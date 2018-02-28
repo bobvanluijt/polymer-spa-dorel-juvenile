@@ -31,6 +31,10 @@
         margin: 0;
       }
 
+      .subtitle {
+        @apply(--theme-typography-4);
+      }
+
       .description {
         @apply(--theme-paragraph-text);
       }
@@ -61,10 +65,11 @@
          desktop-small-up$="{{ breakpoints.desktopSmallUp }}"
          tablet-medium-up$="{{ breakpoints.tabletMediumUp }}">
       <div class="column ">
-        <h1 class="title">[[ metaTitle ]]</h1>
-        <h2 class="description">
-          <dorel-safe-html html="[[ metaDescription ]]"></dorel-safe-html>
-        </h2>
+        <h2 class="title">[[ seoData.title ]]</h2>
+        <h3 class="subtitle">[[ seoData.sub_title ]]</h2>
+        <p class="description">
+          <dorel-safe-html html="[[ seoData.description ]]"></dorel-safe-html>
+        </p>
       </div>
     </div>
   </template>
@@ -75,21 +80,11 @@
 
         /**
          * @attribute
-         * @name metaTitle
-         * @description String that is used by template
+         * @name seoData
+         * @description object that contains title, sub_title, and description
          */
-        metaTitle: {
-          type: String,
-        },
-
-        /**
-         * @attribute
-         * @name metaDescription
-         * @description String that is used by template
-         * may contain inline html
-         */
-        metaDescription: {
-          type: String,
+        seoData: {
+          type: Object,
         }
 
       }
