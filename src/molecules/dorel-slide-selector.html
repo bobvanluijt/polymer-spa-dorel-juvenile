@@ -1,5 +1,5 @@
 <link rel="import" href="./dorel-small-product-slide.html">
-
+<link rel="import" href="../../node_modules/iron-swiper/iron-swiper.html">
 
 <dom-module id="dorel-slide-selector">
   <template>
@@ -13,7 +13,7 @@
       .slideshow {
         position: relative;
         overflow: hidden;
-        height: 29em;
+        height: 30em;
         width: 100%;
         background-color: white;
       }
@@ -22,7 +22,7 @@
         position: relative;
         display: inline-block;
         width: var(--slide-width);
-        height: 28rem;
+        height: 29rem;
         margin: 0 1.5rem 0 0;
         background-color: var(--theme-color-white);
         padding: 1rem;
@@ -136,27 +136,19 @@
     <dorel-media-query breakpoints="{{ breakpoints }}"></dorel-media-query>
 
     <section class="slideshow" desktop-small-up$="{{ breakpoints.desktopSmallUp }}" tablet-medium-up$="{{ breakpoints.tabletMediumUp }}">
-
       <div class="control-item control-item--next" on-click="moveNext" enabled$="{{ nextEnabled }}">
         <iron-icon class="control-item__icon" icon="dorel-icons:chevron-right"></iron-icon>
       </div>
       <div class="control-item control-item--previous" on-click="movePrevious" enabled$="{{ previousEnabled }}">
         <iron-icon class="control-item__icon" icon="dorel-icons:chevron-left"></iron-icon>
       </div>
-
-      <!--<dorel-layout-container style="border: 1px solid red">
-        <dorel-layout-row style="border: 1px solid green">-->
-          <div id="slideWrapper">
-            <template is="dom-repeat" items="[[ slides ]]">
-              <div class="slide" selected$="[[ item.selected ]]">
-                <dorel-small-product-slide product="[[ item ]]" on-tap="handleClick"></dorel-small-product-slide>
-              </div>
-            </template>
+      <div id="slideWrapper">
+        <template is="dom-repeat" items="[[ slides ]]">
+          <div class="slide" selected$="[[ item.selected ]]">
+            <dorel-small-product-slide product="[[ item ]]" on-tap="handleClick" selected="[[ item.selected ]]"></dorel-small-product-slide>
           </div>
-        <!--</dorel-layout-row>
-
-      </dorel-layout-container>-->
-
+        </template>
+      </div>
     </section>
 
   </template>

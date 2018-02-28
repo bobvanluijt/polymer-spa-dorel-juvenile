@@ -58,12 +58,13 @@
       .image-wrapper {
         border-radius: var(--theme-border-radius-2);
         width: 100%;
-        height: 15em;
+        height: 10rem;
         /*background-color: var(--theme-color-monochrome-2);*/
         overflow: hidden;
         display: flex;
         padding: .25em;
         box-sizing: border-box;
+        margin-bottom: 1rem;
       }
 
       .image {
@@ -105,6 +106,10 @@
       .category-listing-item[fade] {
         opacity: 1;
       }
+
+      #results_button {
+        margin-top: 1rem;
+      }
     </style>
 
     <dorel-media-query breakpoints="{{breakpoints}}"></dorel-media-query>
@@ -134,79 +139,94 @@
           colors-data="[[colorsData]]"
           filters="[[filters]]"></dorel-color-switcher>
       </div>
-
+      <template is="dom-if" if="[[ selected ]]">
+        <dorel-cta
+          id="results_button"
+          type="secondary"
+          title="[[localize('car_fitting_results#car_fitting')]]"
+          on-click="scrollToresult"
+          size="medium"
+          icon="dorel-icons:expand-more">
+          [[localize('car_fitting_results#car_fitting')]]
+        </dorel-cta>
+      </template>
+      <div id="results_below"></div>
     </section>
   </template>
 
   <script>
-    Polymer({
-      is: 'dorel-category-listing-item-cfl',
-      properties: {
-        fade: {
-          type: Boolean,
-          value: false,
-        },
+    class DorelCategoryListingItemCfl extends ReduxMixin(Polymer.mixinBehaviors([DorelMultilingualBehavior, ConditionalBehaviors, TemplateBehaviors], Polymer.Element)) {
 
+      static get is() {
+        return 'dorel-category-listing-item-cfl';
+      }
 
-        filters: {
-          type: Array
-        },
+      static get properties() {
+        return {
+          fade: {
+            type: Boolean,
+            value: false,
+          },
 
-        /**
-         * @attribute
-         * @name colorsData
-         * @description array defined on the attribute
-         */
-        colorsData: {
-          type: Array,
-          value: []
-        },
+          filters: {
+            type: Array
+          },
 
-        /**
-         * @attribute
-         * @name imageUrl
-         * @description product name on the attribute
-         */
-        imageUrl: {
-          type: String,
-          value: ''
-        },
+          /**
+           * @attribute
+           * @name colorsData
+           * @description array defined on the attribute
+           */
+          colorsData: {
+            type: Array,
+            value: []
+          },
 
-        /**
-         * @attribute
-         * @name linkUrl
-         * @description product name on the attribute
-         */
-        linkUrl: {
-          type: String,
-          value: ''
-        },
+          /**
+           * @attribute
+           * @name imageUrl
+           * @description product name on the attribute
+           */
+          imageUrl: {
+            type: String,
+            value: ''
+          },
 
-        /**
-         * @attribute
-         * @name productName
-         * @description product name on the attribute
-         */
-        productName: {
-          type: String,
-          value: ''
-        }
-      },
-      
-      ready: function() {
-        //console.log('colorsData', this.colorsData);
-        //console.log('currentProductImage', this.currentProductImage);
-        //console.log('filters', this.filters);
-      },
+          /**
+           * @attribute
+           * @name linkUrl
+           * @description product name on the attribute
+           */
+          linkUrl: {
+            type: String,
+            value: ''
+          },
 
-      behaviors: [DorelMultilingualBehavior],
+          /**
+           * @attribute
+           * @name productName
+           * @description product name on the attribute
+           */
+          productName: {
+            type: String,
+            value: ''
+          }
+        };
+      }
 
-      _setDynamicProductUrl: function(linkUrl, testl) {
+      /**
+       * scroll to the fitting result
+       */
+      scrollToresult() {
+        this.$.results_below.scrollIntoView({block: "start", behavior: "smooth"})
+      }
 
+      _setDynamicProductUrl(linkUrl, testl) {
         var windowLocation = window.location.origin + '/' + window.location.pathname.split('/')[1] + '/' + window.location.pathname.split('/')[2] + '/';
-
         return windowLocation + linkUrl;
       }
-    });
+    }
+
+    customElements.define(DorelCategoryListingItemCfl.is, DorelCategoryListingItemCfl);
   </script>
 </dom-module>

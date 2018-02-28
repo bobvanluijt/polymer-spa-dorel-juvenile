@@ -559,8 +559,11 @@
       }
 
       productListFromState(state) {
+        function findProduct(item) {
+            return item.url === this.requestedProductName;
+        }
         const data = {
-          carseat: state.product.products[0]
+          carseat: state.product.products.find(findProduct.bind(this))
         };
         if(this.requestedProductName) {
           if(data.carseat.isLoading === false && data.carseat.notAvailable === false) {
