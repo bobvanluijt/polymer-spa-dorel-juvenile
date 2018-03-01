@@ -1,3 +1,4 @@
+<link rel="import" href="../../../node_modules/polymer/lib/mixins/gesture-event-listeners.html">
 <link rel="import" href="../../../node_modules/app-layout/app-drawer/app-drawer.html">
 <link rel="import" href="../../utils/behaviors/bundled/dorel-main-menu-behaviors.html">
 
@@ -252,54 +253,72 @@
   </template>
 
   <script>
+    class DorelMainMenuMobile extends Polymer.mixinBehaviors([MainMenuBehavior, MatchUrlBehavior], Polymer.GestureEventListeners(Polymer.Element)) {
+      static get is() { return 'dorel-main-menu-mobile'; }
 
-    Polymer({
-      is: 'dorel-main-menu-mobile',
-      properties: {
+      static get properties() {
+        return {
+          /**
+           * @name mobileMenuOpened
+           * @description Boolean that indicates if the menu is open or closed
+           */
+          mobileMenuOpened: {
+            type: Boolean,
+            reflectToAttribute: true,
+            notify: true
+          },
 
-        /**
-         * @name mobileMenuOpened
-         * @description Boolean that indicates if the menu is open or closed
-         */
-        mobileMenuOpened: {
-          type: Boolean,
-          reflectToAttribute: true,
-          notify: true
-        },
+          /**
+           * @name currentLanguage
+           * @description Object containing currently selected country and language
+           */
+          currentLanguage: {
+            type: Object,
+            notify: true
+          },
+          /**
+           * @name continentsData
+           * @description Array containing the continents (and country, language data)
+           */
+          continentsData: {
+            type: Array
+          }
+        }
+      }
 
-        /**
-         * @name currentLanguage
-         * @description Object containing currently selected country and language
-         */
-        currentLanguage: {
-          type: Object,
-          notify: true
-        },
-        /**
-         * @name continentsData
-         * @description Array containing the continents (and country, language data)
-         */
-        continentsData: {
-          type: Array
-        },
+      connectedCallback() {
+        super.connectedCallback();
+        Polymer.Gestures.addListener(this.$.drawer.$$('#scrim'), 'down', this._mouseDownHandler.bind(this));
+      }
 
-      },
 
-      behaviors: [MainMenuBehavior, MatchUrlBehavior],
+      disconnectedCallback() {
+        super.disconnectedCallback();
+        Polymer.Gestures.removeListener(this.$.drawer.$$('#scrim'), 'down', this._mouseDownHandler.bind(this));
+      }
+
+      /**
+       * @name _mouseDownHandler
+       * @description handles a mouse down event on the overlay
+       * @param
+       */
+      _mouseDownHandler() {
+        this.set('mobileMenuOpened', false);
+      }
 
       /**
        * @name _openAccordion
        * @description handles a accordion click
        * @param event - Object
        */
-      _openAccordion: function (event) {
+      _openAccordion(event) {
         var accordionId = Number(Polymer.dom(event).localTarget.id);
         var newMenuItems = this.get('menuItems').map(function (menuItem) {
           menuItem.opened = menuItem.id === accordionId && !menuItem.opened ? true : false;
           return Object.assign({}, menuItem);
         });
         this.set('menuItems', newMenuItems);
-      },
+      }
 
       /**
        * @name filterDropdownItems
@@ -309,7 +328,7 @@
        * @param index - Number
        * @returns Boolean
        */
-      filterDropdownItems: function (mainItem, index) {
+      filterDropdownItems(mainItem, index) {
         var self = this;
         return function (item) {
           // if dropdownType is category we should only show the first item
@@ -319,19 +338,20 @@
             return true;
           }
         };
-      },
+      }
 
       /**
        * @name clickMenuItem
        * @description closes the mobile menu and calls _emitGtmEvent
        * @param event - Object
        */
-      clickMenuItem: function (event) {
+      clickMenuItem(event) {
         this.set('mobileMenuOpened', false);
         this._emitGtmEvent(event);
       }
+    }
 
-    });
+    customElements.define(DorelMainMenuMobile.is, DorelMainMenuMobile);
 
   </script>
 
