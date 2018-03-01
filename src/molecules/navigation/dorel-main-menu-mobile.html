@@ -192,22 +192,6 @@
                     on-click="_openAccordion"
                     heading="[[ mainItem.title ]]">
 
-
-                    <ul class="sub-menu">
-                      <template is="dom-repeat" items="[[ getDeepArrayItems(mainItem, 'dropdown_items') ]]" as="dropdownItem">
-                        <li class="sub-menu__item">
-                            <a on-click="clickMenuItem"
-                              class="link"
-                              gtm-parent="dorel-navigation-main"
-                              gtm-parent-index="[[ index ]]"
-                              active$="[[ checkIfActive(dropdownItem.link, route) ]]"
-                              href="[[ dropdownItem.link ]]">
-                              <dorel-safe-html html="[[ dropdownItem.title ]]"></dorel-safe-html>
-                            </a>
-                        </li>
-                      </template>
-                    </ul>
-
                     <template is="dom-if" if="[[ checkIfCategoryItems(mainItem) ]]">
                       <ul class="sub-menu">
                         <template is="dom-repeat" items="[[ getDeepArrayItems(mainItem, 'sub_category_items') ]]" as="dropdownItem">
@@ -236,6 +220,22 @@
                         <dorel-safe-html html="All [[ mainItem.title ]]"></dorel-safe-html>
                       </dorel-cta>
                     </template>
+
+                    <ul class="sub-menu">
+                      <template is="dom-repeat" items="[[ getDeepArrayItems(mainItem, 'dropdown_items') ]]" as="dropdownItem">
+                        <li class="sub-menu__item">
+                            <a on-click="clickMenuItem"
+                              class="link"
+                              gtm-parent="dorel-navigation-main"
+                              gtm-parent-index="[[ index ]]"
+                              active$="[[ checkIfActive(dropdownItem.link, route) ]]"
+                              href="[[ dropdownItem.link ]]">
+                              <dorel-safe-html html="[[ dropdownItem.title ]]"></dorel-safe-html>
+                            </a>
+                        </li>
+                      </template>
+                    </ul>
+
                   </dorel-accordion-item>
                 </li>
               </template>
