@@ -24,6 +24,7 @@
         background-color: var(--theme-color-monochrome-1);
         border-radius: var(--theme-button-border-radius);
         padding: 1.8rem;
+        margin-top: 2rem;
         margin-bottom: 1.5rem;
       }
       /*.image-wrapper {*/
@@ -167,7 +168,7 @@
         /*padding: 25px;*/
         top: 0;
         left: 0;
-        z-index: 10000;
+        z-index: 100;
         display: none;
         @apply(--theme-typography-1);
       }
@@ -288,6 +289,7 @@
         width: 4rem;
       }
     </style>
+    <dorel-media-query breakpoints="{{ breakpoints }}"></dorel-media-query>
     <dorel-wp-collect-templates
       template-type="page-product-advisory-tool.php"
       response="{{carFittingToolPage}}"></dorel-wp-collect-templates>
@@ -305,7 +307,6 @@
           </template>
         </dorel-layout-column>
       </dorel-layout-row>
-      <br><br>
       <dorel-layout-row align="middle">
         <dorel-layout-column desktop-column-span="5" tablet-column-span="5" mobile-column-span="12" align="left">
             <dorel-layout-row>
@@ -316,7 +317,6 @@
                     <strong hidden$="[[ !getLabelOrNotListed(car.result) ]]">[[ localize('car_fitting_results#car_information_label_title') ]] [[ car.result.car_information_label ]]</strong>
                     <strong hidden$="[[ getLabelOrNotListed(car.result) ]]">[[ localize('car_fitting_results#car_information_label_title') ]] [[ car.result.car_information_label ]]</strong>
                     <template is="dom-if" if="[[ shouldShowCarResult(car.result) ]]">
-                      <br>
                       <br>
                       <!--<object id="fit" data="/assets/images/car-fitting/icon_green.svg" type="image/svg+xml"></object>
                       <strong class="fit-title">Fit</strong>-->
@@ -705,12 +705,26 @@
                   const notice = self.shadowRoot.querySelector(`#car_${carIndex}_seat_${item.seat_position}_notification`);
                   greenIcon.mousemove(function(event) {
                     const offset = self.offset(event.currentTarget);
-                    notice.style.left = `${offset.left + 40}px`;
                     notice.style.display = 'block';
+                    notice.style.top = '0px';
+                    notice.style.left = '0px';
+                    const width = notice.clientWidth;
                     const height = notice.clientHeight;
-                    notice.style.top = `${offset.top - (height - (height / 3))}px`;
+                    if(self.breakpoints.mobileSmall || self.breakpoints.mobileMedium) {
+                      setTimeout(function(){
+                        const top = (offset.top - (height + 30));
+                        notice.style.top = `${offset.top - (height - (height / 2))}px`;
+                        notice.style.left = `${(document.documentElement.clientWidth / 2) - (width / 2)}px`; 
+                      }, 200);
+                    } else {
+                      notice.style.top = `${offset.top - (height - (height / 3))}px`;
+                      notice.style.left = `${offset.left + 40}px`;
+                    }
                   });
                   greenIcon.mouseout(function(event) {
+                    notice.style.display = 'none';
+                  });
+                  notice.addEventListener('mouseout', function(){
                     notice.style.display = 'none';
                   });
                 }
@@ -722,12 +736,26 @@
                   const notice = self.shadowRoot.querySelector(`#car_${carIndex}_seat_${item.seat_position}_notification`);
                   blueIcon.mousemove(function(event) {
                     const offset = self.offset(event.currentTarget);
-                    notice.style.left = `${offset.left + 40}px`;
                     notice.style.display = 'block';
+                    notice.style.top = '0px';
+                    notice.style.left = '0px';
+                    const width = notice.clientWidth;
                     const height = notice.clientHeight;
-                    notice.style.top = `${offset.top - (height - (height / 3))}px`;
+                    if(self.breakpoints.mobileSmall || self.breakpoints.mobileMedium) {
+                      setTimeout(function(){
+                        const top = (offset.top - (height + 30));
+                        notice.style.top = `${offset.top - (height - (height / 2))}px`;
+                        notice.style.left = `${(document.documentElement.clientWidth / 2) - (width / 2)}px`; 
+                      }, 200);
+                    } else {
+                      notice.style.top = `${offset.top - (height - (height / 3))}px`;
+                      notice.style.left = `${offset.left + 40}px`;
+                    }
                   });
                   blueIcon.mouseout(function(event) {
+                    notice.style.display = 'none';
+                  });
+                  notice.addEventListener('mouseout', function(){
                     notice.style.display = 'none';
                   });
                 }
@@ -749,19 +777,21 @@
                     notice.style.left = '0px';
                     const width = notice.clientWidth;
                     const height = notice.clientHeight;
-                    //if(self.breakpoints.mobileSmall || self.breakpoints.mobileMedium) {
-                    //  setTimeout(function(){
-                    //    const top = (offset.top - (height + 30));
-                    //    console.log(offset.top, height, top);
-                    //    notice.style.top = `${top}px`;
-                    //    notice.style.left = `${(document.documentElement.clientWidth / 2) - (width / 2)}px`; 
-                    //  }, 200);
-                    //} else {
+                    if(self.breakpoints.mobileSmall || self.breakpoints.mobileMedium) {
+                      setTimeout(function(){
+                        const top = (offset.top - (height + 30));
+                        notice.style.top = `${offset.top - (height - (height / 2))}px`;
+                        notice.style.left = `${(document.documentElement.clientWidth / 2) - (width / 2)}px`; 
+                      }, 200);
+                    } else {
                       notice.style.top = `${offset.top - (height - (height / 3))}px`;
                       notice.style.left = `${offset.left + 40}px`;
-                    //}
+                    }
                   });
                   orangeIcon.mouseout(function(event) {
+                    notice.style.display = 'none';
+                  });
+                  notice.addEventListener('mouseout', function(){
                     notice.style.display = 'none';
                   });
                 }
@@ -769,16 +799,30 @@
                   self.iconsUsed.icon_top_tether.used = true;
                   svgCarNode.select(`${frontPositionContainer}#seat_${item.seat_position} #icon_tether`).attr({'visibility': 'visible'});
                   const tetherIcon = svgCarNode.select(`${frontPositionContainer}#seat_${item.seat_position} #icon_tether #hover_area`);
-                  const tether = self.shadowRoot.querySelector(`#car_${carIndex}_seat_${item.seat_position}_tether`);
+                  const notice = self.shadowRoot.querySelector(`#car_${carIndex}_seat_${item.seat_position}_tether`);
                   tetherIcon.mousemove(function(event) {
                     const offset = self.offset(event.currentTarget);
-                    tether.style.left = `${offset.left + 20}px`;
-                    tether.style.display = 'block';
-                    const height = tether.clientHeight;
-                    tether.style.top = `${offset.top - (height - (height / 3))}px`;
+                    notice.style.display = 'block';
+                    notice.style.top = '0px';
+                    notice.style.left = '0px';
+                    const width = notice.clientWidth;
+                    const height = notice.clientHeight;
+                    if(self.breakpoints.mobileSmall || self.breakpoints.mobileMedium) {
+                      setTimeout(function(){
+                        const top = (offset.top - (height + 30));
+                        notice.style.top = `${offset.top - (height - (height / 2))}px`;
+                        notice.style.left = `${(document.documentElement.clientWidth / 2) - (width / 2)}px`; 
+                      }, 200);
+                    } else {
+                      notice.style.top = `${offset.top - (height - (height / 3))}px`;
+                      notice.style.left = `${offset.left + 30}px`;
+                    }
                   });
                   tetherIcon.mouseout(function(event) {
-                    tether.style.display = 'none';
+                    notice.style.display = 'none';
+                  });
+                  notice.addEventListener('mouseout', function(){
+                    notice.style.display = 'none';
                   });
                 }
               });
