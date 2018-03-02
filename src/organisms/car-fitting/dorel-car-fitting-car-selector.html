@@ -305,6 +305,7 @@
       }
 
       previousStep() {
+        this.deleteCar({model: {index: 0}});
         this.set('stepData.isCurrent', false);
         this.set('stepController.currentStep', this.stepData.previousStep);
         this.set(`carData.0.result`, null);
@@ -313,7 +314,10 @@
       updateStep() {
         if(this.carData.length > 0 && this.carData[0].result) {
           if(this.carData[0].result.message && this.carData[0].result.message !== 'loading') {
-            this.$.next_button.removeAttribute('disabled');
+            setTimeout(function(){
+              this.$.next_button.removeAttribute('disabled');
+            }.bind(this), 2000);
+
             //this.$.loading_wrapper.setAttribute('hidden', true);
             //this.set('load', false);
             /*this.$.add_button.removeAttribute('disabled');

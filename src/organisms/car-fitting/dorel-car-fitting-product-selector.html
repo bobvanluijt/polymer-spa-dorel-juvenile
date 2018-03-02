@@ -158,9 +158,7 @@
 
       productsFetched(e) {
         const list = this.get('productList');
-        console.log(list.length)
         if(list.length > 0) {
-          //debugger;
           this.handleSelectionChange({base: {index: 0}});
         }
       }
