@@ -150,7 +150,6 @@
           [[localize('car_fitting_results#car_fitting')]]
         </dorel-cta>
       </template>
-      <div id="results_below"></div>
     </section>
   </template>
 
@@ -219,6 +218,7 @@
        */
       scrollToresult() {
         //this.$.results_below.scrollIntoView({block: "start", behavior: "smooth"})
+        this.push('scrollData', 1);
       }
 
       _setDynamicProductUrl(linkUrl, testl) {
