@@ -143,6 +143,7 @@
         width: 100%;
         height: 32rem;
       }
+
       .swiper-slide {
         text-align: left;
         /*font-size: 18px;*/
@@ -163,14 +164,25 @@
         /*align-items: center;*/
       }
       
-      .color-name {
-        padding: 0;
+      .swiper-pagination-fraction, .swiper-pagination-custom, .swiper-container-horizontal > .swiper-pagination-bullets {
+        bottom: initial;
+        height: 1.5rem
       }
-      
+
+      .swiper-pagination {
+        position: relative;
+        height: 1.5rem;
+        width: 100%;
+      }
+
+      .swiper-pagination-bullet-active {
+         background: var(--theme-brand-color-1);
+      }
+
       .swiper-container-horizontal > .swiper-pagination-progressbar {
         background-color: var(--theme-color-monochrome-2);
       }
-      
+
       .swiper-pagination-progressbar .swiper-pagination-progressbar-fill {
         background-color: var(--theme-color-monochrome-3);
       }
@@ -186,6 +198,7 @@
         <iron-icon class="control-item__icon" icon="dorel-icons:chevron-left"></iron-icon>
       </div>
       <div class="swiper-container" id="swiperContainer" hidden="true">
+        <div class="swiper-pagination"></div>
         <div class="swiper-wrapper" id="swiperWrapper">
           <template is="dom-repeat" items="[[ slides ]]">
             <div class="swiper-slide slide" selected$="[[ item.selected ]]">
@@ -193,7 +206,6 @@
             </div>
           </template>
         </div>
-        <div class="swiper-pagination"></div>
       </div>
     </section>
   </template>
@@ -231,8 +243,7 @@
       
       static get observers() {
         return [
-          'initialize(slides.*)',
-          'test(renderedItemCount)'
+          'initialize(slides.*)'
         ];
       }
       
@@ -256,7 +267,7 @@
           pagination: {
             el: pagination,
             clickable: true,
-            type: 'progressbar'
+            // type: 'progressbar'
           },
           navigation: {
             nextEl: next,

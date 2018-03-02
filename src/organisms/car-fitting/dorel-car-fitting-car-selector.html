@@ -307,7 +307,7 @@
       previousStep() {
         this.set('stepData.isCurrent', false);
         this.set('stepController.currentStep', this.stepData.previousStep);
-        this.set('carData.0.result.message', null);
+        this.set(`carData.0.result`, null);
       }
 
       updateStep() {
