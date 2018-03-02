@@ -156,12 +156,12 @@
         }
       }
 
-      // productsFetched(e) {
-      //   const list = this.get('productList');
-      //   if(list.length > 0) {
-      //     //this.push('selectedIndexGlobal', 0);
-      //   }
-      // }
+      productsFetched(e) {
+        const list = this.get('productList');
+        if(list.length > 0) {
+          this.handleSelectionChange({base: {index: 0}});
+        }
+      }
 
       productListFromState(state) {
         let list = [];
@@ -205,6 +205,7 @@
             list[this.selectedIndexGlobal.index].selected = true;
           }
         }
+
         return list;
       }
 
@@ -231,6 +232,7 @@
               resultsEl.url = `${CONFIG.DIO_API_URL}/carseat/${item.car_brand_id}?index=${index}&model_name=${item.model_name}&model_type=${item.model_type}&introduction_year=${item.introduction_year}&doors=${item.doors}&sku=${sku}`;
               self.set('isPreviousButtonHidden', true);
               resultsEl.generateRequest();
+              //debugger;
             });
           }
         }

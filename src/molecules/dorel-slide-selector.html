@@ -1,19 +1,24 @@
+<script src="../../node_modules/swiper/dist/js/swiper.min.js"></script>
 <link rel="import" href="./dorel-small-product-slide.html">
-
+<link rel="import" href="./dorel-swiper-styles.html">
 
 <dom-module id="dorel-slide-selector">
   <template>
-    <style is="custom-style">
+    <style is="custom-style" include="dorel-swiper-styles">
       :host {
         --slide-wrapper-x: 0px;
         /*--slide-width: calc(( var(--max-width-limit) - 3rem) / 3 - 2rem) ;*/
         --slide-width: 20rem;
       }
 
+      [hidden] {
+        display: none;
+      }
+
       .slideshow {
         position: relative;
         overflow: hidden;
-        height: 29em;
+        height: 33em;
         width: 100%;
         background-color: white;
       }
@@ -21,9 +26,9 @@
       .slide {
         position: relative;
         display: inline-block;
-        width: var(--slide-width);
-        height: 28rem;
-        margin: 0 1.5rem 0 0;
+        /*width: var(--slide-width);*/
+        height: 29rem;
+        margin: 1rem 1.5rem 0 0;
         background-color: var(--theme-color-white);
         padding: 1rem;
         font-size: 1rem;
@@ -31,14 +36,15 @@
         box-sizing: border-box;
         box-shadow: 4px 4px 24px -6px var(--theme-color-monochrome-5);
         border-radius: var(--theme-border-radius-1);
+        z-index 10000;
       }
 
-      .slide[selected] {
+      .swiper-slide-active {
         box-shadow: none;
         border-color: var(--theme-brand-color-1);
       }
 
-      .slide[selected]::after {
+      .swiper-slide-active::after {
         position: absolute;
         display: inline-block;
         border: 1.5rem solid transparent;
@@ -46,7 +52,8 @@
         border-top: 1rem solid var(--theme-brand-color-1);
         content: ' ';
         bottom: -1rem;
-        left: calc(( var(--slide-width) / 2) - 1.5rem);
+        /*left: calc(( var(--slide-width) / 2) - 1.5rem);*/
+        left: calc(width / 2);
       }
 
       #slideWrapper {
@@ -87,14 +94,14 @@
         transition: transform 0.2s, background-color 0.2s, box-shadow 0.2s, opacity 0.2s;
       }
 
-      .control-item[enabled] {
+      .control-item {
         pointer-events: auto;
         opacity: 1;
         transform: translate(0, -50%) scale(1);
         opacity: 0.8;
       }
 
-      .control-item--previous {
+      .control-item-previous {
         right: auto;
         left: 0;
         /*border-radius: 0 var(--theme-button-border-radius) var(--theme-button-border-radius) 0;*/
@@ -131,34 +138,77 @@
       dorel-layout-container section {
         padding: 0;  
       }
+      
+      .swiper-container {
+        width: 100%;
+        height: 33rem;
+      }
+
+      .swiper-slide {
+        text-align: left;
+        /*font-size: 18px;*/
+        /*background: #fff;*/
+  
+        /* Center slide text vertically */
+        /*display: -webkit-box;*/
+        /*display: -ms-flexbox;*/
+        /*display: -webkit-flex;*/
+        display: flex;
+        /*-webkit-box-pack: center;*/
+        /*-ms-flex-pack: center;*/
+        /*-webkit-justify-content: center;*/
+        justify-content: center;
+        /*-webkit-box-align: center;*/
+        /*-ms-flex-align: center;*/
+        /*-webkit-align-items: center;*/
+        /*align-items: center;*/
+      }
+      
+      .swiper-pagination-fraction, .swiper-pagination-custom, .swiper-container-horizontal > .swiper-pagination-bullets {
+        bottom: initial;
+        height: 1.5rem
+      }
+
+      .swiper-pagination {
+        position: relative;
+        height: 1.5rem;
+        width: 100%;
+      }
+
+      .swiper-pagination-bullet-active {
+         background: var(--theme-brand-color-1);
+      }
+
+      .swiper-container-horizontal > .swiper-pagination-progressbar {
+        background-color: var(--theme-color-monochrome-2);
+      }
+
+      .swiper-pagination-progressbar .swiper-pagination-progressbar-fill {
+        background-color: var(--theme-color-monochrome-3);
+      }
     </style>
 
     <dorel-media-query breakpoints="{{ breakpoints }}"></dorel-media-query>
 
     <section class="slideshow" desktop-small-up$="{{ breakpoints.desktopSmallUp }}" tablet-medium-up$="{{ breakpoints.tabletMediumUp }}">
-
-      <div class="control-item control-item--next" on-click="moveNext" enabled$="{{ nextEnabled }}">
+      <div class="control-item control-item-next">
         <iron-icon class="control-item__icon" icon="dorel-icons:chevron-right"></iron-icon>
       </div>
-      <div class="control-item control-item--previous" on-click="movePrevious" enabled$="{{ previousEnabled }}">
+      <div class="control-item control-item-previous">
         <iron-icon class="control-item__icon" icon="dorel-icons:chevron-left"></iron-icon>
       </div>
-
-      <!--<dorel-layout-container style="border: 1px solid red">
-        <dorel-layout-row style="border: 1px solid green">-->
-          <div id="slideWrapper">
-            <template is="dom-repeat" items="[[ slides ]]">
-              <div class="slide" selected$="[[ item.selected ]]">
-                <dorel-small-product-slide product="[[ item ]]" on-tap="handleClick"></dorel-small-product-slide>
-              </div>
-            </template>
-          </div>
-        <!--</dorel-layout-row>
-
-      </dorel-layout-container>-->
-
+      <div class="swiper-container" id="swiperContainer" hidden="true">
+        <div class="swiper-pagination"></div>
+        <div class="swiper-wrapper" id="swiperWrapper">
+          <template is="dom-repeat" items="[[ slides ]]">
+            <div class="swiper-slide slide" selected$="[[ item.selected ]]">
+              <dorel-small-product-slide product="[[ item ]]" selected="[[ item.selected ]]" scroll-data="{{ scrollData }}"></dorel-small-product-slide>
+            </div>
+          </template>
+        </div>
+      </div>
+      <div id="results_below"></div>
     </section>
-
   </template>
   <script>
 
@@ -170,10 +220,18 @@
       constructor() {
         super();
         this.initialized = false;
+        this.swiper = null;
+        this.resizeCount = 0;
       }
 
       static get properties() {
         return {
+          scrollData: {
+            type: Array,
+            value: () => {
+              return []
+            }
+          },
           slides: {
             type: Array,
             value: () => []
@@ -184,80 +242,107 @@
             observer: '_selectedIndexChange',
             // reflectToAttribute: true
           },
-          nextEnabled: {
-            type: Boolean,
-            computed: 'checkNext(selectedIndex, slides)'
-          },
-          previousEnabled: {
-            type: Boolean,
-            computed: 'checkPrevious(selectedIndex)'
-          },
+          swiperIndex: {
+            index: null
+          }
         }
       }
-      
+
       static get observers() {
         return [
-          'initialize(slides.*)'
+          'initialize(slides.*)',
+          'scrollToresult(scrollData.*)'
         ];
+      }
+
+      scrollToresult(data) {
+        if(data.base.length > 0) {
+          this.$.results_below.scrollIntoView({block: "start", behavior: "smooth"});
+        }
+      }
+
+      ready() {
+        super.ready();
+        const container = this.shadowRoot.querySelector('.swiper-container');
+        const pagination = this.shadowRoot.querySelector('.swiper-pagination');
+        const next = this.shadowRoot.querySelector('.control-item-next');
+        const previous = this.shadowRoot.querySelector('.control-item-previous');
+        
+        this.swiper = new Swiper(container, {
+          observer: true,
+          observeParents: true,
+          slideToClickedSlide: false,
+          simulateTouch: true,
+          slidesPerView: 3,
+          slidesOffsetAfter: 1000,
+          freeMode: false,
+          spaceBetween: 50,
+          init: true,
+          pagination: {
+            el: pagination,
+            clickable: true,
+            // type: 'progressbar'
+          },
+          navigation: {
+            nextEl: next,
+            prevEl: previous,
+          },
+          breakpoints: {
+            1024: {
+              slidesPerView: 4,
+              spaceBetween: 40,
+            },
+            768: {
+              slidesPerView: 3,
+              spaceBetween: 30,
+            },
+            640: {
+              slidesPerView: 1,
+              spaceBetween: 20,
+            },
+            320: {
+              slidesPerView: 1,
+              spaceBetween: 10,
+            }
+          }
+        });
+        
+        this.swiper.on('slideChange', function() {
+          this.set('selectedIndexGlobal.index', this.swiper.activeIndex);
+          this.set('slides.' + this.swiper.previousIndex + '.selected', false);
+          this.set('slides.' + this.swiper.activeIndex + '.selected', true);
+        }.bind(this));
       }
 
       initialize(data) {
         if(data.base.length > 0 && !this.initialized) {
-          this.set('selectedIndex', 0);
+          this.resizeCount = 0;
+          //this.set('selectedIndex', 0);
           this.set('selectedIndexGlobal.index', 0);
-          this.updateStyles({ '--slide-wrapper-x': '-' + 0 + 'px' });
+          //this.updateStyles({ '--slide-wrapper-x': '-' + 0 + 'px' });
+          setInterval(function(){
+            if(this.resizeCount < 30) {
+              this.$.swiperContainer.setAttribute('hidden', true);
+              this.$.swiperContainer.removeAttribute('hidden');
+              this.resizeCount++;
+            }
+          }.bind(this), 1000);
+          this.swiper.slideTo(0);
           this.set('initialized', true);
         }
-
         if(data.base.length === 0) {
           this.set('initialized', false);
         }
       }
 
-      _selectedIndexChange(data) {
-        const index = this.get('selectedIndex');
-        if(data >= 0) {
-          this.set('selectedIndexGlobal.index', index);
-        }
-      }
-      
-      handleClick(e) {
-        this.moveToIndex(e.model.index);
-      }
+      // handleClick(event) {
+      //   if(event.model.index) {
+      //     console.log('click')
+      //     debugger;
+      //     this.swiper.slideTo(event.model.index);
+      //   }
+      // }
 
-      checkNext(index, slides) {
-        return slides && index < slides.length -1;
-      }
-
-      checkPrevious(index) {
-        return index > 0;
-      }
-
-      moveNext() {
-        this.moveToIndex(this.get('selectedIndex') + 1);
-      }
-
-      movePrevious() {
-        this.moveToIndex(this.get('selectedIndex') - 1);
-      }
-
-      moveToIndex(index) {
-        const slideCount = this.get('slides').length;
-        if (index < 0 || index > slideCount -1 || slideCount === 0) {
-          return
-        }
-        const currentIndex = this.get('selectedIndex');
-        this.set('slides.' + currentIndex + '.selected', false);
-        this.set('slides.' + index + '.selected', true);
-        this.set('selectedIndex', index);
-
-        const shiftLeft = this.$.slideWrapper.getBoundingClientRect().width * index / slideCount;
-        this.updateStyles({ '--slide-wrapper-x': '-' + (shiftLeft + 0) + 'px' });
-      }
-
-      isSelected(index) {
-        return this.get('selectedIndex') === index;
-      }
     }
 
     customElements.define(DorelSlideSelector.is, DorelSlideSelector);
