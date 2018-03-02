@@ -158,7 +158,9 @@
 
       productsFetched(e) {
         const list = this.get('productList');
+        console.log(list.length)
         if(list.length > 0) {
+          //debugger;
           this.handleSelectionChange({base: {index: 0}});
         }
       }
@@ -232,6 +234,7 @@
               resultsEl.url = `${CONFIG.DIO_API_URL}/carseat/${item.car_brand_id}?index=${index}&model_name=${item.model_name}&model_type=${item.model_type}&introduction_year=${item.introduction_year}&doors=${item.doors}&sku=${sku}`;
               self.set('isPreviousButtonHidden', true);
               resultsEl.generateRequest();
+              //debugger;
             });
           }
         }
