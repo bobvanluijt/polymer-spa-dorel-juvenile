@@ -129,11 +129,11 @@
       }
 
       .mobile-multi-language {
-        position: fixed;
+        position: absolute;
         z-index: 99999;
         right: 0;
         width: 256px;
-        bottom: 0;
+        bottom: 7.5rem;
       }
 
       .mobile-multi-language-container {
@@ -148,14 +148,14 @@
         transition: 0.1s 0s ease;
       }
 
+      .mobile-multi-language-container--selector {
+        float: left;
+      }
+
       [mobile-opened] .mobile-multi-language-container {
         bottom: 0;
         opacity: 1;
         transition: 0.15s 0.2s ease;
-      }
-
-      .mobile-multi-language-container dorel-multilingual-select-language {
-        float: right;
       }
     </style>
 
@@ -239,17 +239,17 @@
             </template>
         </ul>
       </div>
-    </app-drawer>
 
-    <div class="mobile-multi-language" mobile-opened$="[[ mobileMenuOpened ]]">
-      <div class="mobile-multi-language-container">
-        <dorel-multilingual-select-language
-          current-language="{{ currentLanguage }}"
-          continents-data="[[ continentsData ]]">
-        </dorel-multilingual-select-language>
+      <div class="mobile-multi-language" mobile-opened$="[[ mobileMenuOpened ]]">
+        <div class="mobile-multi-language-container">
+          <dorel-multilingual-select-language
+            current-language="{{ currentLanguage }}"
+            continents-data="[[ continentsData ]]"
+            class="mobile-multi-language-container--selector">
+          </dorel-multilingual-select-language>
+        </div>
       </div>
-    </div>
-
+    </app-drawer>
   </template>
 
   <script>
