@@ -66,9 +66,13 @@
       .main-menu--item {
         background-color: var(--theme-color-monochrome-1);
         border-radius: var(--theme-border-radius-1);
-        overflow: hidden;
         margin-bottom: .75rem;
+        overflow: hidden;
         min-height: min-content;
+      }
+
+      .main-menu--dorel-accordion-item {
+        overflow: hidden;
       }
 
       .link {
@@ -179,7 +183,7 @@
               </template>
 
               <template is="dom-if" if="[[ mainItem.dropdown ]]">
-                <li>
+                <li class="main-menu--dorel-accordion-item">
                   <dorel-accordion-item
                     small
                     light
@@ -218,7 +222,7 @@
                     </template>
 
                     <ul class="sub-menu">
-                      <template is="dom-repeat" items="[[ getDeepArrayItems(mainItem, 'dropdown_items') ]]" as="dropdownItem" filter="[[ filterDropdownItems(mainItem) ]]">
+                      <template is="dom-repeat" items="[[ getDeepArrayItems(mainItem, 'dropdown_items') ]]" as="dropdownItem">
                         <li class="sub-menu__item">
                             <a on-click="clickMenuItem"
                               class="link"
