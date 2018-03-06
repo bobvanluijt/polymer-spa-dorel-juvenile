@@ -82,6 +82,10 @@
         display: block;
       }
 
+      .link:active {
+        -webkit-tap-highlight-color: rgba(0,0,0,0);
+      }
+
       .sub-menu .link::before {
         margin-right: 5px;
       }
@@ -163,7 +167,7 @@
 
     <app-drawer id="drawer" opened="{{ mobileMenuOpened }}" align="right" swipe-open tabindex="0" tablet-medium-up$="[[ breakpoints.tabletMediumUp ]]">
       <div class="menu-spacer-top"></div>
-      <div class="mobile-nav">
+      <div class="mobile-nav" id="mobileNav">
         <ul class="main-menu">
             <template is="dom-repeat" items="[[ menuItems ]]" as="mainItem">
 
@@ -288,22 +292,23 @@
 
       connectedCallback() {
         super.connectedCallback();
-        Polymer.Gestures.addListener(this.$.drawer.$$('#scrim'), 'down', this._mouseDownHandler.bind(this));
+        Polymer.Gestures.addListener(this.$.drawer.$$('#scrim'), 'down', this._overlayDownHandler.bind(this));
       }
 
 
       disconnectedCallback() {
         super.disconnectedCallback();
-        Polymer.Gestures.removeListener(this.$.drawer.$$('#scrim'), 'down', this._mouseDownHandler.bind(this));
+        Polymer.Gestures.removeListener(this.$.drawer.$$('#scrim'), 'down', this._overlayDownHandler.bind(this));
       }
 
       /**
-       * @name _mouseDownHandler
+       * @name _overlayDownHandler
        * @description handles a mouse down event on the overlay
        * @param
        */
-      _mouseDownHandler() {
+      _overlayDownHandler(e) {
         this.set('mobileMenuOpened', false);
+        e.preventDefault();
       }
 
       /**
