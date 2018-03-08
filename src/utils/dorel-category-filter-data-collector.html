@@ -65,15 +65,17 @@
       _setFilters: function(products, filterData) {
         var self = this;
 
-        var filterGroups = filterData.map(function(group) {
+        let filterGroups = filterData.map(group => {
           group.values = [];
-          products.forEach(function(product) {
+          products.forEach(product => {
             if(!product || !product.filter_groups) {
               return;
             }
-            product.filter_groups.forEach(function(productFilterGroup) {
-              if(productFilterGroup.name === group.name) {
-                productFilterGroup.values.map(function(item) {
+            product.filter_groups.forEach(productFilterGroup => {
+              if ( productFilterGroup.name === group.name ||
+                   (this._isColorGroup(group.name) && this._isColorGroup(productFilterGroup.name))
+              ) {
+                productFilterGroup.values.map(item => {
                   item.label = item.value;
                   //TODO should be refactured in end-point (back-end)
                   // if item.color is not a hexcode it is a image
@@ -95,7 +97,7 @@
           if(group.values.length) {
             return group;
           }
-        }).filter(function(group) {
+        }).filter(group => {
           return group ? true : false;
         });
         return filterGroups;
@@ -119,6 +121,10 @@
             });
             return !exists;
         }));
+      },
+
+      _isColorGroup: function(name) {
+        return ['color', 'colour'].includes(name.toLowerCase()) ? true : false;
       }
 
     });
