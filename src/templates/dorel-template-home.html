@@ -64,15 +64,6 @@
           <!--// section-cards -->
 
         </div>
-        <!-- section-seo -->
-        <template
-          is="dom-if"
-          if="[[templateData.acf.seo_block]]">
-          <dorel-layout-container>
-            <dorel-section-seo seo-data="[[templateData.acf.seo_block]]"></dorel-section-seo>
-          </dorel-layout-container>
-        </template>
-        <!--// section-seo -->
       </div>
       <!--// container -->
 
@@ -111,9 +102,7 @@
          * @description the data model used for the cards component
          */
         sectionCards: Object
-
       },
-
       behaviors: [TemplateBehaviors]
     });
   </script>
