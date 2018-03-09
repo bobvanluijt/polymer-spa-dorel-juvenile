@@ -138,7 +138,7 @@
       }
 
       .mobile-multi-language {
-        position: absolute;
+        position: fixed;
         z-index: 99999;
         right: 0;
         width: var(--theme-app-drawer-width);
@@ -156,10 +156,6 @@
         bottom: -50px;
         opacity: 1;
         transition: 0.1s 0s ease;
-      }
-
-      .mobile-multi-language-container--selector {
-        float: left;
       }
 
       [mobile-opened] .mobile-multi-language-container {
@@ -291,6 +287,11 @@
            */
           continentsData: {
             type: Array
+          },
+
+          languageDialogOpened: {
+            type: Boolean,
+            value: false
           }
         }
       }
@@ -304,12 +305,14 @@
             e.preventDefault();
           }, false);
         }
+        this.$$('.mobile-multi-language-container--selector').addEventListener('click', this._onLanguageClicked.bind(this));
         Polymer.Gestures.addListener(this.$.drawer.$$('#scrim'), 'down', this._overlayDownHandler.bind(this));
       }
 
 
       disconnectedCallback() {
         super.disconnectedCallback();
+        this.$$('.mobile-multi-language-container--selector').removeEventListener('click', this._onLanguageClicked.bind(this));
         Polymer.Gestures.removeListener(this.$.drawer.$$('#scrim'), 'down', this._overlayDownHandler.bind(this));
       }
 
@@ -365,6 +368,15 @@
       clickMenuItem(event) {
         this.set('mobileMenuOpened', false);
         this._emitGtmEvent(event);
+      }
+
+      /**
+       * @name _onLanguageClicked
+       * @description change the z-index of the drawer to show/hide the hamburger Close button
+       */
+      _onLanguageClicked() {
+        this.languageDialogOpened = !this.languageDialogOpened;
+        this.$.drawer.style.zIndex = this.languageDialogOpened ? 10000 : 10;
       }
     }
 
