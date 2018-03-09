@@ -1,3 +1,4 @@
+<link rel="import" href="../../../node_modules/polymer/lib/mixins/gesture-event-listeners.html">
 <link rel="import" href="../../../node_modules/app-layout/app-drawer/app-drawer.html">
 <link rel="import" href="../../utils/behaviors/bundled/dorel-main-menu-behaviors.html">
 
@@ -13,6 +14,7 @@
         display: flex;
         flex-direction: column;
         text-align: left;
+        --app-drawer-width: var(--theme-app-drawer-width);
       }
 
       .menu-spacer-top {
@@ -66,9 +68,13 @@
       .main-menu--item {
         background-color: var(--theme-color-monochrome-1);
         border-radius: var(--theme-border-radius-1);
-        overflow: hidden;
         margin-bottom: .75rem;
+        overflow: hidden;
         min-height: min-content;
+      }
+
+      .main-menu--dorel-accordion-item {
+        overflow: hidden;
       }
 
       .link {
@@ -91,6 +97,10 @@
 
       .link:hover {
         color: var(--theme-color-text-link-active);
+      }
+
+      .link:active {
+        -webkit-tap-highlight-color: rgba(0,0,0,0);
       }
 
       .link[active] {
@@ -128,33 +138,33 @@
       }
 
       .mobile-multi-language {
-        position: fixed;
+        position: absolute;
         z-index: 99999;
         right: 0;
-        width: 256px;
-        bottom: 0;
+        width: var(--theme-app-drawer-width);
+        bottom: 7.5rem;
       }
 
       .mobile-multi-language-container {
+        background-color: rgb(255, 255, 255);
         float: left;
         width: 100%;
         height: 3em;
         position: absolute;
-        bottom: -50px;
         padding: 0 var(--theme-gutter-mobile);
         box-sizing: border-box;
-        opacity: 0;
+        bottom: -50px;
+        opacity: 1;
         transition: 0.1s 0s ease;
+      }
+
+      .mobile-multi-language-container--selector {
+        float: left;
       }
 
       [mobile-opened] .mobile-multi-language-container {
         bottom: 0;
-        opacity: 1;
         transition: 0.15s 0.2s ease;
-      }
-
-      .mobile-multi-language-container dorel-multilingual-select-language {
-        float: right;
       }
     </style>
 
@@ -162,7 +172,7 @@
 
     <app-drawer id="drawer" opened="{{ mobileMenuOpened }}" align="right" swipe-open tabindex="0" tablet-medium-up$="[[ breakpoints.tabletMediumUp ]]">
       <div class="menu-spacer-top"></div>
-      <div class="mobile-nav">
+      <div class="mobile-nav" id="mobileNav">
         <ul class="main-menu">
             <template is="dom-repeat" items="[[ menuItems ]]" as="mainItem">
 
@@ -179,7 +189,7 @@
               </template>
 
               <template is="dom-if" if="[[ mainItem.dropdown ]]">
-                <li>
+                <li class="main-menu--dorel-accordion-item">
                   <dorel-accordion-item
                     small
                     light
@@ -218,7 +228,7 @@
                     </template>
 
                     <ul class="sub-menu">
-                      <template is="dom-repeat" items="[[ getDeepArrayItems(mainItem, 'dropdown_items') ]]" as="dropdownItem" filter="[[ filterDropdownItems(mainItem) ]]">
+                      <template is="dom-repeat" items="[[ getDeepArrayItems(mainItem, 'dropdown_items') ]]" as="dropdownItem">
                         <li class="sub-menu__item">
                             <a on-click="clickMenuItem"
                               class="link"
@@ -238,68 +248,94 @@
             </template>
         </ul>
       </div>
-    </app-drawer>
 
-    <div class="mobile-multi-language" mobile-opened$="[[ mobileMenuOpened ]]">
-      <div class="mobile-multi-language-container">
-        <dorel-multilingual-select-language
-          current-language="{{ currentLanguage }}"
-          continents-data="[[ continentsData ]]">
-        </dorel-multilingual-select-language>
+      <div class="mobile-multi-language" mobile-opened$="[[ mobileMenuOpened ]]">
+        <div class="mobile-multi-language-container">
+          <dorel-multilingual-select-language
+            current-language="{{ currentLanguage }}"
+            continents-data="[[ continentsData ]]"
+            class="mobile-multi-language-container--selector">
+          </dorel-multilingual-select-language>
+        </div>
       </div>
-    </div>
-
+    </app-drawer>
   </template>
 
   <script>
+    class DorelMainMenuMobile extends Polymer.mixinBehaviors([MainMenuBehavior, MatchUrlBehavior], Polymer.GestureEventListeners(Polymer.Element)) {
+      static get is() { return 'dorel-main-menu-mobile'; }
 
-    Polymer({
-      is: 'dorel-main-menu-mobile',
-      properties: {
+      static get properties() {
+        return {
+          /**
+           * @name mobileMenuOpened
+           * @description Boolean that indicates if the menu is open or closed
+           */
+          mobileMenuOpened: {
+            type: Boolean,
+            reflectToAttribute: true,
+            notify: true
+          },
 
-        /**
-         * @name mobileMenuOpened
-         * @description Boolean that indicates if the menu is open or closed
-         */
-        mobileMenuOpened: {
-          type: Boolean,
-          reflectToAttribute: true,
-          notify: true
-        },
+          /**
+           * @name currentLanguage
+           * @description Object containing currently selected country and language
+           */
+          currentLanguage: {
+            type: Object,
+            notify: true
+          },
+          /**
+           * @name continentsData
+           * @description Array containing the continents (and country, language data)
+           */
+          continentsData: {
+            type: Array
+          }
+        }
+      }
 
-        /**
-         * @name currentLanguage
-         * @description Object containing currently selected country and language
-         */
-        currentLanguage: {
-          type: Object,
-          notify: true
-        },
-        /**
-         * @name continentsData
-         * @description Array containing the continents (and country, language data)
-         */
-        continentsData: {
-          type: Array
-        },
+      connectedCallback() {
+        super.connectedCallback();
+        // disable default scrolling the background on iOS Safari
+        const mobileNav = this.$$('#mobileNav');
+        if (mobileNav) {
+          mobileNav.addEventListener('touchmove', e => {
+            e.preventDefault();
+          }, false);
+        }
+        Polymer.Gestures.addListener(this.$.drawer.$$('#scrim'), 'down', this._overlayDownHandler.bind(this));
+      }
 
-      },
 
-      behaviors: [MainMenuBehavior, MatchUrlBehavior],
+      disconnectedCallback() {
+        super.disconnectedCallback();
+        Polymer.Gestures.removeListener(this.$.drawer.$$('#scrim'), 'down', this._overlayDownHandler.bind(this));
+      }
+
+      /**
+       * @name _overlayDownHandler
+       * @description handles a mouse down event on the overlay
+       * @param
+       */
+      _overlayDownHandler(e) {
+        this.set('mobileMenuOpened', false);
+        e.preventDefault();
+      }
 
       /**
        * @name _openAccordion
        * @description handles a accordion click
        * @param event - Object
        */
-      _openAccordion: function (event) {
+      _openAccordion(event) {
         var accordionId = Number(Polymer.dom(event).localTarget.id);
         var newMenuItems = this.get('menuItems').map(function (menuItem) {
           menuItem.opened = menuItem.id === accordionId && !menuItem.opened ? true : false;
           return Object.assign({}, menuItem);
         });
         this.set('menuItems', newMenuItems);
-      },
+      }
 
       /**
        * @name filterDropdownItems
@@ -309,7 +345,7 @@
        * @param index - Number
        * @returns Boolean
        */
-      filterDropdownItems: function (mainItem, index) {
+      filterDropdownItems(mainItem, index) {
         var self = this;
         return function (item) {
           // if dropdownType is category we should only show the first item
@@ -319,19 +355,20 @@
             return true;
           }
         };
-      },
+      }
 
       /**
        * @name clickMenuItem
        * @description closes the mobile menu and calls _emitGtmEvent
        * @param event - Object
        */
-      clickMenuItem: function (event) {
+      clickMenuItem(event) {
         this.set('mobileMenuOpened', false);
         this._emitGtmEvent(event);
       }
+    }
 
-    });
+    customElements.define(DorelMainMenuMobile.is, DorelMainMenuMobile);
 
   </script>
 

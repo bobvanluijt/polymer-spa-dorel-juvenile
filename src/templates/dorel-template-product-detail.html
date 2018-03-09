@@ -144,6 +144,16 @@
             reviews-sorting="[[reviewsConfig.sorting]]"
             image-only="[[reviewsConfig.image_only]]"></dorel-section-product-reviews>
         </template>
+
+        <!-- section-seo -->
+        <template
+          is="dom-if"
+          if="[[templateData.acf.seo_block]]">
+          <dorel-layout-container>
+            <dorel-section-seo seo-data="[[templateData.acf.seo_block]]"></dorel-section-seo>
+          </dorel-layout-container>
+        </template>
+        <!--// section-seo -->
       </template>
     </div>
   </template>

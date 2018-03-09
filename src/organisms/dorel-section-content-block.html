@@ -33,12 +33,16 @@
         min-height: 100%;
       }
 
+      .content-block--layout-container, .content-block--layout-column {
+        margin-top: 0;
+      }
+
       h3 {
         @apply(--theme-typography-6);
       }
 
       dorel-cta {
-        margin-top: 1.5em;
+        margin: 1em 0;
         clear: both;
         float: left;
       }
@@ -48,13 +52,14 @@
       breakpoints="{{ breakpoints }}"></dorel-media-query>
 
     <section class="content-block">
-      <dorel-layout-container>
+      <dorel-layout-container class="content-block--layout-container">
         <dorel-layout-row
           reverse$="[[ _reverseLayout(breakpoints.tabletMediumUp, componentCount) ]]">
           <dorel-layout-column
             desktop-column-span="6"
             tablet-column-span="6"
-            mobile-column-span="12">
+            mobile-column-span="12"
+            class="content-block--layout-column">
             <div class="image-container"
               desktop$="[[ breakpoints.tabletMediumUp ]]">
               <dorel-bynder-image
@@ -74,7 +79,8 @@
           <dorel-layout-column
             desktop-column-span="6"
             tablet-column-span="6"
-            mobile-column-span="12">
+            mobile-column-span="12"
+            class="content-block--layout-column">
             <div class="text-container">
               <div>
                 <h3 class="title">[[ blockData.title ]]</h3>

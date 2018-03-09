@@ -36,7 +36,7 @@
     </style>
     <dorel-media-query breakpoints="{{ breakpoints }}"></dorel-media-query>
     <app-location route="{{ route }}" query-params="{{ queryParams }}"></app-location>
-    
+
     <br>
 
     <dorel-car-fitting-nav
@@ -55,7 +55,7 @@
       data="{{ routeData }}"
       tail="{{ subroute }}">
     </app-route>
-    
+
     <dorel-car-fitting-age-selector
       age-category="{{ ageCategory }}"
       car-data="{{ carData }}"
@@ -104,6 +104,16 @@
     <template is="dom-if" if="[[ breakpoints.tabletMediumUp ]]" restamp="true">
       <div id="background-complementary"></div>
     </template>
+
+    <!-- section-seo -->
+    <template
+      is="dom-if"
+      if="[[templateData.acf.seo_block]]">
+      <dorel-layout-container>
+        <dorel-section-seo seo-data="[[templateData.acf.seo_block]]"></dorel-section-seo>
+      </dorel-layout-container>
+    </template>
+    <!--// section-seo -->
   </template>
 
   <script>
@@ -366,7 +376,7 @@
         this.currentStepTitle = (this.getCurrentStepData()) ? this.getCurrentStepData().title : '';
         this.currentProgress = (this.getCurrentProgess()) ? this.getCurrentProgess() : 0;
         const backgroundNode = this.shadowRoot.querySelector('#background-complementary');
-        if(backgroundNode) (setStepTo === 'carFittingResults') ? backgroundNode.style.top = '47rem': backgroundNode.style.top = '0rem';
+        if(backgroundNode) (setStepTo === 'carFittingResults') ? backgroundNode.style.top = '50rem': backgroundNode.style.top = '0rem';
       }
     }
 
