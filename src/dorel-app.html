@@ -214,6 +214,16 @@
           name="404"></dorel-template-404>
 
       </iron-pages>
+      <!-- section-seo -->
+      <template
+        is="dom-if"
+        if="[[currentPage.acf.seo_block]]">
+        <dorel-layout-container>
+          <dorel-section-seo seo-data="[[currentPage.acf.seo_block]]"></dorel-section-seo>
+        </dorel-layout-container>
+      </template>
+
+      <!--// section-seo -->
     </main>
 
     <template

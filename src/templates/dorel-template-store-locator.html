@@ -18,16 +18,6 @@
       template-data="[[ templateData ]]"
       gtm-parent="dorel-section-store-locator"
       gtm-parent-index="0"></dorel-section-store-locator>
-
-    <!-- section-seo -->
-    <template
-      is="dom-if"
-      if="[[templateData.acf.seo_block]]">
-      <dorel-layout-container>
-        <dorel-section-seo seo-data="[[templateData.acf.seo_block]]"></dorel-section-seo>
-      </dorel-layout-container>
-    </template>
-    <!--// section-seo -->
   </template>
 
   <script>
