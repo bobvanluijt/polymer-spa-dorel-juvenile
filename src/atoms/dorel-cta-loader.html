@@ -1,0 +1,437 @@
+<link rel="import" href="../utils/behaviors/single/dorel-gtm-behavior.html">
+
+<dom-module id="dorel-cta-loader">
+  <template>
+    <style include="iron-flex">
+      /*
+       * CTA - Default states
+       */
+
+      /* aplies to all type of cta's (both button and regular link) */
+      .theme-cta {
+        @apply(--theme-button);
+        @apply(--theme-button-primary);
+        @apply(--theme-button-medium);
+        width: 100%;
+      }
+
+      .theme-cta--primary {
+        @apply(--theme-button-primary);
+      }
+
+      .theme-cta--secondary {
+        @apply(--theme-button-secondary);
+      }
+
+      .theme-cta--tertiary {
+        @apply(--theme-button-tertiary);
+      }
+
+      .theme-cta--link {
+        @apply(--theme-button-link);
+      }
+
+      .theme-cta--primary.inverted {
+        @apply(--theme-button-inverted);
+      }
+
+      .theme-cta--link.inverted {
+        @apply(--theme-link-inverted);
+      }
+
+      .theme-cta--link.dorel-cta.inverted:hover {
+        @apply(--theme-link-inverted);
+        opacity: 0.8;
+      }
+
+      .theme-cta--inverted .theme-cta__icon {
+        @apply(--theme-button-link-icon);
+      }
+
+      .theme-cta--link .theme-cta__content {
+        padding: 0;
+      }
+
+      .theme-cta--link .theme-cta__icon {
+        @apply(--theme-button-link-icon);
+        padding-right: 0;
+      }
+
+      /*
+       * CTA - Hover and focus states
+       */
+
+      .theme-cta:hover, .theme-cta:focus {
+        cursor: pointer;
+      }
+
+      .theme-cta:hover .theme-cta__icon, .theme-cta:focus .theme-cta__icon {
+        @apply(--theme-button-icon-active);
+      }
+
+      .theme-cta--primary:hover, .theme-cta--primary:focus,
+      .theme-cta--secondary:hover, .theme-cta--secondary:focus,
+      .theme-cta--tertiary:hover, .theme-cta--tertiary:focus {
+        @apply(--theme-button-active);
+      }
+
+      .theme-cta--link:hover, .theme-cta--link:focus {
+        @apply(--theme-button-link-active);
+      }
+
+      .theme-cta--link:hover .theme-cta__icon,
+      .theme-cta--link:focus .theme-cta__icon {
+        @apply(--theme-button-link-icon-active);
+      }
+
+      /*
+       * CTA - Sizes
+       */
+
+      .theme-cta--medium {
+        @apply(--theme-button-medium);
+      }
+
+      .theme-cta--large {
+        @apply(--theme-button-large);
+        height: 3em;
+      }
+
+      .theme-cta--large .theme-cta__content {
+        padding: 0;
+      }
+
+      /*
+       * CTA - Content
+       */
+
+      .theme-cta__content {
+        @apply(--theme-button-label);
+        -webkit-box-align: center;
+        -webkit-flex-align: center;
+        -ms-flex-align: center;
+        -webkit-align-items: center;
+        -webkit-flex-grow: 1;
+        flex-grow: 1;
+        padding: 0 0 0 0.75em;
+      }
+
+      /*
+       * CTA - Icon styling
+       */
+
+      .theme-cta__icon {
+        @apply(--theme-button-icon);
+      }
+
+      .theme-cta--primary .theme-cta__icon,
+      .theme-cta--primary.inverted:hover .theme-cta__icon {
+        @apply(--theme-button-primary-icon);
+      }
+
+      .theme-cta--primary.inverted .theme-cta__icon,
+      .theme-cta--secondary .theme-cta__icon {
+        @apply(--theme-button-secondary-icon);
+      }
+
+      .theme-cta--tertiary .theme-cta__icon {
+        @apply(--theme-button-tertiary-icon);
+      }
+
+      .theme-cta__icon--left {
+        width: 3em;
+        height: 2.5em;
+        margin: 0;
+      }
+
+      :host([rotate]) a {
+        transform: scaleX(-1);
+      }
+
+      :host([rotate]) span {
+        transform: scaleX(-1);
+        padding: 0 0.75em 0 0;
+      }
+
+      :host([disabled]) a {
+        opacity: .35;
+        pointer-events: none;
+      }
+
+      :host([disabled]) {
+        cursor: not-allowed;
+      }
+
+      :host([type="link"][active]) a {
+        @apply(--theme-button-link-active);
+      }
+
+      :host([type="primary"][active]) a {
+        @apply(--theme-button-active);
+      }
+
+      :host([type="link"][active]) .theme-cta__icon {
+        @apply(--theme-button-link-icon-active);
+      }
+
+      :host([type="link"]) .theme-cta__icon {
+        border-left: 0;
+        border-right: 0;
+        margin-left: 0;
+        margin-right: 0;
+      }
+
+      /*
+       * Left aligned icons
+       */
+      :host([left-align-icon]) .theme-cta {
+        flex-direction: row-reverse;
+      }
+
+      :host([left-align-icon]) .theme-cta__icon {
+        @apply(--theme-button-icon-left);
+        padding: 0 .5em 0 0.25em;
+      }
+
+      :host([left-align-icon]) .theme-cta__content {
+        padding: 0 .5em 0 0;
+      }
+
+      /*
+       * Responsive Behaviour
+       */
+
+      [tablet-medium-up] .theme-cta__icon--left {
+        width: 5.125em;
+        height: 3.125em;
+        margin: .475em 0;
+      }
+
+      .theme-cta--large[tablet-medium-up] {
+        @apply(--theme-button-large);
+        height: auto;
+      }
+    </style>
+
+    <dorel-media-query breakpoints="{{ breakpoints }}"></dorel-media-query>
+
+    <a href$="[[ link ]]"
+      title$="[[ title ]]"
+      target$="[[ target ]]"
+      class$="theme-cta theme-cta--[[ type ]] theme-cta--[[ size ]] [[ invertedCssClass ]]"
+      tablet-medium-up$="{{ breakpoints.tabletMediumUp }}"
+      target$="[[ _isExternal(linkTarget) ]]"
+      gtm-action$="[[ gtmAction ]]"
+      gtm-parent$="[[ gtmParent ]]"
+      gtm-parent-index$="[[ gtmParentIndex ]]"
+      gtm-child$="[[ gtmChild ]]"
+      gtm-child-index$="[[ gtmChildIndex ]]"
+      gtm-cta-index$="[[ gtmCtaIndex ]]"
+      on-click="_clickCTA">
+ 
+      <template
+        is="dom-if"
+        if="[[ extraIcon ]]">
+        <iron-icon class="theme-cta__icon theme-cta__icon--left" icon="[[ extraIcon ]]"></iron-icon>
+      </template>
+
+      <span class="theme-cta__content"><slot id="content"></slot></span>
+
+      <template
+        is="dom-if"
+        if="[[ icon ]]">
+        <template
+          is="dom-if"
+          if="[[ !isLoading ]]">
+          <iron-icon class="theme-cta__icon" icon="[[ icon ]]"></iron-icon>
+        </template>
+      </template>
+      
+      <template
+        is="dom-if"
+        if="[[ isLoading ]]">
+        <dorel-loader class="theme-cta__icon" loading="[[ isLoading ]]"></dorel-loader>
+      </template>
+
+    </a>
+  </template>
+
+  <script>
+    class DorelCtaLoader extends ReduxMixin(Polymer.mixinBehaviors([GtmBehavior], Polymer.Element)) {
+
+      static get is() { return 'dorel-cta-loader'; }
+
+      static get properties() {
+        return {
+          /**
+           * @redux path
+           * @name currentPage
+           * @description get the currentPage from redux
+           */
+          currentPage: {
+            type: Object,
+            statePath: 'page.currentPage'
+          },
+
+          /**
+           * @attribute
+           * @name link
+           * @description defines the href of the CTA
+           */
+          link: {
+            type: String
+          },
+          /**
+           * @attribute
+           * @name target
+           * @description defines the target for the href
+           */
+          target: {
+            type: String
+          },
+          /**
+           * @attribute
+           * @name title
+           * @description defines the title attribut of the CTA, can be the same as it's content
+           */
+          title: {
+            type: String
+          },
+          /**
+           * @attribute
+           * @name linkTarget
+           * @description defines the links target (e.g. _blank for opening in new tab)
+           */
+          linkTarget: {
+            type: String,
+            value: ''
+          },
+
+          /**
+           * @attribute
+           * @name type
+           * @description defines what type of CTA we are dealing with. Currently 'primary', 'secondary', 'tertiary' and 'link' are supported. Per type, certain css applies to differentiate beteen one another.
+           */
+          type: {
+            type: String,
+            value: 'primary'
+          },
+
+          /**
+           * @attribute
+           * @name inverted
+           * @description for CTA on a dark background. Only implemented for types 'primary' and 'link'
+           */
+          inverted: {
+            type: Boolean,
+            value: false
+          },
+
+          /**
+           * @attribute
+           * @name size
+           * @description defines the size of the CTA. Currently 'medium' and 'large' are supported
+           */
+          size: {
+            type: String,
+            value: 'medium'
+          },
+
+          /**
+           * @attribute
+           * @name icon
+           * @description The icon for the CTA. Use the dorel-iconset icons here.For example: dorel-icons:chevron-right
+           */
+          icon: {
+            type: String,
+            value: 'dorel-icons:chevron-right'
+          },
+
+          /**
+           * @attribute
+           * @name extraIcon
+           * @description A large extra icon for emphasizing the CTA. Is placed left of the text.
+           * Use the dorel-iconset icons here. For example: dorel-icons:chevron-right
+           */
+          extraIcon: {
+            type: String
+          },
+
+          /**
+           * @attribute
+           * @name disabled
+           * @description Sets the disabled state of the CTA
+           */
+          disabled: {
+            type: Boolean
+          },
+
+          /**
+           * @attribute
+           * leftAlignIcon
+           * @description Aligns the main icon to the left of the button label
+           */
+          leftAlignIcon: {
+            type: Boolean
+          },
+
+          /**
+           * @attribute
+           * invertedCssClass
+           * @description define the inverted css class
+           */
+          invertedCssClass: {
+            type: String,
+            computed: '_getInvertedStyle(inverted)'
+          }
+        }
+      }
+
+      /**
+       * @name clickCTA
+       * @description handle the click on a cta link, very important for Analytics!!!!!!
+       */
+      _clickCTA(event) {
+        // retarget to the right element to get its attributes
+        const element = (event.target.tagName === 'A') ? event.target : event.composedPath()[1];
+        const gtmAction = element.getAttribute('gtm-action');
+        const path = event.composedPath();
+        const pathEl = path.filter(el => el.tagName && el.tagName.includes('DOREL-'));
+
+        /**
+         * Tracking on click for cta
+         */
+        const gtmEvent = {
+          action: this.get('gtmAction') || 'click',
+          component: 'call-to-action',
+          structure: pathEl,
+          element: element,
+          event: 'polymer_event',
+          things: {
+            'currentPage': this.get('currentPage') || document.URL,
+            'targetPage': element.href
+          }
+        };
+
+        this._dispatchGtmEvent(gtmEvent);
+      }
+
+      /**
+       * define if the _target opens in a new tab or not
+       */
+      _isExternal(linkTarget) {
+        return (typeof linkTarget === 'undefined' || !linkTarget) ?
+          '_self' : '_blank';
+      }
+
+      /**
+       * determine if we need to set the inverted css class to
+       */
+      _getInvertedStyle(inverted) {
+        return inverted ? 'inverted' : '';
+      }
+    }
+
+    customElements.define(DorelCtaLoader.is, DorelCtaLoader);
+  </script>
+</dom-module>
