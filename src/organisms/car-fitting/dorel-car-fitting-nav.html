@@ -165,6 +165,11 @@
       .header-wrapper[desktop-small-up] {
         height: 7.5em;
       }
+      
+      .header-item-back {
+        font-size: 1.5rem;
+        color: var(--theme-color-text-link);
+      }
 
       [desktop-small-up] .header-item-logo {
         order: 1;
@@ -200,6 +205,7 @@
          desktop-small-up$="{{ breakpoints.desktopSmallUp }}"
          compact-menu$="{{ compactMenu }}">
       <header>
+        [[ test(stepController) ]]
         <div class="header-items">
           <template is="dom-if" if="{{ breakpoints.desktopSmallUp }}">
             <div class="header-item header-item-logo">
@@ -219,10 +225,10 @@
               </a>
             </div>
           </template>
-
           <template is="dom-if" if="{{ !breakpoints.desktopSmallUp }}">
             <div class="flex-row">
-              <template is="dom-if" if="{{ shouldShow(previous) }}">
+
+              <template is="dom-if" if="[[ showPrevious ]]">
                 <div class="header-item header-item-back">
                   <iron-icon class="header-icon icon-back"
                              on-click="previousStep"
@@ -260,6 +266,11 @@
         return 'dorel-car-fitting-nav';
       }
 
+      constructor() {
+        super();
+        this.showPrevious = false;
+      }
+
       static get properties() {
         return {
           productUrl: {
@@ -267,6 +278,30 @@
             computed: 'getProductUrl(productName)'
           }
         };
+      }
+
+      static get observers() {
+        return [
+            'updateView(stepController.currentStep)'
+        ];
+      }
+
+      updateView() {
+        if(this.stepController.currentStep) {
+          const currentStepData = this.stepData[Object.keys(this.stepData).filter(function(step) {
+            return this.stepData[step].stepName === this.stepController.currentStep;
+          }.bind(this))];
+          this.set('showPrevious', currentStepData.previousStep);
+        }
+      }
+
+      previousStep() {
+        if(this.stepController.currentStep) {
+          const currentStepData = this.stepData[Object.keys(this.stepData).filter(function(step) {
+            return this.stepData[step].stepName === this.stepController.currentStep;
+          }.bind(this))];
+          this.set('stepController.currentStep', currentStepData.previousStep);
+        }
       }
 
       getProductUrl(productName) {

@@ -46,6 +46,8 @@
       previous="[[ isNotFirstStep(currentStep, carFittingSteps) ]]"
       progress="[[ currentProgress ]]"
       product-name="[[ requestedProductName ]]"
+      step-controller="{{ stepController  }}"
+      step-data="[[ stepData ]]"
       brand-name="[[ brandName ]]'">
     </dorel-car-fitting-nav>
 
@@ -100,20 +102,10 @@
       </dorel-car-fitting-results>
     </template>
 
-
     <template is="dom-if" if="[[ breakpoints.tabletMediumUp ]]" restamp="true">
       <div id="background-complementary"></div>
     </template>
 
-    <!-- section-seo -->
-    <template
-      is="dom-if"
-      if="[[templateData.acf.seo_block]]">
-      <dorel-layout-container>
-        <dorel-section-seo seo-data="[[templateData.acf.seo_block]]"></dorel-section-seo>
-      </dorel-layout-container>
-    </template>
-    <!--// section-seo -->
   </template>
 
   <script>
