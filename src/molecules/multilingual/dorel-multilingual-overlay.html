@@ -36,6 +36,17 @@
         font-size: var(--theme-base-font-size);
       }
 
+      [mobile-small] paper-dialog,
+      [mobile-medium] paper-dialog,
+      [tablet-small] paper-dialog,
+      [tablet-medium] paper-dialog,
+      [tablet-medium-up] paper-dialog {
+        border-bottom: 1px solid rgba(0, 0, 0, .1);
+        box-shadow: none;
+        top: 4.5rem;
+        width: var(--theme-app-drawer-width);
+      }
+
       .container {
         position: relative;
         margin: 0 !important;
@@ -55,6 +66,14 @@
         padding: 0 !important;
         float: left;
         width: 100%;
+      }
+
+      [mobile-small] .header,
+      [mobile-medium] .header,
+      [tablet-small] .header,
+      [tablet-medium] .header,
+      [tablet-medium-up] .header {
+        visibility: hidden;
       }
 
       dorel-logo {
@@ -97,7 +116,11 @@
     <dorel-media-query breakpoints="{{ breakpoints }}"></dorel-media-query>
 
     <section class="section-example-component"
-             tablet-medium-up$="{{ breakpoints.tabletMediumUp }}">
+             tablet-medium-up$="{{ breakpoints.tabletMediumUp }}"
+             mobile-small$="{{ breakpoints.mobileSmall }}"
+             mobile-medium$="{{ breakpoints.mobileMedium }}"
+             tablet-small$="{{ breakpoints.tabletSmall }}"
+             tablet-medium$="{{ breakpoints.tabletMedium }}">
 
       <paper-dialog id="dialog"
                     always-on-top="true"

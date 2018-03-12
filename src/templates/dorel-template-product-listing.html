@@ -6,7 +6,10 @@
 <dom-module id="dorel-template-product-listing">
   <template>
     <style>
-      h1, h2, h3, h4 {
+      h1,
+      h2,
+      h3,
+      h4 {
         @apply(--theme-header-text-transform);
       }
 
@@ -20,58 +23,34 @@
       dorel-layout-column {
         margin-top: 0;
       }
+
     </style>
 
     <!-- section-header -->
-    <template
-      is="dom-if"
-      if="[[templateData.acf.hero_header.length]]">
-      <dorel-section-header
-        section-header-data="[[heroHeader]]"></dorel-section-header>
+    <template is="dom-if" if="[[templateData.acf.hero_header.length]]">
+      <dorel-section-header section-header-data="[[heroHeader]]"></dorel-section-header>
     </template>
     <!--// section-header -->
 
-    <dorel-section-page-nav
-      breadcrumbs-toggle="true"
-      rendered-count="{{renderedCount}}"></dorel-section-page-nav>
+    <dorel-section-page-nav breadcrumbs-toggle="true" rendered-count="{{renderedCount}}"></dorel-section-page-nav>
 
     <dorel-layout-container>
-      <dorel-layout-row
-        align="left">
+      <dorel-layout-row align="left">
 
         <!-- Sidebar -->
-        <template
-          is="dom-if"
-          if="[[_shouldShowSidebar(leftSidebar)]]">
-          <dorel-layout-column
-            desktop-column-span="3"
-            tablet-column-span="5"
-            mobile-column-span="12">
+        <template is="dom-if" if="[[_shouldShowSidebar(leftSidebar)]]">
+          <dorel-layout-column desktop-column-span="3" tablet-column-span="5" mobile-column-span="12">
 
-            <template
-              is="dom-if"
-              if="[[leftSidebar.productSubCategories.toggle]]">
-              <dorel-accordion-item
-                heading="[[localize('Subcategories')]]"
-                opened
-                small>
-                <dorel-category-submenu
-                  items="[[leftSidebar.productSubCategories.sub_categories]]">
+            <template is="dom-if" if="[[leftSidebar.productSubCategories.toggle]]">
+              <dorel-accordion-item heading="[[localize('Subcategories')]]" opened small>
+                <dorel-category-submenu items="[[leftSidebar.productSubCategories.sub_categories]]">
                 </dorel-category-submenu>
               </dorel-accordion-item>
             </template>
 
-            <template
-              is="dom-if"
-              if="[[leftSidebar.filters.toggle]]">
-              <dorel-accordion-item
-                heading="[[localize('Filters')]]"
-                opened
-                small>
-                <dorel-category-filter
-                  filter-data="[[leftSidebar.filters.filter_groups]]"
-                  retrieving-products="[[retrievingProducts]]"
-                  product-data="[[products]]">
+            <template is="dom-if" if="[[leftSidebar.filters.toggle]]">
+              <dorel-accordion-item heading="[[localize('Filters')]]" opened small>
+                <dorel-category-filter filter-data="[[leftSidebar.filters.filter_groups]]" retrieving-products="[[retrievingProducts]]" product-data="[[products]]">
                 </dorel-category-filter>
               </dorel-accordion-item>
             </template>
@@ -79,18 +58,11 @@
         </template>
         <!--// Sidebar -->
 
-        <dorel-layout-column
-          desktop-column-span$="[[_colSpan(leftSidebar, 'list', 'desktop')]]"
-          tablet-column-span$="[[_colSpan(leftSidebar, 'list', 'tablet')]]"
+        <dorel-layout-column desktop-column-span$="[[_colSpan(leftSidebar, 'list', 'desktop')]]" tablet-column-span$="[[_colSpan(leftSidebar, 'list', 'tablet')]]"
           mobile-column-span="12">
-          <dorel-category-listing
-            desktop-col-span="[[_colSpan(leftSidebar, 'item', 'desktop')]]"
-            tablet-col-span="[[_colSpan(leftSidebar, 'item', 'tablet')]]"
-            mobile-col-span="[[_colSpan(leftSidebar, 'item', 'mobile')]]"
-            products-data="[[products]]"
-            retrieving-products="[[retrievingProducts]]"
-            sort="[[sort]]"
-            rendered-count="{{renderedCount}}"></dorel-category-listing>
+          <dorel-category-listing desktop-col-span="[[_colSpan(leftSidebar, 'item', 'desktop')]]" tablet-col-span="[[_colSpan(leftSidebar, 'item', 'tablet')]]"
+            mobile-col-span="[[_colSpan(leftSidebar, 'item', 'mobile')]]" products-data="[[products]]" retrieving-products="[[retrievingProducts]]"
+            sort="[[sort]]" rendered-count="{{renderedCount}}"></dorel-category-listing>
         </dorel-layout-column>
       </dorel-layout-row>
     </dorel-layout-container>
@@ -98,7 +70,9 @@
   </template>
 
   <script>
-    class DorelTemplateProductListing extends ReduxMixin(Polymer.mixinBehaviors([TemplateBehaviors, DorelMultilingualBehavior], Polymer.Element)) {
+    class DorelTemplateProductListing extends ReduxMixin(Polymer.mixinBehaviors([TemplateBehaviors,
+      DorelMultilingualBehavior
+    ], Polymer.Element)) {
 
       static get is() {
         return 'dorel-template-product-listing';
@@ -120,17 +94,18 @@
            */
           products: {
             type: Array,
-            statePath: function(state) {
-              if (!this.get('categories')
-                || !this.get('categories').length
-                || !state.product
-                || !state.product.products.length) return;
+            statePath: function (state) {
+              if (!this.get('categories') ||
+                !this.get('categories').length ||
+                !state.product ||
+                !state.product.products.length) return;
 
               // (TODO) the wp category ids array items are strings, convert them to integers to compare with the magento product category ids
               const wpCatIdsToInt = this.get('categories').map(category => parseInt(category));
 
               // filter the products and get only the products that comply to the wp categories defined for this page
               const filteredProds = state.product.products.filter(product => {
+                if (typeof product.categories === 'undefined' || !product.categories.length) return;
                 return (product.categories.some(category => {
                   return wpCatIdsToInt.includes(category);
                 })) ? product : '';
@@ -166,9 +141,10 @@
            */
           retrievingProducts: {
             type: Boolean,
-            statePath: function(state) {
+            statePath: function (state) {
               // check if current categories are in the requested categories
-              const categories = state.product.requestedCategories.map(category => this.get('categories').indexOf(category.id) > -1 ? category : '');
+              const categories = state.product.requestedCategories.map(category => this.get('categories').indexOf(
+                category.id) > -1 ? category : '');
 
               // check if there are categories in the current ones that are loading if only one of them is loading set isRetrieving to true
               let isRetrieving = false;
@@ -205,16 +181,16 @@
        * @return {number} colspan
        */
       _colSpan(leftSidebar, type, viewport) {
-        switch(viewport) {
+        switch (viewport) {
           case 'desktop':
-            return (type === 'list')
-            ? (this._shouldShowSidebar(leftSidebar)) ? 9 : 12
-            : (this._shouldShowSidebar(leftSidebar)) ? 4 : 3;
+            return (type === 'list') ?
+              (this._shouldShowSidebar(leftSidebar)) ? 9 : 12 :
+              (this._shouldShowSidebar(leftSidebar)) ? 4 : 3;
 
           case 'tablet':
-            return (type === 'list')
-            ? (this._shouldShowSidebar(leftSidebar)) ? 7 : 12
-            : (this._shouldShowSidebar(leftSidebar)) ? 4 : 6;
+            return (type === 'list') ?
+              (this._shouldShowSidebar(leftSidebar)) ? 7 : 12 :
+              (this._shouldShowSidebar(leftSidebar)) ? 4 : 6;
         }
       }
 
@@ -225,8 +201,8 @@
        * @param {array} previous categories
        */
       _categoriesChanged(newCategories, oldCategories) {
-        if(newCategories && newCategories.length
-          && JSON.stringify(newCategories) !== JSON.stringify(oldCategories)) {
+        if (newCategories && newCategories.length &&
+          JSON.stringify(newCategories) !== JSON.stringify(oldCategories)) {
           this.dispatch('requestProductsByCategories', newCategories);
         }
       }
@@ -243,5 +219,6 @@
     }
 
     customElements.define(DorelTemplateProductListing.is, DorelTemplateProductListing);
+
   </script>
 </dom-module>
