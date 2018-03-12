@@ -12,6 +12,11 @@
         display: none;
       }
 
+      .cta-back {
+        float: left;
+        margin-top: 1.5em;
+      }
+
       dorel-cta {
         float: right;
         margin-top: 1.5em;
@@ -52,7 +57,7 @@
         <dorel-layout-column desktop-column-span="12" tablet-column-span="12" mobile-column-span="12" align="left">
           <template is="dom-if" if="[[ breakpoints.desktopSmallUp ]]">
             <div class="previous_button_container">
-              <dorel-cta id="previous_button" title="[[ stepData.options.previous ]]" rotate no-margin type="link" link="[[createCarFittingListLink(carFittingToolPage)]]" size="medium" icon="dorel-icons:chevron-right" on-click="previousStep">
+              <dorel-cta class="cta-back" id="previous_button" title="[[ stepData.options.previous ]]" rotate no-margin type="link" link="[[createCarFittingListLink(carFittingToolPage)]]" size="medium" icon="dorel-icons:chevron-right" on-click="previousStep">
                 [[ localize('common#back') ]]
               </dorel-cta>
             </div>

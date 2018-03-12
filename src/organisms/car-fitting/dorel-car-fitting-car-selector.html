@@ -1,5 +1,6 @@
 <link rel="import" href="../../molecules/dorel-car-details-form.html">
 <link rel="import" href="../../atoms/dorel-checkbox.html">
+<link rel="import" href="../../atoms/dorel-cta-loader.html">
 <dom-module id="dorel-car-fitting-car-selector">
   <template>
     <style>
@@ -11,7 +12,12 @@
         display: none;
       }
 
-      dorel-cta {
+      .cta-back {
+        float: left;
+        margin-top: 1.5em;
+      }
+
+      dorel-cta-loader {
         float: right;
         margin-top: 1.5em;
       }
@@ -97,9 +103,9 @@
         margin-top: 0;
       }
 
-      .loading-wrapper {
-        margin-left: -200px;
-      }
+      /*.loading-wrapper {*/
+      /*  margin-left: -200px;*/
+      /*}*/
 
     </style>
 
@@ -112,7 +118,7 @@
       <template is="dom-if" if="[[ breakpoints.desktopSmallUp ]]">
         <dorel-layout-row align="middle">
            <dorel-layout-column desktop-column-span="12" tablet-column-span="12" mobile-column-span="12" align="left">
-            <dorel-cta title="[[ stepData.options.previous ]]" rotate no-margin type="link" link="" size="medium" icon="dorel-icons:chevron-right" on-click="previousStep">
+            <dorel-cta class="cta-back" title="[[ stepData.options.previous ]]" rotate no-margin type="link" link="" size="medium" icon="dorel-icons:chevron-right" on-click="previousStep">
                 [[ localize('common#back') ]]
             </dorel-cta>
           </dorel-layout-column>
@@ -171,17 +177,17 @@
                   </dorel-layout-column>-->
                   <br><br><br>
                   <dorel-layout-column desktop-column-span="6" tablet-column-span="6" mobile-column-span="7" align="left">
-                    <dorel-loader class="loading-wrapper" loading="[[ isLoading(carData.0.result.message) ]]"></dorel-loader>
-                    <dorel-cta title="Call to action"
+                    <dorel-cta-loader title="Call to action"
                                 type="primary"
                                 link="[[createCarFittingListLink(carFittingToolPage, showcaseData)]]"
                                 size="medium"
                                 on-tap="nextStep"
                                 id="next_button"
                                 disabled
+                                is-loading="[[ isLoading(carData.0.result.message) ]]"
                                 hidden$="[[ stepData.hide_primary_button ]]">
                       [[ localize(stepData.main_section.primary_cta) ]]
-                    </dorel-cta>
+                    </dorel-cta-loader>
                   </dorel-layout-column>
                 </dorel-layout-row>
               </dorel-layout-column>
