@@ -39,12 +39,11 @@
       [mobile-small] paper-dialog,
       [mobile-medium] paper-dialog,
       [tablet-small] paper-dialog,
-      [tablet-medium] paper-dialog,
-      [tablet-medium-up] paper-dialog {
-        border-bottom: 1px solid rgba(0, 0, 0, .1);
-        box-shadow: none;
-        top: 4.5rem;
-        width: var(--theme-app-drawer-width);
+      [tablet-medium] paper-dialog {
+        top: 7.5rem;
+        width: 100vw;
+        position: fixed;
+        left: calc(var(--theme-app-drawer-width) - 100vw);
       }
 
       .container {
@@ -68,14 +67,6 @@
         width: 100%;
       }
 
-      [mobile-small] .header,
-      [mobile-medium] .header,
-      [tablet-small] .header,
-      [tablet-medium] .header,
-      [tablet-medium-up] .header {
-        visibility: hidden;
-      }
-
       dorel-logo {
         margin: 2.25em 0 2.25em 0;
       }
@@ -91,7 +82,7 @@
         position: absolute;
         top: 1.25em;
         right: .75em;
-        z-index: 10;
+        z-index: 99999;
         cursor: pointer;
         width: 2em;
         height: 2em;
