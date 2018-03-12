@@ -10,9 +10,14 @@
         display: none;
       }
 
-      .inner-col-left-top {
-        min-height: 26rem;
+      dorel-cta {
+        float: right;
+        margin-top: 1.5em;
       }
+
+      /*.inner-col-left-top {*/
+      /*  min-height: 26rem;*/
+      /*}*/
 
       .notification-box {
         background-color: var(--theme-color-monochrome-1);
@@ -49,7 +54,7 @@
         width: 100%;
         color: var(--theme-brand-color-2);
         font-size: var(--theme-typography-3_-_font-size);
-        height: 3rem;
+        min-height: 3rem;
         background-color: var(--theme-color-monochrome-2);
         border-radius: var(--theme-button-border-radius);
       }
@@ -59,7 +64,7 @@
         width: 100%;
         color: var(--theme-color-monochrome-2);
         font-size: var(--theme-typography-2_-_font-size);
-        height: 3rem;
+        min-height: 3rem;
         background-color: var(--theme-brand-color-2);
         border-radius: var(--theme-button-border-radius);
       }
@@ -148,7 +153,7 @@
             <dorel-layout-row align="middle">
               <dorel-layout-column desktop-column-span="9" tablet-column-span="9" mobile-column-span="12" align="left" class="col-left-bottom">
                 <dorel-layout-row align="right">
-                  <dorel-layout-column desktop-column-span="7" tablet-column-span="7" mobile-column-span="7" align="left">
+                  <dorel-layout-column desktop-column-span="8" tablet-column-span="8" mobile-column-span="8" align="left">
                     <dorel-cta title="Call to action"
                                type="primary"
                                link="[[getToolUrl()]]"
