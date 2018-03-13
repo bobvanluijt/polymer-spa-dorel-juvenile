@@ -42,12 +42,6 @@
         height: var(--theme-logo-desktop-height);
       }
 
-      .logo[compact-menu] {
-        -ms-transform: scale(.75);
-        -webkit-transform: scale(.75);
-        transform: scale(.75);
-      }
-
       .logo[alternative-logo] {
         background: var(--theme-logo-alternative);
       }
@@ -59,8 +53,7 @@
     <div class="logo"
          alternative-logo$="[[ useAlternativeLogo ]]"
          tablet-medium-up$="[[ breakpoints.tabletMediumUp ]]"
-         desktop-small-up$="[[ breakpoints.desktopSmallUp ]]"
-         compact-menu$="[[ compactMenu ]]"></div>
+         desktop-small-up$="[[ breakpoints.desktopSmallUp ]]"></div>
   </template>
 
   <script>

@@ -26,6 +26,12 @@
         width: 100%;
         text-align: center;
       }
+
+      [mobile-small] .layout-column-timeline,
+      [mobile-medium] .layout-column-timeline {
+        padding: 0;
+      }
+      
       [tablet-medium-up] .title {
         @apply(--theme-typography-7);
       }
@@ -33,7 +39,10 @@
 
     <dorel-media-query breakpoints="{{ breakpoints }}"></dorel-media-query>
 
-    <section tablet-medium-up$="[[ breakpoints.tabletMediumUp ]]">
+    <section
+      tablet-medium-up$="[[ breakpoints.tabletMediumUp ]]"
+      mobile-small$="{{ breakpoints.mobileSmall }}"
+      mobile-medium$="{{ breakpoints.mobileMedium }}">
 
       <!-- HERO HEADER -->
       <dorel-section-hero-header
@@ -89,7 +98,7 @@
           if="[[ _isPageComponent(component.acf_fc_layout, 'timeline') ]]">
           <dorel-layout-container>
             <dorel-layout-row>
-              <dorel-layout-column desktop-column-span="12" tablet-column-span="12" mobile-column-span="12">
+              <dorel-layout-column desktop-column-span="12" tablet-column-span="12" mobile-column-span="12" class="layout-column-timeline">
                 <h2 class="title">[[component.title]]</h2>
                 <dorel-section-timeline
                   interval="[[component.animation_interval]]"
