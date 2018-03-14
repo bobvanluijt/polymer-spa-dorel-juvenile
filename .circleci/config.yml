@@ -12,4 +12,4 @@ workflows:
   build_and_test:
     jobs:
       - build:
-          context: dorel.io
+          context: dorelio
