@@ -144,6 +144,7 @@
           featuresData: {
             type: Object,
             statePath: function(state) {
+              if (this.featuresMockData) return this.featuresMockData;
               if(!this.productId || !state.modules.features.length) {
                 return { isLoading: true, features: [] };
               }
@@ -152,6 +153,13 @@
               });
             }
           },
+          /**
+           * @attribute
+           * @name featuresMockData
+           * @description coming from the mock data
+           * used for component guide
+           */
+          featuresMockData: Object,
           /**
            * @attribute
            * @name expanded
