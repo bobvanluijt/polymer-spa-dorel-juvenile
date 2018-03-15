@@ -38,18 +38,11 @@
     <dorel-section-product-showcase showcase-data="[[ productShowcaseData ]]"></dorel-section-product-showcase>
 
     <dorel-layout-container>
-      <h2 class="class-for-h2">Product Features</h2>
-      <p>With a centered layout, and expand/collapse on mobile</p>
-    </dorel-layout-container>
-
-    <dorel-section-product-features features-data="[[ featuresData ]]"></dorel-section-product-features>
-
-    <dorel-layout-container>
       <hr>
       <h2 class="class-for-h2">Product USPS</h2>
     </dorel-layout-container>
 
-    <dorel-section-product-usps usps-data="[[ uspsData ]]"></dorel-section-product-usps>
+    <dorel-section-product-usps usps-mock-data="[[ uspsData ]]"></dorel-section-product-usps>
 
     <dorel-layout-container>
       <hr>
@@ -57,6 +50,27 @@
     </dorel-layout-container>
 
     <dorel-section-product-video video-data="[[ productVideoData ]]"></dorel-section-product-video>
+
+    <dorel-layout-container>
+      <h2 class="class-for-h2">Product Features</h2>
+      <p>With a centered layout, and expand/collapse on mobile</p>
+    </dorel-layout-container>
+
+    <dorel-section-product-features features-mock-data="[[ featuresData ]]"></dorel-section-product-features>
+
+    <dorel-layout-container>
+      <hr>
+      <h2 class="class-for-h2">Product Topics</h2>
+    </dorel-layout-container>
+    <dorel-section-product-topics
+      topic-data="[[ null ]]"></dorel-section-product-topics>
+
+    <dorel-layout-container>
+      <hr>
+      <h2 class="class-for-h2">Product SlideShow</h2>
+    </dorel-layout-container>
+    <dorel-section-slideshow
+      slideshow-data="[[ slideshowData ]]"></dorel-section-slideshow>
 
     <dorel-layout-container>
       <hr>
@@ -70,7 +84,7 @@
       <hr>
       <h2 class="class-for-h2">Product Accordion</h2>
     </dorel-layout-container>
-    <dorel-section-product-accordions accordions-data="[[ accordionsData ]]"></dorel-section-product-accordions>
+    <dorel-section-product-accordions accordions-mock-data="[[ accordionsData ]]"></dorel-section-product-accordions>
   </template>
   <script>
     Polymer({
@@ -111,6 +125,9 @@
           type: Object,
           value: slideshowMock
         }
+      },
+      created: function() {
+        console.log('sasas', this.featuresData);
       }
     });
   </script>
