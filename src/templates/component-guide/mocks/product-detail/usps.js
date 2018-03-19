@@ -1,26 +1,49 @@
 var uspsMock = {
-  title: 'This is a USP title',
-  usps: [
-    {
-      image: 'https://d2csxpduxe849s.cloudfront.net/media/2A82AC0B-80EE-4791-AE41EE17E21FC96A/7F84BD5F-551A-4DA5-8532AB44763439AA/AAC5CE51-5CCF-400E-9EB1904D94540489/Widescreen Retina landscape-MC1310_2017_maxicosi_stroller_adorra_lifestyle_familywithaccessories_landscape.jpg',
-      title: 'Lorem ipsum dolor sit amet',
-      description: 'Etiam rhoncus. Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero.'
-    },
-    {
-      image: 'https://d2csxpduxe849s.cloudfront.net/media/2A82AC0B-80EE-4791-AE41EE17E21FC96A/67C11181-7708-40F6-B5A14E625D001D8C/12D8A92F-3453-4BFD-8F49218A9A2B492C/Widescreen Retina landscape-MC_2017_maxicosi_general_lifestyle_outdoor_footbridge_landscape.jpg',
-      title: 'Nullam quis ante',
-      description: 'In ac dui quis mi consectetuer lacinia'
-    },
-    {
-      image: 'https://d2csxpduxe849s.cloudfront.net/media/2A82AC0B-80EE-4791-AE41EE17E21FC96A/305816CF-2B2E-4BB4-ADA9D751CC1DBAFC/BA2A1849-B031-4CB2-A5B14A2075A59A0D/Widescreen Retina landscape-MC_2017_maxicosi_general_lifestyle_outdoor_motherwithchild_feetinwater_landscape.jpg',
-      title: 'Duis arcu tortor',
-      description: 'Integer ante arcu, accumsan a, consectetuer eget, posuere ut, mauris'
-    },
-    {
-      image: 'https://d2csxpduxe849s.cloudfront.net/media/2A82AC0B-80EE-4791-AE41EE17E21FC96A/305816CF-2B2E-4BB4-ADA9D751CC1DBAFC/BA2A1849-B031-4CB2-A5B14A2075A59A0D/Widescreen Retina landscape-MC_2017_maxicosi_general_lifestyle_outdoor_motherwithchild_feetinwater_landscape.jpg',
-      title: 'Duis arcu tortor',
-      description: 'Integer ante arcu, accumsan a, consectetuer eget, posuere ut, mauris'
-    }
-
-  ]
+	"title": "",
+	"usps": [
+		{
+			"entity_id": "48519",
+			"created_at": "2018-03-14 14:29:13",
+			"updated_at": "2018-03-14 14:29:13",
+			"product_id": "4885",
+			"main_title": "",
+			"title": "i-Size (R129) safety",
+			"description": "Inlay offers a better fit and lying position for the newborn",
+			"image": "https://images.salsify.com/image/upload/s--Q7K-ez5C--/gponbb3ahq2kv4zxsgsx.jpg",
+			"store_id": "1"
+		},
+		{
+			"entity_id": "48521",
+			"created_at": "2018-03-14 14:29:13",
+			"updated_at": "2018-03-14 14:29:13",
+			"product_id": "4885",
+			"main_title": "",
+			"title": "Part of 2way car seat family",
+			"description": "Up to 4 years of rearward-facing safety in combination with 2wayFix and 2wayPearl",
+			"image": "https://images.salsify.com/image/upload/s--fE8CEAhE--/kll8l7kxghn5p8kp5gkw.jpg",
+			"store_id": "1"
+		},
+		{
+			"entity_id": "48523",
+			"created_at": "2018-03-14 14:29:13",
+			"updated_at": "2018-03-14 14:29:13",
+			"product_id": "4885",
+			"main_title": "",
+			"title": "Flexible travel system",
+			"description": "Compatible with all Maxi-Cosi, Quinny and many other strollers",
+			"image": "https://images.salsify.com/image/upload/s--zm0gZokW--/sldkaffuthme8xm3w0ji.jpg",
+			"store_id": "1"
+		},
+		{
+			"entity_id": "48525",
+			"created_at": "2018-03-14 14:29:13",
+			"updated_at": "2018-03-14 14:29:13",
+			"product_id": "4885",
+			"main_title": "",
+			"title": "Installation feedback",
+			"description": "Interactive light and sound feedback confirm correct fit minimizing risk of wrong installation",
+			"image": "https://images.salsify.com/image/upload/s--8VEbmAoU--/txsqzzss3tdn0d0y9g7h.jpg",
+			"store_id": "1"
+		}
+	]
 };

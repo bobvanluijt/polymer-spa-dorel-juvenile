@@ -374,8 +374,12 @@
        * @name _onLanguageClicked
        * @description change the z-index of the drawer to show/hide the hamburger Close button
        */
-      _onLanguageClicked() {
-        this.languageDialogOpened = !this.languageDialogOpened;
+      _onLanguageClicked(e) {
+        if (!this.languageDialogOpened) {
+          this.languageDialogOpened = true;
+        } else if (e.path[0].className === 'close') {
+          this.languageDialogOpened = false;
+        }
         this.$.drawer.style.zIndex = this.languageDialogOpened ? 10000 : 10;
       }
     }
