@@ -4,9 +4,14 @@ jobs:
     machine: true
     steps:
       - checkout
-      - run: docker login -u $DOCKER_USER -p $DOCKER_PASS
-      - run: docker build -t dorelio/dorel-spa-test:$CIRCLE_BRANCH .
-      - run: docker push dorelio/dorel-spa-test:$CIRCLE_BRANCH
+      - run: echo $GCLOUD_SERVICE_KEY_SNEPPY | base64 --decode --ignore-garbage > ${HOME}/gcloud-service-key.json
+      - run: sudo /opt/google-cloud-sdk/bin/gcloud --quiet components update
+      - run: sudo /opt/google-cloud-sdk/bin/gcloud auth activate-service-account --key-file=${HOME}/gcloud-service-key.json
+      - run: sudo /opt/google-cloud-sdk/bin/gcloud config set project dorel-io-dev
+      #- run: docker login -u $DOCKER_USER -p $DOCKER_PASS
+      - run: docker build -t eu.gcr.io/sneppy-test/dorel-spa-test:$CIRCLE_BRANCH .
+      #- run: docker push dorelio/dorel-spa-test:$CIRCLE_BRANCH
+      - run: sudo /opt/google-cloud-sdk/bin/gcloud docker -- push eu.gcr.io/sneppy-test/dorel-spa-test:$CIRCLE_BRANCH
 workflows:
   version: 2
   build_and_test:

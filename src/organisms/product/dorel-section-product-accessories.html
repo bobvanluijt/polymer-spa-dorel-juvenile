@@ -34,8 +34,8 @@
     <dorel-media-query breakpoints="{{ breakpoints }}"></dorel-media-query>
     <template is="dom-if" if="[[ _hasRelatedProducts(relatedProducts) ]]">
       <dorel-layout-container tablet-medium-up$="[[ breakpoints.tabletMediumUp ]]">
-        <dorel-titling title="[[ accessoriesOptions.title ]]"
-                       description="[[ accessoriesOptions.description ]]"></dorel-titling>
+        <dorel-titling title="[[ localize('section_product_accessories#title') ]]"
+                       description="[[ localize('section_product_accessories#subtitle') ]]"></dorel-titling>
 
         <dorel-layout-row>
           <!-- mobile -->
