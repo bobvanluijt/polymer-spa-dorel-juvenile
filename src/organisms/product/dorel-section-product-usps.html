@@ -44,11 +44,10 @@
 
     <dorel-layout-container
       tablet-medium-up$="{{breakpoints.tabletMediumUp}}">
-      <dorel-titling
-        title="[[localize('product_usps#title')]]"></dorel-titling>
       <template
         is="dom-if"
         if="[[uspsData.usps.length]]">
+        <dorel-titling title="[[localize('product_usps#title')]]"></dorel-titling>
         <dorel-layout-row>
           <template
             is="dom-repeat"
