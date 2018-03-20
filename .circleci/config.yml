@@ -8,8 +8,8 @@ jobs:
       - run: sudo /opt/google-cloud-sdk/bin/gcloud --quiet components update
       - run: sudo /opt/google-cloud-sdk/bin/gcloud auth activate-service-account --key-file=${HOME}/gcloud-service-key.json
       - run: sudo /opt/google-cloud-sdk/bin/gcloud config set project dorel-io-dev
-      - run: docker build -t eu.gcr.io/dorel-io-dev/dorel-spa-test:$CIRCLE_TAG .
-      - run: sudo /opt/google-cloud-sdk/bin/gcloud docker -- push eu.gcr.io/dorel-io-dev/dorel-spa-test:$CIRCLE_TAG
+      - run: docker build -t eu.gcr.io/dorel-io-dev/polymer-spa-dorel-juvenile:$CIRCLE_TAG .
+      - run: sudo /opt/google-cloud-sdk/bin/gcloud docker -- push eu.gcr.io/dorel-io-dev/polymer-spa-dorel-juvenile:$CIRCLE_TAG
 workflows:
   version: 2
   build_and_test:
