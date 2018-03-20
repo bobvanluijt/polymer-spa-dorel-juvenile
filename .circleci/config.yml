@@ -1,16 +1,15 @@
 version: 2
 jobs:
   build:
-    machine:
-      pre: echo export VARIABLE=\"HELLO WORLD\" >> $HOME/.circlerc
+    machine: true
     steps:
       - checkout
       - run: echo $GCLOUD_SERVICE_KEY | base64 --decode --ignore-garbage > ${HOME}/gcloud-service-key.json
       - run: sudo /opt/google-cloud-sdk/bin/gcloud --quiet components update
       - run: sudo /opt/google-cloud-sdk/bin/gcloud auth activate-service-account --key-file=${HOME}/gcloud-service-key.json
       - run: sudo /opt/google-cloud-sdk/bin/gcloud config set project dorel-io-dev
-      - run: docker build -t eu.gcr.io/dorel-io-dev/polymer-spa-dorel-juvenile:$GIT_TAG .
-      - run: sudo /opt/google-cloud-sdk/bin/gcloud docker -- push eu.gcr.io/dorel-io-dev/polymer-spa-dorel-juvenile:$GIT_TAG
+      - run: echo export GIT_TAG=`git describe --tags --abbrev=0` && docker build -t eu.gcr.io/dorel-io-dev/polymer-spa-dorel-juvenile:$GIT_TAG .
+      - run: echo export GIT_TAG=`git describe --tags --abbrev=0` && sudo /opt/google-cloud-sdk/bin/gcloud docker -- push eu.gcr.io/dorel-io-dev/polymer-spa-dorel-juvenile:$GIT_TAG
 workflows:
   version: 2
   build_and_test:
