@@ -2,7 +2,7 @@ version: 2
 jobs:
   build:
     machine:
-      pre: echo export VARIABLE='HELLO WORLD' >> "$BASH_ENV"
+      pre: echo export VARIABLE=\"HELLO WORLD\" >> $HOME/.circlerc
     steps:
       - checkout
       - run: echo $GCLOUD_SERVICE_KEY | base64 --decode --ignore-garbage > ${HOME}/gcloud-service-key.json
