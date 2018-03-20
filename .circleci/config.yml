@@ -8,10 +8,8 @@ jobs:
       - run: sudo /opt/google-cloud-sdk/bin/gcloud --quiet components update
       - run: sudo /opt/google-cloud-sdk/bin/gcloud auth activate-service-account --key-file=${HOME}/gcloud-service-key.json
       - run: sudo /opt/google-cloud-sdk/bin/gcloud config set project dorel-io-dev
-      #- run: docker login -u $DOCKER_USER -p $DOCKER_PASS
-      - run: docker build -t eu.gcr.io/dorel-io-dev/dorel-spa-test:$CIRCLE_BRANCH .
-      #- run: docker push dorelio/dorel-spa-test:$CIRCLE_BRANCH
-      - run: sudo /opt/google-cloud-sdk/bin/gcloud docker -- push eu.gcr.io/dorel-io-dev/dorel-spa-test:$CIRCLE_BRANCH
+      - run: docker build -t eu.gcr.io/dorel-io-dev/dorel-spa-test:$CIRCLE_TAG .
+      - run: sudo /opt/google-cloud-sdk/bin/gcloud docker -- push eu.gcr.io/dorel-io-dev/dorel-spa-test:$CIRCLE_TAG
 workflows:
   version: 2
   build_and_test:
