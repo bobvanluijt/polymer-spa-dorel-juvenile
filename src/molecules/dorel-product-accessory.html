@@ -11,18 +11,6 @@
         @apply(--layout-horizontal);
       }
 
-      .accessory-title {
-        @apply(--theme-typography-3);
-        float: left;
-        width: 100%;
-        margin-top: 0;
-      }
-
-      .accessory-description {
-        float: left;
-        margin: .75em 0;
-      }
-
       dorel-cta {
         float: left;
         clear: both;
@@ -36,6 +24,18 @@
         display: flex;
         width: 100%;
         height: 100%;
+      }
+
+      .accessory-title {
+        @apply(--theme-typography-3);
+        float: left;
+        width: 100%;
+        margin-top: 0;
+      }
+
+      .accessory-description {
+        float: left;
+        margin: .75em 0;
       }
 
       .accessory-wrapper {
@@ -80,16 +80,36 @@
       }
     </style>
 
+    <template is="dom-if" if="{{ isBrand('Quinny') }}">
+      <style>
+        .accessory-title {
+          height: 1.5em;
+          overflow: hidden;
+          font-weight: var(--theme-font-weight-bold);
+        }
+
+        .accessory-description {
+          height: 9.3em;
+          overflow: hidden;
+        }
+
+        .accessory-included-badge {
+          background-color: var(--theme-color-black);
+          border-radius: 0;
+          float: left;
+          font-weight: var(--theme-font-weight-bold);
+          margin-bottom: .75rem;
+          padding: 0.5rem .75rem;
+          position: static;
+          text-transform: uppercase;
+        }
+      </style>
+    </template>
+
     <dorel-media-query breakpoints="{{ breakpoints }}"></dorel-media-query>
 
     <section class="accessory">
       <div class="accessory-wrapper">
-
-        <template
-          is="dom-if"
-          if="{{ accessoryData.included }}">
-          <span class="accessory-included-badge">{{ localize('Included') }}</span>
-        </template>
 
         <template
           is="dom-if"
@@ -116,6 +136,13 @@
               <dorel-safe-html html="[[ accessoryData.excerpt.value ]]"></dorel-safe-html>
             </div>
           </template>
+
+          <template
+            is="dom-if"
+            if="{{ accessoryData.included }}">
+            <span class="accessory-included-badge">{{ localize('Included') }}</span>
+          </template>
+
           <!-- NOTE: The permalink check was removed here. -->
           <dorel-cta
             type="[[ ctaType ]]"

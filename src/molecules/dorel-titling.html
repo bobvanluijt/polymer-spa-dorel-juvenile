@@ -26,6 +26,14 @@
       }
 
     </style>
+    
+    <template is="dom-if" if="{{ isBrand('Quinny') }}">
+      <style>
+        .title {
+          font-weight: var(--theme-font-weight-bold);
+        }
+      </style>
+    </template>
 
     <dorel-media-query breakpoints="{{ breakpoints }}"></dorel-media-query>
 
@@ -55,7 +63,7 @@
   <script>
     Polymer({
       is: 'dorel-titling',
-
+      behaviors: [ ConditionalBehaviors ],
       properties: {
         /**
          * @name title
@@ -71,7 +79,7 @@
         description: {
           type: String
         }
-      },
+      }
     });
 
   </script>
