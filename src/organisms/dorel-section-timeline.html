@@ -48,6 +48,11 @@
         padding: 10px 40px;
       }
 
+      [mobile-small] .timeline-row .content-wrap,
+      [mobile-medium] .timeline-row .content-wrap {
+        padding: 0;
+      }
+
       .timeline-row .content-overlay {
         background-color: rgba(255,255,255, 0.5);
         left: 0;
@@ -63,6 +68,7 @@
 
       .title {
         display: block;
+        margin-top: 0;
         text-align: center;
         width: 100%;
       }
@@ -159,7 +165,13 @@
       }
     </style>
 
-    <section class="timeline" on-click="_toggleTimeline">
+    <dorel-media-query breakpoints="{{ breakpoints }}"></dorel-media-query>
+
+    <section
+      class="timeline"
+      on-click="_toggleTimeline"
+      mobile-small$="{{ breakpoints.mobileSmall }}"
+      mobile-medium$="{{ breakpoints.mobileMedium }}">
       <div class="moments-container">
         <template
           is="dom-repeat"
@@ -178,11 +190,11 @@
                     image-alt="[[ moment.bynder_image_alt_text ]]"
                     derivative-identifier="webimage"
                     width="100%"
-                    height="10em"
+                    height="25em"
                     tablet-width="100%"
-                    tablet-height="8em"
-                    mobile-width="100%"
-                    mobile-height="5em"></dorel-bynder-image>
+                    tablet-height="20em"
+                    mobile-width="102%"
+                    mobile-height="15em"></dorel-bynder-image>
                   <h3 class="title">[[moment.title]]</h3>
                 </div>
               </div>

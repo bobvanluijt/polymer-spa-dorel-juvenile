@@ -10,7 +10,7 @@
       // retarget to the right element to get its attributes
       const path = event.path;
       const element = (event.target.tagName === elName) ? event.target : path[0];
-      const pathEl = path.filter(el => el.tagName && el.tagName.includes('DOREL-'));
+      const pathEl = path ? path.filter(el => el.tagName && el.tagName.includes('DOREL-')) : null;
 
       /**
        * Tracking on click for cta

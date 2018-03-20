@@ -126,6 +126,7 @@
           accordionsData: {
             type: Object,
             statePath: function(state) {
+              if (this.accordionsMockData) return this.accordionsMockData;
               if(!this.productId || !state.modules.accordions.length) {
                 return { isLoading: true };
               }
@@ -133,7 +134,8 @@
                 return item.productId === this.productId && !item.isLoading && !item.isNotAvailable;
               });
             }
-          }
+          },
+          accordionsMockData: Object
         }
       }
 
