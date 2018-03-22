@@ -103,6 +103,10 @@
           margin-top: 1em;
           padding: 0 5vw;
         }
+
+        .cta-related-products {
+          display: none;
+        }
       </style>
     </template>
 
@@ -353,7 +357,8 @@
                   on-click="_viewAccessories"
                   link="#"
                   size="medium"
-                  icon="dorel-icons:expand-more">
+                  icon="dorel-icons:expand-more"
+                  class="cta-related-products">
                   [[localize('View_Related_Products')]]
                 </dorel-cta>
               </template>

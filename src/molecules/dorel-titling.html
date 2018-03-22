@@ -26,11 +26,14 @@
       }
 
     </style>
-    
+
     <template is="dom-if" if="{{ isBrand('Quinny') }}">
       <style>
-        .title {
+        [tablet-medium-up] .title, .title {
           font-weight: var(--theme-font-weight-bold);
+          background-image: url('/assets/images/quinny/underline.svg');
+          background-position: center 90%;
+          background-repeat: no-repeat;
         }
       </style>
     </template>
