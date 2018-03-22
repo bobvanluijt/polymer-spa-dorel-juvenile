@@ -171,7 +171,7 @@
        * @param String content, string is used to fill the content attribute
        */
       _addMetaEquiv(type, value, content) {
-        const element = document.querySelector(`meta[${type}="${value}"]`)
+        const element = document.querySelector(`meta[${type}="${value}"]`);
         if(element) {
           return element.setAttribute('content', content);
         }
@@ -180,7 +180,7 @@
         // add and set the value of the http-equiv attribute
         meta.setAttribute(type, value);
         // add and set the value of the content attribute
-        meta.setAttribute('content', value);
+        meta.setAttribute('content', content);
         // add the meta tag to the head
         document.getElementsByTagName('head')[0].appendChild(meta);
       }
