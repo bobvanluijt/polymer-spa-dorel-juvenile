@@ -112,7 +112,7 @@
 
     <template is="dom-if" if="{{ isBrand('Quinny') }}">
       <style>
-        dorel-layout-column {
+        dorel-layout-column, dorel-layout-column.dorel-section-hero-header {
           position: static;
           text-align: left;
         }
@@ -218,7 +218,7 @@
                   <dorel-cta
                     title="[[heroHeaderData.cta_text]]"
                     icon="dorel-icons:play-circle-outline"
-                    inverted
+                    inverted="[[ !isBrand('Quinny') ]]"
                     link="#"
                     on-click="openYouTubeLightbox">[[heroHeaderData.cta_text]]</dorel-cta>
                 </template>
