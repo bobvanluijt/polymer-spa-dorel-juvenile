@@ -44,11 +44,10 @@
 
     <dorel-layout-container
       tablet-medium-up$="{{breakpoints.tabletMediumUp}}">
-      <dorel-titling
-        title="[[localize('product_usps#title')]]"></dorel-titling>
       <template
         is="dom-if"
         if="[[uspsData.usps.length]]">
+        <dorel-titling title="[[localize('product_usps#title')]]"></dorel-titling>
         <dorel-layout-row>
           <template
             is="dom-repeat"
@@ -125,14 +124,16 @@
           uspsData: {
             type: Object,
             statePath: function(state) {
-              if(!this.productId || !state.modules.usps.length) {
+              if (this.uspsMockData) return this.uspsMockData;
+              if (!this.productId || !state.modules.usps.length) {
                 return { isLoading: true };
               }
               return state.modules.usps.find(item => {
                 return item.productId === this.productId && !item.isLoading && !item.isNotAvailable;
               });
             }
-          }
+          },
+          uspsMockData: Object
         };
       }
 

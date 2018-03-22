@@ -99,7 +99,7 @@
                   tabindex="0"
                   color-image$="[[color.images.image]]"
                   color-name$="[[color.collection_colour_theme_name.name]]">
-                  <img src="[[color.collection_colour_theme_name.value]]" class="image-color" />
+                  <img src="[[ _getCorrectSize(color.collection_colour_theme_name.value) ]]" class="image-color" />
                 </span>
               </template>
 
@@ -319,6 +319,15 @@
        */
       _noHexOrSwatch(color) {
         return Boolean(color && color.collection_colour_theme_name && !color.collection_colour_theme_name.type);
+      }
+
+      _getCorrectSize(imageUrl) {
+        if(!imageUrl || !imageUrl.length) {
+          return;
+        }
+        const parameters = `c_limit,h_${this.height ? this.height : 252},q_70`;
+        const lastSegment = imageUrl.split('/').pop();
+        return `${imageUrl.split('/').map(segment => segment === lastSegment ? parameters : segment).join('/')}/${lastSegment}`;
       }
     }
 

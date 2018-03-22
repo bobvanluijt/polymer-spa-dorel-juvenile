@@ -119,6 +119,7 @@ gulp.task('build:es5', function () {
         .pipe(gulpif('index.html', replace('$version', git.tag()))) 
         .pipe(gulpif('index.html', replace('$datetime', new Date().toISOString())))
         .pipe(gulpif('index.html', replace('$commit', git.short())))
+        .pipe(gulpif('index.html', replace('$branch', git.branch())))
 
         // Remember, you need to rejoin any split inline code when you're done.
         .pipe(sourcesStreamSplitter.rejoin());
@@ -222,6 +223,7 @@ gulp.task('build:es6', function(done) {
       .pipe(gulpif('index.html', replace('$version', git.tag()))) 
       .pipe(gulpif('index.html', replace('$datetime', new Date().toISOString())))
       .pipe(gulpif('index.html', replace('$commit', git.short())))
+      .pipe(gulpif('index.html', replace('$branch', git.branch())))
       .pipe(gulp.dest(`./${buildDirectory}`))
       .on('end', () => console.log('ES6 Build complete!'));
       done();
