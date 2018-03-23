@@ -28,12 +28,17 @@
     </style>
 
     <template is="dom-if" if="{{ isBrand('Quinny') }}">
-      <style>
-        [tablet-medium-up] .title, .title {
+        <style>
+        .title, .title.dorel-titling {
           font-weight: var(--theme-font-weight-bold);
           background-image: url('/assets/images/quinny/underline.svg');
-          background-position: center 90%;
+          background-position: center 120%;
           background-repeat: no-repeat;
+        }
+
+        [tablet-medium-up] .title,
+        [tablet-medium-up] .title.dorel-titling {
+          background-position: center 90%;
         }
       </style>
     </template>
