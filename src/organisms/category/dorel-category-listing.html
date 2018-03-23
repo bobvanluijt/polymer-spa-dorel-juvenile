@@ -144,7 +144,6 @@
         }
 
         const products = this._sortProducts(newProductsData);
-
         // workaround for deep clone on dom-repeat
         const prodsObj = JSON.parse(JSON.stringify(products));
 
@@ -187,10 +186,10 @@
           // if the sort type created_at is set and they are not yet converted to a Date in milliseconds
           if (sort.type === 'created_at') {
             if (typeof a[sort.type].value === 'string') {
-              a[sort.type].value = (new Date(a[sort.type].value)).getTime();
+              a[sort.type].value = (new Date(a[sort.type].value.replace(/-/g, "/"))).getTime();
             }
             if (typeof b[sort.type].value === 'string') {
-              b[sort.type].value = (new Date(b[sort.type].value)).getTime();
+              b[sort.type].value = (new Date(b[sort.type].value.replace(/-/g, "/"))).getTime();
             }
           }
 

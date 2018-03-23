@@ -94,14 +94,15 @@
            */
           products: {
             type: Array,
-            statePath: function (state) {
-              if (!this.get('categories') ||
-                !this.get('categories').length ||
+            statePath(state) {
+              const categories = this.get('categories');
+              if (!categories ||
+                !categories.length ||
                 !state.product ||
                 !state.product.products.length) return;
 
               // (TODO) the wp category ids array items are strings, convert them to integers to compare with the magento product category ids
-              const wpCatIdsToInt = this.get('categories').map(category => parseInt(category));
+              const wpCatIdsToInt = categories.map(category => parseInt(category));
 
               // filter the products and get only the products that comply to the wp categories defined for this page
               const filteredProds = state.product.products.filter(product => {
