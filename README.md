@@ -39,17 +39,17 @@ The SPA is hosted from it's own container so all you need is Docker:
 
 Inside the new dorel-spa folder:
 
-    docker build -f Dockerfile_dev -t dorel-spa .
+    docker build -f Dockerfile-dev -t dorel-spa .
 
 ##### Run the container
 
 Adjust your dorel-spa path accordingly
 
-    docker run -d --name dorel-spa -p 80:80 -v /Users/username/Documents/dorel-spa:/code dorel-spa
+    docker run -d --name dorel-spa -e "NGINX_FRONTEND=local.localhost" -p 80:80 -v /Users/username/Documents/dorel-spa:/code dorel-spa
     
 Windows:
 
-    docker run -d --name dorel-spa -p 80:80 -v C:\\Users\username\Documents\dorel-spa:/code dorel-spa
+    docker run -d --name dorel-spa -e "NGINX_FRONTEND=local.localhost -p 80:80 -v C:\\Users\username\Documents\dorel-spa:/code dorel-spa
     
 ##### Install dependencies
     
