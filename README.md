@@ -39,7 +39,7 @@ The SPA is hosted from it's own container so all you need is Docker:
 
 Inside the new dorel-spa folder:
 
-    docker build -t dorel-spa .
+    docker build -f Dockerfile_dev -t dorel-spa .
 
 ##### Run the container
 
