@@ -9,8 +9,8 @@ RUN apt-get update && apt-get install yarn
 COPY default-dev.conf /opt/nginx/default.conf
 RUN rm -rf /usr/share/nginx/html
 COPY . /usr/share/nginx/html/
-WORKDIR /usr/share/nginx/html
-RUN yarn install
-RUN yarn build
+WORKDIR /code
+#RUN yarn install
+#RUN yarn build
 COPY start.sh /start.sh
 CMD ["/bin/bash", "/start.sh"]
