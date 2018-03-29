@@ -45,11 +45,11 @@ Inside the new dorel-spa folder:
 
 Adjust your dorel-spa path accordingly
 
-    docker run -d --name dorel-spa -e "NGINX_FRONTEND=local.localhost" -p 80:80 -v /Users/username/Documents/dorel-spa:/code dorel-spa
+    docker run -d --name dorel-spa -e "NGINX_FRONTEND=local-mc.localhost" -p 80:80 -v /Users/username/Documents/dorel-spa:/code dorel-spa
     
 Windows:
 
-    docker run -d --name dorel-spa -e "NGINX_FRONTEND=local.localhost -p 80:80 -v C:\\Users\username\Documents\dorel-spa:/code dorel-spa
+    docker run -d --name dorel-spa -e "NGINX_FRONTEND=local-mc.localhost" -p 80:80 -v C:\\Users\username\Documents\dorel-spa:/code dorel-spa
     
 ##### Install dependencies
     
