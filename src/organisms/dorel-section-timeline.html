@@ -69,6 +69,7 @@
       .title {
         display: block;
         margin-top: 0;
+        margin-bottom: 0;
         text-align: center;
         width: 100%;
       }
@@ -185,16 +186,17 @@
               <div class="content-wrap">
                 <div class="content">
                   <dorel-bynder-image
-                    sizing="contain"
+                    sizing="cover"
                     media-id="[[ moment.bynder_image ]]"
                     image-alt="[[ moment.bynder_image_alt_text ]]"
                     derivative-identifier="webimage"
-                    width="100%"
-                    height="25em"
+                    mobile-derivative-identifier="Fullscreen Small portrait"
+                    width="90%"
+                    height="12rem"
                     tablet-width="100%"
-                    tablet-height="20em"
-                    mobile-width="102%"
-                    mobile-height="15em"></dorel-bynder-image>
+                    tablet-height="13rem"
+                    mobile-width="100%"
+                    mobile-height="8rem"></dorel-bynder-image>
                   <h3 class="title">[[moment.title]]</h3>
                 </div>
               </div>
@@ -275,6 +277,7 @@
        * @description starts the animation with the given parameters
        */
       start() {
+        this._resetMoments(this.get('moments'));
         const maxIterations = Number(this.get('maxIterations'));
 
         let moments = this.get('moments');
@@ -321,7 +324,11 @@
       stop() {
         clearInterval(this.get('animation'));
         this.set('status', false);
-        this._resetMoments(this.get('moments'));
+        const moments = this.get('moments').map(moment => {
+          moment.active = true;
+          return moment;
+        });
+        this._updateMoments(moments);
       }
 
       /**
