@@ -257,7 +257,7 @@
                   type="primary"
                   title="[[localize('cta#find_a_store')]]"
                   on-click="_openLightbox"
-                  link=""
+                  link="#"
                   size="medium"
                   icon="dorel-icons:chevron-right">[[localize('cta#find_a_store')]]</dorel-cta>
                 <dorel-showcase-lead-generation-lightbox
@@ -299,6 +299,7 @@
                   type="link"
                   title="[[localize('View_Accessories')]]"
                   on-click="_viewAccessories"
+                  link="#"
                   size="medium"
                   icon="dorel-icons:expand-more">
                   [[localize('View_Related_Products')]]
@@ -500,7 +501,9 @@
        */
       _createStoreLocatorLink(pageObject) {
         const urlArr = window.location.href.split('/');
-        return `${urlArr[0]}//${urlArr[2]}/${urlArr[3]}/${pageObject.post_name}`;
+        const temp = `${urlArr[0]}//${urlArr[2]}/${urlArr[3]}/${pageObject.post_name}`;
+        console.log(temp);
+        return temp;
       }
 
       /**
