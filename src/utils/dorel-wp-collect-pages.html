@@ -86,7 +86,7 @@
         self.collect = self.collect.concat(pages);
 
         // define url for retrieving products
-        productsEl.url = this.globals.Dorel.wpUrl + '/wp/v2/products';
+        productsEl.url = this.globals.Dorel.wpUrl + '/wp/v2/products' + this.perPage;
 
         // do the products call
         productsEl.generateRequest();
