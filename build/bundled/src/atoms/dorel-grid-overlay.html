@@ -45,24 +45,19 @@
 
       .row {
         @apply(--theme-grid-row);
-        padding: 0 var(--theme-gutter);
+        @apply(--theme-grid-row-mobile);
+        padding: 0 var(--theme-gutter-mobile);
+
       }
 
       .column {
         @apply(--theme-grid-column);
+        @apply(--theme-grid-column-mobile);
         -ms-flex-preferred-size: var(--theme-column-width);
         flex-basis: var(--theme-column-width);
         max-width: var(--theme-column-width);
+        width: 100%;
         margin-top: 0;
-      }
-
-      [mobile-small] .column, [mobile-medium] .column {
-        @apply(--theme-grid-column-mobile);
-      }
-
-      [mobile-small] .row, [mobile-medium] .row {
-        @apply(--theme-grid-row-mobile);
-        padding: 0 var(--theme-gutter-mobile);
       }
 
       .column-content {
@@ -70,16 +65,23 @@
         height: 100vh;
         opacity: .25;
       }
+
+      /* Responsive Behaviour */
+      [tablet-medium-up] .column {
+        @apply(--theme-grid-column);
+        margin-top: 0;
+      }
+
+      [tablet-medium-up] .row {
+        @apply(--theme-grid-row);
+        @apply(--theme-grid-row-margins);
+        padding: 0 var(--theme-gutter);
+      }
+
     </style>
 
-    
-    <iron-media-query query="(max-width : 479px)" query-matches="{{ mobileSmall }}"></iron-media-query>
-    <iron-media-query query="(min-width : 480px) and (max-width : 767px)" query-matches="{{ mobileMedium }}"></iron-media-query>
-    <iron-media-query query="(min-width : 768px) and (max-width : 991px)" query-matches="{{ tablets }}"></iron-media-query>
-    <iron-media-query query="(min-width : 992px) and (max-width : 1199px)" query-matches="{{ desktopSmall }}"></iron-media-query>
-    <iron-media-query query="(min-width : 1200px)" query-matches="{{ desktopFull }}"></iron-media-query>
-
-    <div mobile-small$="{{ mobileSmall }}" mobile-medium$="{{ mobileMedium }}" tablets$="{{ tablets }}" desktop-small$="{{ desktopSmall }}" desktop-full$="{{ desktopFull }}">
+    <dorel-media-query breakpoints="{{ breakpoints }}"></dorel-media-query>
+    <div tablet-medium-up$="{{ breakpoints.tabletMediumUp }}">
       <div class="vertical-rhythm" shown$="[[ globals.Dorel.grid.vertical ]]"></div>
       <div class="horizontal-grid" shown$="[[ globals.Dorel.grid.horizontal ]]">
         <div class="row">
@@ -123,7 +125,7 @@
       </div>
     </div>
   </template>
-  <script>Polymer({is:"dorel-grid-overlay",behaviors:[Polymer.IronA11yKeysBehavior],properties:{keyEventTarget:{type:Object,value:function(){return document.body}},pageRoutePath:{type:Object,notify:!0,readOnly:!1},availableBrands:{type:Array,value:[]},selectedBrand:{type:String,notify:!0,readOnly:!1}},keyBindings:{"shift+backspace":"_setVerticalRhythm","shift+enter":"_setHorizontalGrid","shift+right":"_setNextBrand","shift+left":"_setPreviousBrand","shit+space":"_setPageToComponents"},_setPageToComponents:function(){this.pageRoutePath="component-guide/introduction/"},_getIndexCurrentBrand:function(){for(var e=-1,t=0;t<this.availableBrands.length;t++)this.selectedBrand===this.availableBrands[t].label&&(e=t);return e},_setNextBrand:function(){var e=this._getIndexCurrentBrand(),t=(e+1)%this.availableBrands.length;this.selectedBrand=this.availableBrands[t].label},_setPreviousBrand:function(){var e=this._getIndexCurrentBrand(),t=Math.abs((e-1)%this.availableBrands.length);this.selectedBrand=this.availableBrands[t].label},_setVerticalRhythm:function(){var e=Polymer.globalsManager.get("Dorel.grid.vertical");Polymer.globalsManager.set("Dorel.grid.vertical",!e)},_setHorizontalGrid:function(){var e=Polymer.globalsManager.get("Dorel.grid.horizontal");Polymer.globalsManager.set("Dorel.grid.horizontal",!e)}});</script>
+  <script>Polymer({is:"dorel-grid-overlay",behaviors:[Polymer.IronA11yKeysBehavior],properties:{keyEventTarget:{type:Object,value:function(){return document.body}},pageRoutePath:{type:Object,notify:!0,readOnly:!1},availableBrands:{type:Array,value:[]},selectedBrand:{type:String,notify:!0,readOnly:!1}},keyBindings:{"shift+backspace":"_setVerticalRhythm","shift+enter":"_setHorizontalGrid","shift+right":"_setNextBrand","shift+left":"_setPreviousBrand"},_setPageToComponents:function(){this.pageRoutePath="component-guide/introduction/"},_getIndexCurrentBrand:function(){for(var e=-1,t=0;t<this.availableBrands.length;t++)this.selectedBrand===this.availableBrands[t].label&&(e=t);return e},_setNextBrand:function(){var e=this._getIndexCurrentBrand(),t=(e+1)%this.availableBrands.length;this.selectedBrand=this.availableBrands[t].label},_setPreviousBrand:function(){var e=this._getIndexCurrentBrand(),t=Math.abs((e-1)%this.availableBrands.length);this.selectedBrand=this.availableBrands[t].label},_setVerticalRhythm:function(){var e=Polymer.globalsManager.get("Dorel.grid.vertical");Polymer.globalsManager.set("Dorel.grid.vertical",!e)},_setHorizontalGrid:function(){var e=Polymer.globalsManager.get("Dorel.grid.horizontal");Polymer.globalsManager.set("Dorel.grid.horizontal",!e)}});</script>
 
 </dom-module>
 </body></html>

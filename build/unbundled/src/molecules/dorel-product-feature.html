@@ -10,15 +10,16 @@
       }
 
       .feature-image {
-        width: 16em;
-        height: 17.5em;
+        width: 8em;
+        height: 8.75em;
+        float: left;
         margin: auto;
-        float: none;
         display: block;
       }
 
       .feature-title {
-        @apply(--theme-typography-4);
+        @apply(--theme-typography-5);
+        margin-top: 0;
         float: left;
         width: 100%;
       }
@@ -27,36 +28,34 @@
         float: left;
       }
 
-      [mobile-small] .feature-image, [mobile-medium] .feature-image {
-        width: 8em;
-        height: 8.75em;
-        float: left;
-      }
-
-      [mobile-small] .feature-content, [mobile-medium] .feature-content {
+      .feature-content {
         width: calc(100% - 8em);
         padding: 0 0 0 1em;
         box-sizing: border-box;
         float: left;
       }
 
-      [mobile-small] .feature-title, [mobile-medium] .feature-title {
-        margin-top: 0;
+      [tablet-medium-up] .feature-image {
+        width: 16em;
+        height: 17.5em;
+        float: none;
       }
 
-      [mobile-small] .feature-wrapper, [mobile-medium] .feature-wrapper {
-        padding: 0;
+      [tablet-medium-up] .feature-content {
+        width: auto;
+        padding: .75em;
+        float: none;
+      }
+
+      [tablet-medium-up] .feature-title {
+        @apply(--theme-typography-4);
       }
 
     </style>
 
-    
-    <iron-media-query query="(max-width : 479px)" query-matches="{{ mobileSmall }}"></iron-media-query>
-    <iron-media-query query="(min-width : 480px) and (max-width : 820px)" query-matches="{{ mobileMedium }}"></iron-media-query>
-    <iron-media-query query="(min-width : 821px) and (max-width : 991px)" query-matches="{{ tablets }}"></iron-media-query>
-    <iron-media-query query="(min-width : 992px) and (max-width : 1199px)" query-matches="{{ desktopSmall }}"></iron-media-query>
+    <dorel-media-query breakpoints="{{ breakpoints }}"></dorel-media-query>
 
-    <section mobile-small$="{{ mobileSmall }}" mobile-medium$="{{ mobileMedium }}" tablets$="{{ tablets }}" desktop-small$="{{ desktopSmall }}">
+    <section tablet-medium-up$="{{ breakpoints.tabletMediumUp }}">
       <div class="feature">
         <div class="feature-wrapper">
           <template is="dom-if" if="[[ _hasValue(featureData.image) ]]">
@@ -78,7 +77,7 @@
     </section>
   </template>
 
-  <script>Polymer({is:"dorel-product-feature",properties:{featureData:{type:Object,value:function(){return{}}}},_hasValue:function(e){return"undefined"!=typeof e||""!==e}});</script>
+  <script>Polymer({is:"dorel-product-feature",properties:{featureData:{type:Object,value:function(){return{}}}},_hasValue:function(e){return void 0!==e||""!==e}});</script>
 
 </dom-module>
 </body></html>

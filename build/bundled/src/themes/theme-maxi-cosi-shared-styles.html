@@ -78,8 +78,16 @@
           flex-direction: row;
           -ms-flex-wrap: wrap;
           flex-wrap: wrap;
+        };
+
+        --theme-grid-row-margins: {
           margin-right: -0.75em;
           margin-left: -0.75em;
+        };
+
+        --theme-grid-row-mobile-margins: {
+          margin-right: -0.125em;
+          margin-left: -0.125em;
         };
 
         /* Modifier for mobile screens */
@@ -263,6 +271,10 @@
         --theme-button: {
           line-height: var(--theme-scale-3);
           margin: var(--theme-scale-3) 0 0 0;
+          -webkit-box-align: center;
+          -webkit-flex-align: center;
+          -ms-flex-align: center;
+          -webkit-align-items: center;
           display: -webkit-flex;
           display: -moz-flex;
           display: -ms-flexbox;
@@ -442,8 +454,6 @@
         --theme-logo-mobile-height: 3em;
         --theme-logo: url('/assets/images/logos/logo-maxi-cosi.svg') no-repeat center center;
 
-        --header-item-menu-alignment: 0 0 0 auto;
-
         --max-width-limit: 1280px;
 
         --max-width-container: {
@@ -466,7 +476,6 @@
         --image-placeholder: {
           background: linear-gradient(to right, var(--theme-brand-color-1) 0%, var(--theme-brand-color-2) 100%);
         };
-
 
         /*
         * Material design overwrites

@@ -48,22 +48,11 @@
     </style>
 
     <template is="dom-if" if="[[ slideshowData.slides.length ]]">
-
-      
-      <iron-media-query query="(max-width : 479px)" query-matches="{{ mobileSmall }}"></iron-media-query>
-      <iron-media-query query="(min-width : 480px) and (max-width : 767px)" query-matches="{{ mobileMedium }}"></iron-media-query>
-      <iron-media-query query="(min-width : 768px) and (max-width : 991px)" query-matches="{{ tablets }}"></iron-media-query>
-      <iron-media-query query="(min-width : 992px) and (max-width : 1199px)" query-matches="{{ desktopSmall }}"></iron-media-query>
-      <iron-media-query query="(min-width : 1200px)" query-matches="{{ desktopFull }}"></iron-media-query>
-
-      <section class$="section-slideshow {{ isFullWidth(slideshowData.width) }}" mobile-small$="{{ mobileSmall }}" mobile-medium$="{{ mobileMedium }}" tablets$="{{ tablets }}" desktop-small$="{{ desktopSmall }}" desktop-full$="{{ desktopFull }}">
-
+      <section class$="section-slideshow {{ isFullWidth(slideshowData.width) }}">
         
         <l2t-paper-slider class="simple-slider" auto-progress="" slide-duration="4" total-slides="[[ slideshowData.slides.length ]]">
           <template is="dom-repeat" items="[[ slideshowData.slides ]]" as="slide">
-
-            <paper-slide class="simple-slider-slide" style$="
-                  background-image: url([[ hasBackgroundImage(slide.image) ]]);"></paper-slide>
+            <paper-slide class="simple-slider-slide" style$="background-image: url([[ hasBackgroundImage(slide.image) ]]);"></paper-slide>
 
           </template>
         </l2t-paper-slider>
@@ -72,6 +61,6 @@
     </template>
   </template>
 
-  <script>Polymer({is:"dorel-section-slideshow",properties:{slideshowData:{type:Object,value:function(){return{}}}},isFullWidth:function(e){return""==typeof e||"undefined"===e||"full-width"===e?"container-fluid":"container"},hasBackgroundImage:function(e){return"undefined"!=typeof e&&""!==e&&e?e:"/assets/images/placeholders/slideshow/placeholder.jpg"},prevSlide:function(e){this.$$("simple-slider").prev(),this._eventTracking(e,"previous")},nextSlide:function(e){this.$$("simple-slider").next(),this._eventTracking(e,"next")},_eventTracking:function(e,n){Polymer.globalsManager.get("Dorel");Polymer.globalsManager.set("Dorel.events",{action:n,component:"slideshow",element:Polymer.dom(e).localTarget,event:"polymer_event"})}});</script>
+  <script>Polymer({is:"dorel-section-slideshow",properties:{slideshowData:{type:Object,value:function(){return{}}}},isFullWidth:function(e){return""==typeof e||"undefined"===e||"full-width"===e?"container-fluid":"container"},hasBackgroundImage:function(e){return void 0!==e&&""!==e&&e?e:"/assets/images/placeholders/slideshow/placeholder.jpg"},prevSlide:function(e){this.$$("simple-slider").prev(),this._eventTracking(e,"previous")},nextSlide:function(e){this.$$("simple-slider").next(),this._eventTracking(e,"next")},_eventTracking:function(e,n){Polymer.globalsManager.get("Dorel");Polymer.globalsManager.set("Dorel.events",{action:n,component:"slideshow",element:Polymer.dom(e).localTarget,event:"polymer_event"})}});</script>
 </dom-module>
 </body></html>

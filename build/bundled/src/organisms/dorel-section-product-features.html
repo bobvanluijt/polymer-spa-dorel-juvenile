@@ -12,12 +12,12 @@
         @apply(--max-width-container);
         width: 100%;
         float: left;
-        padding: 1.5em var(--theme-gutter) 4.5em var(--theme-gutter);
+        padding: 1.5em var(--theme-gutter-mobile) 3em var(--theme-gutter-mobile);
         box-sizing: border-box;
       }
 
       .title {
-        @apply(--theme-typography-7);
+        @apply(--theme-typography-6);
         color: var(--theme-brand-color-1);
         width: 100%;
         text-align: center;
@@ -31,24 +31,6 @@
 
       dorel-product-feature {
         @apply(--theme-grid-column);
-        -ms-flex-preferred-size: calc(var(--theme-column-width) * 3);
-        flex-basis: calc(var(--theme-column-width) * 3);
-        max-width: calc(var(--theme-column-width) * 3);
-      }
-
-      /* Responsive Behaviour */
-
-      [mobile-small], [mobile-medium] {
-        padding: 1.5em var(--theme-gutter-mobile) 3em var(--theme-gutter-mobile);
-      }
-
-      [tablets] dorel-product-feature {
-        -ms-flex-preferred-size: calc(var(--theme-column-width) * 6);
-        flex-basis: calc(var(--theme-column-width) * 6);
-        max-width: calc(var(--theme-column-width) * 6);
-      }
-
-      [mobile-small] dorel-product-feature, [mobile-medium] dorel-product-feature {
         @apply(--theme-grid-column-mobile);
         -ms-flex-preferred-size: 100%;
         flex-basis: 100%;
@@ -59,35 +41,38 @@
         margin: 0;
       }
 
-      [mobile-small] .row {
-        margin-right: -0.25em;
-        margin-left: -0.25em;
+      /* Responsive Behaviour */
+      .section-product-features[tablet-medium-up] {
+        padding: 1.5em var(--theme-gutter) 4.5em var(--theme-gutter);
       }
 
-      [mobile-medium] .row {
-        margin-right: -0.5em;
-        margin-left: -0.5em;
+      [tablet-medium-up] dorel-product-feature {
+        -ms-flex-preferred-size: calc(var(--theme-column-width) * 3);
+        flex-basis: calc(var(--theme-column-width) * 3);
+        max-width: calc(var(--theme-column-width) * 3);
+      }
+
+      [tablet-medium] dorel-product-feature {
+        -ms-flex-preferred-size: calc(var(--theme-column-width) * 6);
+        flex-basis: calc(var(--theme-column-width) * 6);
+        max-width: calc(var(--theme-column-width) * 6);
+      }
+
+      [tablet-medium-up] .title {
+        @apply(--theme-typography-7);
       }
 
     </style>
 
+    <dorel-media-query breakpoints="{{ breakpoints }}"></dorel-media-query>
+
     <template is="dom-if" if="[[ featuresData.features.length ]]">
-
-      
-      <iron-media-query query="(max-width : 479px)" query-matches="{{ mobileSmall }}"></iron-media-query>
-      <iron-media-query query="(min-width : 480px) and (max-width : 767px)" query-matches="{{ mobileMedium }}"></iron-media-query>
-      <iron-media-query query="(max-width : 767px)" query-matches="{{ mobile }}"></iron-media-query>
-      <iron-media-query query="(min-width : 768px) and (max-width : 991px)" query-matches="{{ tablets }}"></iron-media-query>
-      <iron-media-query query="(min-width : 767px) and (max-width : 1600px)" query-matches="{{ screenLarge }}"></iron-media-query>
-
-      <section class="section-product-features layout horizontal center center-justified wrap" mobile-small$="{{ mobileSmall }}" mobile-medium$="{{ mobileMedium }}" tablets$="{{ tablets }}" screen-large$="{{ screenLarge }}">
-
+      <section class="section-product-features layout horizontal center center-justified wrap" tablet-medium$="{{ breakpoints.tabletMedium }}" tablet-medium-up$="{{ breakpoints.tabletMediumUp }}">
         <template is="dom-if" if="[[ _hasValue(featuresData.title) ]]">
           <h2 class="title">[[ featuresData.title ]]</h2>
         </template>
-
         <div class="row">
-          <template is="dom-if" if="[[ mobile ]]">
+          <template is="dom-if" if="[[ !breakpoints.tabletMediumUp ]]">
             <template is="dom-repeat" items="[[ initialContent ]]" as="feature">
               <dorel-product-feature feature-data="[[ feature ]]"></dorel-product-feature>
             </template>
@@ -111,7 +96,7 @@
               </template>
             </template>
           </template>
-          <template is="dom-if" if="[[ !mobile ]]">
+          <template is="dom-if" if="[[ breakpoints.tabletMediumUp ]]">
             <template is="dom-repeat" items="[[ featuresData.features ]]" as="feature">
               <dorel-product-feature feature-data="[[ feature ]]"></dorel-product-feature>
             </template>
@@ -120,6 +105,6 @@
       </section>
     </template>
   </template>
-  <script>Polymer({is:"dorel-section-product-features",properties:{maxShown:{type:Number,value:5},featuresData:{type:Object,value:function(){return{}}},expanded:{type:Boolean,value:!1},initialContent:{type:String,computed:"_computeInitialContent(featuresData)"},restContent:{type:String,computed:"_computeRestContent(featuresData)"}},_computeInitialContent:function(e){return e.features.length>this.maxShown?e.features.slice(0,this.maxShown):e.features},_computeRestContent:function(e){return e.features.length>this.maxShown?e.features.slice(this.maxShown):[]},_toggle:function(){this.$$("#collapse").toggle(),this.expanded=!this.expanded},_hasValue:function(e){return"undefined"!=typeof e||""!==e}});</script>
+  <script>Polymer({is:"dorel-section-product-features",properties:{maxShown:{type:Number,value:5},featuresData:{type:Object,value:function(){return{}}},expanded:{type:Boolean,value:!1},initialContent:{type:String,computed:"_computeInitialContent(featuresData)"},restContent:{type:String,computed:"_computeRestContent(featuresData)"}},_computeInitialContent:function(e){return e.features.length>this.maxShown?e.features.slice(0,this.maxShown):e.features},_computeRestContent:function(e){return e.features.length>this.maxShown?e.features.slice(this.maxShown):[]},_toggle:function(){this.$$("#collapse").toggle(),this.expanded=!this.expanded},_hasValue:function(e){return void 0!==e||""!==e}});</script>
 </dom-module>
 </body></html>

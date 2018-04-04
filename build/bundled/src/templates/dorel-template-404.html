@@ -3,22 +3,24 @@
     <style>
       :host {
         display: block;
-        padding: 1.5em;
+        float: left;
+        width: 100%;
       }
 
       .error {
         @apply(--layout-horizontal);
         @apply(--layout-center);
         @apply(--layout-center-justified);
-        min-height: 50vh;
+        padding: 0 var(--theme-gutter-mobile);
+        min-height: auto;
         float: left;
         width: 100%;
-        margin-top: 3em;
-        margin-bottom: 4em;
+        margin: 3em 0;
+        box-sizing: border-box;
       }
 
       .error__title {
-        @apply(--theme-typography-8);
+        @apply(--theme-typography-6);
         color: var(--theme-brand-color-1);
       }
 
@@ -26,8 +28,20 @@
         @apply(--theme-paragraph-text);
       }
 
+      /* Responsive Behaviour */
+      [tablet-medium-up] .error__title {
+        @apply(--theme-typography-8);
+      }
+
+      .error[tablet-medium-up] {
+        min-height: 50vh;
+        padding: 0 var(--theme-gutter);
+      }
+
     </style>
-    <div class="error">
+
+    <dorel-media-query breakpoints="{{ breakpoints }}"></dorel-media-query>
+    <div class="error" tablet-medium-up$="{{ breakpoints.tabletMediumUp }}">
       <div>
         <h1 class="error__title">Sorry, something went wrong</h1>
         <p class="error__content">

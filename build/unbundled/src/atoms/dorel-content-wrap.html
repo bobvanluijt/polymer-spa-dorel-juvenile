@@ -16,36 +16,26 @@
       }
 
       h1.title {
-        @apply(--theme-typography-7);
+        @apply(--theme-typography-6);
       }
 
       h2.title {
-        @apply(--theme-typography-6);
-      }
-
-      [mobile-small] h1.title {
         @apply(--theme-typography-4);
       }
 
-      [mobile-small] h2.title {
-        @apply(--theme-typography-3);
+      [tablet-medium-up] h1.title {
+        @apply(--theme-typography-7);
       }
 
-      [mobile-medium] h1.title {
+      [tablet-medium-up] h2.title {
         @apply(--theme-typography-6);
       }
-
-      [mobile-medium] h2.title {
-        @apply(--theme-typography-5);
-      }
-
     </style>
 
-    
-    <iron-media-query query="(max-width : 479px)" query-matches="{{ mobileSmall }}"></iron-media-query>
-    <iron-media-query query="(min-width : 480px) and (max-width : 767px)" query-matches="{{ mobileMedium }}"></iron-media-query>
+    <dorel-media-query breakpoints="{{ breakpoints }}"></dorel-media-query>
 
-    <div class="content-wrapper" mobile-small$="{{ mobileSmall }}" mobile-medium$="{{ mobileMedium }}">
+
+    <div class="content-wrapper" tablet-medium-up$="{{ breakpoints.tabletMediumUp }}">
       <div class="content">
         <template is="dom-if" if="{{ _hasValue(contentTitle) }}">
           <template is="dom-if" if="{{ _isMainHeader(contentIndex) }}">
@@ -66,6 +56,6 @@
     </div>
   </template>
 
-  <script>Polymer({is:"dorel-content-wrap",properties:{contentTitle:{type:String,value:""},contentHtml:{type:String,value:""}},_hasValue:function(e){return"undefined"!=typeof e&&""!==e},_isMainHeader:function(e){return"undefined"!=typeof e&&e<1}});</script>
+  <script>Polymer({is:"dorel-content-wrap",properties:{contentTitle:{type:String,value:""},contentHtml:{type:String,value:""}},_hasValue:function(e){return void 0!==e&&""!==e},_isMainHeader:function(e){return void 0!==e&&e<1}});</script>
 </dom-module>
 </body></html>

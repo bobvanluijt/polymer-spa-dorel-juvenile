@@ -3,6 +3,6 @@
     <iron-ajax id="categories" url="" handle-as="json" on-response="_categoriesLoaded"></iron-ajax>
   </template>
 
-  <script>Polymer({is:"dorel-wp-collect-categories",properties:{endPoint:{type:String}},observers:["_retrieveCategories(globals.Dorel.wpUrl)"],_retrieveCategories:function(e){if("undefined"!=typeof e&&""!==e&&this._hasProps(e)){var r=this.$.categories;r.url=this.globals.Dorel.wpUrl+"/wp/v2/categories",r.generateRequest()}},_categoriesLoaded:function(e){var r=e.detail.response;Polymer.globalsManager.set("Dorel.collect.categories",r)},_hasProps:function(e){var r=!1;for(var o in e)r=!!e.hasOwnProperty(o);return r}});</script>
+  <script>Polymer({is:"dorel-wp-collect-categories",properties:{endPoint:{type:String}},observers:["_retrieveCategories(globals.Dorel.wpUrl)"],_retrieveCategories:function(e){if(void 0!==e&&""!==e&&this._hasProps(e)){var r=this.$.categories;r.url=this.globals.Dorel.wpUrl+"/wp/v2/categories",r.generateRequest()}},_categoriesLoaded:function(e){var r=e.detail.response;Polymer.globalsManager.set("Dorel.collect.categories",r)},_hasProps:function(e){var r=!1;for(var o in e)r=!!e.hasOwnProperty(o);return r}});</script>
 </dom-module>
 </body></html>

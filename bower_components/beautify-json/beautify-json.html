@@ -1,0 +1,118 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../polymer/polymer.html">
+
+<!--
+Polymer 1.2 element to output json in a human readable way
+
+Example:
+
+    <beautify-json output="JSON_OBJECT" highlight></beautify-json>
+
+@demo demo/index.html
+-->
+<dom-module id="beautify-json">
+  <template>
+    <style>
+      ::host {
+        display: block;
+        border: 1px solid red;
+      }
+        
+      .default {
+        outline: 1px solid #ccc;
+        margin: 5px; 
+        padding: 10px 20px;
+      }
+
+      .highlighted {
+        background: #212121;
+        color: #89ddff;
+        outline: 1px solid #ccc;
+        margin: 5px; 
+        padding: 10px 20px;
+      }
+
+      ::selection {
+        background: #c8c8c8; /* WebKit/Blink Browsers */
+      }
+
+      ::-moz-selection {
+        background: #c8c8c8; /* Gecko Browsers */
+      }
+
+      .key { color: #82aaff; }
+      .string { color: #c3e176; }
+      .number { color: #f78c6c; }
+      .boolean { color: #f78c6c; }
+      .null { color: #f78c6c; }
+    </style>
+    <pre id="output" class$="{{ elClass }}">{{ output }}</pre>
+  </template>
+
+  <script>
+    Polymer({
+      is: 'beautify-json',
+      properties: {
+        /**
+         * `highlight` show the json in a dark syntax
+         * highlighting theme. It's optional to set this
+         * attribute.
+         */
+        highlight: {
+          type: Boolean,
+          value: false
+        },
+
+        /**
+         * `output` is the object or array that you
+         * want to output. If not given, we show a default
+         * example json
+         */
+        output: {
+          type: Object,
+          observer: '_jsonChanged'
+        }
+      },
+
+      ready: function() {
+        this.elClass = (this.highlight) ? 'highlighted' : 'default';
+      },
+
+      _jsonChanged: function() {
+        if (typeof this.output === 'object') {
+          var unstyled = JSON.stringify(this.output, undefined, 2);
+          var output = ( this.highlight ) ? this._syntaxHighlight(unstyled) : unstyled;
+          Polymer.dom(this.$.output).innerHTML = output;
+        }
+      },
+
+      _syntaxHighlight: function(json) {
+        json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
+            var cls = 'number';
+            if (/^"/.test(match)) {
+                if (/:$/.test(match)) {
+                    cls = 'key';
+                } else {
+                    cls = 'string';
+                }
+            } else if (/true|false/.test(match)) {
+                cls = 'boolean';
+            } else if (/null/.test(match)) {
+                cls = 'null';
+            }
+            return '<span class="' + cls + '">' + match + '</span>';
+        });
+      }
+    });
+  </script>
+</dom-module>

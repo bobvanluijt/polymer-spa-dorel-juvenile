@@ -1,4 +1,4 @@
-<html><head><link rel="import" href="../organisms/dorel-section-info-header.html">
+<html><head><link rel="import" href="../organisms/dorel-section-header.html">
 <link rel="import" href="../organisms/dorel-section-content-wrap.html">
 
 </head><body><dom-module id="dorel-template-info">
@@ -29,7 +29,7 @@
                   
                   <template is="dom-if" if="{{ isPageComponent(component.acf_fc_layout, 'section_info_header') }}">
 
-                    <dorel-section-info-header info-header-data="[[ component ]]"></dorel-section-info-header>
+                    <dorel-section-header section-header-data="[[ component ]]" info-header="true"></dorel-section-header>
 
                   </template>
                   
@@ -58,6 +58,6 @@
     </div>
   </template>
 
-  <script>Polymer({is:"dorel-template-info",properties:{templateData:{type:String}},isPageComponent:function(e,t){var p=e.substr(e.length-1),r=!isNaN(Number(p));if(r){var s=e.split("_");return s.pop(),strippedResponse=s.join("_"),strippedResponse===t}return e===t}});</script>
+  <script>Polymer({is:"dorel-template-info",properties:{templateData:{type:String}},isPageComponent:function(e,t){var p=e.substr(e.length-1);if(!isNaN(Number(p))){var r=e.split("_");return r.pop(),strippedResponse=r.join("_"),strippedResponse===t}return e===t}});</script>
 </dom-module>
 </body></html>

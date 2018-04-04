@@ -15,31 +15,34 @@
       }
 
       .logo {
-        width: var(--theme-logo-width);
-        height: var(--theme-logo-height);
+        width: var(--theme-logo-mobile-width);
+        height: var(--theme-logo-mobile-height);
         background: var(--theme-logo);
         display: block;
         background-size: contain;
         overflow: hidden;
         transition: transform .45s ease;
+        -ms-transform-origin: left;
+        -webkit-transform-origin: left;
         transform-origin: left;
       }
 
-      .logo[screen-small] {
-        width: var(--theme-logo-mobile-width);
-        height: var(--theme-logo-mobile-height);
+      .logo[tablet-medium-up] {
+        width: var(--theme-logo-width);
+        height: var(--theme-logo-height);
       }
 
       .logo[compact-menu] {
+        -ms-transform: scale(.75);
+        -webkit-transform: scale(.75);
         transform: scale(.75);
       }
-
     </style>
-    <iron-media-query query="(max-width : 767px)" query-matches="{{ screenSmall }}"></iron-media-query>
-    <iron-media-query query="(min-width : 768px) and (max-width : 991px)" query-matches="{{ screenMedium }}"></iron-media-query>
-    <h1 class="title">[[ brandName ]]</h1>
-    <div class="logo" screen-small$="{{ screenSmall }}" screen-medium$="{{ screenMedium }}" compact-menu$="{{ compactMenu }}"></div>
 
+    <dorel-media-query breakpoints="{{ breakpoints }}"></dorel-media-query>
+
+    <h1 class="title">[[ brandName ]]</h1>
+    <div class="logo" tablet-medium-up$="{{ breakpoints.tabletMediumUp }}" compact-menu$="{{ compactMenu }}"></div>
   </template>
 
   <script>Polymer({is:"dorel-logo",properties:{brandName:{type:String}}});</script>

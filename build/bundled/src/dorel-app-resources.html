@@ -5,7 +5,7 @@
     </noscript>
   </template>
 
-  <script>Polymer({is:"google-tag-manager",properties:{cid:{type:String}},attached:function(){!function(e,t,a,n,r){e[n]=e[n]||[],e[n].push({"gtm.start":(new Date).getTime(),event:"gtm.js"});var g=t.getElementsByTagName(a)[0],o=t.createElement(a),m="dataLayer"!=n?"&l="+n:"";o.async=!0,o.src="//www.googletagmanager.com/gtm.js?id="+r+m,g.parentNode.insertBefore(o,g)}(window,document,"script","dataLayer",this.cid)},_computeSrc:function(e){return"//www.googletagmanager.com/ns.html?id="+e}});</script>
+  <script>Polymer({is:"google-tag-manager",properties:{cid:{type:String}},attached:function(){!function(e,t,a,n,g){e[n]=e[n]||[],e[n].push({"gtm.start":(new Date).getTime(),event:"gtm.js"});var r=t.getElementsByTagName(a)[0],o=t.createElement(a);o.async=!0,o.src="//www.googletagmanager.com/gtm.js?id="+g,r.parentNode.insertBefore(o,r)}(window,document,"script","dataLayer",this.cid)},_computeSrc:function(e){return"//www.googletagmanager.com/ns.html?id="+e}});</script>
 </dom-module>
 <dom-module id="iron-image" assetpath="../bower_components/iron-image/">
   <template>
@@ -61,49 +61,113 @@
 <dom-module id="dorel-gtm-events" assetpath="atoms/">
   <script>Polymer({is:"dorel-gtm-events",properties:{gtmData:{type:Object}},observers:["_clickEvent(globals.Dorel.events)"],_clickEvent:function(e){this._hasProps(e)&&(console.info(e),window.dataLayer=window.dataLayer||[],window.dataLayer.push(e))},_hasProps:function(e){var r=!1;for(var o in e)r=!!e.hasOwnProperty(o);return r}});</script>
 </dom-module>
-<iron-iconset-svg size="79" name="dorel-cta-icons">
+<dom-module id="dorel-color-switcher" assetpath="atoms/">
+  <template>
+    <style>
+      .color-name {
+        @apply(--theme-typography-2);
+        margin: 1em 0 .5em 0;
+      }
+
+      .list-group {
+        list-style: none;
+        float: left;
+        padding: 0;
+        margin: 0.1875em 0;
+      }
+
+      .list-group-item {
+        float: left;
+        border: 2px solid transparent;
+        border-radius: 2em;
+        padding: .25em;
+        transition: border .3s ease;
+        margin-right: .5em;
+      }
+
+      .list-group-item.active {
+        border: 2px solid var(--theme-brand-color-1);
+      }
+
+      .list-group-item span {
+        display: block;
+        border-radius: 1em;
+        width: 1.75em;
+        height: 1.75em;
+        border: 1px solid var(--theme-color-monochrome-3);
+        cursor: pointer;
+        transition: opacity .3s ease;
+      }
+
+      .list-group-item span:focus, .list-group-item span:hover {
+        outline: none;
+        opacity: .7;
+      }
+
+      .color-switcher {
+        float: left;
+        width: 100%;
+      }
+
+    </style>
+
+    <template is="dom-if" if="[[ colorsData.length ]]">
+      <div class="color-switcher">
+        <div class="color-name">Color: [[ currentName ]]</div>
+
+        <ul class="list-group">
+          <template is="dom-repeat" items="[[ colorsData ]]" as="color">
+            <li class$="list-group-item {{ _isCurrentColor(currentName, color.color_name) }}">
+              <span on-click="_changeCurrentColor" role="button" tabindex="0" color-image$="[[ color.color_image ]]" color-name$="[[ color.color_name ]]" gtm-action$="[[ gtmAction ]]" gtm-child$="[[ gtmChild ]]" gtm-cta-index$="[[ index ]]" style$="background-color: [[ color.color_code ]];"></span>
+            </li>
+          </template>
+        </ul>
+
+      </div>
+    </template>
+  </template>
+
+  <script>Polymer({is:"dorel-color-switcher",properties:{colorsData:{type:Array,value:[],observer:"_colorsDataChanged"},currentImage:{type:String,value:"",notify:!0}},_colorsDataChanged:function(t,e){void 0!==t&&t.length&&(this.currentImage=t[0].color_image,this.currentName=t[0].color_name)},_changeCurrentColor:function(t){var e=Polymer.dom(t).localTarget;this.newColorImage=t.target.getAttribute("color-image"),this.newColorName=t.target.getAttribute("color-name"),this.gtmAction=t.target.getAttribute("gtm-action"),this.gtmChild=t.target.getAttribute("gtm-child"),this.gtmCtaIndex=t.target.getAttribute("gtm-cta-index");var r={name:this.gtmParent,index:Number(this.gtmParentIndex)+1,child:{name:this.gtmChild,index:1,event:{name:"color-switch",colorName:this.newColorName,colorImage:this.newColorImage,index:Number(this.gtmCtaIndex)+1}}};Polymer.globalsManager.set("Dorel.events",{action:this.gtmAction?this.gtmAction:"click",component:"color-switcher",structure:r,element:e,event:"polymer_event",things:{currentColor:this.currentName,targetColor:this.newColorName}}),this.currentImage=this.newColorImage,this.currentName=this.newColorName},_isCurrentColor:function(t,e){return t===e?"active":""}});</script>
+
+</dom-module>
+<dom-module id="iron-icon" assetpath="../bower_components/iron-icon/">
+  <template>
+    <style>
+      :host {
+        @apply(--layout-inline);
+        @apply(--layout-center-center);
+        position: relative;
+
+        vertical-align: middle;
+
+        fill: var(--iron-icon-fill-color, currentcolor);
+        stroke: var(--iron-icon-stroke-color, none);
+
+        width: var(--iron-icon-width, 24px);
+        height: var(--iron-icon-height, 24px);
+        @apply(--iron-icon);
+      }
+    </style>
+  </template>
+
+  <script>Polymer({is:"iron-icon",properties:{icon:{type:String},theme:{type:String},src:{type:String},_meta:{value:Polymer.Base.create("iron-meta",{type:"iconset"})}},observers:["_updateIcon(_meta, isAttached)","_updateIcon(theme, isAttached)","_srcChanged(src, isAttached)","_iconChanged(icon, isAttached)"],_DEFAULT_ICONSET:"icons",_iconChanged:function(t){var i=(t||"").split(":");this._iconName=i.pop(),this._iconsetName=i.pop()||this._DEFAULT_ICONSET,this._updateIcon()},_srcChanged:function(t){this._updateIcon()},_usesIconset:function(){return this.icon||!this.src},_updateIcon:function(){this._usesIconset()?(this._img&&this._img.parentNode&&Polymer.dom(this.root).removeChild(this._img),""===this._iconName?this._iconset&&this._iconset.removeIcon(this):this._iconsetName&&this._meta&&(this._iconset=this._meta.byKey(this._iconsetName),this._iconset?(this._iconset.applyIcon(this,this._iconName,this.theme),this.unlisten(window,"iron-iconset-added","_updateIcon")):this.listen(window,"iron-iconset-added","_updateIcon"))):(this._iconset&&this._iconset.removeIcon(this),this._img||(this._img=document.createElement("img"),this._img.style.width="100%",this._img.style.height="100%",this._img.draggable=!1),this._img.src=this.src,Polymer.dom(this.root).appendChild(this._img))}});</script>
+
+</dom-module>
+<iron-iconset-svg size="24" name="dorel-icons">
   <svg>
     <defs>
-      <g id="feeding-care" transform="translate(16.000000, 0.000000)">
-        <polygon id="Fill-1" fill="#FEFEFE" points="7.023 38.536 30.746 38.536 30.746 8.717 7.023 8.717"></polygon>
-        <polygon id="Stroke-2" stroke="#00A8D5" stroke-width="1.008" stroke-linecap="round" stroke-linejoin="round" points="7.023 38.536 30.746 38.536 30.746 8.717 7.023 8.717"></polygon>
-        <g id="Group-19" transform="translate(0.000000, 0.892000)">
-          <path d="M30.0896,48.3532 L10.1556,49.0122 L8.8796,18.0752 C8.8796,12.4482 13.4306,7.8972 19.0566,7.8972 C24.6836,7.8972 29.2356,12.4482 29.2356,18.0752 L30.0896,48.3532 Z M8.3376,32.1392 C10.1246,34.0362 14.3946,38.4722 19.1966,43.2742 C24.2206,38.2512 28.4826,33.8112 30.0576,32.1392 C32.5946,29.4452 34.4366,26.0982 35.5026,23.8562 L35.5026,17.2312 C35.5026,8.0782 28.0806,0.6122 18.8836,0.6122 C9.7306,0.6122 2.2656,8.0782 2.2656,17.2312 L2.2656,22.4692 C3.1226,24.4712 5.2006,28.8082 8.3376,32.1392 L8.3376,32.1392 Z" id="Fill-3" fill="#FEFEFE"></path>
-          <path d="M30.0896,48.3532 L10.1556,49.0122 L8.8796,18.0752 C8.8796,12.4482 13.4306,7.8972 19.0566,7.8972 C24.6836,7.8972 29.2356,12.4482 29.2356,18.0752 L30.0896,48.3532 Z M8.3376,32.1392 C10.1246,34.0362 14.3946,38.4722 19.1966,43.2742 C24.2206,38.2512 28.4826,33.8112 30.0576,32.1392 C32.5946,29.4452 34.4366,26.0982 35.5026,23.8562 L35.5026,17.2312 C35.5026,8.0782 28.0806,0.6122 18.8836,0.6122 C9.7306,0.6122 2.2656,8.0782 2.2656,17.2312 L2.2656,22.4692 C3.1226,24.4712 5.2006,28.8082 8.3376,32.1392 Z" id="Stroke-5" stroke="#9E9E9E" stroke-width="1.008" stroke-linecap="round" stroke-linejoin="round"></path>
-          <path d="M19.218,74.4958 C8.133,74.4958 2.256,67.7598 2.256,59.5398 C2.256,51.0338 8.85,45.0618 18.597,45.0618 C28.822,45.0618 35.512,51.4158 35.512,60.0178 C35.512,68.8088 28.775,74.4958 19.218,74.4958" id="Fill-7" fill="#FEFEFE"></path>
-          <path d="M19.218,74.4958 C8.133,74.4958 2.256,67.7598 2.256,59.5398 C2.256,51.0338 8.85,45.0618 18.597,45.0618 C28.822,45.0618 35.512,51.4158 35.512,60.0178 C35.512,68.8088 28.775,74.4958 19.218,74.4958 Z" id="Stroke-9" stroke="#9E9E9E" stroke-width="1.008" stroke-linecap="round" stroke-linejoin="round"></path>
-          <path d="M9.2156,29.156 C11.5746,30.118 13.3986,30.648 16.5196,30.648 C26.7126,30.648 34.3536,24.198 34.3536,16.804 L34.3536,16.803 L35.2266,15.669 C35.5026,15.44 35.9136,15.478 36.1416,15.754 L37.0726,16.875 C37.3306,17.186 37.2606,17.35 37.2376,17.67 C36.9686,21.449 36.6666,25.611 36.5806,28.28 C36.3646,34.929 36.5806,54.894 36.5806,54.894 C36.5806,61.708 35.4926,66.129 32.3766,69.319 L32.3296,69.296 L3.2706,31.998 C2.9426,31.658 2.9516,31.115 3.2906,30.787 L4.6706,29.453 C5.0526,29.084 5.2756,29.16 5.6986,29.158 C6.0276,29.156 6.3516,29.155 6.6736,29.154 L9.2156,29.156 Z" id="Fill-11" fill="#FEFEFE"></path>
-          <path d="M9.2156,29.156 C11.5746,30.118 13.3986,30.648 16.5196,30.648 C26.7126,30.648 34.3536,24.198 34.3536,16.804 L34.3536,16.803 L35.2266,15.669 C35.5026,15.44 35.9136,15.478 36.1416,15.754 L37.0726,16.875 C37.3306,17.186 37.2606,17.35 37.2376,17.67 C36.9686,21.449 36.6666,25.611 36.5806,28.28 C36.3646,34.929 36.5806,54.894 36.5806,54.894 C36.5806,61.708 35.4926,66.129 32.3766,69.319 L32.3296,69.296 L3.2706,31.998 C2.9426,31.658 2.9516,31.115 3.2906,30.787 L4.6706,29.453 C5.0526,29.084 5.2756,29.16 5.6986,29.158 C6.0276,29.156 6.3516,29.155 6.6736,29.154 L9.2156,29.156 Z" id="Stroke-13" stroke="#9E9E9E" stroke-width="1.008" stroke-linecap="round" stroke-linejoin="round"></path>
-          <path d="M27.0886,28.1677 C24.7296,29.1297 22.8876,29.6597 20.2746,29.6597 C10.0826,29.6597 3.4146,24.1967 3.4146,16.8037 L2.5416,15.6697 C2.2656,15.4407 1.8556,15.4777 1.6266,15.7547 L0.6946,16.8757 C0.4376,17.1857 0.5066,17.3507 0.5296,17.6707 C0.7986,21.4487 1.1016,24.6227 1.1876,27.2917 C1.4026,33.9407 1.1876,53.9047 1.1876,53.9047 C1.1876,60.7197 2.2756,65.1407 5.3926,68.3307 L5.4386,68.3077 L34.4966,31.0087 C34.8256,30.6697 34.8176,30.1267 34.4776,29.7987 L33.0976,28.4647 C32.7156,28.0957 32.4916,28.1717 32.0686,28.1697 C31.7396,28.1677 31.4156,28.1667 31.0946,28.1657 L27.0886,28.1677 Z" id="Fill-15" fill="#FEFEFE"></path>
-          <path d="M27.0886,28.1677 C24.7296,29.1297 22.8876,29.6597 20.2746,29.6597 C10.0826,29.6597 3.4146,24.1967 3.4146,16.8037 L2.5416,15.6697 C2.2656,15.4407 1.8556,15.4777 1.6266,15.7547 L0.6946,16.8757 C0.4376,17.1857 0.5066,17.3507 0.5296,17.6707 C0.7986,21.4487 1.1016,24.6227 1.1876,27.2917 C1.4026,33.9407 1.1876,53.9047 1.1876,53.9047 C1.1876,60.7197 2.2756,65.1407 5.3926,68.3307 L5.4386,68.3077 L34.4966,31.0087 C34.8256,30.6697 34.8176,30.1267 34.4776,29.7987 L33.0976,28.4647 C32.7156,28.0957 32.4916,28.1717 32.0686,28.1697 C31.7396,28.1677 31.4156,28.1667 31.0946,28.1657 L27.0886,28.1677 Z" id="Stroke-17" stroke="#9E9E9E" stroke-width="1.008" stroke-linecap="round" stroke-linejoin="round"></path>
-        </g>
-      </g>
-      <g id="stroller" transform="translate(-21.000000, -5.000000)">
-        <path d="M55.5975248,49.1754276 L66.3094059,59.2472958 L66.3094059,61.1682789 C66.3094059,61.6477996 65.9529703,61.9533007 65.4618812,61.9533007 L45.0292079,61.9533007 C44.5351485,61.9533007 44.1341584,61.6033279 44.1341584,61.1682789 L44.1341584,59.2472958 L55.5975248,49.1754276 Z" id="Fill-4" fill="#FEFEFE"></path>
-        <path d="M51.080198,43.7094717 L77.5138614,56.1277042 C77.970297,56.3336275 78.1108911,56.6072249 78.1108911,57.2240278 L78.1108911,59.4524455 C78.1108911,60.0015741 77.6544554,60.4462908 77.0930693,60.4462908 L66.0693069,60.5429684 L56.790099,50.5716449" id="Fill-6" fill="#FEFEFE"></path>
-        <path d="M42.679802,61.3474224 L27.6659406,25.6540673 C27.6035644,25.5612568 27.5926733,25.4674796 27.5817822,25.3727356 C27.5243564,24.8845139 27.8312871,24.5074714 28.3273267,24.4523652 L31.2471287,24.125595 C31.6441584,24.0811234 32.030297,24.3808238 32.1748515,24.7597998 L55.4728713,49.4995874 L42.679802,61.3474224 Z" id="Fill-8" fill="#FEFEFE"></path>
-        <path d="M38.7267327,32.8799414 L31.3148515,24.1953962 L48.3316832,10.4468804 C48.7544554,10.0872399 49.3980198,10.1297781 49.7673267,10.543558 L51.2663366,12.223814 C51.6821782,12.6888331 51.760396,12.9856332 51.5544554,13.4332503 L48.9386139,41.4040019" id="Fill-10" fill="#FEFEFE"></path>
-        <path d="M77.4488119,74.3842947 C77.4488119,77.8521187 74.569604,80.6635022 71.0181188,80.6635022 C67.4656436,80.6635022 64.5864356,77.8521187 64.5864356,74.3842947 C64.5864356,70.9164706 67.4656436,68.1050871 71.0181188,68.1050871 C74.569604,68.1050871 77.4488119,70.9164706 77.4488119,74.3842947 Z M67.5033663,74.3842947 C67.5033663,76.2791748 69.0766337,77.8153813 71.0172277,77.8153813 C72.9578218,77.8153813 74.5310891,76.2791748 74.5310891,74.3842947 C74.5310891,72.4894145 72.9578218,70.9532081 71.0172277,70.9532081 C69.0766337,70.9532081 67.5033663,72.4894145 67.5033663,74.3842947 Z" id="Combined-Shape" fill="#FEFEFE"></path>
-        <path d="M38.139802,72.6225395 C38.139802,77.0639066 34.4526733,80.6641789 29.9041584,80.6641789 C25.3556436,80.6641789 21.6685149,77.0639066 21.6685149,72.6225395 C21.6685149,68.1811724 25.3556436,64.5809001 29.9041584,64.5809001 C34.4526733,64.5809001 38.139802,68.1811724 38.139802,72.6225395 Z M25.0112871,72.6225395 C25.0112871,75.2608701 27.2023762,77.4003445 29.9043564,77.4003445 C32.6073267,77.4003445 34.7974257,75.2608701 34.7974257,72.6225395 C34.7974257,69.9842089 32.6073267,67.8447345 29.9043564,67.8447345 C27.2023762,67.8447345 25.0112871,69.9842089 25.0112871,72.6225395 Z" id="Combined-Shape" fill="#FEFEFE"></path>
-        <path d="M23.5977228,19.0156059 L46.3452475,41.5975504 L46.3561386,41.5878826 L53.6165347,48.7835934 L29.0511881,72.3700177 C28.799703,72.6155787 28.7551485,72.9694186 28.9848515,73.1937105 L30.050198,74.2358946 C30.3016832,74.4814556 30.6650495,74.3954126 30.8937624,74.1711206 L55.4947525,50.6456032 L69.679901,64.7025204 L69.7165347,73.626826 C69.720495,73.9738984 69.9482178,74.2532966 70.2729703,74.2494295 L71.7808911,74.2349278 C72.1373267,74.2310607 72.3274257,73.9168587 72.3244554,73.600723 L72.3036634,63.941668 L72.2987129,63.9368342 C72.2977228,63.7676484 72.2244554,63.5965291 72.0937624,63.4669812 L49.8670297,41.4418995 L49.8581188,41.4506005 L25.6917822,17.4629643 L24.9660396,16.7311152 C24.7175248,16.4816871 24.3561386,16.4323815 24.1224752,16.6537731 L23.0412871,17.6795221 C22.7858416,17.9221827 22.8690099,18.2779562 23.0957426,18.5051484 L23.5977228,19.0156059 Z" id="Fill-20" fill="#FEFEFE"></path>
-        <path d="M23.5977228,19.0156059 L46.3452475,41.5975504 L53.6165347,48.7835934 L29.0511881,72.3700177 C28.799703,72.6155787 28.7551485,72.9694186 28.9848515,73.1937105 L30.050198,74.2358946 C30.3016832,74.4814556 30.6650495,74.3954126 30.8937624,74.1711206 L55.4947525,50.6456032 L69.679901,64.7025204 L69.7165347,73.626826 C69.720495,73.9738984 69.9482178,74.2532966 70.2729703,74.2494295 L71.7808911,74.2349278 C72.1373267,74.2310607 72.3274257,73.9168587 72.3244554,73.600723 L72.3036634,63.941668 C72.2977228,63.7676484 72.2244554,63.5965291 72.0937624,63.4669812 L49.8670297,41.4418995 L25.6917822,17.4629643 L24.9660396,16.7311152 C24.7175248,16.4816871 24.3561386,16.4323815 24.1224752,16.6537731 L23.0412871,17.6795221 C22.7858416,17.9221827 22.8690099,18.2779562 23.0957426,18.5051484 L23.5977228,19.0156059 Z" id="Stroke-22" stroke="#9E9E9E" stroke-width="1.008" stroke-linecap="round" stroke-linejoin="round"></path>
-      </g>
-      <g id="car-seat" transform="translate(-20.000000, -14.000000)">
-        <polygon id="Fill-4" fill="#FEFEFE" points="40.4970297 79.2001553 67.5059406 79.2001553 67.5059406 70.5164046 40.4970297 70.5164046"></polygon>
-        <polygon id="Stroke-6" stroke="#9E9E9E" stroke-width="1.015" stroke-linecap="round" stroke-linejoin="round" points="40.4970297 79.2001553 67.5059406 79.2001553 67.5059406 70.5164046 40.4970297 70.5164046"></polygon>
-        <g id="Group-9">
-          <g transform="translate(34.653465, 78.410988)">
-            <path d="M0.712970297,0.505241701 C1.94168317,3.54834013 1.72386139,2.96107552 2.5129703,4.6199767 C3.01594059,5.67802368 3.99613861,6.35944477 6.06346535,6.35944477 L35.3981188,6.35944477 C37.9941584,6.35944477 39.2040594,5.26645312 39.6515842,3.96476412 L41.1624752,0.505241701 L6.24267327,0.505241701" id="Fill-7" stroke="none" fill="#FEFEFE" fill-rule="evenodd"></path>
-            <path d="M0.712970297,0.505241701 C1.94168317,3.54834013 1.72386139,2.96107552 2.5129703,4.6199767 C3.01594059,5.67802368 3.99613861,6.35944477 6.06346535,6.35944477 L35.3981188,6.35944477 C37.9941584,6.35944477 39.2040594,5.26645312 39.6515842,3.96476412 L41.1624752,0.505241701 L6.24267327,0.505241701" id="Stroke-8" stroke="#9E9E9E" stroke-width="1.015" fill="none" stroke-linecap="round" stroke-linejoin="round"></path>
-          </g>
-        </g>
-        <path d="M73.5036634,65.5712483 C72.1086139,64.9995147 70.7462376,64.7568433 69.4779208,64.8335275 C68.6789109,64.8451757 67.1155446,64.9859251 65.2115842,65.7440303 C64.7125743,65.9371967 64.2175248,66.1701611 63.7284158,66.4351582 C63.6393069,66.4836925 63.5482178,66.5341681 63.4581188,66.5846438 C63.4284158,66.6011454 63.399703,66.6176471 63.37,66.6341487 C62.9224752,66.8894389 62.4670297,67.1816152 62.0046535,67.5135896 C59.9848515,68.9375849 58.1749505,70.7537371 56.8561386,72.2330615 C55.4581188,73.7415065 54.6551485,74.930596 54.6551485,74.930596 L41.7313861,74.930596 L42.3125743,78.5959037 L76.4363366,78.5959037 C77.8343564,77.6718113 78.5175248,75.5887206 78.7284158,74.616094 C79.9016832,70.7867404 77.579901,67.2417977 73.5036634,65.5712483" id="Fill-10" fill="#FEFEFE"></path>
-        <path d="M73.5036634,65.5712483 C72.1086139,64.9995147 70.7462376,64.7568433 69.4779208,64.8335275 C68.6789109,64.8451757 67.1155446,64.9859251 65.2115842,65.7440303 C64.7125743,65.9371967 64.2175248,66.1701611 63.7284158,66.4351582 C63.6393069,66.4836925 63.5482178,66.5341681 63.4581188,66.5846438 C63.4284158,66.6011454 63.399703,66.6176471 63.37,66.6341487 C62.9224752,66.8894389 62.4670297,67.1816152 62.0046535,67.5135896 C59.9848515,68.9375849 58.1749505,70.7537371 56.8561386,72.2330615 C55.4581188,73.7415065 54.6551485,74.930596 54.6551485,74.930596 L41.7313861,74.930596 L42.3125743,78.5959037 L76.4363366,78.5959037 C77.8343564,77.6718113 78.5175248,75.5887206 78.7284158,74.616094 C79.9016832,70.7867404 77.579901,67.2417977 73.5036634,65.5712483 Z" id="Stroke-11" stroke="#9E9E9E" stroke-width="1.015" stroke-linecap="round" stroke-linejoin="round"></path>
-        <path d="M20.7485149,17.1313337 L22.6465347,23.934867 L27.6564356,38.1194914 L41.7623762,38.083576 C44.7841584,38.083576 46.9594059,35.2773248 46.9594059,30.5219375 C46.9594059,21.6692875 35.3920792,14.0455251 27.0821782,15.0919239 C21.7990099,15.757814 20.7485149,17.1313337 20.7485149,17.1313337" id="Fill-12" fill="#FEFEFE"></path>
-        <path d="M20.7485149,17.1313337 L22.6465347,23.934867 L27.6564356,38.1194914 L41.7623762,38.083576 C44.7841584,38.083576 46.9594059,35.2773248 46.9594059,30.5219375 C46.9594059,21.6692875 35.3920792,14.0455251 27.0821782,15.0919239 C21.7990099,15.757814 20.7485149,17.1313337 20.7485149,17.1313337 Z" id="Stroke-13" stroke="#9E9E9E" stroke-width="1.015" stroke-linecap="round" stroke-linejoin="round"></path>
-        <path d="M26.4115842,37.133178 C26.4115842,37.133178 41.6581188,34.4637934 50.6977228,44.5006795 C59.7363366,54.5365948 45.6878218,77.0652301 41.9848515,81.9768977 C41.9848515,81.9768977 36.2135644,81.8701223 34.2531683,77.4923316 C32.2927723,73.1145409 24.560099,47.8097457 26.4115842,37.133178" id="Fill-14" fill="#FEFEFE"></path>
-        <path d="M26.4115842,37.133178 C26.4115842,37.133178 41.6581188,34.4637934 50.6977228,44.5006795 C59.7363366,54.5365948 45.6878218,77.0652301 41.9848515,81.9768977 C41.9848515,81.9768977 36.2135644,81.8701223 34.2531683,77.4923316 C32.2927723,73.1145409 24.560099,47.8097457 26.4115842,37.133178 Z" id="Stroke-15" stroke="#9E9E9E" stroke-width="1.015" stroke-linecap="round" stroke-linejoin="round"></path>
-      </g>
+      <g id="file-download"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"></path></g>
+      <g id="check"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"></path></g>
+      <g id="close"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></g>
+      <g id="menu"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"></path></g>
+      <g id="back-to-top"><path d="M8 11h3v10h2V11h3l-4-4-4 4zM4 3v2h16V3H4z"></path></g>
+      <g id="expand-less"><path d="M12 8l-6 6 1.41 1.41L12 10.83l4.59 4.58L18 14z"></path></g>
+      <g id="expand-more"><path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"></path></g>
+      <g id="chevron-right"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></g>
+      <g id="play-circle-outline"><path d="M10 16.5l6-4.5-6-4.5v9zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"></path></g>
+      <g id="location"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"></path></g>
+      <g id="external-link"><path d="M9 5v2h6.59L4 18.59 5.41 20 17 8.41V15h2V5z"></path></g>
+      <g id="help-outline"><path d="M11 18h2v-2h-2v2zm1-16C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-2.21 0-4 1.79-4 4h2c0-1.1.9-2 2-2s2 .9 2 2c0 2-3 1.75-3 5h2c0-2.25 3-2.5 3-5 0-2.21-1.79-4-4-4z"></path></g>
     </defs>
   </svg>
 </iron-iconset-svg><dom-module id="dorel-third-party" assetpath="molecules/">
@@ -112,7 +176,7 @@
       <dorel-zendesk zendesk-loaded="{{ globals.Dorel.collect.options.zendesk_loaded }}"></dorel-zendesk>
     </template>
   </template>
-  <script>Polymer({is:"dorel-third-party",properties:{hubspotToggle:{type:Boolean},hubspotPortalId:{type:String},hubspotScriptSrc:{type:String,value:"//js.hsforms.net/forms/v2.js"},zendeskToggle:{type:Boolean},zendeskHost:{type:String}},observers:["_initHubspot(hubspotToggle, hubspotPortalId, hubspotScriptSrc)","_initZendesk(zendeskToggle, zendeskHost)"],_initHubspot:function(e,t,o){if("undefined"!=typeof e&&e&&"undefined"!=typeof t&&""!==t&&"undefined"!=typeof o&&!this._scriptExists(o)){var n=this,s=document.createElement("script");s.src=o,document.getElementsByTagName("head")[0].appendChild(s),s.onload=function(){n.importHref(n.resolveUrl("../atoms/dorel-hubspot.html"),function(){Polymer.globalsManager.set("Dorel.collect.options.hubspot_loaded",!0)},null,!1)}}},_initZendesk:function(e,t){if("undefined"!=typeof e&&e&&"undefined"!=typeof t&&""!==t){var o=this;window.zEmbed||function(){var e=[];window.zEmbed=function(){e.push(arguments)},window.zE=window.zE||window.zEmbed,document.zendeskHost=o.zendeskHost,document.zEQueue=e}(),o.importHref(o.resolveUrl("../atoms/dorel-zendesk.html"),function(){Polymer.globalsManager.set("Dorel.collect.options.zendesk_loaded",!0)},null,!0)}},_scriptExists:function(e){for(var t=document.getElementsByTagName("script"),o=t.length;o--;)return t[o].src===e;return!1}});</script>
+  <script>Polymer({is:"dorel-third-party",properties:{hubspotToggle:{type:Boolean},hubspotPortalId:{type:String},hubspotScriptSrc:{type:String,value:"//js.hsforms.net/forms/v2.js"},zendeskToggle:{type:Boolean},zendeskHost:{type:String}},observers:["_initHubspot(hubspotToggle, hubspotPortalId, hubspotScriptSrc)","_initZendesk(zendeskToggle, zendeskHost)"],_initHubspot:function(e,o,t){if(void 0!==e&&e&&void 0!==o&&""!==o&&void 0!==t&&!this._scriptExists(t)){var n=this,s=document.createElement("script");s.src=t,document.getElementsByTagName("head")[0].appendChild(s),s.onload=function(){n.importHref(n.resolveUrl("../atoms/dorel-hubspot.html"),function(){Polymer.globalsManager.set("Dorel.collect.options.hubspot_loaded",!0)},null,!1)}}},_initZendesk:function(e,o){if(void 0!==e&&e&&void 0!==o&&""!==o){var t=this;window.zEmbed||function(){var e=[];window.zEmbed=function(){e.push(arguments)},window.zE=window.zE||window.zEmbed,document.zendeskHost=t.zendeskHost,document.zEQueue=e}(),t.importHref(t.resolveUrl("../atoms/dorel-zendesk.html"),function(){Polymer.globalsManager.set("Dorel.collect.options.zendesk_loaded",!0)},null,!0)}},_scriptExists:function(e){for(var o=document.getElementsByTagName("script"),t=o.length;t--;)return o[t].src===e;return!1}});</script>
 </dom-module>
 <dom-module id="dorel-content-wrap" assetpath="atoms/">
   <template>
@@ -132,36 +196,26 @@
       }
 
       h1.title {
-        @apply(--theme-typography-7);
+        @apply(--theme-typography-6);
       }
 
       h2.title {
-        @apply(--theme-typography-6);
-      }
-
-      [mobile-small] h1.title {
         @apply(--theme-typography-4);
       }
 
-      [mobile-small] h2.title {
-        @apply(--theme-typography-3);
+      [tablet-medium-up] h1.title {
+        @apply(--theme-typography-7);
       }
 
-      [mobile-medium] h1.title {
+      [tablet-medium-up] h2.title {
         @apply(--theme-typography-6);
       }
-
-      [mobile-medium] h2.title {
-        @apply(--theme-typography-5);
-      }
-
     </style>
 
-    
-    <iron-media-query query="(max-width : 479px)" query-matches="{{ mobileSmall }}"></iron-media-query>
-    <iron-media-query query="(min-width : 480px) and (max-width : 767px)" query-matches="{{ mobileMedium }}"></iron-media-query>
+    <dorel-media-query breakpoints="{{ breakpoints }}"></dorel-media-query>
 
-    <div class="content-wrapper" mobile-small$="{{ mobileSmall }}" mobile-medium$="{{ mobileMedium }}">
+
+    <div class="content-wrapper" tablet-medium-up$="{{ breakpoints.tabletMediumUp }}">
       <div class="content">
         <template is="dom-if" if="{{ _hasValue(contentTitle) }}">
           <template is="dom-if" if="{{ _isMainHeader(contentIndex) }}">
@@ -182,31 +236,7 @@
     </div>
   </template>
 
-  <script>Polymer({is:"dorel-content-wrap",properties:{contentTitle:{type:String,value:""},contentHtml:{type:String,value:""}},_hasValue:function(e){return"undefined"!=typeof e&&""!==e},_isMainHeader:function(e){return"undefined"!=typeof e&&e<1}});</script>
-</dom-module>
-<dom-module id="dorel-image-wrap" assetpath="atoms/">
-  <template>
-    <style>
-      .image-wrap {
-        text-align: center;
-      }
-      .image-wrap iron-image {
-        margin: 0 auto;
-        width: 100%;
-        max-width: 340px;
-        min-height: 400px;
-      }
-    </style>
-    
-    <div class="image-wrap">
-      <iron-image fade="true" sizing="contain" preload="" src$="[[ imageUrl ]]">
-      </iron-image>
-    </div>
-
-  </template>
-
-  <script>Polymer({is:"dorel-image-wrap",properties:{imageUrl:{type:String,value:""}}});</script>
-
+  <script>Polymer({is:"dorel-content-wrap",properties:{contentTitle:{type:String,value:""},contentHtml:{type:String,value:""}},_hasValue:function(e){return void 0!==e&&""!==e},_isMainHeader:function(e){return void 0!==e&&e<1}});</script>
 </dom-module>
 <dom-module id="dorel-video-wrap" assetpath="atoms/">
   <template>
@@ -239,180 +269,8 @@
 
   </template>
 
-  <script>Polymer({is:"dorel-video-wrap",properties:{videoType:{type:String,value:""},videoId:{type:String,value:""},playVideo:{type:Boolean,value:!1}},hasVideoId:function(e){return"undefined"!=typeof e||""!==e||null!==e},isYoutubeVideo:function(e){return"undefined"!=typeof e&&"youtube"===e},_iframeClick:function(e){this.playVideo=!this.playVideo,this._eventTracking(e)},_eventTracking:function(e){Polymer.globalsManager.get("Dorel");Polymer.globalsManager.set("Dorel.events",{action:this.playVideo?"play":"stop",component:"big-video",element:Polymer.dom(e).localTarget,event:"polymer_event"})}});</script>
+  <script>Polymer({is:"dorel-video-wrap",properties:{videoType:{type:String,value:""},videoId:{type:String,value:""},playVideo:{type:Boolean,value:!1}},hasVideoId:function(e){return void 0!==e||""!==e||null!==e},isYoutubeVideo:function(e){return void 0!==e&&"youtube"===e},_iframeClick:function(e){this.playVideo=!this.playVideo,this._eventTracking(e)},_eventTracking:function(e){Polymer.globalsManager.get("Dorel");Polymer.globalsManager.set("Dorel.events",{action:this.playVideo?"play":"stop",component:"big-video",element:Polymer.dom(e).localTarget,event:"polymer_event"})}});</script>
 
-</dom-module>
-<dom-module id="dorel-section-big-title" assetpath="organisms/">
-  <template>
-    <style include="theme-maxi-cosi-shared-styles">
-      .section-big-title {
-        display: table;
-        width: 100%;
-      }
-
-      .section-big-title-inner {
-        display: table-cell;
-        vertical-align: middle;
-        text-align: center;
-      }
-      .section-big-title-inner.left .column-headline {
-        margin: 0 auto 0 0;
-      }
-      .section-big-title-inner.center .column-headline {
-        margin: 0 auto;
-      }
-      .section-big-title-inner.right .column-headline {
-        margin: 0 0 0 auto;
-      }
-  
-      .section-big-title[mobile-small] {
-        height: 180px;
-      }
-      .section-big-title[mobile-small] .section-big-title-inner > * {
-        width: 268px;
-      }
-  
-      .section-big-title[mobile-medium] {
-        height: 260px;
-      }
-      .section-big-title[mobile-medium] .section-big-title-inner > * {
-        width: 384px;
-      }
-  
-      .section-big-title[tablets] {
-        height: 340px;
-      }
-      .section-big-title[tablets] .section-big-title-inner > * {
-        width: 500px;
-      }
-
-  
-      .section-big-title[desktop-small] {
-        height: 420px;
-      }
-      .section-big-title[desktop-full] {
-        height: 420px;
-      }
-      .section-big-title[desktop-small] .section-big-title-inner > *,
-      .section-big-title[desktop-full] .section-big-title-inner > * {
-        width: 616px;
-      }
-
-      .column-headline {
-        @apply(--theme-heading);
-      }
-      h1.column-headline {
-        font-size: 2.4rem;
-      }
-      h2.column-headline {
-        font-size: 2rem;
-      }
-      h3.column-headline {
-        font-size: 1.8rem;
-      }
-      h4.column-headline {
-        font-size: 1.7rem;
-      }
-      h5.column-headline {
-        font-size: 1.6rem;
-      }
-      h6.column-headline {
-        font-size: 1rem;
-      }
-    </style>
-    
-    
-    <iron-media-query query="(max-width : 479px)" query-matches="{{ mobileSmall }}"></iron-media-query>
-    <iron-media-query query="(min-width : 480px) and (max-width : 767px)" query-matches="{{ mobileMedium }}"></iron-media-query>
-    <iron-media-query query="(min-width : 768px) and (max-width : 991px)" query-matches="{{ tablets }}"></iron-media-query>
-    <iron-media-query query="(min-width : 992px) and (max-width : 1199px)" query-matches="{{ desktopSmall }}"></iron-media-query>
-    <iron-media-query query="(min-width : 1200px)" query-matches="{{ desktopFull }}"></iron-media-query>
-    
-    <section class="section-big-title container-fluid" mobile-small$="{{ mobileSmall }}" mobile-medium$="{{ mobileMedium }}" tablets$="{{ tablets }}" desktop-small$="{{ desktopSmall }}" desktop-full$="{{ desktopFull }}" style$="background-color: [[ bigTitleData.background_color ]]">
-      <div class$="section-big-title-inner [[ bigTitleData.big_title_alignment ]]">
-        <template is="dom-if" if="[[ bigTitleData.big_title ]]">
-          
-          <template is="dom-if" if="{{ hasBigTitleType(bigTitleData.big_title_type) }}">
-            <template is="dom-if" if="{{ _isH1(bigTitleData.big_title_type) }}">
-              <h1 class="column-headline text-center" style$="color: [[ bigTitleData.big_title_color ]]">[[ bigTitleData.big_title ]]</h1>
-            </template>
-
-            <template is="dom-if" if="{{ _isH2(bigTitleData.big_title_type) }}">
-              <h2 class="column-headline text-center" style$="color: [[ bigTitleData.big_title_color ]]">[[ bigTitleData.big_title ]]</h2>
-            </template>
-
-            <template is="dom-if" if="{{ _isH3(bigTitleData.big_title_type) }}">
-              <h3 class="column-headline text-center" style$="color: [[ bigTitleData.big_title_color ]]">[[ bigTitleData.big_title ]]</h3>
-            </template>
-
-            <template is="dom-if" if="{{ _isH4(bigTitleData.big_title_type) }}">
-              <h4 class="column-headline text-center" style$="color: [[ bigTitleData.big_title_color ]]">[[ bigTitleData.big_title ]]</h4>
-            </template>
-
-            <template is="dom-if" if="{{ _isH5(bigTitleData.big_title_type) }}">
-              <h5 class="column-headline text-center" style$="color: [[ bigTitleData.big_title_color ]]">[[ bigTitleData.big_title ]]</h5>
-            </template>
-
-            <template is="dom-if" if="{{ _isH6(bigTitleData.big_title_type) }}">
-              <h6 class="column-headline text-center" style$="color: [[ bigTitleData.big_title_color ]]">[[ bigTitleData.big_title ]]</h6>
-            </template>
-          </template>
-
-        </template>
-
-      </div>
-    </section>
-  </template>
-
-  <script>Polymer({is:"dorel-section-big-title",properties:{bigTitleData:{type:Object,value:function(){return{}}}},hasBigTitleType:function(n){return"undefined"!=typeof n||null===n||""!==n},_isH1:function(n){return"h1"===n},_isH2:function(n){return"h2"===n},_isH3:function(n){return"h3"===n},_isH4:function(n){return"h4"===n},_isH5:function(n){return"h5"===n},_isH6:function(n){return"h6"===n}});</script>
-
-</dom-module><dom-module id="dorel-section-big-video" assetpath="organisms/">
-  <template>
-    <style>
-      .section-big-video {
-        height: 478px;
-      }
-
-      .section-big-video .video-wrap {
-        text-align: center;
-        position: relative;
-        min-height: 478px;
-      }
-      .section-big-video .video-wrap iframe {
-        margin: 0 auto;
-        width: 100%;
-        position: absolute;
-        height: 100%;
-        left: 0;
-        top: 0;
-      }
-    </style>
-
-
-    
-    <iron-media-query query="(max-width : 479px)" query-matches="{{ mobileSmall }}"></iron-media-query>
-    <iron-media-query query="(min-width : 480px) and (max-width : 767px)" query-matches="{{ mobileMedium }}"></iron-media-query>
-    <iron-media-query query="(min-width : 768px) and (max-width : 991px)" query-matches="{{ tablets }}"></iron-media-query>
-    <iron-media-query query="(min-width : 992px) and (max-width : 1199px)" query-matches="{{ desktopSmall }}"></iron-media-query>
-    <iron-media-query query="(min-width : 1200px)" query-matches="{{ desktopFull }}"></iron-media-query>
-    
-    <template is="dom-if" if="[[ videoWrapData ]]">
-      <section class="section-big-video" mobile-small$="{{ mobileSmall }}" mobile-medium$="{{ mobileMedium }}" tablets$="{{ tablets }}" desktop-small$="{{ desktopSmall }}" desktop-full$="{{ desktopFull }}">
-          <template is="dom-if" if="[[ hasVideoId(videoWrapData.video_id) ]]">
-
-            <template is="dom-if" if="[[ isYoutubeVideo(videoWrapData.video_type) ]]">
-              <div class="video-wrap">
-                <iframe src="https://www.youtube.com/embed/[[ videoWrapData.video_id ]]" frameborder="0" allowfullscreen="" on-click="_iframeClick"></iframe>
-              </div>
-            </template>
-
-          </template>
-      </section>
-    </template>
-
-  </template>
-
-  <script>Polymer({is:"dorel-section-big-video",properties:{videoWrapData:{type:Object,value:function(){return{}}},playVideo:{type:Boolean,value:!1}},hasVideoId:function(e){return"undefined"!=typeof e||null!==e||""!==e},isYoutubeVideo:function(e){return"undefined"!=typeof e&&"youtube"===e},_iframeClick:function(e){this.playVideo=!this.playVideo,this._eventTracking(e)},_eventTracking:function(e){Polymer.globalsManager.get("Dorel");Polymer.globalsManager.set("Dorel.events",{action:this.playVideo?"play":"stop",component:"big-video",element:Polymer.dom(e).localTarget,event:"polymer_event"})}});</script>
 </dom-module>
 <dom-module id="dorel-card" assetpath="molecules/">
   <template>
@@ -429,17 +287,9 @@
         margin-top: 1.5em;
         overflow: hidden;
         flex: 1;
-
         -webkit-box-shadow: 10px 10px 10px -12px var(--theme-color-monochrome-3);
         -moz-box-shadow: 10px 10px 10px -12px var(--theme-color-monochrome-3);
         box-shadow: 10px 10px 10px -12px var(--theme-color-monochrome-3);
-      }
-
-      .title {
-        @apply(--theme-typography-6);
-        color: var(--theme-brand-color-1);
-        float: left;
-        width: 100%;
       }
 
       .description {
@@ -465,18 +315,22 @@
         height: 12em;
       }
 
-      [mobile-small] .title, [mobile-medium] .title {
+      .title {
         @apply(--theme-typography-5);
+        color: var(--theme-brand-color-1);
+        float: left;
+        width: 100%;
+      }
+
+      [tablet-medium-up] .title {
+        @apply(--theme-typography-6);
       }
 
     </style>
 
-    
-    <iron-media-query query="(max-width : 479px)" query-matches="{{ mobileSmall }}"></iron-media-query>
-    <iron-media-query query="(min-width : 480px) and (max-width : 767px)" query-matches="{{ mobileMedium }}"></iron-media-query>
+    <dorel-media-query breakpoints="{{ breakpoints }}"></dorel-media-query>
 
-
-    <div class="card" mobile-small$="{{ mobileSmall }}" mobile-medium$="{{ mobileMedium }}">
+    <div class="card" tablet-medium-up$="{{ breakpoints.tabletMediumUp }}">
       
       <template is="dom-if" if="[[ _hasValue(cardData.card_image) ]]">
         <iron-image class="card-image" sizing="cover" fade="true" preload="" src$="[[ cardData.card_image ]]">
@@ -511,7 +365,7 @@
 
   </template>
 
-  <script>Polymer({is:"dorel-card",properties:{cardData:{type:Object}},_hasValue:function(e){return""!==e&&"undefined"!=typeof e&&null!==e}});</script>
+  <script>Polymer({is:"dorel-card",properties:{cardData:{type:Object}},_hasValue:function(e){return""!==e&&void 0!==e&&null!==e}});</script>
 
 </dom-module>
 <dom-module id="dorel-section-cards" assetpath="organisms/">
@@ -528,61 +382,98 @@
         @apply(--max-width-container);
         width: 100%;
         float: left;
-        padding: 1.5em var(--theme-gutter) 3em var(--theme-gutter);
+        padding: 1.5em var(--theme-gutter-mobile);
         box-sizing: border-box;
       }
 
       .row {
         @apply(--theme-grid-row);
         @apply(--layout-flex);
+        @apply(--theme-grid-row-mobile-margins);
       }
 
       dorel-card {
         @apply(--theme-grid-column);
-        -ms-flex-preferred-size: calc(var(--theme-column-width) * 6);
-        flex-basis: calc(var(--theme-column-width) * 6);
-        max-width: calc(var(--theme-column-width) * 6);
-        padding: 0 .75em;
         margin-top: 0;
-      }
-
-      [mobile-small] dorel-card, [mobile-medium] dorel-card {
-
         -ms-flex-preferred-size: 100%;
         flex-basis: 100%;
         max-width: 100%;
         padding: 0;
       }
 
+      [tablet-medium-up] dorel-card {
+        -ms-flex-preferred-size: calc(var(--theme-column-width) * 6);
+        flex-basis: calc(var(--theme-column-width) * 6);
+        max-width: calc(var(--theme-column-width) * 6);
+        padding: 0 .75em;
+      }
+
+      .section-cards[tablet-medium-up] {
+        padding: 1.5em var(--theme-gutter);
+      }
+
+      [tablet-medium-up] .row {
+        @apply(--theme-grid-row-margins);
+      }
     </style>
 
-    
-    <iron-media-query query="(max-width : 479px)" query-matches="{{ mobileSmall }}"></iron-media-query>
-    <iron-media-query query="(min-width : 480px) and (max-width : 767px)" query-matches="{{ mobileMedium }}"></iron-media-query>
+    <dorel-media-query breakpoints="{{ breakpoints }}"></dorel-media-query>
 
     <template is="dom-if" if="[[ cardsData.cards.length ]]">
 
-      <section class="section-cards layout horizontal center center-justified wrap" mobile-small$="{{ mobileSmall }}" mobile-medium$="{{ mobileMedium }}">
+      <section class="section-cards layout horizontal center center-justified wrap" tablet-medium-up$="{{ breakpoints.tabletMediumUp }}">
         <div class="row">
-
           <template is="dom-repeat" items="[[ cardsData.cards ]]" as="card">
-
             <dorel-card card-data="[[ card ]]" gtm-parent="[[ gtmParent ]]" gtm-parent-index="[[ gtmParentIndex ]]" gtm-child="dorel-card" gtm-child-index="[[ index ]]"></dorel-card>
-
           </template>
-
         </div>
-
       </section>
-
     </template>
-
   </template>
 
   <script>Polymer({is:"dorel-section-cards",properties:{cardsData:{type:Object,value:function(){return{}}}}});</script>
 
 </dom-module>
-<dom-module id="dorel-section-cta" assetpath="organisms/">
+<iron-iconset-svg size="79" name="dorel-cta-icons">
+  <svg>
+    <defs>
+      <g id="feeding-care" transform="translate(16.000000, 0.000000)">
+        <polygon id="Fill-1" fill="#FEFEFE" points="7.023 38.536 30.746 38.536 30.746 8.717 7.023 8.717"></polygon>
+        <polygon id="Stroke-2" stroke="#00A8D5" stroke-width="1.008" stroke-linecap="round" stroke-linejoin="round" points="7.023 38.536 30.746 38.536 30.746 8.717 7.023 8.717"></polygon>
+        <g id="Group-19" transform="translate(0.000000, 0.892000)"><path d="M30.0896,48.3532 L10.1556,49.0122 L8.8796,18.0752 C8.8796,12.4482 13.4306,7.8972 19.0566,7.8972 C24.6836,7.8972 29.2356,12.4482 29.2356,18.0752 L30.0896,48.3532 Z M8.3376,32.1392 C10.1246,34.0362 14.3946,38.4722 19.1966,43.2742 C24.2206,38.2512 28.4826,33.8112 30.0576,32.1392 C32.5946,29.4452 34.4366,26.0982 35.5026,23.8562 L35.5026,17.2312 C35.5026,8.0782 28.0806,0.6122 18.8836,0.6122 C9.7306,0.6122 2.2656,8.0782 2.2656,17.2312 L2.2656,22.4692 C3.1226,24.4712 5.2006,28.8082 8.3376,32.1392 L8.3376,32.1392 Z" id="Fill-3" fill="#FEFEFE"></path>
+          <path d="M30.0896,48.3532 L10.1556,49.0122 L8.8796,18.0752 C8.8796,12.4482 13.4306,7.8972 19.0566,7.8972 C24.6836,7.8972 29.2356,12.4482 29.2356,18.0752 L30.0896,48.3532 Z M8.3376,32.1392 C10.1246,34.0362 14.3946,38.4722 19.1966,43.2742 C24.2206,38.2512 28.4826,33.8112 30.0576,32.1392 C32.5946,29.4452 34.4366,26.0982 35.5026,23.8562 L35.5026,17.2312 C35.5026,8.0782 28.0806,0.6122 18.8836,0.6122 C9.7306,0.6122 2.2656,8.0782 2.2656,17.2312 L2.2656,22.4692 C3.1226,24.4712 5.2006,28.8082 8.3376,32.1392 Z" id="Stroke-5" stroke="#9E9E9E" stroke-width="1.008" stroke-linecap="round" stroke-linejoin="round"></path>
+          <path d="M19.218,74.4958 C8.133,74.4958 2.256,67.7598 2.256,59.5398 C2.256,51.0338 8.85,45.0618 18.597,45.0618 C28.822,45.0618 35.512,51.4158 35.512,60.0178 C35.512,68.8088 28.775,74.4958 19.218,74.4958" id="Fill-7" fill="#FEFEFE"></path>
+          <path d="M19.218,74.4958 C8.133,74.4958 2.256,67.7598 2.256,59.5398 C2.256,51.0338 8.85,45.0618 18.597,45.0618 C28.822,45.0618 35.512,51.4158 35.512,60.0178 C35.512,68.8088 28.775,74.4958 19.218,74.4958 Z" id="Stroke-9" stroke="#9E9E9E" stroke-width="1.008" stroke-linecap="round" stroke-linejoin="round"></path>
+          <path d="M9.2156,29.156 C11.5746,30.118 13.3986,30.648 16.5196,30.648 C26.7126,30.648 34.3536,24.198 34.3536,16.804 L34.3536,16.803 L35.2266,15.669 C35.5026,15.44 35.9136,15.478 36.1416,15.754 L37.0726,16.875 C37.3306,17.186 37.2606,17.35 37.2376,17.67 C36.9686,21.449 36.6666,25.611 36.5806,28.28 C36.3646,34.929 36.5806,54.894 36.5806,54.894 C36.5806,61.708 35.4926,66.129 32.3766,69.319 L32.3296,69.296 L3.2706,31.998 C2.9426,31.658 2.9516,31.115 3.2906,30.787 L4.6706,29.453 C5.0526,29.084 5.2756,29.16 5.6986,29.158 C6.0276,29.156 6.3516,29.155 6.6736,29.154 L9.2156,29.156 Z" id="Fill-11" fill="#FEFEFE"></path>
+          <path d="M9.2156,29.156 C11.5746,30.118 13.3986,30.648 16.5196,30.648 C26.7126,30.648 34.3536,24.198 34.3536,16.804 L34.3536,16.803 L35.2266,15.669 C35.5026,15.44 35.9136,15.478 36.1416,15.754 L37.0726,16.875 C37.3306,17.186 37.2606,17.35 37.2376,17.67 C36.9686,21.449 36.6666,25.611 36.5806,28.28 C36.3646,34.929 36.5806,54.894 36.5806,54.894 C36.5806,61.708 35.4926,66.129 32.3766,69.319 L32.3296,69.296 L3.2706,31.998 C2.9426,31.658 2.9516,31.115 3.2906,30.787 L4.6706,29.453 C5.0526,29.084 5.2756,29.16 5.6986,29.158 C6.0276,29.156 6.3516,29.155 6.6736,29.154 L9.2156,29.156 Z" id="Stroke-13" stroke="#9E9E9E" stroke-width="1.008" stroke-linecap="round" stroke-linejoin="round"></path>
+          <path d="M27.0886,28.1677 C24.7296,29.1297 22.8876,29.6597 20.2746,29.6597 C10.0826,29.6597 3.4146,24.1967 3.4146,16.8037 L2.5416,15.6697 C2.2656,15.4407 1.8556,15.4777 1.6266,15.7547 L0.6946,16.8757 C0.4376,17.1857 0.5066,17.3507 0.5296,17.6707 C0.7986,21.4487 1.1016,24.6227 1.1876,27.2917 C1.4026,33.9407 1.1876,53.9047 1.1876,53.9047 C1.1876,60.7197 2.2756,65.1407 5.3926,68.3307 L5.4386,68.3077 L34.4966,31.0087 C34.8256,30.6697 34.8176,30.1267 34.4776,29.7987 L33.0976,28.4647 C32.7156,28.0957 32.4916,28.1717 32.0686,28.1697 C31.7396,28.1677 31.4156,28.1667 31.0946,28.1657 L27.0886,28.1677 Z" id="Fill-15" fill="#FEFEFE"></path>
+          <path d="M27.0886,28.1677 C24.7296,29.1297 22.8876,29.6597 20.2746,29.6597 C10.0826,29.6597 3.4146,24.1967 3.4146,16.8037 L2.5416,15.6697 C2.2656,15.4407 1.8556,15.4777 1.6266,15.7547 L0.6946,16.8757 C0.4376,17.1857 0.5066,17.3507 0.5296,17.6707 C0.7986,21.4487 1.1016,24.6227 1.1876,27.2917 C1.4026,33.9407 1.1876,53.9047 1.1876,53.9047 C1.1876,60.7197 2.2756,65.1407 5.3926,68.3307 L5.4386,68.3077 L34.4966,31.0087 C34.8256,30.6697 34.8176,30.1267 34.4776,29.7987 L33.0976,28.4647 C32.7156,28.0957 32.4916,28.1717 32.0686,28.1697 C31.7396,28.1677 31.4156,28.1667 31.0946,28.1657 L27.0886,28.1677 Z" id="Stroke-17" stroke="#9E9E9E" stroke-width="1.008" stroke-linecap="round" stroke-linejoin="round"></path>
+        </g>
+      </g>
+      <g id="stroller" transform="translate(-21.000000, -5.000000)">
+        <path d="M55.5975248,49.1754276 L66.3094059,59.2472958 L66.3094059,61.1682789 C66.3094059,61.6477996 65.9529703,61.9533007 65.4618812,61.9533007 L45.0292079,61.9533007 C44.5351485,61.9533007 44.1341584,61.6033279 44.1341584,61.1682789 L44.1341584,59.2472958 L55.5975248,49.1754276 Z" id="Fill-4" fill="#FEFEFE"></path>
+        <path d="M51.080198,43.7094717 L77.5138614,56.1277042 C77.970297,56.3336275 78.1108911,56.6072249 78.1108911,57.2240278 L78.1108911,59.4524455 C78.1108911,60.0015741 77.6544554,60.4462908 77.0930693,60.4462908 L66.0693069,60.5429684 L56.790099,50.5716449" id="Fill-6" fill="#FEFEFE"></path>
+        <path d="M42.679802,61.3474224 L27.6659406,25.6540673 C27.6035644,25.5612568 27.5926733,25.4674796 27.5817822,25.3727356 C27.5243564,24.8845139 27.8312871,24.5074714 28.3273267,24.4523652 L31.2471287,24.125595 C31.6441584,24.0811234 32.030297,24.3808238 32.1748515,24.7597998 L55.4728713,49.4995874 L42.679802,61.3474224 Z" id="Fill-8" fill="#FEFEFE"></path>
+        <path d="M38.7267327,32.8799414 L31.3148515,24.1953962 L48.3316832,10.4468804 C48.7544554,10.0872399 49.3980198,10.1297781 49.7673267,10.543558 L51.2663366,12.223814 C51.6821782,12.6888331 51.760396,12.9856332 51.5544554,13.4332503 L48.9386139,41.4040019" id="Fill-10" fill="#FEFEFE"></path>
+        <path d="M77.4488119,74.3842947 C77.4488119,77.8521187 74.569604,80.6635022 71.0181188,80.6635022 C67.4656436,80.6635022 64.5864356,77.8521187 64.5864356,74.3842947 C64.5864356,70.9164706 67.4656436,68.1050871 71.0181188,68.1050871 C74.569604,68.1050871 77.4488119,70.9164706 77.4488119,74.3842947 Z M67.5033663,74.3842947 C67.5033663,76.2791748 69.0766337,77.8153813 71.0172277,77.8153813 C72.9578218,77.8153813 74.5310891,76.2791748 74.5310891,74.3842947 C74.5310891,72.4894145 72.9578218,70.9532081 71.0172277,70.9532081 C69.0766337,70.9532081 67.5033663,72.4894145 67.5033663,74.3842947 Z" id="Combined-Shape" fill="#FEFEFE"></path>
+        <path d="M38.139802,72.6225395 C38.139802,77.0639066 34.4526733,80.6641789 29.9041584,80.6641789 C25.3556436,80.6641789 21.6685149,77.0639066 21.6685149,72.6225395 C21.6685149,68.1811724 25.3556436,64.5809001 29.9041584,64.5809001 C34.4526733,64.5809001 38.139802,68.1811724 38.139802,72.6225395 Z M25.0112871,72.6225395 C25.0112871,75.2608701 27.2023762,77.4003445 29.9043564,77.4003445 C32.6073267,77.4003445 34.7974257,75.2608701 34.7974257,72.6225395 C34.7974257,69.9842089 32.6073267,67.8447345 29.9043564,67.8447345 C27.2023762,67.8447345 25.0112871,69.9842089 25.0112871,72.6225395 Z" id="Combined-Shape" fill="#FEFEFE"></path>
+        <path d="M23.5977228,19.0156059 L46.3452475,41.5975504 L46.3561386,41.5878826 L53.6165347,48.7835934 L29.0511881,72.3700177 C28.799703,72.6155787 28.7551485,72.9694186 28.9848515,73.1937105 L30.050198,74.2358946 C30.3016832,74.4814556 30.6650495,74.3954126 30.8937624,74.1711206 L55.4947525,50.6456032 L69.679901,64.7025204 L69.7165347,73.626826 C69.720495,73.9738984 69.9482178,74.2532966 70.2729703,74.2494295 L71.7808911,74.2349278 C72.1373267,74.2310607 72.3274257,73.9168587 72.3244554,73.600723 L72.3036634,63.941668 L72.2987129,63.9368342 C72.2977228,63.7676484 72.2244554,63.5965291 72.0937624,63.4669812 L49.8670297,41.4418995 L49.8581188,41.4506005 L25.6917822,17.4629643 L24.9660396,16.7311152 C24.7175248,16.4816871 24.3561386,16.4323815 24.1224752,16.6537731 L23.0412871,17.6795221 C22.7858416,17.9221827 22.8690099,18.2779562 23.0957426,18.5051484 L23.5977228,19.0156059 Z" id="Fill-20" fill="#FEFEFE"></path>
+        <path d="M23.5977228,19.0156059 L46.3452475,41.5975504 L53.6165347,48.7835934 L29.0511881,72.3700177 C28.799703,72.6155787 28.7551485,72.9694186 28.9848515,73.1937105 L30.050198,74.2358946 C30.3016832,74.4814556 30.6650495,74.3954126 30.8937624,74.1711206 L55.4947525,50.6456032 L69.679901,64.7025204 L69.7165347,73.626826 C69.720495,73.9738984 69.9482178,74.2532966 70.2729703,74.2494295 L71.7808911,74.2349278 C72.1373267,74.2310607 72.3274257,73.9168587 72.3244554,73.600723 L72.3036634,63.941668 C72.2977228,63.7676484 72.2244554,63.5965291 72.0937624,63.4669812 L49.8670297,41.4418995 L25.6917822,17.4629643 L24.9660396,16.7311152 C24.7175248,16.4816871 24.3561386,16.4323815 24.1224752,16.6537731 L23.0412871,17.6795221 C22.7858416,17.9221827 22.8690099,18.2779562 23.0957426,18.5051484 L23.5977228,19.0156059 Z" id="Stroke-22" stroke="#9E9E9E" stroke-width="1.008" stroke-linecap="round" stroke-linejoin="round"></path>
+      </g>
+      <g id="car-seat" transform="translate(-20.000000, -14.000000)">
+        <polygon id="Fill-4" fill="#FEFEFE" points="40.4970297 79.2001553 67.5059406 79.2001553 67.5059406 70.5164046 40.4970297 70.5164046"></polygon>
+        <polygon id="Stroke-6" stroke="#9E9E9E" stroke-width="1.015" stroke-linecap="round" stroke-linejoin="round" points="40.4970297 79.2001553 67.5059406 79.2001553 67.5059406 70.5164046 40.4970297 70.5164046"></polygon>
+        <g id="Group-9"><g transform="translate(34.653465, 78.410988)"><path d="M0.712970297,0.505241701 C1.94168317,3.54834013 1.72386139,2.96107552 2.5129703,4.6199767 C3.01594059,5.67802368 3.99613861,6.35944477 6.06346535,6.35944477 L35.3981188,6.35944477 C37.9941584,6.35944477 39.2040594,5.26645312 39.6515842,3.96476412 L41.1624752,0.505241701 L6.24267327,0.505241701" id="Fill-7" stroke="none" fill="#FEFEFE" fill-rule="evenodd"></path><path d="M0.712970297,0.505241701 C1.94168317,3.54834013 1.72386139,2.96107552 2.5129703,4.6199767 C3.01594059,5.67802368 3.99613861,6.35944477 6.06346535,6.35944477 L35.3981188,6.35944477 C37.9941584,6.35944477 39.2040594,5.26645312 39.6515842,3.96476412 L41.1624752,0.505241701 L6.24267327,0.505241701" id="Stroke-8" stroke="#9E9E9E" stroke-width="1.015" fill="none" stroke-linecap="round" stroke-linejoin="round"></path></g></g>
+        <path d="M73.5036634,65.5712483 C72.1086139,64.9995147 70.7462376,64.7568433 69.4779208,64.8335275 C68.6789109,64.8451757 67.1155446,64.9859251 65.2115842,65.7440303 C64.7125743,65.9371967 64.2175248,66.1701611 63.7284158,66.4351582 C63.6393069,66.4836925 63.5482178,66.5341681 63.4581188,66.5846438 C63.4284158,66.6011454 63.399703,66.6176471 63.37,66.6341487 C62.9224752,66.8894389 62.4670297,67.1816152 62.0046535,67.5135896 C59.9848515,68.9375849 58.1749505,70.7537371 56.8561386,72.2330615 C55.4581188,73.7415065 54.6551485,74.930596 54.6551485,74.930596 L41.7313861,74.930596 L42.3125743,78.5959037 L76.4363366,78.5959037 C77.8343564,77.6718113 78.5175248,75.5887206 78.7284158,74.616094 C79.9016832,70.7867404 77.579901,67.2417977 73.5036634,65.5712483" id="Fill-10" fill="#FEFEFE"></path>
+        <path d="M73.5036634,65.5712483 C72.1086139,64.9995147 70.7462376,64.7568433 69.4779208,64.8335275 C68.6789109,64.8451757 67.1155446,64.9859251 65.2115842,65.7440303 C64.7125743,65.9371967 64.2175248,66.1701611 63.7284158,66.4351582 C63.6393069,66.4836925 63.5482178,66.5341681 63.4581188,66.5846438 C63.4284158,66.6011454 63.399703,66.6176471 63.37,66.6341487 C62.9224752,66.8894389 62.4670297,67.1816152 62.0046535,67.5135896 C59.9848515,68.9375849 58.1749505,70.7537371 56.8561386,72.2330615 C55.4581188,73.7415065 54.6551485,74.930596 54.6551485,74.930596 L41.7313861,74.930596 L42.3125743,78.5959037 L76.4363366,78.5959037 C77.8343564,77.6718113 78.5175248,75.5887206 78.7284158,74.616094 C79.9016832,70.7867404 77.579901,67.2417977 73.5036634,65.5712483 Z" id="Stroke-11" stroke="#9E9E9E" stroke-width="1.015" stroke-linecap="round" stroke-linejoin="round"></path>
+        <path d="M20.7485149,17.1313337 L22.6465347,23.934867 L27.6564356,38.1194914 L41.7623762,38.083576 C44.7841584,38.083576 46.9594059,35.2773248 46.9594059,30.5219375 C46.9594059,21.6692875 35.3920792,14.0455251 27.0821782,15.0919239 C21.7990099,15.757814 20.7485149,17.1313337 20.7485149,17.1313337" id="Fill-12" fill="#FEFEFE"></path>
+        <path d="M20.7485149,17.1313337 L22.6465347,23.934867 L27.6564356,38.1194914 L41.7623762,38.083576 C44.7841584,38.083576 46.9594059,35.2773248 46.9594059,30.5219375 C46.9594059,21.6692875 35.3920792,14.0455251 27.0821782,15.0919239 C21.7990099,15.757814 20.7485149,17.1313337 20.7485149,17.1313337 Z" id="Stroke-13" stroke="#9E9E9E" stroke-width="1.015" stroke-linecap="round" stroke-linejoin="round"></path>
+        <path d="M26.4115842,37.133178 C26.4115842,37.133178 41.6581188,34.4637934 50.6977228,44.5006795 C59.7363366,54.5365948 45.6878218,77.0652301 41.9848515,81.9768977 C41.9848515,81.9768977 36.2135644,81.8701223 34.2531683,77.4923316 C32.2927723,73.1145409 24.560099,47.8097457 26.4115842,37.133178" id="Fill-14" fill="#FEFEFE"></path>
+        <path d="M26.4115842,37.133178 C26.4115842,37.133178 41.6581188,34.4637934 50.6977228,44.5006795 C59.7363366,54.5365948 45.6878218,77.0652301 41.9848515,81.9768977 C41.9848515,81.9768977 36.2135644,81.8701223 34.2531683,77.4923316 C32.2927723,73.1145409 24.560099,47.8097457 26.4115842,37.133178 Z" id="Stroke-15" stroke="#9E9E9E" stroke-width="1.015" stroke-linecap="round" stroke-linejoin="round"></path>
+      </g>
+    </defs>
+  </svg>
+</iron-iconset-svg><dom-module id="dorel-section-cta" assetpath="organisms/">
   <template>
     <style include="iron-flex iron-flex-alignment">
       :host {
@@ -598,62 +489,58 @@
 
       .section-cta {
         @apply(--max-width-container);
-        padding: 0 var(--theme-gutter);
         float: left;
         width: 100%;
         box-sizing: border-box;
-        margin-top: -3em;
         position: relative;
-      }
-
-      .section-cta[mobile-small] {
+        margin-top: 1.5em;
         padding: 0 var(--theme-gutter-mobile);
       }
 
       .row {
         @apply(--theme-grid-row);
+        @apply(--theme-grid-row-mobile-margins);
         @apply(--layout-flex);
         justify-content: center;
       }
 
       h2 {
         @apply(--theme-grid-column);
-        -ms-flex-preferred-size: calc(var(--theme-column-width) * 4);
-        flex-basis: calc(var(--theme-column-width) * 4);
-        max-width: calc(var(--theme-column-width) * 4);
-        padding: 0 .75em;
-        margin-top: 0;
-        margin: 0;
+        -ms-flex-preferred-size: 100%;
+        -webkit-flex-basis: 100%;
+        flex-basis: 100%;
+        max-width: 100%;
         display: initial;
+        padding: 0;
+        margin: 0;
+
         font-size: 1em;
       }
 
-      [mobile-small] h2, [mobile-medium] h2 {
-        -ms-flex-preferred-size: 100%;
-        flex-basis: 100%;
-        max-width: 100%;
-        padding: 0;
+      /* Responsive styling */
+      [tablet-medium-up] h2 {
+        -ms-flex-preferred-size: calc(var(--theme-column-width) * 4);
+        -webkit-flex-basis: calc(var(--theme-column-width) * 4);
+        flex-basis: calc(var(--theme-column-width) * 4);
+        max-width: calc(var(--theme-column-width) * 4);
+        padding: 0 .75em;
       }
 
-      [mobile-small] .row {
-        margin-right: -0.125em;
-        margin-left: -0.125em;
+      .section-cta[tablet-medium-up] {
+        padding: 0 var(--theme-gutter);
+        margin-top: -3em;
       }
 
-      .section-cta[mobile-small], .section-cta[mobile-medium] {
-        margin-top: 1.5em;
+      [tablet-medium-up] .row {
+        @apply(--theme-grid-row-margins);
       }
 
     </style>
 
-    
-    <iron-media-query query="(max-width : 479px)" query-matches="{{ mobileSmall }}"></iron-media-query>
-    <iron-media-query query="(min-width : 480px) and (max-width : 767px)" query-matches="{{ mobileMedium }}"></iron-media-query>
+    <dorel-media-query breakpoints="{{ breakpoints }}"></dorel-media-query>
 
     <template is="dom-if" if="[[ ctaData.ctas.length ]]">
-
-      <section class="section-cta layout horizontal center center-justified wrap" mobile-small$="{{ mobileSmall }}" mobile-medium$="{{ mobileMedium }}">
-
+      <section class="section-cta layout horizontal center center-justified wrap" tablet-medium-up$="{{ breakpoints.tabletMediumUp }}">
         <div class="row">
           <template is="dom-repeat" items="[[ ctaData.ctas ]]" as="cta">
             <h2>
@@ -663,98 +550,11 @@
             </h2>
           </template>
         </div>
-
       </section>
-
     </template>
-
   </template>
 
   <script>Polymer({is:"dorel-section-cta",properties:{ctaData:{type:Object,value:function(){return{}}}}});</script>
-
-</dom-module>
-<dom-module id="dorel-section-downloads" assetpath="organisms/">
-  <template>
-    <style include="iron-flex iron-flex-alignment">
-      :host {
-        --iron-image-placeholder: var(--image-placeholder);
-      }
-      .container {
-        padding: var(--theme-component-space-inner);
-      }
-
-      .title {
-        @apply(--theme-heading);
-        font-size: var(--theme-size-headline);
-        margin: 0 0 var(--theme-component-space-micro) 0;
-        text-align: center;
-        width: 100%;
-      }
-
-      .downloads {
-        @apply(--layout-flex);
-        @apply(--layout-horizontal);
-        @apply(--layout-center-justified);
-        @apply(--layout-wrap);
-      }
-
-      .downloads__item {
-        padding: var(--theme-component-space-inner);
-        text-align: center;
-
-      }
-
-      .downloads__item__label {
-        text-decoration: none;
-        color: var(--theme-color-link-primary);
-        cursor: pointer;
-        transition: color .3s ease;
-      }
-
-      .downloads__item__image {
-        width: 12rem;
-        height: 8rem;
-        opacity: .75;
-        margin: 0 auto 1rem auto;
-        display: block;
-        transition: opacity .3s ease;
-      }
-
-      .downloads__item:hover, .downloads__item:focus {
-        cursor: pointer;
-      }
-
-      .downloads__item:hover .downloads__item__image, .downloads__item:focus .downloads__item__image{
-        opacity: .5;
-      }
-
-      .downloads__item:hover .downloads__item__label, .downloads__item:focus .downloads__item__label {
-        color: var(--theme-color-text-link-active);
-      }
-
-    </style>
-  
-
-    <template is="dom-if" if="[[ downloadsData.downloads.length ]]">
-      <section class="container">
-        <h2 class="title">[[ downloadsData.downloads_title ]]</h2>
-        <div class="downloads">
-          <template is="dom-repeat" items="[[ downloadsData.downloads ]]" as="download">
-
-            <div class="downloads__item" role="button" tabindex="0" data-file$="[[ download.download_file ]]" on-click="_clickDownload">
-              <iron-image class="downloads__item__image" sizing="cover" fade="true" preload="" src$="[[ download.download_image ]]">
-              </iron-image>
-              <iron-icon icon="dorel-icons:file-download"></iron-icon>
-              <span class="downloads__item__label">[[ download.download_text ]]</span>
-            </div>
-          
-          </template>
-        </div>
-      </section>
-    </template>
-  </template>
-
-  <script>Polymer({is:"dorel-section-downloads",properties:{downloadsData:{type:Object,value:function(){return{}}}},_clickDownload:function(e){window.open(e.currentTarget.getAttribute("data-file"),"_blank"),this._eventTracking(e)},_eventTracking:function(e){Polymer.globalsManager.get("Dorel");Polymer.globalsManager.set("Dorel.events",{action:"click",component:"downloads",element:Polymer.dom(e).localTarget,event:"polymer_event",things:{downloadFile:e.currentTarget.getAttribute("data-file")}})}});</script>
 </dom-module>
 <dom-module id="dorel-section-heroes" assetpath="organisms/">
   <template>
@@ -766,14 +566,10 @@
 
       .section-heroes {
         @apply(--max-width-container);
-        padding: 0 var(--theme-gutter) var(--theme-gutter) var(--theme-gutter);
+        padding: 0 var(--theme-gutter-mobile);
         float: left;
         width: 100%;
         box-sizing: border-box;
-      }
-
-      .section-heroes[mobile-small], .section-heroes[mobile-medium] {
-        padding: 0 var(--theme-gutter-mobile);
       }
 
       .section-heroes-wrap {
@@ -785,23 +581,32 @@
         margin: auto;
       }
 
+      .section-heroes-wrap:first-child .section-heroes-image-wrapper {
+        margin-top: 3em;
+      }
+
       .section-heroes-image-wrapper {
         @apply(--theme-grid-column);
-        -ms-flex-preferred-size: calc(var(--theme-column-width) * 10);
-        flex-basis: calc(var(--theme-column-width) * 10);
-        max-width: calc(var(--theme-column-width) * 10);
         float: left;
         width: 100%;
-        margin-right: calc(var(--theme-column-width) * 2);
-        margin-top: 3em;
+        margin-top: 1.5em;
         padding: 0;
+        margin-left: 0 !important;
+        margin-right: 0;
+        -ms-flex-preferred-size: 100%;
+        flex-basis: 100%;
+        max-width: 100%;
       }
 
       .section-heroes-image {
         float: left;
         width: 100%;
-        height: 28.5em;
+        height: 18em;
         border-radius: 2em;
+        /*height: 100%; */
+        display: block;
+        background-repeat: no-repeat;
+        background-size: 100% auto;
       }
 
       .section-heroes-image-overlay {
@@ -811,7 +616,6 @@
         height: 28.5em;
         width: calc(var(--theme-column-width) * 4);
         top: 10em;
-
         filter: "progid:DXImageTransform.Microsoft.Dropshadow(OffX=12, OffY=12, Color='#444') ";
         filter: url("#drop-shadow");
         -webkit-filter: drop-shadow(-7px 12px 7px rgba(0, 0, 0, .15));
@@ -819,9 +623,9 @@
       }
 
       .title {
-        @apply(--theme-typography-7);
-        color: var(--theme-brand-color-1);
+        @apply(--theme-typography-5);
         margin-top: 0;
+        color: var(--theme-brand-color-1);
       }
 
       dorel-cta {
@@ -831,13 +635,14 @@
       .description {
         @apply(--theme-typography-2);
         max-width: 28em;
+        margin-top: 0;
       }
 
       .description-column {
         @apply(--theme-grid-column);
-        -ms-flex-preferred-size: calc(var(--theme-column-width) * 4);
-        flex-basis: calc(var(--theme-column-width) * 4);
-        max-width: calc(var(--theme-column-width) * 4);
+        -ms-flex-preferred-size: 100%;
+        flex-basis: 100%;
+        max-width: 100%;
         padding: 0 .75em;
         margin-top: 0;
       }
@@ -854,15 +659,6 @@
 
       .section-heroes-wrap {
         margin-bottom: 1.5em;
-      }
-
-      /* Section heroes */
-      .section-heroes-image {
-        width: 100%;
-        height: 100%;
-        display: block;
-        background-repeat: no-repeat;
-        background-size: 100% auto;
       }
 
       .image-parent {
@@ -905,65 +701,47 @@
       }
 
       /* Responsive Behaviour */
-      [mobile-small] .section-heroes-image-overlay,
-      [mobile-medium] .section-heroes-image-overlay,
-      [tablets] .section-heroes-image-overlay {
-        display: none;
+      .section-heroes[tablet-medium-up] {
+        padding: 0 var(--theme-gutter) var(--theme-gutter) var(--theme-gutter);
       }
 
-      [mobile-small] .section-heroes-image-wrapper,
-      [mobile-medium] .section-heroes-image-wrapper,
-      [tablets] .section-heroes-image-wrapper {
-        margin-left: 0 !important;
-        margin-right: 0;
-        -ms-flex-preferred-size: 100%;
-        flex-basis: 100%;
-        max-width: 100%;
-
+      [desktop-small-up] .section-heroes-image-wrapper {
+        -ms-flex-preferred-size: calc(var(--theme-column-width) * 10);
+        flex-basis: calc(var(--theme-column-width) * 10);
+        max-width: calc(var(--theme-column-width) * 10);
+        margin-right: calc(var(--theme-column-width) * 2);
       }
 
-      [mobile-small] .section-heroes-image,
-      [mobile-medium] .section-heroes-image {
-        height: 18em;
+      [tablet-medium-up] .section-heroes-image {
+        height: 28.5em;
       }
 
-      [tablets] .section-heroes-image {
-        height: 21em;
-      }
-
-      [mobile-small] .title,
-      [mobile-medium] .title {
-        @apply(--theme-typography-5);
-        margin-top: 0;
-      }
-
-      [mobile-small] .description,
-      [mobile-medium] .description {
-        margin-top: 0;
-      }
-
-      [tablets] .description-column {
+      [tablet-medium-up] .description-column {
         -ms-flex-preferred-size: calc(var(--theme-column-width) * 6);
         flex-basis: calc(var(--theme-column-width) * 6);
         max-width: calc(var(--theme-column-width) * 6);
       }
 
-      [mobile-small] .description-column, [mobile-medium] .description-column {
-        -ms-flex-preferred-size: 100%;
-        flex-basis: 100%;
-        max-width: 100%;
+      [desktop-small-up] .description-column {
+        -ms-flex-preferred-size: calc(var(--theme-column-width) * 4);
+        flex-basis: calc(var(--theme-column-width) * 4);
+        max-width: calc(var(--theme-column-width) * 4);
+      }
+
+      [tablet-medium-up] .title {
+        @apply(--theme-typography-7);
+        margin-top: 0;
+      }
+
+      [tablet-medium-up] .description {
+        margin-top: 1.5em;
       }
 
     </style>
 
-    
-    <iron-media-query query="(max-width : 479px)" query-matches="{{ mobileSmall }}"></iron-media-query>
-    <iron-media-query query="(min-width : 480px) and (max-width : 767px)" query-matches="{{ mobileMedium }}"></iron-media-query>
-    <iron-media-query query="(min-width : 768px) and (max-width : 991px)" query-matches="{{ tablets }}"></iron-media-query>
-    <iron-media-query query="(min-width : 992px) and (max-width : 1199px)" query-matches="{{ desktopSmall }}"></iron-media-query>
-    <iron-media-query query="(min-width : 1200px)" query-matches="{{ desktopFull }}"></iron-media-query>
+    <dorel-media-query breakpoints="{{ breakpoints }}"></dorel-media-query>
 
-    <section class="section-heroes" mobile-small$="{{ mobileSmall }}" mobile-medium$="{{ mobileMedium }}" tablets$="{{ tablets }}" desktop-small$="{{ desktopSmall }}" desktop-full$="{{ desktopFull }}">
+    <section class="section-heroes" desktop-small-up$="{{ breakpoints.desktopSmallUp }}" tablet-medium-up$="{{ breakpoints.tabletMediumUp }}">
 
       <template is="dom-repeat" items="[[ heroesData.heroes ]]" as="hero">
         <div class="section-heroes-wrap layout horizontal center center-justified wrap">
@@ -976,9 +754,12 @@
               </div>
             </div>
           </div>
-          
-          <iron-image class="section-heroes-image-overlay" sizing="contain" fade="true" preload="" src$="[[ hero.overlay_image ]]">
-          </iron-image>
+          <template is="dom-if" if="{{ breakpoints.desktopSmallUp }}">
+            
+            <iron-image class="section-heroes-image-overlay" sizing="contain" fade="true" preload="" src$="[[ hero.overlay_image ]]">
+            </iron-image>
+          </template>
+
           <div class="description-column">
             <h3 class="title">[[ hero.title ]]</h3>
             <p class="description">[[ hero.sub_title ]]</p>
@@ -995,7 +776,121 @@
   <script>Polymer({is:"dorel-section-heroes",properties:{heroesData:{type:Object,value:function(){return{}}}}});</script>
 
 </dom-module>
-<dom-module id="dorel-section-hero-header" assetpath="organisms/">
+<dom-module id="iron-localstorage" assetpath="../bower_components/iron-localstorage/"></dom-module>
+<script>Polymer({is:"iron-localstorage",properties:{name:{type:String,value:""},value:{type:Object,notify:!0},useRaw:{type:Boolean,value:!1},autoSaveDisabled:{type:Boolean,value:!1},errorMessage:{type:String,notify:!0},_loaded:{type:Boolean,value:!1}},observers:["_debounceReload(name,useRaw)","_trySaveValue(autoSaveDisabled)","_trySaveValue(value.*)"],ready:function(){this._boundHandleStorage=this._handleStorage.bind(this)},attached:function(){window.addEventListener("storage",this._boundHandleStorage)},detached:function(){window.removeEventListener("storage",this._boundHandleStorage)},_handleStorage:function(e){e.key==this.name&&this._load(!0)},_trySaveValue:function(){this._doNotSave||this._loaded&&!this.autoSaveDisabled&&this.debounce("save",this.save)},_debounceReload:function(){this.debounce("reload",this.reload)},reload:function(){this._loaded=!1,this._load()},_load:function(e){try{var a=window.localStorage.getItem(this.name)}catch(e){this.errorMessage=e.message,this._error("Could not save to localStorage.  Try enabling cookies for this page.",e)}if(null===a)this._loaded=!0,this._doNotSave=!0,this.value=null,this._doNotSave=!1,this.fire("iron-localstorage-load-empty",{externalChange:e});else{if(!this.useRaw)try{a=JSON.parse(a)}catch(e){this.errorMessage="Could not parse local storage value",Polymer.Base._error("could not parse local storage value",a),a=null}this._loaded=!0,this._doNotSave=!0,this.value=a,this._doNotSave=!1,this.fire("iron-localstorage-load",{externalChange:e})}},save:function(){var e=this.useRaw?this.value:JSON.stringify(this.value);try{null===this.value||void 0===this.value?window.localStorage.removeItem(this.name):window.localStorage.setItem(this.name,e)}catch(e){this.errorMessage=e.message,Polymer.Base._error("Could not save to localStorage. Incognito mode may be blocking this action",e)}}});</script>
+<script>Polymer({is:"google-youtube-api",behaviors:[Polymer.IronJsonpLibraryBehavior],properties:{libraryUrl:{type:String,value:"https://www.youtube.com/iframe_api"},notifyEvent:{type:String,value:"api-load"},callbackName:{type:String,value:"onYouTubeIframeAPIReady"}},get api(){return YT}});</script><dom-module id="google-youtube" assetpath="../bower_components/google-youtube/">
+  <style>
+    :host {
+      display: block;
+    }
+
+    :host([fluid]) {
+      width: 100%;
+      max-width: 100%;
+      position: relative;
+    }
+
+    :host([fluid]) iframe,
+    :host([fluid]) #thumbnail {
+      vertical-align: bottom;
+      position: absolute;
+      top: 0px;
+      left: 0px;
+      width: 100%;
+      height: 100%;
+    }
+
+    iframe {
+      @apply(--google-youtube-iframe);
+    }
+
+    #container {
+      max-width: 100%;
+      max-height: 100%;
+      @apply(--google-youtube-container);
+    }
+
+    #thumbnail {
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+      @apply(--google-youtube-thumbnail);
+    }
+  </style>
+
+  <template>
+    <div id="container" style$="{{_computeContainerStyle(width, height)}}">
+      <template is="dom-if" if="{{thumbnail}}">
+        <img id="thumbnail" src$="{{thumbnail}}" title="YouTube video thumbnail." alt="YouTube video thumbnail." on-tap="_handleThumbnailTap">
+      </template>
+
+      <template is="dom-if" if="{{!thumbnail}}">
+        <template is="dom-if" if="[[shouldLoadApi]]">
+          <google-youtube-api on-api-load="_apiLoad"></google-youtube-api>
+        </template>
+      </template>
+
+      
+      <iron-localstorage name="google-youtube-playsupported" value="{{_playsupportedLocalStorage}}" on-iron-localstorage-load="_useExistingPlaySupportedValue" on-iron-localstorage-load-empty="_determinePlaySupported">
+      </iron-localstorage>
+
+      <div id="player"></div>
+    </div>
+  </template>
+</dom-module>
+
+<script>Polymer({is:"google-youtube",properties:{videoId:{type:String,value:"",observer:"_videoIdChanged"},list:{type:String,value:""},listType:String,shouldLoadApi:{type:Boolean,computed:"_computeShouldLoadApi(list, videoId)"},playsupported:{type:Boolean,value:null,notify:!0},autoplay:{type:Number,value:0},playbackstarted:{type:Boolean,value:!1,notify:!0},height:{type:String,value:"270px"},width:{type:String,value:"480px"},state:{type:Number,value:-1,notify:!0},currenttime:{type:Number,value:0,notify:!0},duration:{type:Number,value:1,notify:!0},currenttimeformatted:{type:String,value:"0:00",notify:!0},durationformatted:{type:String,value:"0:00",notify:!0},fractionloaded:{type:Number,value:0,notify:!0},chromeless:{type:Boolean,value:!1},thumbnail:{type:String,value:""},fluid:{type:Boolean,value:!1},volume:{type:Number,value:100,notify:!0},playbackrate:{type:Number,value:1,notify:!0},playbackquality:{type:String,value:"",notify:!0}},_computeContainerStyle:function(A,t){return"width:"+A+"; height:"+t},_computeShouldLoadApi:function(A,t){return Boolean(A||t)},_useExistingPlaySupportedValue:function(){this.playsupported=this._playsupportedLocalStorage},_determinePlaySupported:function(){if(null==this.playsupported){var A,t=document.createElement("video");if("play"in t){t.id="playtest",t.style.position="absolute",t.style.top="-9999px",t.style.left="-9999px";var e=document.createElement("source");e.src="data:video/mp4;base64,AAAAFGZ0eXBNU05WAAACAE1TTlYAAAOUbW9vdgAAAGxtdmhkAAAAAM9ghv7PYIb+AAACWAAACu8AAQAAAQAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAnh0cmFrAAAAXHRraGQAAAAHz2CG/s9ghv4AAAABAAAAAAAACu8AAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAABAAAAAAFAAAAA4AAAAAAHgbWRpYQAAACBtZGhkAAAAAM9ghv7PYIb+AAALuAAANq8AAAAAAAAAIWhkbHIAAAAAbWhscnZpZGVBVlMgAAAAAAABAB4AAAABl21pbmYAAAAUdm1oZAAAAAAAAAAAAAAAAAAAACRkaW5mAAAAHGRyZWYAAAAAAAAAAQAAAAx1cmwgAAAAAQAAAVdzdGJsAAAAp3N0c2QAAAAAAAAAAQAAAJdhdmMxAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAFAAOABIAAAASAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGP//AAAAEmNvbHJuY2xjAAEAAQABAAAAL2F2Y0MBTUAz/+EAGGdNQDOadCk/LgIgAAADACAAAAMA0eMGVAEABGjuPIAAAAAYc3R0cwAAAAAAAAABAAAADgAAA+gAAAAUc3RzcwAAAAAAAAABAAAAAQAAABxzdHNjAAAAAAAAAAEAAAABAAAADgAAAAEAAABMc3RzegAAAAAAAAAAAAAADgAAAE8AAAAOAAAADQAAAA0AAAANAAAADQAAAA0AAAANAAAADQAAAA0AAAANAAAADQAAAA4AAAAOAAAAFHN0Y28AAAAAAAAAAQAAA7AAAAA0dXVpZFVTTVQh0k/Ou4hpXPrJx0AAAAAcTVREVAABABIAAAAKVcQAAAAAAAEAAAAAAAAAqHV1aWRVU01UIdJPzruIaVz6ycdAAAAAkE1URFQABAAMAAAAC1XEAAACHAAeAAAABBXHAAEAQQBWAFMAIABNAGUAZABpAGEAAAAqAAAAASoOAAEAZABlAHQAZQBjAHQAXwBhAHUAdABvAHAAbABhAHkAAAAyAAAAA1XEAAEAMgAwADAANQBtAGUALwAwADcALwAwADYAMAA2ACAAMwA6ADUAOgAwAAABA21kYXQAAAAYZ01AM5p0KT8uAiAAAAMAIAAAAwDR4wZUAAAABGjuPIAAAAAnZYiAIAAR//eBLT+oL1eA2Nlb/edvwWZflzEVLlhlXtJvSAEGRA3ZAAAACkGaAQCyJ/8AFBAAAAAJQZoCATP/AOmBAAAACUGaAwGz/wDpgAAAAAlBmgQCM/8A6YEAAAAJQZoFArP/AOmBAAAACUGaBgMz/wDpgQAAAAlBmgcDs/8A6YEAAAAJQZoIBDP/AOmAAAAACUGaCQSz/wDpgAAAAAlBmgoFM/8A6YEAAAAJQZoLBbP/AOmAAAAACkGaDAYyJ/8AFBAAAAAKQZoNBrIv/4cMeQ==",t.appendChild(e);var a=document.createElement("source");a.src="data:video/webm;base64,GkXfo49CgoR3ZWJtQoeBAUKFgQEYU4BnAQAAAAAAF60RTZt0vE27jFOrhBVJqWZTrIIQA027jFOrhBZUrmtTrIIQbE27jFOrhBFNm3RTrIIXmU27jFOrhBxTu2tTrIIWs+xPvwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFUmpZuQq17GDD0JATYCjbGliZWJtbCB2MC43LjcgKyBsaWJtYXRyb3NrYSB2MC44LjFXQY9BVlNNYXRyb3NrYUZpbGVEiYRFnEAARGGIBc2Lz1QNtgBzpJCy3XZ0KNuKNZS4+fDpFxzUFlSua9iu1teBAXPFhL4G+bmDgQG5gQGIgQFVqoEAnIEAbeeBASMxT4Q/gAAAVe6BAIaFVl9WUDiqgQEj44OEE95DVSK1nIN1bmTgkbCBULqBPJqBAFSwgVBUuoE87EQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB9DtnVB4eeBAKC4obaBAAAAkAMAnQEqUAA8AABHCIWFiIWEiAICAAamYnoOC6cfJa8f5Zvda4D+/7YOf//nNefQYACgnKGWgQFNANEBAAEQEAAYABhYL/QACIhgAPuC/rOgnKGWgQKbANEBAAEQEAAYABhYL/QACIhgAPuC/rKgnKGWgQPoANEBAAEQEAAYABhYL/QACIhgAPuC/rOgnKGWgQU1ANEBAAEQEAAYABhYL/QACIhgAPuC/rOgnKGWgQaDANEBAAEQEAAYABhYL/QACIhgAPuC/rKgnKGWgQfQANEBAAEQEAAYABhYL/QACIhgAPuC/rOgnKGWgQkdANEBAAEQEBRgAGFgv9AAIiGAAPuC/rOgnKGWgQprANEBAAEQEAAYABhYL/QACIhgAPuC/rKgnKGWgQu4ANEBAAEQEAAYABhYL/QACIhgAPuC/rOgnKGWgQ0FANEBAAEQEAAYABhYL/QACIhgAPuC/rOgnKGWgQ5TANEBAAEQEAAYABhYL/QACIhgAPuC/rKgnKGWgQ+gANEBAAEQEAAYABhYL/QACIhgAPuC/rOgnKGWgRDtANEBAAEQEAAYABhYL/QACIhgAPuC/rOgnKGWgRI7ANEBAAEQEAAYABhYL/QACIhgAPuC/rIcU7trQOC7jLOBALeH94EB8YIUzLuNs4IBTbeH94EB8YIUzLuNs4ICm7eH94EB8YIUzLuNs4ID6LeH94EB8YIUzLuNs4IFNbeH94EB8YIUzLuNs4IGg7eH94EB8YIUzLuNs4IH0LeH94EB8YIUzLuNs4IJHbeH94EB8YIUzLuNs4IKa7eH94EB8YIUzLuNs4ILuLeH94EB8YIUzLuNs4INBbeH94EB8YIUzLuNs4IOU7eH94EB8YIUzLuNs4IPoLeH94EB8YIUzLuNs4IQ7beH94EB8YIUzLuNs4ISO7eH94EB8YIUzBFNm3SPTbuMU6uEH0O2dVOsghTM",t.appendChild(a),document.body.appendChild(t),this.async(function(){t.onplaying=function(e){clearTimeout(A),this.playsupported=e&&"playing"===e.type||0!==t.currentTime,this._playsupportedLocalStorage=this.playsupported,t.onplaying=null,document.body.removeChild(t)}.bind(this),A=setTimeout(t.onplaying,500),t.play()})}else this.playsupported=!1,this._playsupportedLocalStorage=!1}},ready:function(){if(this.hasAttribute("fluid")){var A=parseInt(this.height,10)/parseInt(this.width,10);isNaN(A)&&(A=9/16),A*=100,this.width="100%",this.height="auto",this.$.container.style["padding-top"]=A+"%"}},detached:function(){this._player&&this._player.destroy()},play:function(){this._player&&this._player.playVideo&&this.playsupported&&this._player.playVideo()},setVolume:function(A){this._player&&this._player.setVolume&&this._player.setVolume(A)},mute:function(){this._player&&this._player.mute&&this._player.mute()},unMute:function(){this._player&&this._player.unMute&&this._player.unMute()},pause:function(){this._player&&this._player.pauseVideo&&this._player.pauseVideo()},seekTo:function(A){this._player&&this._player.seekTo&&(this._player.seekTo(A,!0),this.async(function(){this._updatePlaybackStats()},100))},setPlaybackRate:function(A){this._player&&this._player.setPlaybackRate&&this._player.setPlaybackRate(A)},setPlaybackQuality:function(A){this._player&&this._player.setPlaybackQuality&&this._player.setPlaybackQuality(A)},_videoIdChanged:function(){this.currenttime=0,this.currenttimeformatted=this._toHHMMSS(0),this.fractionloaded=0,this.duration=1,this.durationformatted=this._toHHMMSS(0),this._player&&this._player.cueVideoById?this.playsupported&&this.attributes.autoplay&&"1"==this.attributes.autoplay.value?this._player.loadVideoById(this.videoId):this._player.cueVideoById(this.videoId):this._pendingVideoId=this.videoId},_player:null,__updatePlaybackStatsInterval:null,_pendingVideoId:"",_apiLoad:function(){var A={playsinline:1,controls:2,autohide:1,autoplay:this.autoplay};this.chromeless&&(A.controls=0,A.modestbranding=1,A.showinfo=0,A.iv_load_policy=3,A.rel=0);for(var t=0;t<this.attributes.length;t++){var e=this.attributes[t];A[e.nodeName]=e.value}this._player=new YT.Player(this.$.player,{videoId:this.videoId,width:"100%",height:"100%",playerVars:A,events:{onReady:function(A){this._pendingVideoId&&this._pendingVideoId!=this.videoId&&(this._player.cueVideoById(this._pendingVideoId),this._pendingVideoId=""),this.fire("google-youtube-ready",A)}.bind(this),onStateChange:function(A){this.state=A.data,1==this.state?(this.playbackstarted=!0,this.playsupported=!0,this.duration=this._player.getDuration(),this.durationformatted=this._toHHMMSS(this.duration),this.__updatePlaybackStatsInterval||(this.__updatePlaybackStatsInterval=setInterval(this._updatePlaybackStats.bind(this),1e3))):this.__updatePlaybackStatsInterval&&(clearInterval(this.__updatePlaybackStatsInterval),this.__updatePlaybackStatsInterval=null),this.fire("google-youtube-state-change",A)}.bind(this),onPlaybackQualityChange:function(A){this.playbackquality=A.data}.bind(this),onPlaybackRateChange:function(A){this.playbackrate=A.data}.bind(this),onError:function(A){this.state=0,this.fire("google-youtube-error",A)}.bind(this)}})},_updatePlaybackStats:function(){this.currenttime=Math.round(this._player.getCurrentTime()),this.currenttimeformatted=this._toHHMMSS(this.currenttime),this.fractionloaded=this._player.getVideoLoadedFraction(),this.volume=this._player.getVolume()},_toHHMMSS:function(A){var t=Math.floor(A/3600);A-=3600*t;var e=Math.floor(A/60),a=Math.round(A-60*e),i="";return t>0&&(i+=t+":",e<10&&(e="0"+e)),a<10&&(a="0"+a),i+e+":"+a},_handleThumbnailTap:function(){this.autoplay=1,this.thumbnail=""}});</script>
+<dom-module id="dorel-hero-video" assetpath="molecules/">
+  <template>
+    <style>
+      :host {
+        position: relative;
+        overflow: hidden;
+
+        --google-youtube-container: {
+          position: relative;
+          padding-bottom: 56.25%;
+          height: 0 !important;
+          overflow: hidden;
+        };
+
+        --google-youtube-iframe: {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+        };
+      }
+
+      google-youtube {
+        overflow: hidden;
+      }
+
+      .thumbnail-image {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        left: 0;
+        top: 0;
+        background-position: 50% 50%;
+        background-repeat: no-repeat;
+        background-size: cover;
+        opacity: 1;
+        transition: opacity .3s ease;
+      }
+
+      .thumbnail-image[playing] {
+        opacity: 0;
+      }
+    </style>
+
+    <google-youtube id="googleYouTube" playsupported="{{ playSupported }}" video-id="[[ videoId ]]" state="{{ state }}" currenttime="{{ currentTime }}" currenttimeformatted="{{ currentTimeFormatted }}" duration="{{ duration }}" durationformatted="{{ durationFormatted }}" fractionloaded="{{ fractionLoaded }}" volume="{{ volume }}" playbackrate="{{ playbackRate }}" playbackquality="{{ playbackQuality }}" playbackstarted="{{ playbackstarted }}" width="100vw" chromeless="true" modestbranding="0" autoplay="1" on-google-youtube-state-change="handleStateChange" on-google-youtube-error="handleYouTubeError">
+    </google-youtube>
+    <div class="thumbnail-image" playing$="[[ playbackstarted ]]" style$="background-image:url('[[ thumbnail ]]');"></div>
+  </template>
+</dom-module>
+<script>Polymer({is:"dorel-hero-video",properties:{thumbnail:String,videoId:String,playSupported:Boolean,state:Number,currentTime:Number,currentTimeFormatted:String,duration:Number,durationFormatted:String,fractionLoaded:Number,volume:Number,playbackRate:Number,playbackQuality:String,playbackstarted:Boolean},handleStateChange:function(e){0===this.state&&this.$.googleYouTube.play()},handleYouTubeError:function(e){console.error("YouTube playback error",e.detail)}});</script><dom-module id="dorel-section-hero-header" assetpath="organisms/">
   <template>
     <style>
       :host {
@@ -1051,10 +946,11 @@
       .content {
         @apply(--theme-grid-column);
         position: absolute;
-        bottom: 4.5em;
+        top: 60%;
         right: 0;
         text-align: right;
         padding: 0 1.5em;
+
         margin-top: 0;
       }
 
@@ -1147,11 +1043,28 @@
     </style>
 
     
+    
     <iron-media-query query="(max-width : 479px)" query-matches="{{ mobileSmall }}"></iron-media-query>
     <iron-media-query query="(min-width : 480px) and (max-width : 767px)" query-matches="{{ mobileMedium }}"></iron-media-query>
     <iron-media-query query="(min-width : 767px)" query-matches="{{ screenLarge }}"></iron-media-query>
     <section class="hero-header" mobile-small$="{{ mobileSmall }}" mobile-medium$="{{ mobileMedium }}" screen-large$="{{ screenLarge }}">
-      <iron-image class="image" sizing="cover" fade="true" preload="" src$="[[ heroHeaderData.background_image ]]"></iron-image>
+
+      
+      <template is="dom-if" if="{{ screenLarge }}">
+        
+        <template is="dom-if" if="[[ heroHeaderData.video_id ]]">
+          <dorel-hero-video video-id="[[ heroHeaderData.video_id ]]" thumbnail="[[ heroHeaderData.background_image ]]"></dorel-hero-video>
+        </template>
+
+        
+        <template is="dom-if" if="[[ !heroHeaderData.video_id ]]">
+          <iron-image class="image" sizing="cover" fade="true" preload="" src$="[[ heroHeaderData.background_image ]]"></iron-image>
+        </template>
+      </template>
+      
+      <template is="dom-if" if="{{ !screenLarge }}">
+        <iron-image class="image" sizing="cover" fade="true" preload="" src$="[[ heroHeaderData.background_image ]]"></iron-image>
+      </template>
       <div class="content-wrapper">
         <div class="content">
           <header>
@@ -1166,113 +1079,14 @@
             </template>
           </header>
 
-          <template is="dom-if" if="[[ heroHeaderData.cta_toggle ]]">
-            <dorel-cta title="[[ heroHeaderData.cta_text ]]" icon="dorel-icons:play-circle-outline" type="primary" link="[[ heroHeaderData.cta_href ]]" gtm-parent="[[ gtmParent ]]" gtm-parent-index="[[ gtmParentIndex ]]" gtm-cta-index="0">
-              [[ heroHeaderData.cta_text ]]
-            </dorel-cta>
-          </template>
+          
         </div>
       </div>
     </section>
   </template>
-  <script>Polymer({is:"dorel-section-hero-header",properties:{heroHeaderData:{type:Object,value:function(){return{}}}},_hasValue:function(e){return"undefined"!=typeof e||""!==e}});</script>
+  <script>Polymer({is:"dorel-section-hero-header",properties:{heroHeaderData:{type:Object,value:function(){return{}}}},_hasValue:function(e){return void 0!==e||""!==e}});</script>
 </dom-module>
-<dom-module id="dorel-section-multi" assetpath="organisms/">
-  <template>
-    <style include="iron-flex iron-flex-alignment">
-
-
-      .section-multi {
-        margin: 0 auto;
-        padding: var(--theme-component-space-inner-xlarge) 0 0 0;
-        float: left;
-        width: 100%;
-      }
-
-      .section-multi .multi-title {
-        @apply(--theme-heading);
-        font-size: var(--theme-size-headline);
-        text-align: center;
-        margin: 0 0 var(--theme-component-space-inner-xlarge) 0;
-        width: 100%;
-      }
-
-      .section-container {
-        @apply(--layout-horizontal);
-        @apply(--layout-center-justified);
-        @apply(--layout-wrap);
-      }
-
-      .section-container > .section-container-content {
-        @apply(--layout-flex);
-        padding: 0 var(--theme-component-space-inner);
-        box-sizing: border-box;
-        min-width: 320px;
-        max-width: 740px;
-
-      }
-
-      /* IE 11 fix for single columns */
-      .section-container[columns="1"] > .section-container-content {
-        width: 100%;
-        min-width: 100%;
-        max-width: 100%;
-      }
-
-      .section-multi[desktop-full] .section-container {
-        width: 1170px;
-        margin: auto;
-      }
-
-      [background='background'] {
-        background-color: var(--theme-multi-background-color);
-        padding-bottom: var(--theme-multi-bottom-padding)
-      }
-
-      [background='no-background'] {
-        background-color: var(--theme-multi-no-background-color);
-      }
-
-    </style>
-
-    
-    <iron-media-query query="(max-width : 479px)" query-matches="{{ mobileSmall }}"></iron-media-query>
-    <iron-media-query query="(min-width : 480px) and (max-width : 767px)" query-matches="{{ mobileMedium }}"></iron-media-query>
-    <iron-media-query query="(min-width : 768px) and (max-width : 991px)" query-matches="{{ tablets }}"></iron-media-query>
-    <iron-media-query query="(min-width : 992px) and (max-width : 1199px)" query-matches="{{ desktopSmall }}"></iron-media-query>
-    <iron-media-query query="(min-width : 1200px)" query-matches="{{ desktopFull }}"></iron-media-query>
-
-    <section class="section-multi" mobile-small$="{{ mobileSmall }}" mobile-medium$="{{ mobileMedium }}" tablets$="{{ tablets }}" desktop-small$="{{ desktopSmall }}" desktop-full$="{{ desktopFull }}" background$="{{ needsBackground(multiData.acf_fc_layout) }}">
-
-      <div class="section-container" columns="1">
-        <template is="dom-if" if="[[ multiData.multi_title ]]">
-          <div class="section-container-content">
-            <h2 class="multi-title">[[ multiData.multi_title ]]</h2>
-          </div>
-        </template>
-      </div>
-
-      <div class="section-container" columns$="[[ multiData.multi_columns.length ]]">
-        <template is="dom-repeat" items="[[ multiData.multi_columns ]]" as="col">
-          <div class="section-container-content">
-            <template is="dom-if" if="[[ col.column_components.length ]]">
-              <dorel-page-builder builder-data="[[ col.column_components ]]"></dorel-page-builder>
-            </template>
-          </div>
-        </template>
-      </div>
-
-    </section>
-  </template>
-
-  <script>Polymer({is:"dorel-section-multi",properties:{multiData:{type:Object},templateData:{type:Object},columnAmount:{type:Number,value:0}},ready:function(){this.columnAmount=this.multiData.multi_columns.length},isFullWidth:function(t){return"undefined"!=typeof t&&"full-width"===t},needsBackground:function(t){var e=t.substr(t.length-1),u=!isNaN(Number(e));return u?"no-background":"background"}});</script>
-
-</dom-module>
-<link rel="import" src="../bower_components/inert/inert.html">
-
-
-
-<dom-module id="l2t-paper-slider" assetpath="../bower_components/l2t-paper-slider/">
+<link rel="import" src="../bower_components/inert/inert.html"><dom-module id="l2t-paper-slider" assetpath="../bower_components/l2t-paper-slider/">
   <template>
     <style>
       .slider {
@@ -1373,7 +1187,7 @@
     </div>
   </template> 
 </dom-module> 
-<script>!function(){Polymer({is:"l2t-paper-slider",listeners:{"container.track":"_swipeHandler"},behaviors:[Polymer.IronA11yKeysBehavior],hostAttributes:{tabindex:0},properties:{_totalDots:{type:Array,value:[],notify:!0,computed:"_createDots(totalSlides)"},_dotStyles:{type:Object,notify:!0,observer:"_animateCSS"},autoProgress:{type:Boolean,value:!1,notify:!0},disableSwipe:{type:Boolean,value:!1},hideNav:{type:Boolean,value:!1,notify:!0,reflectToAttribute:!0,observer:"_reInit"},position:{type:Number,value:0,notify:!0,reflectToAttribute:!0,observer:"_posObs"},sensitivity:{type:String,value:"default",notify:!0},slideDuration:{type:Number,value:5,notify:!0},totalSlides:{type:Number,value:1,notify:!0,reflectToAttribute:!0,observer:"_reInit"}},keyBindings:{right:"_keyRight",left:"_keyLeft",space:"_spaceCatcher",enter:"_spaceCatcher"},_animateCSS:function(){var t=this.$.container,e=t.querySelector(".slider__indicator");this._dotStyles&&(t.querySelector(".slider__slides").style.transform="translateX(-"+100*this.position+"%)",e.style.opacity="1",e.style.left="calc(((("+this._dotStyles.marginRight+" + "+this._dotStyles.marginLeft+") + ("+this._dotStyles.paddingRight+" + "+this._dotStyles.paddingLeft+") + "+this._dotStyles.width+") * "+this.position+") + "+this.position+" * ("+this._dotStyles.borderLeftWidth+" + "+this._dotStyles.borderRightWidth+"))",e.style.right="calc("+(this.totalSlides-(this.position+1))+"*(("+this._dotStyles.marginRight+" + "+this._dotStyles.marginLeft+") + ("+this._dotStyles.borderLeftWidth+" + "+this._dotStyles.borderRightWidth+") + ("+this._dotStyles.paddingLeft+" + "+this._dotStyles.paddingRight+") + "+this._dotStyles.width+"))")},_ariaChecked:function(){var t=this.$.container.querySelectorAll(".slider__dot");if(t.length>0){for(var e=0;e<this.totalSlides;e++)t[e].setAttribute("aria-checked","false");t[this.position].setAttribute("aria-checked","true")}},_autoProceed:function(){var t=this,e=setInterval(function(){t.moveNext()},1e3*t.slideDuration);this.$.container.addEventListener("mouseover",function(){clearInterval(e)}),this.$.container.addEventListener("mouseout",function(){e=setInterval(function(){t.moveNext()},1e3*t.slideDuration)})},_createDots:function(t){var e,i=[];for(e=0;e<t;++e)i.push(e);return i},_keyLeft:function(){var t=parseInt(this.$.container.getAttribute("data-pos")),e=t>0?t-1:this.totalSlides-1;this.movePos(e),this.moveFocus(e)},_keyRight:function(){var t=parseInt(this.$.container.getAttribute("data-pos")),e=t<this.totalSlides-1?t+1:0;this.movePos(e),this.moveFocus(e)},_moveInd:function(t){if(void 0!=t){var e=this.$.container,i=e.querySelector(".slider__indicator"),s=parseInt(e.getAttribute("data-pos")),o=parseInt(t.getAttribute("aria-posinset")),r=o>s?"right":"left",a=o<s?"right":"left";i.classList.remove("slider__indicator--"+a),i.classList.add("slider__indicator--"+r),this.position=o}},_moveManual:function(){var t,e=this,i=this.$.container.querySelectorAll(".slider__dot");for(t=0;t<this.totalSlides;++t)i[t].setAttribute("aria-label","Slide "+(parseInt(i[t].getAttribute("aria-posinset"))+1)+" selector"),i[t].addEventListener("click",function(t){e.movePos(t.target.getAttribute("aria-posinset"))});this.totalSlides&&(this._dotStyles=window.getComputedStyle(i[0]))},_posObs:function(){this._animateCSS(),this._setInert(),this._ariaChecked(),this.fire("change")},_reInit:function(){var t=this;this._animateCSS(),setTimeout(function(){t._moveManual()},0)},_setInert:function(){for(var t=this.$.container,e=t.querySelectorAll("paper-slide"),i=0;i<e.length;i++)i!=this.position&&e[i].setAttribute("inert","");e[this.position]&&e[this.position].removeAttribute("inert")},_spaceCatcher:function(t){t.preventDefault();var e=document.activeElement.getAttribute("aria-posinset");e&&this.movePos(e)},_swipeHandler:function(t){if(!this.disableSwipe){var e=this.$.container;switch(t.detail.state){case"start":this.startPosX=t.detail.x,e.querySelector(".slider__slides").classList.remove("mouseup");break;case"track":var i=e.offsetWidth,s=this.startPosX-t.detail.x,o=0==this.position&&s<0?0:this.position==this.totalSlides-1&&s>0?0:s/i*100,r=o>100?100*this.position+100:o<-100?100*this.position-100:o+100*this.position;this.perMov=r<=100*(this.totalSlides-1)?r>=0&&r:this.totalSlides,e.querySelector(".slider__slides").style.transform="translateX(-"+this.perMov+"%)";break;case"end":var a="high"==this.sensitivity?.25:"low"==this.sensitivity?-.25:0,n=this.perMov>100*this.position?1:-1,l=Math.round(this.perMov/100+a*n);e.querySelector(".slider__slides").classList.add("mouseup"),this.position==l&&(e.querySelector(".slider__slides").style.transform="translateX(-"+100*this.position+"%)"),this.movePos(l)}}},moveFocus:function(t){var e=this.$.container.querySelectorAll(".slider__dot")[t];e.focus()},moveNext:function(){var t=parseInt(this.$.container.getAttribute("data-pos")),e=t<this.totalSlides-1?t+1:0;this.movePos(e)},movePos:function(t){var e=this.$.container.querySelectorAll(".slider__dot")[t];this._moveInd(e)},movePrev:function(){var t=parseInt(this.$.container.getAttribute("data-pos")),e=t>0?t-1:this.totalSlides-1;this.movePos(e)},attached:function(){var t=this;1==this.autoProgress&&setTimeout(function(){t._autoProceed()},0),setTimeout(function(){t._moveManual(),t._ariaChecked()},0),this.setScrollDirection("y",this.$.container)}})}();</script>
+<script>!function(){Polymer({is:"l2t-paper-slider",listeners:{"container.track":"_swipeHandler"},behaviors:[Polymer.IronA11yKeysBehavior],hostAttributes:{tabindex:0},properties:{_totalDots:{type:Array,value:[],notify:!0,computed:"_createDots(totalSlides)"},_dotStyles:{type:Object,notify:!0,observer:"_animateCSS"},autoProgress:{type:Boolean,value:!1,notify:!0},disableSwipe:{type:Boolean,value:!1},hideNav:{type:Boolean,value:!1,notify:!0,reflectToAttribute:!0,observer:"_reInit"},position:{type:Number,value:0,notify:!0,reflectToAttribute:!0,observer:"_posObs"},sensitivity:{type:String,value:"default",notify:!0},slideDuration:{type:Number,value:5,notify:!0},totalSlides:{type:Number,value:1,notify:!0,reflectToAttribute:!0,observer:"_reInit"}},keyBindings:{right:"_keyRight",left:"_keyLeft",space:"_spaceCatcher",enter:"_spaceCatcher"},_animateCSS:function(){var t=this.$.container,e=t.querySelector(".slider__indicator");this._dotStyles&&(t.querySelector(".slider__slides").style.transform="translateX(-"+100*this.position+"%)",e.style.opacity="1",e.style.left="calc(((("+this._dotStyles.marginRight+" + "+this._dotStyles.marginLeft+") + ("+this._dotStyles.paddingRight+" + "+this._dotStyles.paddingLeft+") + "+this._dotStyles.width+") * "+this.position+") + "+this.position+" * ("+this._dotStyles.borderLeftWidth+" + "+this._dotStyles.borderRightWidth+"))",e.style.right="calc("+(this.totalSlides-(this.position+1))+"*(("+this._dotStyles.marginRight+" + "+this._dotStyles.marginLeft+") + ("+this._dotStyles.borderLeftWidth+" + "+this._dotStyles.borderRightWidth+") + ("+this._dotStyles.paddingLeft+" + "+this._dotStyles.paddingRight+") + "+this._dotStyles.width+"))")},_ariaChecked:function(){var t=this.$.container.querySelectorAll(".slider__dot");if(t.length>0){for(var e=0;e<this.totalSlides;e++)t[e].setAttribute("aria-checked","false");t[this.position].setAttribute("aria-checked","true")}},_autoProceed:function(){var t=this,e=setInterval(function(){t.moveNext()},1e3*t.slideDuration);this.$.container.addEventListener("mouseover",function(){clearInterval(e)}),this.$.container.addEventListener("mouseout",function(){e=setInterval(function(){t.moveNext()},1e3*t.slideDuration)})},_createDots:function(t){var e,i=[];for(e=0;e<t;++e)i.push(e);return i},_keyLeft:function(){var t=parseInt(this.$.container.getAttribute("data-pos")),e=t>0?t-1:this.totalSlides-1;this.movePos(e),this.moveFocus(e)},_keyRight:function(){var t=parseInt(this.$.container.getAttribute("data-pos")),e=t<this.totalSlides-1?t+1:0;this.movePos(e),this.moveFocus(e)},_moveInd:function(t){if(void 0!=t){var e=this.$.container,i=e.querySelector(".slider__indicator"),s=parseInt(e.getAttribute("data-pos")),o=parseInt(t.getAttribute("aria-posinset")),r=o>s?"right":"left",a=o<s?"right":"left";i.classList.remove("slider__indicator--"+a),i.classList.add("slider__indicator--"+r),this.position=o}},_moveManual:function(){var t,e=this,i=this.$.container.querySelectorAll(".slider__dot");for(t=0;t<this.totalSlides;++t)i[t].setAttribute("aria-label","Slide "+(parseInt(i[t].getAttribute("aria-posinset"))+1)+" selector"),i[t].addEventListener("click",function(t){e.movePos(t.target.getAttribute("aria-posinset"))});this.totalSlides&&(this._dotStyles=window.getComputedStyle(i[0]))},_posObs:function(){this._animateCSS(),this._setInert(),this._ariaChecked(),this.fire("change")},_reInit:function(){var t=this;this._animateCSS(),setTimeout(function(){t._moveManual()},0)},_setInert:function(){for(var t=this.$.container,e=t.querySelectorAll("paper-slide"),i=0;i<e.length;i++)i!=this.position&&e[i].setAttribute("inert","");e[this.position]&&e[this.position].removeAttribute("inert")},_spaceCatcher:function(t){t.preventDefault();var e=document.activeElement.getAttribute("aria-posinset");e&&this.movePos(e)},_swipeHandler:function(t){if(!this.disableSwipe){var e=this.$.container;switch(t.detail.state){case"start":this.startPosX=t.detail.x,e.querySelector(".slider__slides").classList.remove("mouseup");break;case"track":var i=e.offsetWidth,s=this.startPosX-t.detail.x,o=0==this.position&&s<0?0:this.position==this.totalSlides-1&&s>0?0:s/i*100,r=o>100?100*this.position+100:o<-100?100*this.position-100:o+100*this.position;this.perMov=r<=100*(this.totalSlides-1)?r>=0&&r:this.totalSlides,e.querySelector(".slider__slides").style.transform="translateX(-"+this.perMov+"%)";break;case"end":var a="high"==this.sensitivity?.25:"low"==this.sensitivity?-.25:0,n=this.perMov>100*this.position?1:-1,l=Math.round(this.perMov/100+a*n);e.querySelector(".slider__slides").classList.add("mouseup"),this.position==l&&(e.querySelector(".slider__slides").style.transform="translateX(-"+100*this.position+"%)"),this.movePos(l)}}},moveFocus:function(t){this.$.container.querySelectorAll(".slider__dot")[t].focus()},moveNext:function(){var t=parseInt(this.$.container.getAttribute("data-pos")),e=t<this.totalSlides-1?t+1:0;this.movePos(e)},movePos:function(t){var e=this.$.container.querySelectorAll(".slider__dot")[t];this._moveInd(e)},movePrev:function(){var t=parseInt(this.$.container.getAttribute("data-pos")),e=t>0?t-1:this.totalSlides-1;this.movePos(e)},attached:function(){var t=this;1==this.autoProgress&&setTimeout(function(){t._autoProceed()},0),setTimeout(function(){t._moveManual(),t._ariaChecked()},0),this.setScrollDirection("y",this.$.container)}})}();</script>
 <dom-module id="dorel-section-slideshow" assetpath="organisms/">
   <template>
     <style is="custom-style">
@@ -1421,22 +1235,11 @@
     </style>
 
     <template is="dom-if" if="[[ slideshowData.slides.length ]]">
-
-      
-      <iron-media-query query="(max-width : 479px)" query-matches="{{ mobileSmall }}"></iron-media-query>
-      <iron-media-query query="(min-width : 480px) and (max-width : 767px)" query-matches="{{ mobileMedium }}"></iron-media-query>
-      <iron-media-query query="(min-width : 768px) and (max-width : 991px)" query-matches="{{ tablets }}"></iron-media-query>
-      <iron-media-query query="(min-width : 992px) and (max-width : 1199px)" query-matches="{{ desktopSmall }}"></iron-media-query>
-      <iron-media-query query="(min-width : 1200px)" query-matches="{{ desktopFull }}"></iron-media-query>
-
-      <section class$="section-slideshow {{ isFullWidth(slideshowData.width) }}" mobile-small$="{{ mobileSmall }}" mobile-medium$="{{ mobileMedium }}" tablets$="{{ tablets }}" desktop-small$="{{ desktopSmall }}" desktop-full$="{{ desktopFull }}">
-
+      <section class$="section-slideshow {{ isFullWidth(slideshowData.width) }}">
         
         <l2t-paper-slider class="simple-slider" auto-progress="" slide-duration="4" total-slides="[[ slideshowData.slides.length ]]">
           <template is="dom-repeat" items="[[ slideshowData.slides ]]" as="slide">
-
-            <paper-slide class="simple-slider-slide" style$="
-                  background-image: url([[ hasBackgroundImage(slide.image) ]]);"></paper-slide>
+            <paper-slide class="simple-slider-slide" style$="background-image: url([[ hasBackgroundImage(slide.image) ]]);"></paper-slide>
 
           </template>
         </l2t-paper-slider>
@@ -1445,77 +1248,7 @@
     </template>
   </template>
 
-  <script>Polymer({is:"dorel-section-slideshow",properties:{slideshowData:{type:Object,value:function(){return{}}}},isFullWidth:function(e){return""==typeof e||"undefined"===e||"full-width"===e?"container-fluid":"container"},hasBackgroundImage:function(e){return"undefined"!=typeof e&&""!==e&&e?e:"/assets/images/placeholders/slideshow/placeholder.jpg"},prevSlide:function(e){this.$$("simple-slider").prev(),this._eventTracking(e,"previous")},nextSlide:function(e){this.$$("simple-slider").next(),this._eventTracking(e,"next")},_eventTracking:function(e,n){Polymer.globalsManager.get("Dorel");Polymer.globalsManager.set("Dorel.events",{action:n,component:"slideshow",element:Polymer.dom(e).localTarget,event:"polymer_event"})}});</script>
-</dom-module>
-<dom-module id="dorel-section-usps" assetpath="organisms/">
-  <template>
-    <style>
-      :host {
-        z-index: 999;
-        position: relative;
-      }
-      .section-usps {
-        background-color: var(--theme-color-background-tertiary);
-        padding: var(--theme-component-space-inner-xlarge);
-        float: left;
-        width: 100%;
-        position: relative;
-      }
-      .section-usps .list-group {
-        list-style: none;
-        float: left;
-        width: 100%;
-        margin: 0;
-        padding: 0;
-        width: 1170px;
-        margin: auto;
-        float: none;
-      }
-      .section-usps .list-group .list-group-item {
-        width: 50%;
-        float: left;
-      }
-      
-      .section-usps[mobile-small] {
-        display: none;
-      }
-
-      .section-usps[mobile-medium] .list-group {
-        max-width: 360px;
-      }
-      .section-usps[tablets] .list-group,
-      .section-usps[desktopSmall] .list-group,
-      .section-usps[desktopFull] .list-group {
-        float: left;
-      }
-    </style>
-
-
-    
-    <iron-media-query query="(max-width : 479px)" query-matches="{{ mobileSmall }}"></iron-media-query>
-    <iron-media-query query="(min-width : 480px) and (max-width : 767px)" query-matches="{{ mobileMedium }}"></iron-media-query>
-    <iron-media-query query="(min-width : 768px) and (max-width : 991px)" query-matches="{{ tablets }}"></iron-media-query>
-    <iron-media-query query="(min-width : 992px) and (max-width : 1199px)" query-matches="{{ desktopSmall }}"></iron-media-query>
-    <iron-media-query query="(min-width : 1200px)" query-matches="{{ desktopFull }}"></iron-media-query>
-    
-    <template is="dom-if" if="[[ uspsData.usps.length ]]">
-      <section class="section-usps" mobile-small$="{{ mobileSmall }}" mobile-medium$="{{ mobileMedium }}" tablets$="{{ tablets }}" desktop-small$="{{ desktopSmall }}" desktop-full$="{{ desktopFull }}">
-          <ul class="list-group">
-
-            <template is="dom-repeat" items="[[ uspsData.usps ]]" as="usp">
-              <li class="list-group-item col-sm-6 col-md-6">
-                <iron-icon icon="dorel-icons:check"></iron-icon>
-                [[ usp.usp_text ]]
-              </li>
-            </template>
-
-      </ul>
-      </section>
-    </template>
-
-  </template>
-
-  <script>Polymer({is:"dorel-section-usps",properties:{uspsData:{type:Object,value:function(){return{}}}}});</script>
+  <script>Polymer({is:"dorel-section-slideshow",properties:{slideshowData:{type:Object,value:function(){return{}}}},isFullWidth:function(e){return""==typeof e||"undefined"===e||"full-width"===e?"container-fluid":"container"},hasBackgroundImage:function(e){return void 0!==e&&""!==e&&e?e:"/assets/images/placeholders/slideshow/placeholder.jpg"},prevSlide:function(e){this.$$("simple-slider").prev(),this._eventTracking(e,"previous")},nextSlide:function(e){this.$$("simple-slider").next(),this._eventTracking(e,"next")},_eventTracking:function(e,n){Polymer.globalsManager.get("Dorel");Polymer.globalsManager.set("Dorel.events",{action:n,component:"slideshow",element:Polymer.dom(e).localTarget,event:"polymer_event"})}});</script>
 </dom-module>
 <dom-module id="dorel-page-builder" assetpath="organisms/">
   <template>
@@ -1625,55 +1358,9 @@
 
 
         
-        <template is="dom-if" if="{{ isPageComponent(component.acf_fc_layout, 'image_wrap') }}">
-          
-          <dorel-image-wrap image-url="[[ component.image_url ]]" gtm-component-index="[[ index ]]"></dorel-image-wrap>
-
-        </template>
-        
-
-
-
-
-
-        
         <template is="dom-if" if="{{ isPageComponent(component.acf_fc_layout, 'video_wrap') }}">
           
           <dorel-video-wrap video-type="[[ component.video_type ]]" video-id="[[ component.video_id ]]" gtm-component-index="[[ index ]]"></dorel-video-wrap>
-
-        </template>
-        
-
-
-
-
-        
-        <template is="dom-if" if="{{ isPageComponent(component.acf_fc_layout, 'section_big_title') }}">
-          
-          <dorel-section-big-title big-title-data="[[ component ]]" gtm-component-index="[[ index ]]"></dorel-section-big-title>
-
-        </template>
-        
-
-
-
-
-
-        
-        <template is="dom-if" if="{{ isPageComponent(component.acf_fc_layout, 'section_big_video') }}">
-          
-          <dorel-section-big-video video-wrap-data="[[ component ]]" gtm-component-index="[[ index ]]"></dorel-section-big-video>
-
-        </template>
-        
-
-
-
-
-        
-        <template is="dom-if" if="{{ isPageComponent(component.acf_fc_layout, 'section_downloads') }}">
-          
-          <dorel-section-downloads downloads-data="[[ component ]]" gtm-component-index="[[ index ]]"></dorel-section-downloads>
 
         </template>
         
@@ -1690,16 +1377,6 @@
         </template>
         
 
-
-
-
-        
-        <template is="dom-if" if="{{ isPageComponent(component.acf_fc_layout, 'section_multi') }}">
-          
-          <dorel-section-multi multi-data="[[ component ]]" template-data="[[ templateData ]]" gtm-component-index="[[ index ]]"></dorel-section-multi>
-
-        </template>
-        
 
 
 
@@ -1798,5 +1475,5 @@
     </div>
   </template>
 
-  <script>Polymer({is:"dorel-page-builder",properties:{builderData:{type:Object,value:function(){return{}}},templateData:{type:Object,value:function(){return{}}}},isPageComponent:function(e,t){var r=e.substr(e.length-1),n=!isNaN(Number(r));if(n){var p=e.split("_");return p.pop(),strippedResponse=p.join("_"),strippedResponse===t}return e===t}});</script>
+  <script>Polymer({is:"dorel-page-builder",properties:{builderData:{type:Object,value:function(){return{}}},templateData:{type:Object,value:function(){return{}}}},isPageComponent:function(e,t){var r=e.substr(e.length-1);if(!isNaN(Number(r))){var n=e.split("_");return n.pop(),strippedResponse=n.join("_"),strippedResponse===t}return e===t}});</script>
 </dom-module></div></body></html>

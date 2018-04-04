@@ -1,7 +1,7 @@
 <html><head><link rel="import" href="../organisms/dorel-section-product-accessories.html">
 <link rel="import" href="../organisms/dorel-section-product-accordions.html">
 <link rel="import" href="../organisms/dorel-section-product-features.html">
-<link rel="import" href="../organisms/dorel-section-product-header.html">
+<link rel="import" href="../organisms/dorel-section-header.html">
 <link rel="import" href="../organisms/dorel-section-product-showcase.html">
 <link rel="import" href="../organisms/dorel-section-product-video.html">
 <link rel="import" href="../organisms/dorel-section-product-usps.html">
@@ -81,7 +81,7 @@
           
           <template is="dom-if" if="{{ isPageComponent(component.acf_fc_layout, 'section_product_header') }}">
 
-            <dorel-section-product-header product-header-data="[[ component ]]" gtm-parent="dorel-section-product-header" gtm-parent-index="[[ index ]]"></dorel-section-product-header>
+            <dorel-section-header section-header-data="[[ component ]]" gtm-parent="dorel-section-header" gtm-parent-index="[[ index ]]"></dorel-section-header>
 
           </template>
           
@@ -112,7 +112,7 @@
 
           
           <template is="dom-if" if="{{ isPageComponent(component.acf_fc_layout, 'section_product_accessories') }}">
-            
+
             <dorel-section-product-accessories accessory-scroll-handler="{{ accessoryScrollHandler }}" accessories-data="[[ component ]]" gtm-parent="dorel-section-product-accessories" gtm-parent-index="[[ index ]]"></dorel-section-product-accessories>
 
           </template>
@@ -150,6 +150,6 @@
 
   </template>
 
-  <script>Polymer({is:"dorel-template-products",properties:{templateData:{type:String},routeData:{type:Object},accessoryScrollHandler:{type:Boolean,notify:!0,value:!1}},observers:["_routeDataChanged(routeData.productName)"],_routeDataChanged:function(t){"undefined"!=typeof t&&"undefined"!=typeof this.templateData.products&&this.templateData.products.length&&(this.builderData=this.templateData.products.find(function(e){return e.slug===t}))},isPageComponent:function(t,e){var a=t.substr(t.length-1),r=!isNaN(Number(a));if(r){var o=t.split("_");return o.pop(),strippedResponse=o.join("_"),strippedResponse===e}return t===e}});</script>
+  <script>Polymer({is:"dorel-template-products",properties:{templateData:{type:String},routeData:{type:Object},accessoryScrollHandler:{type:Boolean,notify:!0,value:!1}},observers:["_dataChanged(routeData, templateData)"],_dataChanged:function(t,e){var a=this.routeData.productName;void 0!==a&&void 0!==this.templateData.products&&this.templateData.products.length&&(this.builderData=this.templateData.products.find(function(t){return t.slug===a}))},isPageComponent:function(t,e){var a=t.substr(t.length-1);if(!isNaN(Number(a))){var r=t.split("_");return r.pop(),strippedResponse=r.join("_"),strippedResponse===e}return t===e}});</script>
 </dom-module>
 </body></html>

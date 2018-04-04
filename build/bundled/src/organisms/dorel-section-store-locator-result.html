@@ -24,7 +24,7 @@
       }
     </style>
 
-    <div class="dorel-section-store-locator-result">
+    <div class$="dorel-section-store-locator-result [[ _isVip(store.is_vip) ]]">
       <template is="dom-if" if="[[ !store.address ]]">
         <p class="location-content">No Address Available</p>
       </template>
@@ -49,6 +49,6 @@
     </div>
   </template>
 
-  <script>Polymer({is:"dorel-section-store-locator-result",properties:{store:{type:Object,value:function(){return{}}}}});</script>
+  <script>Polymer({is:"dorel-section-store-locator-result",properties:{store:{type:Object,value:function(){return{}}}},_isVip:function(e){return void 0!==e&&e?"vip":""}});</script>
 </dom-module>
 </body></html>

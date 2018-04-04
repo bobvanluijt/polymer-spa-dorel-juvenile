@@ -5,11 +5,10 @@
     
     
     <style>
-
       .hubspot {
         width: 100%;
         float: left;
-        padding: 1.5em var(--theme-gutter) 0 var(--theme-gutter);
+        padding: 1.5em var(--theme-gutter-mobile) 0 var(--theme-gutter-mobile);
         box-sizing: border-box;
       }
 
@@ -27,7 +26,6 @@
         margin-top: 0;
         padding-top: 0;
         max-width: var(--theme-base-paragraph-width);
-        margin: auto;
         float: none;
 
       }
@@ -61,6 +59,8 @@
 
       label {
         @apply(--theme-form-input-label);
+        @apply(--theme-typography-2);
+        margin-top: 0;
       }
 
       .hs-input:hover, .hs-input.invalid:hover, .hs-input.error:hover {
@@ -109,35 +109,83 @@
         color: var(--theme-color-error);
       }
 
-      [tablets] .wrap-container, [mobile] .wrap-container {
-        margin-left: 0;
-      }
-
-
-      [mobile] .hubspot {
+      /* Responsive Behaviour */
+      [tablet-medium-up] .hubspot {
         padding: 1.5em var(--theme-gutter) 0 var(--theme-gutter);
       }
 
-      [mobile] label {
-        @apply(--theme-typography-2);
-        margin-top: 0;
+      [tablet-medium-up] label {
+        @apply(--theme-form-input-label);
       }
 
-      [mobile] input, [mobile] textarea {
-        margin: 1em 0;
+      [tablet-medium-up] #form {
+        margin: auto;
       }
 
-      [mobile] select {
-
+      /* Hotfix for checkbox */
+      .hs_agree_terms, .hs_agree_terms .input {
+        float: left;
+        width: 100%;
       }
+
+      .hs_agree_terms {
+        margin-bottom: 1.5em;
+      }
+
+      .hs_agree_terms .inputs-list {
+        float: left;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        width: 100%;
+      }
+
+      .hs_agree_terms input {
+        float: left;
+        width: auto;
+        pointer-events: all;
+        margin: 0 .75em 0 0;
+      }
+
+      .hs_agree_terms span {
+        line-height: 52.5px;
+      }
+
+      .hs_agree_terms label {
+        pointer-events: all;
+      }
+
+      .hs-form-field {
+        width: 100% !important;
+      }
+
+      .hs-error-msgs {
+        display: block;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        float: left;
+        margin-bottom: 1.5em;
+      }
+
+      .hs-error-msgs.inputs-list {
+        float: left;
+        width: 100%;
+      }
+
+      .dorel-hubspot {
+        max-width: 100%;
+      }
+
+      .dorel-hubspot select {
+        width: 100%;
+      }
+
     </style>
 
 
-    
-    <iron-media-query query="(max-width : 820px)" query-matches="{{ mobile }}"></iron-media-query>
-    <iron-media-query query="(min-width : 821px) and (max-width : 991px)" query-matches="{{ tablets }}"></iron-media-query>
-    <iron-media-query query="(min-width : 992px) and (max-width : 1199px)" query-matches="{{ desktopSmall }}"></iron-media-query>
-    <div class="hubspot" mobile$="{{ mobile }}" tablets$="{{ tablets }}" desktop-small$="{{ desktopSmall }}">
+    <dorel-media-query breakpoints="{{ breakpoints }}"></dorel-media-query>
+    <div class="hubspot" tablet-medium-up$="{{ breakpoints.tabletMediumUp }}">
       <div class="row">
         <div class="wrap-container">
           <div id="form"></div>
@@ -148,6 +196,6 @@
 
   </template>
 
-  <script>Polymer({is:"dorel-hubspot",properties:{portalId:{type:String},formId:{type:String},hubspotLoaded:{type:Boolean,value:!1}},observers:["_embedForm(portalId, formId, hubspotLoaded)"],_embedForm:function(o,e,r){if("undefined"!=typeof r&&r&&"undefined"!=typeof o&&""!==o&&"undefined"!=typeof e&&""!==e){if(this.$.form.hasChildNodes())for(;this.$.form.firstChild;)this.$.form.removeChild(this.$.form.firstChild);var d="#hsForm_"+e,t=Polymer.dom(this.root).querySelector(d);if(null===t){var i=this;window.hbspt.forms.create({css:"",portalId:o,formId:e,onFormReady:function(o,e){var r=document.createDocumentFragment();r.appendChild(o[0].parentNode),Polymer.dom(i.$.form).appendChild(r)}})}}}});</script>
+  <script>Polymer({is:"dorel-hubspot",properties:{portalId:{type:String},formId:{type:String},hubspotLoaded:{type:Boolean,value:!1}},observers:["_embedForm(portalId, formId, hubspotLoaded)"],_embedForm:function(o,r,e){if(void 0!==e&&e&&void 0!==o&&""!==o&&void 0!==r&&""!==r){if(this.$.form.hasChildNodes())for(;this.$.form.firstChild;)this.$.form.removeChild(this.$.form.firstChild);var d="#hsForm_"+r;if(null===Polymer.dom(this.root).querySelector(d)){var t=this;window.hbspt.forms.create({css:"",portalId:o,formId:r,onFormReady:function(o,r){var e=document.createDocumentFragment();e.appendChild(o[0].parentNode),Polymer.dom(t.$.form).appendChild(e)}})}}}});</script>
 </dom-module>
 </body></html>

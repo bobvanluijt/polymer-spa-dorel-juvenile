@@ -1,73 +1,172 @@
-<html><head><link rel="import" href="../../bower_components/polymer/polymer.html">
-
+<html><head><link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../../bower_components/iron-scroll-target-behavior/iron-scroll-target-behavior.html">
 <link rel="import" href="../molecules/dorel-logo.html">
-<link rel="import" href="../molecules/dorel-search-small.html">
-<link rel="import" href="../molecules/dorel-select-language.html">
+<link rel="import" href="../molecules/dorel-navigation-main.html">
 
 </head><body><dom-module id="dorel-header">
   <template>
-    <style is="custom-style">
-      /* 
-       * iron-flex reusable classes 
-       */
-      .horizontal {
+    <style include="iron-flex iron-flex-alignment">
+      .header-wrapper {
+        height: 4.5em;
+        float: left;
+        width: 100%;
+        display: block;
+      }
+
+      header {
+        position: relative;
+        float: left;
+        width: 100%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 10000;
+        width: 100%;
+        background-color: white;
+      }
+
+      header::before {
+        content: "";
+        position: absolute;
+        bottom: -.75em;
+        left: 0;
+        height: .75em;
+        z-index: 2;
+        width: 100%;
+
+        /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#000000+0,000000+100&0.13+0,0+100 */
+        background: -moz-linear-gradient(top, rgba(0, 0, 0, 0.13) 0%, rgba(0, 0, 0, 0) 100%); /* FF3.6-15 */
+        background: -webkit-linear-gradient(top, rgba(0, 0, 0, 0.13) 0%, rgba(0, 0, 0, 0) 100%); /* Chrome10-25,Safari5.1-6 */
+        background: linear-gradient(to bottom, rgba(0, 0, 0, 0.13) 0%, rgba(0, 0, 0, 0) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#21000000', endColorstr='#00000000', GradientType=0); /* IE6-9 */
+      }
+
+      .header-items {
+        @apply(--max-width-container);
+        @apply(--layout-vertical);
+        background-color: var(--theme-color-white);
+        box-sizing: border-box;
+        transition: .15s ease padding;
+        padding: .75em;
+      }
+
+      .header-item-menu {
+        order: 1;
+      }
+
+      #hamburger {
+        position: absolute;
+        top: 1.25em;
+        right: .75em;
+        z-index: 1000;
+        color: var(--theme-color-text-link);
+        cursor: pointer;
+        transition: .3s ease color, .15s ease top;
+      }
+
+      #hamburger:hover, #hamburger:focus {
+        color: var(--theme-color-text-link-active);
+      }
+
+      .icon-toggle-menu {
+        width: 1.25em;
+        height: 1.25em;
+        font-size: 1.5rem;
+      }
+
+      .header-item-logo {
+        order: 4;
+        /* center the logo */
         @apply(--layout-horizontal);
       }
-      .flex-end-justified {
+
+      /* Compact Menu */
+      [compact-menu] .header-items {
+        padding: 0em .75em;
+      }
+
+      [compact-menu][desktop-small-up] .header-items {
+        padding: 0 1.5em;
+      }
+
+      [compact-menu] #hamburger {
+        top: 0.5em;
+      }
+
+      /* Responsive Behaviour */
+      [tablet-medium-up] .header-items {
+        padding-left: 1.5em;
+        padding-right: 1.5em;
+      }
+
+      [tablet-medium-up] #hamburger {
+        top: 2em;
+        right: 1.25em;
+      }
+
+      [compact-menu][tablet-medium-up] #hamburger {
+        top: 1.25em;
+      }
+
+      .header-wrapper[desktop-small-up] {
+        height: 7.5em;
+      }
+
+      [desktop-small-up] .header-item-logo {
+        order: 1;
+        flex: 1;
+      }
+
+      [desktop-small-up] .header-item-menu {
+        @apply(--layout-wrap);
+        order: 4;
+        padding: .75em 0;
+      }
+
+      [desktop-small-up] .header-items {
+        /* layout horizontal header-main */
         @apply(--layout-horizontal);
-        @apply(--layout-end-justified);
+        @apply(--layout-wrap);
+        padding: 1.5em;
       }
-      .flex {
-        @apply(--layout-flex);
-      }
-      .vertical-center {
+
+      [desktop-small-up] .header-contain-main-elements {
         @apply(--layout-horizontal);
-        @apply(--layout-center);
-      }
-      /* 
-       * custom classes 
-       */
-      .header-search,
-      .header-language {
-        padding: 0 0.2rem; /* add component padding */
-      }
-      .header-utility {
-        padding: 0 var(--theme-component-space-inner) 0 0; /* add logo spacing for padding */
+        @apply(--layout-justified);
       }
     </style>
 
-    <header class="layout horizontal">
+    <dorel-media-query breakpoints="{{ breakpoints }}"></dorel-media-query>
+    <div class="header-wrapper" tablet-medium-up$="{{ breakpoints.tabletMediumUp }}" desktop-small-up$="{{ breakpoints.desktopSmallUp }}" compact-menu$="{{ compactMenu }}">
+      <header>
+        <div class="header-items">
+          <div class="header-item header-item-logo">
+            <div>
+              <a href="/" aria-label="Maxi Cosi" on-click="_logoClicked">
+                <dorel-logo brand-name="[[ brandName ]]" compact-menu="[[ compactMenu ]]"></dorel-logo>
+              </a>
+            </div>
+          </div>
 
-      <div class="flex layout horizontal">
-        <div>
-          
-          <a href="/" aria-label="Dorel SPA">
-            <dorel-logo></dorel-logo>
-          </a>
-          
-        </div>
-        <div class="vertical-center">
-          <content></content>
-        </div>
-      </div>
+          <nav class="header-item header-item-menu">
+            <dorel-navigation-main compact-menu="[[ compactMenu ]]" sub-menu-opened="{{ subMenuOpened }}" mobile-menu-opened="{{ mobileMenuOpened }}"></dorel-navigation-main>
+          </nav>
 
-      <div class="header-utility layout horizontal">
-        
-        <div class="header-search vertical-center">
-          <dorel-search-small></dorel-search-small>
+          <template is="dom-if" if="{{ !breakpoints.desktopSmallUp }}">
+            <div id="hamburger">
+              <template is="dom-if" if="{{ !mobileMenuOpened }}">
+                <iron-icon class="icon-toggle-menu" icon="dorel-icons:menu" on-click="_toggleMobileMenu" aria-label="menu"></iron-icon>
+              </template>
+              <template is="dom-if" if="{{ mobileMenuOpened }}">
+                <iron-icon class="icon-toggle-menu" icon="dorel-icons:close" on-click="_toggleMobileMenu" aria-label="menu"></iron-icon>
+              </template>
+            </div>
+          </template>
         </div>
-        
-        
-        <div class="header-language vertical-center">
-          <dorel-select-language></dorel-select-language>
-        </div>
-        
-      </div>
-
-    </header>
-
+      </header>
+    </div>
   </template>
-
-  <script>Polymer({is:"dorel-header"});</script>
-
-</dom-module></body></html>
+  <script>Polymer({is:"dorel-header",behaviors:[Polymer.IronScrollTargetBehavior],properties:{compactMenu:{type:Boolean,value:!1},brandName:{type:String},loadComplete:{type:Boolean},page:{type:String},subMenuOpened:{type:Boolean},mobileMenuOpened:{type:Boolean}},attached:function(){this._scrollHandler()},_scrollHandler:function(){this.compactMenu=this._scrollTop>50},_logoClicked:function(e){Polymer.globalsManager.set("Dorel.events",{action:"switch",component:"logo",element:Polymer.dom(e).localTarget.parentNode,event:"polymer_event",things:{currentPage:document.URL,targetPage:Polymer.dom(e).localTarget.parentNode.href}})},_toggleMobileMenu:function(e){this.subMenuOpened=!1,this.mobileMenuOpened=!this.mobileMenuOpened,Polymer.globalsManager.set("Dorel.events",{action:this.mobileMenuOpened?"open":"close",component:"hamburger",element:Polymer.dom(e).localTarget.parentNode,event:"polymer_event",things:{currentState:this.mobileMenuOpened?"close":"open",toState:this.mobileMenuOpened?"open":"close"}})}});</script>
+</dom-module>
+</body></html>

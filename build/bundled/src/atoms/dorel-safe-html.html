@@ -1,10 +1,30 @@
-<html><head><link rel="import" href="../../bower_components/polymer/polymer.html">
-</head><body><dom-module id="dorel-safe-html">
-
+<html><head></head><body><dom-module id="dorel-safe-html">
   <template>
-    <span>{{ html }}</span>
+    <style>
+
+      #content {
+        float: left;
+        width: 100%;
+        @apply(--theme-paragraph-text);
+        margin: 0;
+      }
+
+      #content p {
+        @apply(--theme-paragraph-text);
+      }
+
+      #content a {
+        @apply(--theme-text-link);
+      }
+
+      #content a:hover, .accessory a:focus {
+        @apply(--theme-text-link-active);
+      }
+    </style>
+    <div id="content"></div>
   </template>
 
-  <script>Polymer({is:"dorel-safe-html",properties:{html:{type:String,value:""}},ready:function(){this.innerHTML="undefined"==typeof this.html?"":this.html}});</script>
+  <script>Polymer({is:"dorel-safe-html",properties:{html:{type:String,value:"",observer:"_htmlChanged"}},_htmlChanged:function(){Polymer.dom(this.$.content).innerHTML=void 0===this.html?"":this.html}});</script>
 
-</dom-module></body></html>
+</dom-module>
+</body></html>

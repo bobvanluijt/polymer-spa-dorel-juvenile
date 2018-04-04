@@ -10,12 +10,12 @@
         @apply(--max-width-container);
         width: 100%;
         float: left;
-        padding: 1.5em var(--theme-gutter) 3em var(--theme-gutter);
         box-sizing: border-box;
+        padding: 1.5em var(--theme-gutter-mobile);
       }
 
       .title {
-        @apply(--theme-typography-7);
+        @apply(--theme-typography-6);
         color: var(--theme-brand-color-1);
         width: 100%;
         text-align: center;
@@ -35,19 +35,21 @@
         @apply(--theme-grid-row);
         @apply(--layout-flex);
         @apply(--layout-center-justified);
+        @apply(--theme-grid-row-mobile-margins);
       }
 
       .usp {
         @apply(--theme-grid-column);
-        -ms-flex-preferred-size: calc(var(--theme-column-width) * 4);
-        flex-basis: calc(var(--theme-column-width) * 4);
-        max-width: calc(var(--theme-column-width) * 4);
-        padding: 0 .75em;
-        margin-top: 3em;
+        @apply(--theme-grid-column-mobile);
+        -ms-flex-preferred-size: 100%;
+        flex-basis: 100%;
+        max-width: 100%;
+        padding: 0;
+        margin-top: 1.5em;
       }
 
-      .usp-wrapper {
-        padding: 0 1em;
+      .usp:first-child {
+        margin-top: 1.5em;
       }
 
       .usp-image {
@@ -57,54 +59,45 @@
       }
 
       /* Responsive behaviour */
-      .section-product-usps[mobile-small], .section-product-usps[mobile-medium] {
-        padding: 1.5em var(--theme-gutter-mobile) 3em var(--theme-gutter-mobile);
+      .section-product-usps[tablet-medium-up] {
+        padding: 1.5em var(--theme-gutter) 3em var(--theme-gutter);
       }
 
-      [mobile-small] .usp, [mobile-medium] .usp {
-        @apply(--theme-grid-column-mobile);
+      [tablet-medium-up] .usp {
+        padding: 0 .75em;
+        -ms-flex-preferred-size: calc(var(--theme-column-width) * 4);
+        flex-basis: calc(var(--theme-column-width) * 4);
+        max-width: calc(var(--theme-column-width) * 4);
       }
 
-      [mobile-medium] .usp {
+      [tablet-medium-up] .usp:first-child {
+        margin-top: 1.5em;
+      }
+
+      [tablet-medium] .usp {
         -ms-flex-preferred-size: calc(var(--theme-column-width) * 6);
         flex-basis: calc(var(--theme-column-width) * 6);
         max-width: calc(var(--theme-column-width) * 6);
       }
 
-      [mobile-small] .usp {
-        -ms-flex-preferred-size: 100%;
-        flex-basis: 100%;
-        max-width: 100%;
-        padding: 0;
+      [tablet-medium-up] .row {
+        @apply(--theme-grid-row-margins);
       }
 
-      [mobile-small] .row {
-        margin-right: -0.25em;
-        margin-left: -0.25em;
-      }
-
-      [mobile-medium] .row {
-        margin-right: -0.5em;
-        margin-left: -0.5em;
-      }
-
-      [mobile-small] .title {
-        @apply(--theme-typography-6);
+      [tablet-medium-up] .title {
+        @apply(--theme-typography-7);
       }
 
     </style>
 
-    
-    <iron-media-query query="(max-width : 479px)" query-matches="{{ mobileSmall }}"></iron-media-query>
-    <iron-media-query query="(min-width : 480px) and (max-width : 767px)" query-matches="{{ mobileMedium }}"></iron-media-query>
-    <iron-media-query query="(min-width : 767px) and (max-width : 1600px)" query-matches="{{ screenLarge }}"></iron-media-query>
+    <dorel-media-query breakpoints="{{ breakpoints }}"></dorel-media-query>
 
-    <section class="section-product-usps layout horizontal center center-justified wrap" mobile-small$="{{ mobileSmall }}" mobile-medium$="{{ mobileMedium }}" screen-large$="{{ screenLarge }}">
+    <section class="section-product-usps layout horizontal center center-justified wrap" tablet-medium-up$="{{ breakpoints.tabletMediumUp }}" tablet-medium$="{{ breakpoints.tabletMedium }}">
 
       <template is="dom-if" if="[[ _hasValue(uspsData.title) ]]">
         <h4 class="title">[[ uspsData.title ]]</h4>
       </template>
-      
+
       <template is="dom-if" if="[[ uspsData.usps.length ]]">
         <div class="row">
 
@@ -121,7 +114,7 @@
                 <div class="usp-content">
 
                   <template is="dom-if" if="[[ _hasValue(usp.title) ]]">
-                      <h3 class="usp-title">[[ usp.title ]]</h3>
+                    <h3 class="usp-title">[[ usp.title ]]</h3>
                   </template>
 
                   <template is="dom-if" if="[[ _hasValue(usp.description) ]]">
@@ -129,18 +122,14 @@
                       <dorel-safe-html html="[[ usp.description ]]"></dorel-safe-html>
                     </div>
                   </template>
-
                 </div>
               </div>
             </div>
-          
           </template>
-
         </div>
       </template>
-
     </section>
   </template>
-  <script>Polymer({is:"dorel-section-product-usps",properties:{uspsData:{type:Object,value:function(){return{}}}},_hasValue:function(e){return"undefined"!=typeof e||""!==e}});</script>
+  <script>Polymer({is:"dorel-section-product-usps",properties:{uspsData:{type:Object,value:function(){return{}}}},_hasValue:function(e){return void 0!==e||""!==e}});</script>
 </dom-module>
 </body></html>

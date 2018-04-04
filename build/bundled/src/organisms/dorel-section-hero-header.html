@@ -1,4 +1,5 @@
-<html><head></head><body><dom-module id="dorel-section-hero-header">
+<html><head><link rel="import" href="../molecules/dorel-hero-video.html">
+</head><body><dom-module id="dorel-section-hero-header">
   <template>
     <style>
       :host {
@@ -54,10 +55,11 @@
       .content {
         @apply(--theme-grid-column);
         position: absolute;
-        bottom: 4.5em;
+        top: 60%;
         right: 0;
         text-align: right;
         padding: 0 1.5em;
+
         margin-top: 0;
       }
 
@@ -150,11 +152,28 @@
     </style>
 
     
+    
     <iron-media-query query="(max-width : 479px)" query-matches="{{ mobileSmall }}"></iron-media-query>
     <iron-media-query query="(min-width : 480px) and (max-width : 767px)" query-matches="{{ mobileMedium }}"></iron-media-query>
     <iron-media-query query="(min-width : 767px)" query-matches="{{ screenLarge }}"></iron-media-query>
     <section class="hero-header" mobile-small$="{{ mobileSmall }}" mobile-medium$="{{ mobileMedium }}" screen-large$="{{ screenLarge }}">
-      <iron-image class="image" sizing="cover" fade="true" preload="" src$="[[ heroHeaderData.background_image ]]"></iron-image>
+
+      
+      <template is="dom-if" if="{{ screenLarge }}">
+        
+        <template is="dom-if" if="[[ heroHeaderData.video_id ]]">
+          <dorel-hero-video video-id="[[ heroHeaderData.video_id ]]" thumbnail="[[ heroHeaderData.background_image ]]"></dorel-hero-video>
+        </template>
+
+        
+        <template is="dom-if" if="[[ !heroHeaderData.video_id ]]">
+          <iron-image class="image" sizing="cover" fade="true" preload="" src$="[[ heroHeaderData.background_image ]]"></iron-image>
+        </template>
+      </template>
+      
+      <template is="dom-if" if="{{ !screenLarge }}">
+        <iron-image class="image" sizing="cover" fade="true" preload="" src$="[[ heroHeaderData.background_image ]]"></iron-image>
+      </template>
       <div class="content-wrapper">
         <div class="content">
           <header>
@@ -169,15 +188,11 @@
             </template>
           </header>
 
-          <template is="dom-if" if="[[ heroHeaderData.cta_toggle ]]">
-            <dorel-cta title="[[ heroHeaderData.cta_text ]]" icon="dorel-icons:play-circle-outline" type="primary" link="[[ heroHeaderData.cta_href ]]" gtm-parent="[[ gtmParent ]]" gtm-parent-index="[[ gtmParentIndex ]]" gtm-cta-index="0">
-              [[ heroHeaderData.cta_text ]]
-            </dorel-cta>
-          </template>
+          
         </div>
       </div>
     </section>
   </template>
-  <script>Polymer({is:"dorel-section-hero-header",properties:{heroHeaderData:{type:Object,value:function(){return{}}}},_hasValue:function(e){return"undefined"!=typeof e||""!==e}});</script>
+  <script>Polymer({is:"dorel-section-hero-header",properties:{heroHeaderData:{type:Object,value:function(){return{}}}},_hasValue:function(e){return void 0!==e||""!==e}});</script>
 </dom-module>
 </body></html>

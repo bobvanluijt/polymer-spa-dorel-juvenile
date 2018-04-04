@@ -5,9 +5,15 @@
 <link rel="import" href="../molecules/dorel-navigation-sub.html">
 <link rel="import" href="../molecules/dorel-tab.html">
 
+
 </head><body><dom-module id="dorel-navigation-main">
   <template strip-whitespace="">
     <style include="iron-flex iron-flex-alignment">
+
+      :root {
+        font-family: var(--theme-font);
+      }
+
       app-drawer {
         z-index: 1000;
       }
@@ -15,6 +21,8 @@
       .menu-spacer-top {
         height: 3em;
         width: 100%;
+        display: -ms-flexbox;
+        display: -webkit-box;
         display: flex;
       }
 
@@ -68,9 +76,7 @@
 
     </style>
 
-    <iron-media-query query="(max-width : 767px)" query-matches="{{ screenSmall }}"></iron-media-query>
-    <iron-media-query query="(min-width : 768px) and (max-width : 991px)" query-matches="{{ screenMedium }}"></iron-media-query>
-    <iron-media-query query="(min-width : 768px)" query-matches="{{ screenMediumUp }}"></iron-media-query>
+    <dorel-media-query breakpoints="{{ breakpoints }}"></dorel-media-query>
 
     
     <app-drawer opened="{{ mobileMenuOpened }}" align="right" swipe-open="" tabindex="0">
@@ -97,15 +103,14 @@
           </paper-menu>
         </iron-selector>
       </template>
-
     </app-drawer>
 
     
-    <template is="dom-if" if="{{ screenMediumUp }}">
+    <template is="dom-if" if="{{ breakpoints.desktopSmallUp }}">
 
       
       <template is="dom-if" if="[[ globals.Dorel.collect.menus.main_menu.items.length ]]">
-        <nav role="navigation" screenmedium$="{{ screenMedium }}">
+        <nav role="navigation">
           <dorel-tabs selected="[[ page ]]" attr-for-selected="name">
             <div class="layout horizontal center">
               
@@ -124,9 +129,7 @@
                   <dorel-navigation-sub compact-menu="[[ compactMenu ]]" active-id="{{ activeId }}" menu-item="{{ menuItem }}" mobile-menu-opened="{{ mobileMenuOpened }}" search-opened="{{ searchOpened }}" sub-menu-opened="{{ subMenuOpened }}" gtm-parent="dorel-navigation-main" gtm-child-index="[[ index ]]">
                   </dorel-navigation-sub>
                 </template>
-                
               </template>
-
             </div>
           </dorel-tabs>
         </nav>

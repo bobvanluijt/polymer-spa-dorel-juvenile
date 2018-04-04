@@ -14,22 +14,9 @@
         width: 100%;
       }
 
-      .wrapper {
-        opacity: 0; /* make things invisible upon start */
-        -webkit-animation: fadeIn ease 1; /* call our keyframe named fadeIn, use animattion ease-in and repeat it only 1 time */
-        -moz-animation: fadeIn ease 1;
-        animation: fadeIn ease 1;
-        -webkit-animation-duration: 1s;
-        -moz-animation-duration: .1s;
-        animation-duration: 1s;
-        -webkit-animation-fill-mode: forwards; /* this makes sure that after animation is done we remain at the last keyframe value (opacity: 1)*/
-        -moz-animation-fill-mode: forwards;
-        animation-fill-mode: forwards;
-      }
-
       .container {
         @apply(--max-width-container);
-        padding: 1.5em var(--theme-gutter) 0 var(--theme-gutter);
+        padding-top: 1.5em;
         box-sizing: border-box;
       }
 
@@ -40,59 +27,6 @@
 
       dorel-section-category-header {
         @apply(--theme-grid-column);
-        -ms-flex-preferred-size: calc(var(--theme-column-width) * 9);
-        flex-basis: calc(var(--theme-column-width) * 9);
-        max-width: calc(var(--theme-column-width) * 9);
-        order: 1;
-      }
-
-      dorel-section-category-sidebar {
-        @apply(--theme-grid-column);
-        -ms-flex-preferred-size: calc(var(--theme-column-width) * 3);
-        flex-basis: calc(var(--theme-column-width) * 3);
-        max-width: calc(var(--theme-column-width) * 3);
-        order: 0;
-        margin-top: 1.5em;
-      }
-
-      @-webkit-keyframes fadeIn {
-        from {
-          opacity: 0;
-          opacity: 1 \9; /* IE9 only */
-        }
-        to {
-          opacity: 1;
-        }
-      }
-
-      @-moz-keyframes fadeIn {
-        from {
-          opacity: 0;
-          opacity: 1 \9; /* IE9 only */
-        }
-        to {
-          opacity: 1;
-        }
-      }
-
-      @keyframes fadeIn {
-        from {
-          opacity: 0;
-          opacity: 1 \9; /* IE9 only */
-        }
-        to {
-          opacity: 1;
-        }
-      }
-
-      dorel-layout-section dorel-page-builder {
-        width: 100%;
-        display: flex;
-      }
-
-      [mobile-small] dorel-section-category-header,
-      [mobile-medium] dorel-section-category-header,
-      [mobile-tablets] dorel-section-category-header {
         -ms-flex-preferred-size: 100%;
         flex-basis: 100%;
         max-width: 100%;
@@ -100,9 +34,8 @@
         margin-top: 0;
       }
 
-      [mobile-small] dorel-section-category-sidebar,
-      [mobile-medium] dorel-section-category-sidebar,
-      [mobile-tablets] dorel-section-category-sidebar {
+      dorel-section-category-sidebar {
+        @apply(--theme-grid-column);
         -ms-flex-preferred-size: 100%;
         flex-basis: 100%;
         max-width: 100%;
@@ -110,19 +43,37 @@
         margin-top: 1.5em;
       }
 
-      [mobile-small] .container,
-      [mobile-medium] .container {
-        padding: 1.5em var(--theme-gutter-mobile) 0 var(--theme-gutter-mobile);
+      dorel-layout-section dorel-page-builder {
+        width: 100%;
+        display: flex;
       }
 
+      [desktop-small-up] dorel-section-category-header {
+        -ms-flex-preferred-size: calc(var(--theme-column-width) * 9);
+        flex-basis: calc(var(--theme-column-width) * 9);
+        max-width: calc(var(--theme-column-width) * 9);
+        order: 1;
+      }
+
+      [desktop-small-up] dorel-section-category-sidebar {
+        -ms-flex-preferred-size: calc(var(--theme-column-width) * 3);
+        flex-basis: calc(var(--theme-column-width) * 3);
+        max-width: calc(var(--theme-column-width) * 3);
+        order: 0;
+      }
+
+      [tablet-medium-up] .container {
+        padding: 1.5em var(--theme-gutter) 0 var(--theme-gutter);
+      }
+
+      [tablet-medium-up] .row {
+        @apply(--theme-grid-row-margins);
+      }
     </style>
 
-    <iron-media-query query="(max-width : 479px)" query-matches="{{ mobileSmall }}"></iron-media-query>
-    <iron-media-query query="(min-width : 480px) and (max-width : 820px)" query-matches="{{ mobileMedium }}"></iron-media-query>
-    <iron-media-query query="(min-width : 821px) and (max-width : 991px)" query-matches="{{ tablets }}"></iron-media-query>
-    <iron-media-query query="(min-width : 992px) and (max-width : 1199px)" query-matches="{{ desktopSmall }}"></iron-media-query>
+    <dorel-media-query breakpoints="{{ breakpoints }}"></dorel-media-query>
 
-    <div mobile-small$="{{ mobileSmall }}" mobile-medium$="{{ mobileMedium }}" tablets$="{{ tablets }}" desktop-small$="{{ desktopSmall }}">
+    <div tablet-medium-up$="{{ breakpoints.tabletMediumUp }}" desktop-small-up$="{{ breakpoints.desktopSmallUp }}">
       <iron-ajax auto="" url="[[ categoriesEndPoint ]]" handle-as="json" on-response="_categoriesLoaded"></iron-ajax>
 
       
@@ -144,8 +95,8 @@
 
                 
                 <template is="dom-if" if="{{ isPageComponent(component.acf_fc_layout, 'section_category_sidebar') }}">
-                  <dorel-section-category-sidebar category-sidebar-data="[[ component ]]" gtm-parent="dorel-section-category-sidebar" gtm-parent-index="[[ index ]]">
-                </dorel-section-category-sidebar></template>
+                  <dorel-section-category-sidebar category-sidebar-data="[[ component ]]" gtm-parent="dorel-section-category-sidebar" gtm-parent-index="[[ index ]]"></dorel-section-category-sidebar>
+                </template>
                 
               </template>
             </div>
@@ -160,6 +111,6 @@
       </template>
     </div>
   </template>
-  <script>Polymer({is:"dorel-template-product-category",properties:{templateData:{type:Object,value:function(){return{}}},products:{type:Array,value:[]}},observers:["_initProductsPage(globals.Dorel.collect.categories, globals.Dorel.collect.pages)"],_initProductsPage:function(t,e){var r=this;this.products=[];for(var o=t.find(function(t){return t.id===r.templateData.acf.product_category}),s=e.find(function(t){return"products"===t.template}),c=0;c<s.products.length;c++)0===s.products[c].categories.indexOf(o.id)&&(this.products=this.products.concat(s.products[c]))},isPageComponent:function(t,e){var r=t.substr(t.length-1),o=!isNaN(Number(r));if(o){var s=t.split("_");return s.pop(),strippedResponse=s.join("_"),strippedResponse===e}return t===e}});</script>
+  <script>Polymer({is:"dorel-template-product-category",properties:{templateData:{type:Object,value:function(){return{}},observer:"_templateDataChanged"},products:{type:Array,value:[]}},_templateDataChanged:function(){if("product-category"===this.templateData.template){var t=Polymer.globalsManager.get("Dorel.collect.categories"),e=Polymer.globalsManager.get("Dorel.collect.pages");this._initProductsPage(t,e)}},_initProductsPage:function(t,e){var r=this;this.products=[];for(var a=t.find(function(t){return t.id===r.templateData.acf.product_category}),o=e.find(function(t){return"products"===t.template}),s=0;s<o.products.length;s++)0===o.products[s].categories.indexOf(a.id)&&(this.products=this.products.concat(o.products[s]))},isPageComponent:function(t,e){var r=t.substr(t.length-1);if(!isNaN(Number(r))){var a=t.split("_");return a.pop(),strippedResponse=a.join("_"),strippedResponse===e}return t===e}});</script>
 </dom-module>
 </body></html>

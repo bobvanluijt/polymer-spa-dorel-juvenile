@@ -98,7 +98,7 @@
         cursor: pointer;
       }
 
-      [screen-medium] .section-secondary-menu {
+      [tablet-medium-up] .section-secondary-menu {
         top: 2.75em;
       }
 
@@ -110,15 +110,16 @@
       iron-icon {
         padding-left: var(--theme-scale-1);
         margin-top: -2px;
+        width: 1.5em;
+        display: inline-block;
       }
+
     </style>
 
-    <iron-media-query query="(max-width : 767px)" query-matches="{{ screenSmall }}"></iron-media-query>
-    <iron-media-query query="(min-width : 768px) and (max-width : 991px)" query-matches="{{ screenMedium }}"></iron-media-query>
-    <iron-media-query query="(min-width : 768px)" query-matches="{{ screenMediumUp }}"></iron-media-query>
+    <dorel-media-query breakpoints="{{ breakpoints }}"></dorel-media-query>
 
     
-    <template is="dom-if" if="{{ !screenMediumUp }}">
+    <template is="dom-if" if="{{ !breakpoints.desktopSmallUp }}">
       <paper-submenu opened$="{{ thisOpened }}">
         <paper-item class="menu-trigger layout horizontal justified" on-click="_dropdownToggle">
           [[_unescapeHtml(menuItem.title)]]
@@ -143,8 +144,8 @@
     </template>
 
     
-    <template is="dom-if" if="{{ screenMediumUp }}">
-      <div class="menu-item-container" compact-menu$="[[ compactMenu ]]" opened$="{{ thisOpened }}" screen-medium$="{{ screenMedium }}">
+    <template is="dom-if" if="{{ breakpoints.desktopSmallUp }}">
+      <div class="menu-item-container" compact-menu$="[[ compactMenu ]]" opened$="{{ thisOpened }}" tablet-medium-up$="{{ breakpoints.tabletMedium }}">
         <dorel-tab id="dropdown" class="has-submenu" name="[[ menuItem.title ]]" on-click="_dropdownToggle" gtm-parent="[[ gtmParent ]]" gtm-parent-index="[[ gtmParentIndex ]]">
           [[ _unescapeHtml(menuItem.title) ]]
           <template is="dom-if" if="{{ thisOpened }}">
@@ -172,6 +173,6 @@
     </template>
   </template>
 
-  <script>Polymer({is:"dorel-navigation-sub",properties:{subMenuOpened:{type:Boolean,value:!1,notify:!0,observer:"_closeThisOpened"},mobileMenuOpened:{type:Boolean,value:!1,notify:!0},searchOpened:{type:Boolean,value:!1,notify:!0},activeId:{type:Number,notify:!0,observer:"_setThisOpened"},thisOpened:{type:Boolean,value:!1},menuItem:{type:Object}},listeners:{tap:"_onTap"},_onTap:function(e){var n=this.gtmParent,t=Number(this.gtmParentIndex)+1;Number(this.gtmChildIndex)+1;if("A"===Polymer.dom(e).rootTarget.tagName){var i=Polymer.dom(e).rootTarget,o=i.classList.contains("view-all")?1:2,s=Number(i.getAttribute("gtm-index"))+o;Polymer.globalsManager.set("Dorel.events",{action:"click",component:"navigation",structure:{name:n,index:t,child:{name:"dorel-navigation-sub",index:1,event:{name:"submenu-item",index:s}}},element:i,event:"polymer_event"})}else{var i=Polymer.dom(e).localTarget;Polymer.globalsManager.set("Dorel.events",{action:this.subMenuOpened?"open":"close",component:"navigation",structure:{name:n,index:t,event:{name:"dorel-navigation-sub",index:1}},element:i,event:"polymer_event"})}},_closeThisOpened:function(e,n){"undefined"==typeof e||e||(this.thisOpened=e)},_setThisOpened:function(e){"undefined"!=typeof e&&"undefined"!=typeof this.menuItem&&(e===this.menuItem.ID?this.thisOpened=!this.thisOpened:e!==this.menuItem.ID&&(this.thisOpened=!1))},_dropdownToggle:function(e){e.preventDefault();var n=this;n.searchOpened=!1,"undefined"==typeof n.activeId?n.subMenuOpened=!n.subMenuOpened:n.activeId!==n.menuItem.ID?n.subMenuOpened=!0:n.activeId===n.menuItem.ID&&(n.subMenuOpened=!1),n.setActiveId(),window.onscroll=function(e){n.subMenuOpened=!1}},setActiveId:function(){this.activeId=this.subMenuOpened?this.menuItem.ID:null},_menuItemClicked:function(e){this.mobileMenuOpened=!1,this.subMenuOpened=!1,this.searchOpened=!1,this.activeId=null},_unescapeHtml:function(e){var n=document.createElement("div");return n.innerHTML=e,0===n.childNodes.length?"":n.childNodes[0].nodeValue}});</script>
+  <script>Polymer({is:"dorel-navigation-sub",properties:{subMenuOpened:{type:Boolean,value:!1,notify:!0,observer:"_closeThisOpened"},mobileMenuOpened:{type:Boolean,value:!1,notify:!0},searchOpened:{type:Boolean,value:!1,notify:!0},activeId:{type:Number,notify:!0,observer:"_setThisOpened"},thisOpened:{type:Boolean,value:!1},menuItem:{type:Object}},listeners:{tap:"_onTap"},_onTap:function(e){var n=this.gtmParent,t=Number(this.gtmParentIndex)+1;Number(this.gtmChildIndex);if("A"===Polymer.dom(e).rootTarget.tagName){var i=Polymer.dom(e).rootTarget,o=i.classList.contains("view-all")?1:2,s=Number(i.getAttribute("gtm-index"))+o;Polymer.globalsManager.set("Dorel.events",{action:"click",component:"navigation",structure:{name:n,index:t,child:{name:"dorel-navigation-sub",index:1,event:{name:"submenu-item",index:s}}},element:i,event:"polymer_event"})}else{var i=Polymer.dom(e).localTarget;Polymer.globalsManager.set("Dorel.events",{action:this.subMenuOpened?"open":"close",component:"navigation",structure:{name:n,index:t,event:{name:"dorel-navigation-sub",index:1}},element:i,event:"polymer_event"})}},_closeThisOpened:function(e,n){void 0===e||e||(this.thisOpened=e)},_setThisOpened:function(e){void 0!==e&&void 0!==this.menuItem&&(e===this.menuItem.ID?this.thisOpened=!this.thisOpened:e!==this.menuItem.ID&&(this.thisOpened=!1))},_dropdownToggle:function(e){e.preventDefault();var n=this;n.searchOpened=!1,void 0===n.activeId?n.subMenuOpened=!n.subMenuOpened:n.activeId!==n.menuItem.ID?n.subMenuOpened=!0:n.activeId===n.menuItem.ID&&(n.subMenuOpened=!1),n.setActiveId(),window.onscroll=function(e){n.subMenuOpened=!1}},setActiveId:function(){this.activeId=this.subMenuOpened?this.menuItem.ID:null},_menuItemClicked:function(e){this.mobileMenuOpened=!1,this.subMenuOpened=!1,this.searchOpened=!1,this.activeId=null},_unescapeHtml:function(e){var n=document.createElement("div");return n.innerHTML=e,0===n.childNodes.length?"":n.childNodes[0].nodeValue}});</script>
 </dom-module>
 </body></html>

@@ -1,16 +1,10 @@
 <html><head><link rel="import" href="../atoms/dorel-content-wrap.html">
-<link rel="import" href="../atoms/dorel-image-wrap.html">
 <link rel="import" href="../atoms/dorel-video-wrap.html">
-<link rel="import" href="../organisms/dorel-section-big-title.html">
-<link rel="import" href="../organisms/dorel-section-big-video.html">
 <link rel="import" href="../organisms/dorel-section-cards.html">
 <link rel="import" href="../organisms/dorel-section-cta.html">
-<link rel="import" href="../organisms/dorel-section-downloads.html">
 <link rel="import" href="../organisms/dorel-section-heroes.html">
 <link rel="import" href="../organisms/dorel-section-hero-header.html">
-<link rel="import" href="../organisms/dorel-section-multi.html">
 <link rel="import" href="../organisms/dorel-section-slideshow.html">
-<link rel="import" href="../organisms/dorel-section-usps.html">
 
 </head><body><dom-module id="dorel-page-builder">
   <template>
@@ -120,55 +114,9 @@
 
 
         
-        <template is="dom-if" if="{{ isPageComponent(component.acf_fc_layout, 'image_wrap') }}">
-          
-          <dorel-image-wrap image-url="[[ component.image_url ]]" gtm-component-index="[[ index ]]"></dorel-image-wrap>
-
-        </template>
-        
-
-
-
-
-
-        
         <template is="dom-if" if="{{ isPageComponent(component.acf_fc_layout, 'video_wrap') }}">
           
           <dorel-video-wrap video-type="[[ component.video_type ]]" video-id="[[ component.video_id ]]" gtm-component-index="[[ index ]]"></dorel-video-wrap>
-
-        </template>
-        
-
-
-
-
-        
-        <template is="dom-if" if="{{ isPageComponent(component.acf_fc_layout, 'section_big_title') }}">
-          
-          <dorel-section-big-title big-title-data="[[ component ]]" gtm-component-index="[[ index ]]"></dorel-section-big-title>
-
-        </template>
-        
-
-
-
-
-
-        
-        <template is="dom-if" if="{{ isPageComponent(component.acf_fc_layout, 'section_big_video') }}">
-          
-          <dorel-section-big-video video-wrap-data="[[ component ]]" gtm-component-index="[[ index ]]"></dorel-section-big-video>
-
-        </template>
-        
-
-
-
-
-        
-        <template is="dom-if" if="{{ isPageComponent(component.acf_fc_layout, 'section_downloads') }}">
-          
-          <dorel-section-downloads downloads-data="[[ component ]]" gtm-component-index="[[ index ]]"></dorel-section-downloads>
 
         </template>
         
@@ -185,16 +133,6 @@
         </template>
         
 
-
-
-
-        
-        <template is="dom-if" if="{{ isPageComponent(component.acf_fc_layout, 'section_multi') }}">
-          
-          <dorel-section-multi multi-data="[[ component ]]" template-data="[[ templateData ]]" gtm-component-index="[[ index ]]"></dorel-section-multi>
-
-        </template>
-        
 
 
 
@@ -293,5 +231,5 @@
     </div>
   </template>
 
-  <script>Polymer({is:"dorel-page-builder",properties:{builderData:{type:Object,value:function(){return{}}},templateData:{type:Object,value:function(){return{}}}},isPageComponent:function(e,t){var r=e.substr(e.length-1),n=!isNaN(Number(r));if(n){var p=e.split("_");return p.pop(),strippedResponse=p.join("_"),strippedResponse===t}return e===t}});</script>
+  <script>Polymer({is:"dorel-page-builder",properties:{builderData:{type:Object,value:function(){return{}}},templateData:{type:Object,value:function(){return{}}}},isPageComponent:function(e,t){var r=e.substr(e.length-1);if(!isNaN(Number(r))){var n=e.split("_");return n.pop(),strippedResponse=n.join("_"),strippedResponse===t}return e===t}});</script>
 </dom-module></body></html>

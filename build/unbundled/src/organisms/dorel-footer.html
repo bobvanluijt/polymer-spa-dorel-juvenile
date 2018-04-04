@@ -1,5 +1,5 @@
 <html><head><link rel="import" href="../atoms/dorel-back-to-top.html">
-<link rel="import" href="../atoms/dorel-iconset-simple.html">
+<link rel="import" href="../atoms/dorel-icons-social.html">
 
 </head><body><dom-module id="dorel-footer">
   <template>
@@ -12,20 +12,16 @@
 
       footer {
         @apply(--max-width-container);
-        padding: var(--theme-gutter);
+        padding: var(--theme-gutter) var(--theme-gutter-mobile);
         width: 100%;
         height: 100%;
         box-sizing: border-box;
       }
 
-      footer[screen-small] {
-        padding: var(--theme-gutter) var(--theme-gutter-mobile);
-      }
-
       /**
        * copyright and footer-menu links
        */
-      a, .footer-copyright, .footer-heading {
+      a, .footer-copyright {
         @apply(--theme-typography-2);
         color: var(--theme-footer-text-color);
         text-decoration: none;
@@ -44,9 +40,15 @@
        * footer headings
        */
       .footer-heading {
-        color: var(--theme-footer-header-color);
-        font-weight: var(--theme-footer-header-weight);
-        text-transform: uppercase;
+        @apply(--theme-typography-3);
+        color: var(--theme-color-white);
+        height: 3.5em;
+        line-height: 3.5em;
+        margin: 0;
+        position: relative;
+        cursor: pointer;
+        font-weight: 400;
+        text-transform: initial;
       }
 
       /**
@@ -54,6 +56,9 @@
        */
       .footer-media-links {
         margin: 0 0 1.5em 0;
+        -webkit-flex-wrap: wrap;
+        flex-wrap: wrap;
+
       }
 
       .footer-media-link {
@@ -79,26 +84,34 @@
       }
 
       .footer-menu ul {
-        margin: .75em 0;
         padding: 0;
+        margin: 0 0 1.5em 0;
       }
 
       .footer-menu {
         @apply(--theme-grid-column);
-        -ms-flex-preferred-size: calc(var(--theme-column-width) * 2);
-        flex-basis: calc(var(--theme-column-width) * 2);
-        max-width: calc(var(--theme-column-width) * 2);
+        -ms-flex-preferred-size: 100%;
+        -webkit-flex-basis: 100%;
+        flex-basis: 100%;
+        max-width: 100%;
+        width: 100%;
+        display: initial;
+        box-sizing: border-box;
+        max-height: 4.5em;
+        overflow: hidden;
+        border-bottom: 1px solid var(--theme-color-white);
+        transition: max-height .3s ease-in-out;
+        margin-top: 0;
+        padding: 0;
       }
 
-      [screen-medium] .footer-menu {
-        -ms-flex-preferred-size: calc(var(--theme-column-width) * 3);
-        flex-basis: calc(var(--theme-column-width) * 3);
-        max-width: calc(var(--theme-column-width) * 3);
+      .footer-menu.open {
+        max-height: 1000px !important;
       }
 
       /* lists not enumerated */
       .footer-menu li {
-        padding-left: 0;
+        padding: .75em 0;
         list-style-type: none;
       }
 
@@ -106,56 +119,7 @@
         color: var(--theme-color-white);
       }
 
-      /* Layout */
-      .footer-info {
-        @apply(--theme-grid-row);
-      }
-
-      /* Mobile layout */
-      [screen-small] .footer-menu {
-        -ms-flex-preferred-size: 100%;
-        flex-basis: 100%;
-        max-width: 100%;
-        max-height: 4.5em;
-        overflow: hidden;
-        border-bottom: 1px solid var(--theme-color-white);
-        box-sizing: border-box;
-        transition: max-height .3s ease-in-out;
-        max-width: 100%;
-        margin-top: 0;
-        padding: 0;
-      }
-
-      [screen-small] .footer-info {
-        margin-top: 1.5em;
-        padding: 0 .75em;
-      }
-
-      [screen-small] .footer-menu.open {
-        max-height: 1000px !important;
-      }
-
-      [screen-small] .footer-menu .footer-heading {
-        @apply(--theme-typography-3);
-        color: var(--theme-color-white);
-        height: 3.5em;
-        line-height: 3.5em;
-        margin: 0;
-        position: relative;
-        cursor: pointer;
-        font-weight: 400;
-        text-transform: initial;
-      }
-
-      [screen-small] ul {
-        margin: 0 0 1.5em 0;
-      }
-
-      [screen-small] li {
-        padding: .75em 0;
-      }
-
-      [screen-small] .footer-menu .footer-heading::before {
+      .footer-menu .footer-heading::before {
         content: '';
         position: absolute;
         bottom: 2rem;
@@ -164,27 +128,88 @@
         height: .75rem;
         border-bottom: 2px solid var(--theme-white);
         border-left: 2px solid var(--theme-white);
+        -webkit-transform: rotate(-45deg);
+        -ms-transform: rotate(-45deg);
         transform: rotate(-45deg);
+        -ms-transform-origin: center;
+        -webkit-transform-origin: center;
         transform-origin: center;
         transition: transform .3s ease;
       }
 
-      [screen-small] .footer-menu.open .footer-heading::before {
+      .footer-menu.open .footer-heading::before {
+        -webkit-transform: rotate(135deg) translate(0.375rem, -0.375rem);
+        -ms-transform: rotate(135deg) translate(0.375rem, -0.375rem);
         transform: rotate(135deg) translate(0.375rem, -0.375rem);
       }
 
+      /* Layout */
+      .footer-info {
+        @apply(--theme-grid-row);
+        margin-top: 1.5em;
+        padding: 0;
+      }
+
+      /* Responsiv layout */
+      footer[tablet-medium-up] {
+        padding: var(--theme-gutter);
+      }
+
+      [tablet-medium-up] .footer-menu {
+        @apply(--theme-grid-column);
+        -ms-flex-preferred-size: calc(var(--theme-column-width) * 3);
+        -webkit-flex-basis: calc(var(--theme-column-width) * 3);
+        flex-basis: calc(var(--theme-column-width) * 3);
+        max-width: calc(var(--theme-column-width) * 3);
+        overflow: visible;
+        max-height: inherit;
+        border: 0;
+        margin-top: 1.5em;
+      }
+
+      [desktop-small-up] .footer-menu {
+        -ms-flex-preferred-size: calc(var(--theme-column-width) * 2);
+        -webkit-flex-basis: calc(var(--theme-column-width) * 2);
+        flex-basis: calc(var(--theme-column-width) * 2);
+        max-width: calc(var(--theme-column-width) * 2);
+      }
+
+      [tablet-medium-up] .footer-info {
+        @apply(--theme-grid-row-margins);
+      }
+
+      [tablet-medium-up] .footer-heading {
+        @apply(--theme-typography-2);
+        color: var(--theme-footer-header-color);
+        font-weight: var(--theme-footer-header-weight);
+        text-transform: uppercase;
+        text-decoration: none;
+        margin-top: 0;
+        height: auto;
+      }
+
+      [tablet-medium-up] ul {
+        margin: .75em 0;
+      }
+
+      [tablet-medium-up] li {
+        padding: 0;
+      }
+
+      [tablet-medium-up] .footer-menu .footer-heading::before {
+        display: none;
+      }
+
+
     </style>
 
-    <iron-media-query query="(max-width : 767px)" query-matches="{{ screenSmall }}"></iron-media-query>
-    <iron-media-query query="(min-width : 768px) and (max-width : 991px)" query-matches="{{ screenMedium }}"></iron-media-query>
-    <iron-media-query query="(min-width : 992px) and (max-width : 1199px)" query-matches="{{ desktopLarge }}"></iron-media-query>
+    <dorel-media-query breakpoints="{{ breakpoints }}"></dorel-media-query>
 
-    <footer screen-small$="{{ screenSmall }}" screen-medium$="{{ screenMedium }}" desktop-large$="{{ screenLargeUp }}">
-
+    <footer tablet-medium-up$="{{ breakpoints.tabletMediumUp }}" desktop-small-up$="{{ breakpoints.desktopSmallUp }}">
       
       <template is="dom-if" if="[[ globals.Dorel.collect.options.footer_social_toggle ]]">
 
-        <section class="footer-media-links layout horizontal center center-justified">
+        <section class="footer-media-links layout horizontal center center-justified wrap">
           <template is="dom-if" if="[[ globals.Dorel.collect.options.footer_social_links.length ]]">
 
             <template is="dom-repeat" items="[[ globals.Dorel.collect.options.footer_social_links ]]" as="social_link">
@@ -222,6 +247,6 @@
 
   </template>
 
-  <script>Polymer({is:"dorel-footer",properties:{},observers:["_areasChanged(globals.Dorel.collect.widgetAreas.footer-widget-area)"],listeners:{click:"accordionClick"},_socialClick:function(e){this._eventTracking(e,"social")},accordionClick:function(e){"undefined"!=typeof Polymer.dom(e).rootTarget.parentNode&&Polymer.dom(e).rootTarget.parentNode.classList.contains("footer-menu")&&(Polymer.dom(e).rootTarget.parentNode.classList.contains("open")?Polymer.dom(e).rootTarget.parentNode.classList.remove("open"):Polymer.dom(e).rootTarget.parentNode.classList.add("open"),this._eventTracking(e,"accordionToggle"))},_getCopyrightYearRange:function(e){if("undefined"!=typeof e&&""!==e&&null!==e){var o=[];e=Number(e);var t=(new Date).getFullYear();return e<t?o.push(e,t):e===t&&o.push(e),o.join(" - ")}},_areasChanged:function(e){if("undefined"!=typeof e&&"undefined"!=typeof e.widgets){var o=this;if(e.widgets.length)for(var t=0,r=e.widgets.length;t<r;t++){var n=document.createElement("div");n.className="footer-menu",n.innerHTML=e.widgets[t].rendered,Polymer.dom(o.$["footer-widget-area"]).appendChild(n)}this.__ready()}},__ready:function(){for(var e=this,o=this.$$("#footer-widget-area").querySelectorAll(".footer-menu a"),t=0,r=o.length;t<r;t++)o[t].addEventListener("click",function(o){e._eventTracking(o,"switch")})},_eventTracking:function(e,o){var t={action:o,component:"footer",event:"polymer_event"};switch(o){case"accordionToggle":var r=Polymer.dom(e).rootTarget,n=r.parentNode,a=n.classList.contains("open");t.action=a?"open":"close",t.element=n;break;case"switch":t.element=Polymer.dom(e).localTarget,t.things={currentPage:document.URL,targetPage:Polymer.dom(e).localTarget.href};break;case"social":t.element=Polymer.dom(e).localTarget.parentNode}Polymer.globalsManager.set("Dorel.events",t)}});</script>
+  <script>Polymer({is:"dorel-footer",properties:{},observers:["_areasChanged(globals.Dorel.collect.widgetAreas.footer-widget-area)"],listeners:{click:"accordionClick"},_socialClick:function(e){this._eventTracking(e,"social")},accordionClick:function(e){void 0!==Polymer.dom(e).rootTarget.parentNode&&Polymer.dom(e).rootTarget.parentNode.classList.contains("footer-menu")&&(Polymer.dom(e).rootTarget.parentNode.classList.contains("open")?Polymer.dom(e).rootTarget.parentNode.classList.remove("open"):Polymer.dom(e).rootTarget.parentNode.classList.add("open"),this._eventTracking(e,"accordionToggle"))},_getCopyrightYearRange:function(e){if(void 0!==e&&""!==e&&null!==e){var o=[];e=Number(e);var r=(new Date).getFullYear();return e<r?o.push(e,r):e===r&&o.push(e),o.join(" - ")}},_areasChanged:function(e){if(void 0!==e&&void 0!==e.widgets){var o=this;if(e.widgets.length)for(var r=0,t=e.widgets.length;r<t;r++){var a=document.createElement("div");a.className="footer-menu",a.innerHTML=e.widgets[r].rendered,Polymer.dom(o.$["footer-widget-area"]).appendChild(a)}this.__ready()}},__ready:function(){for(var e=this,o=this.$$("#footer-widget-area").querySelectorAll(".footer-menu a"),r=0,t=o.length;r<t;r++)o[r].addEventListener("click",function(o){e._eventTracking(o,"switch")})},_eventTracking:function(e,o){var r={action:o,component:"footer",event:"polymer_event"};switch(o){case"accordionToggle":var t=Polymer.dom(e).rootTarget,a=t.parentNode,n=a.classList.contains("open");r.action=n?"open":"close",r.element=a;break;case"switch":r.element=Polymer.dom(e).localTarget,r.things={currentPage:document.URL,targetPage:Polymer.dom(e).localTarget.href};break;case"social":r.element=Polymer.dom(e).localTarget.parentNode}Polymer.globalsManager.set("Dorel.events",r)}});</script>
 </dom-module>
 </body></html>

@@ -1,1 +1,1 @@
-var CONFIG={CMS_URL:"//dorel-wp.dev/wp-json",DIO_API_URL:"https://api.dorel.io/v1",AVAILABLE_BRANDS:[{label:"Maxi-Cosi"},{label:"Dorel"}],SELECTED_BRAND:0,LOCALE:{COUNTRY:"Australia",LANGUAGE:"en",LANG_CONTENT:"en-AU",LINK_ALT:"http://www.maxi-cosi.com/au-en"}};
+var CONFIG={CMS_URL:"https://wrps.api.www.maxi-cosi.com.au/wp-json",DIO_API_URL:"https://api.dorel.io/v1",AVAILABLE_BRANDS:[{label:"Maxi-Cosi"},{label:"Dorel"}],SELECTED_BRAND:0,LOCALE:{COUNTRY_NAME:"Australia",COUNTRY_CODE:"AU",LANGUAGE:"en",LANG_CONTENT:"en-AU",LINK_ALT:"http://www.maxi-cosi.com/au-en"}};

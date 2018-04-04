@@ -1,10 +1,4 @@
-<html><head><meta charset="UTF-8"><link rel="import" href="../dorel-app.html"></head><body><div hidden="" by-vulcanize=""><script>!function(){"use strict";Polymer.IronJsonpLibraryBehavior={properties:{libraryLoaded:{type:Boolean,value:!1,notify:!0,readOnly:!0},libraryErrorMessage:{type:String,value:null,notify:!0,readOnly:!0}},observers:["_libraryUrlChanged(libraryUrl)"],_libraryUrlChanged:function(r){this._isReady&&this.libraryUrl&&this._loadLibrary()},_libraryLoadCallback:function(r,i){r?(Polymer.Base._warn("Library load failed:",r.message),this._setLibraryErrorMessage(r.message)):(this._setLibraryErrorMessage(null),this._setLibraryLoaded(!0),this.notifyEvent&&this.fire(this.notifyEvent,i))},_loadLibrary:function(){r.require(this.libraryUrl,this._libraryLoadCallback.bind(this),this.callbackName)},ready:function(){this._isReady=!0,this.libraryUrl&&this._loadLibrary()}};var r={apiMap:{},require:function(r,t,e){var a=this.nameFromUrl(r);this.apiMap[a]||(this.apiMap[a]=new i(a,r,e)),this.apiMap[a].requestNotify(t)},nameFromUrl:function(r){return r.replace(/[\:\/\%\?\&\.\=\-\,]/g,"_")+"_api"}},i=function(r,i,t){if(this.notifiers=[],!t){if(!(i.indexOf(this.callbackMacro)>=0))return void(this.error=new Error("IronJsonpLibraryBehavior a %%callback%% parameter is required in libraryUrl"));t=r+"_loaded",i=i.replace(this.callbackMacro,t)}this.callbackName=t,window[this.callbackName]=this.success.bind(this),this.addScript(i)};i.prototype={callbackMacro:"%%callback%%",loaded:!1,addScript:function(r){var i=document.createElement("script");i.src=r,i.onerror=this.handleError.bind(this);var t=document.querySelector("script")||document.body;t.parentNode.insertBefore(i,t),this.script=i},removeScript:function(){this.script.parentNode&&this.script.parentNode.removeChild(this.script),this.script=null},handleError:function(r){this.error=new Error("Library failed to load"),this.notifyAll(),this.cleanup()},success:function(){this.loaded=!0,this.result=Array.prototype.slice.call(arguments),this.notifyAll(),this.cleanup()},cleanup:function(){delete window[this.callbackName]},notifyAll:function(){this.notifiers.forEach(function(r){r(this.error,this.result)}.bind(this)),this.notifiers=[]},requestNotify:function(r){this.loaded||this.error?r(this.error,this.result):this.notifiers.push(r)}}}();</script>
-
-
-<script>Polymer({is:"iron-jsonp-library",behaviors:[Polymer.IronJsonpLibraryBehavior],properties:{libraryUrl:String,callbackName:String,notifyEvent:String}});</script>
-<script>Polymer({is:"google-maps-api",behaviors:[Polymer.IronJsonpLibraryBehavior],properties:{mapsUrl:{type:String,value:"https://maps.googleapis.com/maps/api/js?callback=%%callback%%"},apiKey:{type:String,value:""},clientId:{type:String,value:""},version:{type:String,value:"3.exp"},language:{type:String,value:""},signedIn:{type:Boolean,value:!1},notifyEvent:{type:String,value:"api-load"},libraryUrl:{type:String,computed:"_computeUrl(mapsUrl, version, apiKey, clientId, language, signedIn)"}},_computeUrl:function(e,a,t,i,o,r){var n=e+"&v="+a;if(n+="&libraries=drawing,geometry,places,visualization",t&&!i&&(n+="&key="+t),i&&(n+="&client="+i),!t&&!i){var l="No Google Maps API Key or Client ID specified. See https://developers.google.com/maps/documentation/javascript/get-api-key for instructions to get started with a key or client id.";console.warn(l)}return o&&(n+="&language="+o),r&&(n+="&signed_in="+r),n},get api(){return google.maps}});</script>
-<script>Polymer({is:"iron-selector",behaviors:[Polymer.IronMultiSelectableBehavior]});</script>
-<dom-module id="google-map-marker" assetpath="../../bower_components/google-map/">
+<html><head><meta charset="UTF-8"><link rel="import" href="../dorel-app.html"></head><body><div hidden="" by-vulcanize=""><script>Polymer({is:"google-maps-api",behaviors:[Polymer.IronJsonpLibraryBehavior],properties:{mapsUrl:{type:String,value:"https://maps.googleapis.com/maps/api/js?callback=%%callback%%"},apiKey:{type:String,value:""},clientId:{type:String,value:""},version:{type:String,value:"3.exp"},language:{type:String,value:""},signedIn:{type:Boolean,value:!1},notifyEvent:{type:String,value:"api-load"},libraryUrl:{type:String,computed:"_computeUrl(mapsUrl, version, apiKey, clientId, language, signedIn)"}},_computeUrl:function(e,a,t,i,o,n){var r=e+"&v="+a;if(r+="&libraries=drawing,geometry,places,visualization",t&&!i&&(r+="&key="+t),i&&(r+="&client="+i),!t&&!i){console.warn("No Google Maps API Key or Client ID specified. See https://developers.google.com/maps/documentation/javascript/get-api-key for instructions to get started with a key or client id.")}return o&&(r+="&language="+o),n&&(r+="&signed_in="+n),r},get api(){return google.maps}});</script><script>Polymer({is:"iron-selector",behaviors:[Polymer.IronMultiSelectableBehavior]});</script><dom-module id="google-map-marker" assetpath="../../bower_components/google-map/">
   <style>
     :host {
       display: none;
@@ -45,9 +39,8 @@
   </template>
 </dom-module>
 
-<script>Polymer({is:"google-map",properties:{apiKey:String,mapsUrl:{type:String},clientId:String,latitude:{type:Number,value:37.77493,notify:!0,reflectToAttribute:!0},map:{type:Object,notify:!0,value:null},longitude:{type:Number,value:-122.41942,notify:!0,reflectToAttribute:!0},kml:{type:String,value:null,observer:"_loadKml"},zoom:{type:Number,value:10,observer:"_zoomChanged",notify:!0},noAutoTilt:{type:Boolean,value:!1},mapType:{type:String,value:"roadmap",observer:"_mapTypeChanged",notify:!0},version:{type:String,value:"3.exp"},disableDefaultUi:{type:Boolean,value:!1,observer:"_disableDefaultUiChanged"},disableMapTypeControl:{type:Boolean,value:!1,observer:"_disableMapTypeControlChanged"},disableStreetViewControl:{type:Boolean,value:!1,observer:"_disableStreetViewControlChanged"},fitToMarkers:{type:Boolean,value:!1,observer:"_fitToMarkersChanged"},disableZoom:{type:Boolean,value:!1,observer:"_disableZoomChanged"},styles:{type:Object,value:function(){return{}}},maxZoom:{type:Number,observer:"_maxZoomChanged"},minZoom:{type:Number,observer:"_minZoomChanged"},signedIn:{type:Boolean,value:!1},language:{type:String},clickEvents:{type:Boolean,value:!1,observer:"_clickEventsChanged"},dragEvents:{type:Boolean,value:!1,observer:"_dragEventsChanged"},mouseEvents:{type:Boolean,value:!1,observer:"_mouseEventsChanged"},additionalMapOptions:{type:Object,value:function(){return{}}},markers:{type:Array,value:function(){return[]},readOnly:!0},objects:{type:Array,value:function(){return[]},readOnly:!0},singleInfoWindow:{type:Boolean,value:!1}},behaviors:[Polymer.IronResizableBehavior],listeners:{"iron-resize":"resize"},observers:["_debounceUpdateCenter(latitude, longitude)"],attached:function(){this._initGMap()},detached:function(){this._markersChildrenListener&&(this.unlisten(this.$.selector,"items-changed","_updateMarkers"),this._markersChildrenListener=null),this._objectsMutationObserver&&(this._objectsMutationObserver.disconnect(),this._objectsMutationObserver=null)},_initGMap:function(){this.map||this.$.api.libraryLoaded===!0&&this.isAttached&&(this.map=new google.maps.Map(this.$.map,this._getMapOptions()),this._listeners={},this._updateCenter(),this._loadKml(),this._updateMarkers(),this._updateObjects(),this._addMapListeners(),this.fire("google-map-ready"))},_mapApiLoaded:function(){this._initGMap()},_getMapOptions:function(){var e={zoom:this.zoom,tilt:this.noAutoTilt?0:45,mapTypeId:this.mapType,disableDefaultUI:this.disableDefaultUi,mapTypeControl:!this.disableDefaultUi&&!this.disableMapTypeControl,streetViewControl:!this.disableDefaultUi&&!this.disableStreetViewControl,disableDoubleClickZoom:this.disableZoom,scrollwheel:!this.disableZoom,styles:this.styles,maxZoom:Number(this.maxZoom),minZoom:Number(this.minZoom)};null!=this.getAttribute("draggable")&&(e.draggable=this.draggable);for(var t in this.additionalMapOptions)e[t]=this.additionalMapOptions[t];return e},_attachChildrenToMap:function(e){if(this.map)for(var t,i=0;t=e[i];++i)t.map=this.map},_observeMarkers:function(){this._markersChildrenListener||(this._markersChildrenListener=this.listen(this.$.selector,"items-changed","_updateMarkers"))},_updateMarkers:function(){var e=Array.prototype.slice.call(Polymer.dom(this.$.markers).getDistributedNodes());if(e.length===this.markers.length){var t=e.filter(function(e){return this.markers&&this.markers.indexOf(e)===-1}.bind(this));if(0===t.length)return void(this._markersChildrenListener||this._observeMarkers())}this._observeMarkers(),this.markers=this._setMarkers(e),this._attachChildrenToMap(this.markers),this.fitToMarkers&&this._fitToMarkersChanged()},_observeObjects:function(){this._objectsMutationObserver||(this._objectsMutationObserver=new MutationObserver(this._updateObjects.bind(this)),this._objectsMutationObserver.observe(this,{childList:!0}))},_updateObjects:function(){var e=Array.prototype.slice.call(Polymer.dom(this.$.objects).getDistributedNodes());if(e.length===this.objects.length){var t=e.filter(function(e){return this.objects.indexOf(e)===-1}.bind(this));if(0===t.length)return void this._observeObjects()}this._observeObjects(),this._setObjects(e),this._attachChildrenToMap(this.objects)},clear:function(){for(var e,t=0;e=this.markers[t];++t)e.marker.setMap(null)},resize:function(){if(this.map){var e=this.latitude,t=this.longitude;google.maps.event.trigger(this.map,"resize"),this.latitude=e,this.longitude=t,this.fitToMarkers&&this._fitToMarkersChanged()}},_loadKml:function(){if(this.map&&this.kml){new google.maps.KmlLayer({url:this.kml,map:this.map})}},_debounceUpdateCenter:function(){this.debounce("updateCenter",this._updateCenter)},_updateCenter:function(){if(this.cancelDebouncer("updateCenter"),this.map&&void 0!==this.latitude&&void 0!==this.longitude){var e=Number(this.latitude);if(isNaN(e))throw new TypeError("latitude must be a number");var t=Number(this.longitude);if(isNaN(t))throw new TypeError("longitude must be a number");var i=new google.maps.LatLng(e,t),s=this.map.getCenter();s?(s=new google.maps.LatLng(s.lat(),s.lng()),s.equals(i)||this.map.panTo(i)):this.map.setCenter(i)}},_zoomChanged:function(){this.map&&this.map.setZoom(Number(this.zoom))},_idleEvent:function(){this.map?this._forwardEvent("idle"):this._clearListener("idle")},_clickEventsChanged:function(){this.map&&(this.clickEvents?(this._forwardEvent("click"),this._forwardEvent("dblclick"),this._forwardEvent("rightclick")):(this._clearListener("click"),this._clearListener("dblclick"),this._clearListener("rightclick")))},_dragEventsChanged:function(){this.map&&(this.dragEvents?(this._forwardEvent("drag"),this._forwardEvent("dragend"),this._forwardEvent("dragstart")):(this._clearListener("drag"),this._clearListener("dragend"),this._clearListener("dragstart")))},_mouseEventsChanged:function(){this.map&&(this.mouseEvents?(this._forwardEvent("mousemove"),this._forwardEvent("mouseout"),this._forwardEvent("mouseover")):(this._clearListener("mousemove"),this._clearListener("mouseout"),this._clearListener("mouseover")))},_maxZoomChanged:function(){this.map&&this.map.setOptions({maxZoom:Number(this.maxZoom)})},_minZoomChanged:function(){this.map&&this.map.setOptions({minZoom:Number(this.minZoom)})},_mapTypeChanged:function(){this.map&&this.map.setMapTypeId(this.mapType)},_disableDefaultUiChanged:function(){this.map&&this.map.setOptions({disableDefaultUI:this.disableDefaultUi})},_disableMapTypeControlChanged:function(){this.map&&this.map.setOptions({mapTypeControl:!this.disableMapTypeControl})},_disableStreetViewControlChanged:function(){this.map&&this.map.setOptions({streetViewControl:!this.disableStreetViewControl})},_disableZoomChanged:function(){this.map&&this.map.setOptions({disableDoubleClickZoom:this.disableZoom,scrollwheel:!this.disableZoom})},attributeChanged:function(e){if(this.map)switch(e){case"draggable":this.map.setOptions({draggable:this.draggable})}},_fitToMarkersChanged:function(){if(this.map&&this.fitToMarkers&&this.markers.length>0){for(var e,t=new google.maps.LatLngBounds,i=0;e=this.markers[i];++i)t.extend(new google.maps.LatLng(e.latitude,e.longitude));this.markers.length>1&&this.map.fitBounds(t),this.map.setCenter(t.getCenter())}},_addMapListeners:function(){google.maps.event.addListener(this.map,"center_changed",function(){var e=this.map.getCenter();this.latitude=e.lat(),this.longitude=e.lng()}.bind(this)),google.maps.event.addListener(this.map,"zoom_changed",function(){this.zoom=this.map.getZoom()}.bind(this)),google.maps.event.addListener(this.map,"maptypeid_changed",function(){this.mapType=this.map.getMapTypeId()}.bind(this)),this._clickEventsChanged(),this._dragEventsChanged(),this._mouseEventsChanged(),this._idleEvent()},_clearListener:function(e){this._listeners[e]&&(google.maps.event.removeListener(this._listeners[e]),this._listeners[e]=null)},_forwardEvent:function(e){this._listeners[e]=google.maps.event.addListener(this.map,e,function(t){this.fire("google-map-"+e,t)}.bind(this))},_deselectMarker:function(e,t){var i=this.$.selector.indexOf(e.target);this.singleInfoWindow?this.$.selector.selected=null:this.$.selector.selectedValues&&(this.$.selector.selectedValues=this.$.selector.selectedValues.filter(function(e){return e!==i}))}});</script>
-<script>Polymer({is:"iron-a11y-keys",behaviors:[Polymer.IronA11yKeysBehavior],properties:{target:{type:Object,observer:"_targetChanged"},keys:{type:String,reflectToAttribute:!0,observer:"_keysChanged"}},attached:function(){this.target||(this.target=this.parentNode)},_targetChanged:function(e){this.keyEventTarget=e},_keysChanged:function(){this.removeOwnKeyBindings(),this.addOwnKeyBinding(this.keys,"_fireKeysPressed")},_fireKeysPressed:function(e){this.fire("keys-pressed",e.detail,{})}});</script>
-<dom-module id="dorel-section-store-locator-result" assetpath="../organisms/">
+<script>Polymer({is:"google-map",properties:{apiKey:String,mapsUrl:{type:String},clientId:String,latitude:{type:Number,value:37.77493,notify:!0,reflectToAttribute:!0},map:{type:Object,notify:!0,value:null},longitude:{type:Number,value:-122.41942,notify:!0,reflectToAttribute:!0},kml:{type:String,value:null,observer:"_loadKml"},zoom:{type:Number,value:10,observer:"_zoomChanged",notify:!0},noAutoTilt:{type:Boolean,value:!1},mapType:{type:String,value:"roadmap",observer:"_mapTypeChanged",notify:!0},version:{type:String,value:"3.exp"},disableDefaultUi:{type:Boolean,value:!1,observer:"_disableDefaultUiChanged"},disableMapTypeControl:{type:Boolean,value:!1,observer:"_disableMapTypeControlChanged"},disableStreetViewControl:{type:Boolean,value:!1,observer:"_disableStreetViewControlChanged"},fitToMarkers:{type:Boolean,value:!1,observer:"_fitToMarkersChanged"},disableZoom:{type:Boolean,value:!1,observer:"_disableZoomChanged"},styles:{type:Object,value:function(){return{}}},maxZoom:{type:Number,observer:"_maxZoomChanged"},minZoom:{type:Number,observer:"_minZoomChanged"},signedIn:{type:Boolean,value:!1},language:{type:String},clickEvents:{type:Boolean,value:!1,observer:"_clickEventsChanged"},dragEvents:{type:Boolean,value:!1,observer:"_dragEventsChanged"},mouseEvents:{type:Boolean,value:!1,observer:"_mouseEventsChanged"},additionalMapOptions:{type:Object,value:function(){return{}}},markers:{type:Array,value:function(){return[]},readOnly:!0},objects:{type:Array,value:function(){return[]},readOnly:!0},singleInfoWindow:{type:Boolean,value:!1}},behaviors:[Polymer.IronResizableBehavior],listeners:{"iron-resize":"resize"},observers:["_debounceUpdateCenter(latitude, longitude)"],attached:function(){this._initGMap()},detached:function(){this._markersChildrenListener&&(this.unlisten(this.$.selector,"items-changed","_updateMarkers"),this._markersChildrenListener=null),this._objectsMutationObserver&&(this._objectsMutationObserver.disconnect(),this._objectsMutationObserver=null)},_initGMap:function(){this.map||!0===this.$.api.libraryLoaded&&this.isAttached&&(this.map=new google.maps.Map(this.$.map,this._getMapOptions()),this._listeners={},this._updateCenter(),this._loadKml(),this._updateMarkers(),this._updateObjects(),this._addMapListeners(),this.fire("google-map-ready"))},_mapApiLoaded:function(){this._initGMap()},_getMapOptions:function(){var e={zoom:this.zoom,tilt:this.noAutoTilt?0:45,mapTypeId:this.mapType,disableDefaultUI:this.disableDefaultUi,mapTypeControl:!this.disableDefaultUi&&!this.disableMapTypeControl,streetViewControl:!this.disableDefaultUi&&!this.disableStreetViewControl,disableDoubleClickZoom:this.disableZoom,scrollwheel:!this.disableZoom,styles:this.styles,maxZoom:Number(this.maxZoom),minZoom:Number(this.minZoom)};null!=this.getAttribute("draggable")&&(e.draggable=this.draggable);for(var t in this.additionalMapOptions)e[t]=this.additionalMapOptions[t];return e},_attachChildrenToMap:function(e){if(this.map)for(var t,i=0;t=e[i];++i)t.map=this.map},_observeMarkers:function(){this._markersChildrenListener||(this._markersChildrenListener=this.listen(this.$.selector,"items-changed","_updateMarkers"))},_updateMarkers:function(){var e=Array.prototype.slice.call(Polymer.dom(this.$.markers).getDistributedNodes());if(e.length===this.markers.length){if(0===e.filter(function(e){return this.markers&&-1===this.markers.indexOf(e)}.bind(this)).length)return void(this._markersChildrenListener||this._observeMarkers())}this._observeMarkers(),this.markers=this._setMarkers(e),this._attachChildrenToMap(this.markers),this.fitToMarkers&&this._fitToMarkersChanged()},_observeObjects:function(){this._objectsMutationObserver||(this._objectsMutationObserver=new MutationObserver(this._updateObjects.bind(this)),this._objectsMutationObserver.observe(this,{childList:!0}))},_updateObjects:function(){var e=Array.prototype.slice.call(Polymer.dom(this.$.objects).getDistributedNodes());if(e.length===this.objects.length){if(0===e.filter(function(e){return-1===this.objects.indexOf(e)}.bind(this)).length)return void this._observeObjects()}this._observeObjects(),this._setObjects(e),this._attachChildrenToMap(this.objects)},clear:function(){for(var e,t=0;e=this.markers[t];++t)e.marker.setMap(null)},resize:function(){if(this.map){var e=this.latitude,t=this.longitude;google.maps.event.trigger(this.map,"resize"),this.latitude=e,this.longitude=t,this.fitToMarkers&&this._fitToMarkersChanged()}},_loadKml:function(){if(this.map&&this.kml){new google.maps.KmlLayer({url:this.kml,map:this.map})}},_debounceUpdateCenter:function(){this.debounce("updateCenter",this._updateCenter)},_updateCenter:function(){if(this.cancelDebouncer("updateCenter"),this.map&&void 0!==this.latitude&&void 0!==this.longitude){var e=Number(this.latitude);if(isNaN(e))throw new TypeError("latitude must be a number");var t=Number(this.longitude);if(isNaN(t))throw new TypeError("longitude must be a number");var i=new google.maps.LatLng(e,t),s=this.map.getCenter();s?(s=new google.maps.LatLng(s.lat(),s.lng()),s.equals(i)||this.map.panTo(i)):this.map.setCenter(i)}},_zoomChanged:function(){this.map&&this.map.setZoom(Number(this.zoom))},_idleEvent:function(){this.map?this._forwardEvent("idle"):this._clearListener("idle")},_clickEventsChanged:function(){this.map&&(this.clickEvents?(this._forwardEvent("click"),this._forwardEvent("dblclick"),this._forwardEvent("rightclick")):(this._clearListener("click"),this._clearListener("dblclick"),this._clearListener("rightclick")))},_dragEventsChanged:function(){this.map&&(this.dragEvents?(this._forwardEvent("drag"),this._forwardEvent("dragend"),this._forwardEvent("dragstart")):(this._clearListener("drag"),this._clearListener("dragend"),this._clearListener("dragstart")))},_mouseEventsChanged:function(){this.map&&(this.mouseEvents?(this._forwardEvent("mousemove"),this._forwardEvent("mouseout"),this._forwardEvent("mouseover")):(this._clearListener("mousemove"),this._clearListener("mouseout"),this._clearListener("mouseover")))},_maxZoomChanged:function(){this.map&&this.map.setOptions({maxZoom:Number(this.maxZoom)})},_minZoomChanged:function(){this.map&&this.map.setOptions({minZoom:Number(this.minZoom)})},_mapTypeChanged:function(){this.map&&this.map.setMapTypeId(this.mapType)},_disableDefaultUiChanged:function(){this.map&&this.map.setOptions({disableDefaultUI:this.disableDefaultUi})},_disableMapTypeControlChanged:function(){this.map&&this.map.setOptions({mapTypeControl:!this.disableMapTypeControl})},_disableStreetViewControlChanged:function(){this.map&&this.map.setOptions({streetViewControl:!this.disableStreetViewControl})},_disableZoomChanged:function(){this.map&&this.map.setOptions({disableDoubleClickZoom:this.disableZoom,scrollwheel:!this.disableZoom})},attributeChanged:function(e){if(this.map)switch(e){case"draggable":this.map.setOptions({draggable:this.draggable})}},_fitToMarkersChanged:function(){if(this.map&&this.fitToMarkers&&this.markers.length>0){for(var e,t=new google.maps.LatLngBounds,i=0;e=this.markers[i];++i)t.extend(new google.maps.LatLng(e.latitude,e.longitude));this.markers.length>1&&this.map.fitBounds(t),this.map.setCenter(t.getCenter())}},_addMapListeners:function(){google.maps.event.addListener(this.map,"center_changed",function(){var e=this.map.getCenter();this.latitude=e.lat(),this.longitude=e.lng()}.bind(this)),google.maps.event.addListener(this.map,"zoom_changed",function(){this.zoom=this.map.getZoom()}.bind(this)),google.maps.event.addListener(this.map,"maptypeid_changed",function(){this.mapType=this.map.getMapTypeId()}.bind(this)),this._clickEventsChanged(),this._dragEventsChanged(),this._mouseEventsChanged(),this._idleEvent()},_clearListener:function(e){this._listeners[e]&&(google.maps.event.removeListener(this._listeners[e]),this._listeners[e]=null)},_forwardEvent:function(e){this._listeners[e]=google.maps.event.addListener(this.map,e,function(t){this.fire("google-map-"+e,t)}.bind(this))},_deselectMarker:function(e,t){var i=this.$.selector.indexOf(e.target);this.singleInfoWindow?this.$.selector.selected=null:this.$.selector.selectedValues&&(this.$.selector.selectedValues=this.$.selector.selectedValues.filter(function(e){return e!==i}))}});</script>
+<script>Polymer({is:"iron-a11y-keys",behaviors:[Polymer.IronA11yKeysBehavior],properties:{target:{type:Object,observer:"_targetChanged"},keys:{type:String,reflectToAttribute:!0,observer:"_keysChanged"}},attached:function(){this.target||(this.target=this.parentNode)},_targetChanged:function(e){this.keyEventTarget=e},_keysChanged:function(){this.removeOwnKeyBindings(),this.addOwnKeyBinding(this.keys,"_fireKeysPressed")},_fireKeysPressed:function(e){this.fire("keys-pressed",e.detail,{})}});</script><dom-module id="dorel-section-store-locator-result" assetpath="../organisms/">
   <template>
     <style include="iron-flex iron-flex-alignment" is="custom-style">
       :root {
@@ -73,7 +66,7 @@
       }
     </style>
 
-    <div class="dorel-section-store-locator-result">
+    <div class$="dorel-section-store-locator-result [[ _isVip(store.is_vip) ]]">
       <template is="dom-if" if="[[ !store.address ]]">
         <p class="location-content">No Address Available</p>
       </template>
@@ -98,7 +91,7 @@
     </div>
   </template>
 
-  <script>Polymer({is:"dorel-section-store-locator-result",properties:{store:{type:Object,value:function(){return{}}}}});</script>
+  <script>Polymer({is:"dorel-section-store-locator-result",properties:{store:{type:Object,value:function(){return{}}}},_isVip:function(e){return void 0!==e&&e?"vip":""}});</script>
 </dom-module>
 <dom-module id="dorel-section-store-locator-results" assetpath="../organisms/">
   <template>
@@ -109,7 +102,7 @@
       }
 
       .results {
-        padding: 3em var(--theme-gutter);
+        padding: 1.5em var(--theme-gutter-mobile);
         float: left;
         width: 100%;
         box-sizing: border-box;
@@ -123,6 +116,7 @@
 
       .title {
         @apply(--theme-typography-7);
+        margin-top: 0;
         color: var(--theme-brand-color-1);
         width: 100%;
         text-align: left;
@@ -142,10 +136,10 @@
       }
 
       .results-content {
+        @apply(--theme-grid-column-mobile);
         max-width: var(--theme-base-paragraph-width);
-        padding: 0 .75em;
-        margin-top: 0;
-        margin: auto;
+        width: 100%;
+        padding: 0;
       }
 
       ul {
@@ -158,6 +152,8 @@
         float: left;
         width: 100%;
         margin-top: 1.5em;
+        padding-bottom: 1.5em;
+        border-bottom: 1px solid var(--theme-color-monochrome-2);
       }
 
       dorel-cta {
@@ -167,36 +163,24 @@
       }
 
       /* Responsive Behaviour */
-      [mobile-small] ul, [mobile-medium] ul, [mobile-small] .title, [mobile-medium] .title {
-        padding-left: 0;
-        margin-top: 0;
+      [tablet-medium-up] li {
+        padding-bottom: 0;
+        border-bottom: 0;
       }
 
-      [mobile-small] li, [mobile-medium] li {
-        margin-top: 1.5em;
-        padding-bottom: 1.5em;
-        border-bottom: 1px solid var(--theme-color-monochrome-2);
+      .results[tablet-medium-up] {
+        padding: 3em var(--theme-gutter);
       }
 
-      .results[mobile-small],
-      .results[mobile-medium] {
-        padding: 1.5em var(--theme-gutter-mobile);
-      }
-
-      [mobile-small] .results-content,
-      [mobile-medium] .results-content {
-        @apply(--theme-grid-column-mobile);
-        padding: 0 .75em;
-        margin-top: 0;
+      [tablet-medium-up] .results-content {
+        margin: auto;
       }
 
     </style>
 
-    
-    <iron-media-query query="(max-width : 479px)" query-matches="{{ mobileSmall }}"></iron-media-query>
-    <iron-media-query query="(min-width : 480px) and (max-width : 767px)" query-matches="{{ mobileMedium }}"></iron-media-query>
+    <dorel-media-query breakpoints="{{ breakpoints }}"></dorel-media-query>
 
-    <div class="results layout horizontal center center-justified wrap" mobile-small$="{{ mobileSmall }}" mobile-medium$="{{ mobileMedium }}">
+    <div class="results layout horizontal center center-justified wrap" tablet-medium-up$="{{ breakpoints.tabletMediumUp }}">
       <div class="row">
         <div class="results-content">
           <h2 class="title">Results</h2>
@@ -229,30 +213,6 @@
         width: 100%;
       }
 
-      .content-header {
-        background-color: var(--theme-brand-color-1);
-        float: left;
-        width: 100%;
-        display: flex;
-      }
-
-      .content-wrapper {
-        padding: 6em 0;
-        box-sizing: border-box;
-        color: var(--theme-color-white);
-        max-width: var(--theme-base-paragraph-width);
-        float: none;
-        margin: auto;
-      }
-
-      .title {
-        @apply(--theme-typography-8);
-        color: var(--theme-color-white);
-        font-size: var(--theme-scale-6);
-        margin: 0 0 0.1875em 0;
-        text-shadow: var(--theme-text-shadow);
-      }
-
       .store-title {
         @apply(--theme-typography-4);
         color: var(--theme-brand-color-1);
@@ -265,15 +225,17 @@
       }
 
       .store-overlay {
-        background-color: var(--theme-color-white);
-        box-shadow: -1.5px 1.5px 10px rgba(0, 0, 0, 0.125);
-        position: absolute;
-        top: 1.5em;
-        right: 1.5em;
-        padding: 1.5em;
-        width: 300px;
-        z-index: 1000;
-        border-radius: var(--theme-border-radius-2);
+        background-color: var(--theme-color-monochrome-2);
+        max-width: var(--theme-base-paragraph-width);
+        position: initial;
+        top: 0;
+        right: 0;
+        padding: 1.5em .875em;
+        border-radius: 0;
+        box-sizing: border-box;
+        box-shadow: none;
+        width: 100%;
+        float: left;
       }
 
       .submit-button-wrapper {
@@ -287,7 +249,7 @@
 
       google-map {
         width: 100%;
-        height: 37.5em;
+        height: 90vh;
         position: relative;
         float: left;
       }
@@ -303,30 +265,21 @@
         width: 100%;
       }
 
-      [mobile-small] .store-overlay, [mobile-medium] .store-overlay {
-        position: initial;
-        top: 0;
-        right: 0;
-        padding: 1.5em .875em;
-        border-radius: 0;
-        box-sizing: border-box;
-        max-width: var(--theme-base-paragraph-width);
-        box-shadow: none;
-        width: 100%;
-        margin: auto;
+      /* Responsive Behaviour */
+      [tablet-medium-up] .store-overlay{
+        background-color: var(--theme-color-white);
+        box-shadow: -1.5px 1.5px 10px rgba(0, 0, 0, 0.125);
+        position: absolute;
+        top: 1.5em;
+        right: 1.5em;
+        padding: 1.5em;
+        width: 300px;
+        z-index: 1000;
+        border-radius: var(--theme-border-radius-2);
       }
 
-      [mobile-small] google-map, [mobile-medium] google-map {
-        height: 90vh;
-      }
-
-      [mobile-small] .title, [mobile-medium] .title {
-        @apply(--theme-typography-6);
-        margin-top: 0;
-      }
-
-      [mobile-small] .content-wrapper, [mobile-medium] .content-wrapper {
-        padding: 3em var(--theme-gutter-mobile);
+      [tablet-medium-up] google-map {
+        height: 37.5em;
       }
     </style>
 
@@ -342,40 +295,34 @@
     <iron-a11y-keys id="a11y" target="[[_form]]" keys="enter" on-keys-pressed="_submitLocator"></iron-a11y-keys>
 
     
-    <iron-media-query query="(max-width : 479px)" query-matches="{{ mobileSmall }}"></iron-media-query>
-    <iron-media-query query="(min-width : 480px) and (max-width : 767px)" query-matches="{{ mobileMedium }}"></iron-media-query>
-    <iron-media-query query="max-width : 767px" query-matches="{{ mobile }}"></iron-media-query>
+    <dorel-media-query breakpoints="{{ breakpoints }}"></dorel-media-query>
 
-    <section class="section-store-locator" mobile$="{{ mobile }}" mobile-small$="{{ mobileSmall }}" mobile-medium$="{{ mobileMedium }}">
-      <div class="content-header">
-        <div class="content-wrapper">
-          <h1 class="title">[[ templateData.acf.title ]]</h1>
-          <dorel-safe-html html="[[ templateData.acf.text ]]"></dorel-safe-html>
-        </div>
-      </div>
+    <dorel-section-header section-header-data="[[ templateData.acf ]]" info-header="true" text-header="true"></dorel-section-header>
+    <section class="section-store-locator" tablet-medium-up$="{{ breakpoints.tabletMediumUp }}">
       <div class="store-locator-map">
         <div class="store-overlay">
           <h2 class="store-title">Enter a Location</h2>
           <form is="iron-form" method="get" action="/" id="store-locator-form">
 
-            <dorel-input-select label="Select a country" options="[[ countriesResponse.results ]]" selected="{{ selectedCountry }}" disabled$="[[ !countriesResponse.results.length ]]"></dorel-input-select>
+            
 
             <dorel-input id="address-input" label="Type in address" value="{{ addressInput }}" error-message="{{ addressError }}" invalid$="{{ addressInvalid }}" disabled$="[[ !selectedCountry ]]" required=""></dorel-input>
 
             <h2 class="submit-button-wrapper">
-              <dorel-cta id="submit-button" on-click="_submitLocator" disabled$="{{ _isDisabled(addressInput) }}" type="primary" link="" size="small" icon="dorel-icons:chevron-right" gtm-action="submit-stores" gtm-parent="[[ gtmParent ]]" gtm-parent-index="[[ gtmParentIndex ]]" gtm-cta-index="0">Find Stores</dorel-cta>
+              <dorel-cta id="submit-button" on-click="_submitLocator" disabled$="{{ _isDisabled(addressInput) }}" type="primary" link="" size="small" icon="dorel-icons:chevron-right" gtm-action="submit-stores" gtm-parent="[[ gtmParent ]]" gtm-parent-index="[[ gtmParentIndex ]]" gtm-cta-index="0">Find Stores
+              </dorel-cta>
             </h2>
           </form>
 
         </div>
-        <template is="dom-if" if="{{ !mobile }}">
+        <template is="dom-if" if="{{ breakpoints.tabletMediumUp }}">
           <template is="dom-if" if="[[ apiLoaded ]]">
-            <google-map id="googleMap" language="[[ language ]]" map="{{ map }}" disable-zoom="[[ disableZoom ]]" api-key="[[ apiKey ]]" latitude="{{ mapLat }}" longitude="{{ mapLng }}" zoom="{{ mapZoom }}" fit-to-markers="" map-type="roadmap" disable-map-type-control="" disable-street-view-control="" single-info-window="">
+            <google-map id="googleMap" language="[[ language ]]" map="{{ map }}" disable-zoom="[[ disableZoom ]]" api-key="[[ apiKey ]]" latitude="{{ mapLat }}" longitude="{{ mapLng }}" zoom="{{ mapZoom }}" fit-to-markers="" map-type="roadmap" styles="[[ styles ]]" disable-map-type-control="" disable-street-view-control="" single-info-window="">
 
               <template is="dom-repeat" items="{{ storesResponse.results }}" as="store">
                 <google-map-marker latitude="[[ storesResponse.originalLat ]]" longitude="[[ storesResponse.originalLng ]]" icon="/assets/images/markers/home-marker.png"></google-map-marker>
 
-                <google-map-marker latitude="[[ store.lat ]]" longitude="[[ store.lng ]]" store="[[ store ]]" click-events="true" icon="/assets/images/markers/shop-marker.png">
+                <google-map-marker latitude="[[ store.lat ]]" longitude="[[ store.lng ]]" store="[[ store ]]" click-events="true" icon="[[ _defineStoreType(store.is_vip) ]]">
 
                   
                   <template is="dom-if" if="[[ store.name ]]">
@@ -420,7 +367,7 @@
     </section>
   </template>
 
-  <script>Polymer({is:"dorel-section-store-locator",properties:{templateData:{type:Object,value:function(){return{}}},apiLoaded:{type:Boolean,value:!1,observer:"_initStoreLocator"},_form:{type:Object,value:function(){return this.$["store-locator-form"]}},language:{type:String,value:CONFIG.LOCALE.LANGUAGE},apiKey:{type:String,value:"AIzaSyBYMyWp_Ex0Vti2UUDNOs979yVJ5sts1iA"},disableZoom:{type:Boolean,value:!0},mapLoaded:{type:Boolean,value:!1},countriesResponse:{type:Object,value:function(){return{}}},countryStoresArr:{type:Array,value:[]},selectedCountry:{type:String,value:CONFIG.LOCALE.COUNTRY},addressInvalid:{type:Boolean,value:!1}},listeners:{"google-map-ready":"_mapLoaded"},observers:["_setMapZoom(mapLoaded, geometry)","_setMapFocus(mapLoaded, selectedCountry)"],_mapApiLoaded:function(){this.apiLoaded=!0},_initStoreLocator:function(e){"undefined"!=typeof e&&e&&(this.geocoder=new google.maps.Geocoder,this.autocomplete=new google.maps.places.AutocompleteService,this.countriesEndPoint=this.globals.Dorel.dioApiUrl+"/retailers/countries?brandName=maxi_cosi&localeCode="+this.language)},_mapLoaded:function(){this.mapLoaded=!0},_setMapFocus:function(e,t){if(e&&"undefined"!=typeof t&&"undefined"!=typeof this.geocoder){var s=this;this._retrieveGeocode(t).then(function(e){s.mapLat=e.location.lat(),s.mapLng=e.location.lng(),s.geometry=e})}},_setMapZoom:function(e,t){e&&"undefined"!=typeof t&&this.map.fitBounds(t.viewport)},_countriesLoaded:function(e){this.countriesResponse=e.detail.response},_storesLoaded:function(e){this.storesResponse=e.detail.response;var t={org:{lat:this.storesResponse.originalLat,lng:this.storesResponse.originalLng},res:{lat:this.storesResponse.results[this.storesResponse.totalResults-1].lat,lng:this.storesResponse.results[this.storesResponse.totalResults-1].lng}},s=new google.maps.LatLng(t.org.lat,t.org.lng),o=new google.maps.LatLng(t.res.lat,t.res.lng),n=new google.maps.LatLngBounds;n.extend(s),n.extend(o),this.map.fitBounds(n)},_submitLocator:function(e){if("undefined"!=typeof this.addressInput&&this.address!==this.addressInput){if(""===this.addressInput)return void this._handleErrors("ADDRESS_EMPTY");this.$["address-input"].invalid=!1,this.addressInvalid=!1,this.storesResponse={results:[]};var t=this,s=this.addressInput+" "+this.selectedCountry;this.address=this.addressInput,this.predictions=this._retrieveSuggestions(s).then(function(e){t._retrieveGeocode(e.description).then(function(e){var s="&lat="+e.location.lat();s+="&lng="+e.location.lng(),s+="&radius=5",t.storesEndPoint=t.globals.Dorel.dioApiUrl+"/retailers?brandName=maxi_cosi"+s},function(e){t._handleErrors(e)})},function(e){t._handleErrors(e)})}},_retrieveGeocode:function(e){var t=this;return new Promise(function(s,o){t.geocoder.geocode({address:e},function(e,t){"OK"===t?s(e[0].geometry):o(t)})})},_retrieveSuggestions:function(e){var t=this;return new Promise(function(s,o){t.autocomplete.getQueryPredictions({input:e},function(e,t){t!=google.maps.places.PlacesServiceStatus.OK?o(t):s(e[0])})})},_isDisabled:function(e){return"undefined"==typeof e||""===e},_handleErrors:function(e){switch(e){case"ZERO_RESULTS":this.addressError="No results found for this address!";break;case"ADDRESS_EMPTY":this.addressError="This field cannot be empty"}this.$["address-input"].invalid=!0,this.addressInvalid=!0},_hasProps:function(e){var t=!1;for(var s in e)t=!!e.hasOwnProperty(s);return t}});</script>
+  <script>Polymer({is:"dorel-section-store-locator",properties:{templateData:{type:Object,value:function(){return{}}},apiLoaded:{type:Boolean,value:!1,observer:"_initStoreLocator"},_form:{type:Object,value:function(){return this.$["store-locator-form"]}},language:{type:String,value:CONFIG.LOCALE.LANGUAGE},apiKey:{type:String,value:"AIzaSyBYMyWp_Ex0Vti2UUDNOs979yVJ5sts1iA"},disableZoom:{type:Boolean,value:!0},mapLoaded:{type:Boolean,value:!1},countriesResponse:{type:Object,value:function(){return{}}},countryStoresArr:{type:Array,value:[]},selectedCountry:{type:Object,value:{label:CONFIG.LOCALE.COUNTRY_NAME.charAt(0).toUpperCase()+CONFIG.LOCALE.COUNTRY_NAME.slice(1),value:CONFIG.LOCALE.COUNTRY_CODE}},addressInvalid:{type:Boolean,value:!1},styles:{type:Array,value:[{featureType:"poi",stylers:[{visibility:"off"}]},{featureType:"transit",stylers:[{visibility:"off"}]}]}},listeners:{"google-map-ready":"_mapLoaded"},observers:["_setMapZoom(mapLoaded, geometry)","_setMapFocus(mapLoaded, selectedCountry)"],_mapApiLoaded:function(){this.apiLoaded=!0},_initStoreLocator:function(e){void 0!==e&&e&&(this.geocoder=new google.maps.Geocoder,this.autocomplete=new google.maps.places.AutocompleteService,this.countriesEndPoint=this.globals.Dorel.dioApiUrl+"/retailers/countries?brandName=maxi_cosi&localeCode="+this.language)},_mapLoaded:function(){this.mapLoaded=!0},_setMapFocus:function(e,t){if(e&&void 0!==t&&void 0!==this.geocoder){var s=this;this._retrieveGeocode(t.label).then(function(e){s.mapLat=e.location.lat(),s.mapLng=e.location.lng(),s.geometry=e})}},_setMapZoom:function(e,t){e&&void 0!==t&&this.map.fitBounds(t.viewport)},_countriesLoaded:function(e){this.countriesResponse=e.detail.response},_storesLoaded:function(e){e.detail.response.results.length||this._handleErrors("ZERO_RESULTS"),this.storesResponse=e.detail.response;var t={org:{lat:this.storesResponse.originalLat,lng:this.storesResponse.originalLng},res:{lat:this.storesResponse.results[this.storesResponse.totalResults-1].lat,lng:this.storesResponse.results[this.storesResponse.totalResults-1].lng}},s=new google.maps.LatLng(t.org.lat,t.org.lng),o=new google.maps.LatLng(t.res.lat,t.res.lng),r=new google.maps.LatLngBounds;r.extend(s),r.extend(o),this.map.fitBounds(r)},_submitLocator:function(e){if(void 0!==this.addressInput&&this.address!==this.addressInput){if(""===this.addressInput)return void this._handleErrors("ADDRESS_EMPTY");this.$["address-input"].invalid=!1,this.addressInvalid=!1,this.storesResponse={results:[]};var t=this,s=this.addressInput+" "+this.selectedCountry.label;this.address=this.addressInput,this.predictions=this._retrieveSuggestions(s).then(function(e){t._retrieveGeocode(e.description).then(function(e){var s="&lat="+e.location.lat();s+="&lng="+e.location.lng(),s+="&country="+t.selectedCountry.value,s+="&radius=5",t.storesEndPoint=t.globals.Dorel.dioApiUrl+"/retailers?brandName=maxi_cosi"+s},function(e){t._handleErrors(e)})},function(e){t._handleErrors(e)})}},_retrieveGeocode:function(e){var t=this;return new Promise(function(s,o){t.geocoder.geocode({address:e},function(e,t){"OK"===t?s(e[0].geometry):o(t)})})},_retrieveSuggestions:function(e){var t=this;return new Promise(function(s,o){t.autocomplete.getQueryPredictions({input:e},function(e,t){t!=google.maps.places.PlacesServiceStatus.OK?o(t):s(e[0])})})},_isDisabled:function(e){return void 0===e||""===e},_defineStoreType:function(e){return void 0!==e&&e?"/assets/images/markers/vip-marker.png":"/assets/images/markers/shop-marker.png"},_handleErrors:function(e){switch(e){case"ZERO_RESULTS":this.addressError="No results found for this address!";break;case"ADDRESS_EMPTY":this.addressError="This field cannot be empty"}this.$["address-input"].invalid=!0,this.addressInvalid=!0},_hasProps:function(e){var t=!1;for(var s in e)t=!!e.hasOwnProperty(s);return t}});</script>
 </dom-module>
 </div><dom-module id="dorel-template-store-locator">
   <template>

@@ -1,42 +1,99 @@
-<html><head><link rel="import" href="../../bower_components/polymer/polymer.html">
-<link rel="import" href="https://dev.cdn.dorel.io/includes/brands/dorel/theme-dorel-shared-styles.html">
+<html><head><link rel="import" href="../atoms/dorel-cta.html">
 
-<link rel="import" href="../atoms/dorel-cta.html">
-
-
-
-</head><body><dom-module id="dorel-card" include="theme-dorel-shared-styles iron-flex iron-flex-classes">
-
+</head><body><dom-module id="dorel-card">
   <template>
-    <style>
+    <style include="iron-flex">
+      :host {
+        @apply(--layout-horizontal);
+        --iron-image-placeholder: var(--image-placeholder);
+      }
+
+      .card {
+        background-color: var(--theme-color-white);
+        border-radius: var(--theme-border-radius-1);
+        float: left;
+        margin-top: 1.5em;
+        overflow: hidden;
+        flex: 1;
+        -webkit-box-shadow: 10px 10px 10px -12px var(--theme-color-monochrome-3);
+        -moz-box-shadow: 10px 10px 10px -12px var(--theme-color-monochrome-3);
+        box-shadow: 10px 10px 10px -12px var(--theme-color-monochrome-3);
+      }
+
+      .description {
+        @apply(--theme-typography-2);
+        float: left;
+        width: 100%;
+      }
+
+      .card-content {
+        padding: 0 1.5em 1.5em 1.5em;
+        float: left;
+        width: 100%;
+        box-sizing: border-box;
+      }
+
+      dorel-cta {
+        float: left;
+      }
+
+      .card-image {
+        width: 100%;
+        float: left;
+        height: 12em;
+      }
+
+      .title {
+        @apply(--theme-typography-5);
+        color: var(--theme-brand-color-1);
+        float: left;
+        width: 100%;
+      }
+
+      [tablet-medium-up] .title {
+        @apply(--theme-typography-6);
+      }
+
     </style>
 
-    
-    <template is="dom-if" if="{{ _hasValue(cardData.card_title) }}">
-      <div>
-        <h1 class="theme-headline">[[ cardData.card_title ]]</h1>
+    <dorel-media-query breakpoints="{{ breakpoints }}"></dorel-media-query>
+
+    <div class="card" tablet-medium-up$="{{ breakpoints.tabletMediumUp }}">
+      
+      <template is="dom-if" if="[[ _hasValue(cardData.card_image) ]]">
+        <iron-image class="card-image" sizing="cover" fade="true" preload="" src$="[[ cardData.card_image ]]">
+        </iron-image>
+      </template>
+      
+
+      <div class="card-content">
+        
+        <template is="dom-if" if="[[ _hasValue(cardData.card_title) ]]">
+          <h3 class="title">[[ cardData.card_title ]]</h3>
+        </template>
+        
+
+        
+        <template is="dom-if" if="[[ _hasValue(cardData.card_text) ]]">
+          <p class="description">
+            <dorel-safe-html html="[[ cardData.card_text ]]"></dorel-safe-html>
+          </p>
+        </template>
+        
+
+        
+        <template is="dom-if" if="[[ _hasValue(cardData.cta_toggle) ]]">
+          <dorel-cta type="primary" title="[[ cardData.cta_text ]]" link="[[ cardData.cta_link ]]" link-target="[[ cardData.cta_link_target ]]" size="small" icon="dorel-icons:chevron-right" gtm-parent="[[ gtmParent ]]" gtm-parent-index="[[ gtmParentIndex ]]" gtm-child="[[ gtmChild ]]" gtm-child-index="[[ gtmChildIndex ]]" gtm-cta-index="0">
+            [[ cardData.cta_text ]]
+          </dorel-cta>
+        </template>
+        
       </div>
-    </template>
-    
-    
-    
-    <template is="dom-if" if="{{ _hasValue(cardData.card_content) }}">
-      <div>
-        <dorel-safe-html html="[[ cardData.card_content ]]"></dorel-safe-html>
-      </div>
-    </template>
-    
-    
-    
-    <template is="dom-if" if="{{ cardData.card_cta_toggle }}">
-      <div>
-        <dorel-cta href="[[ cardData.card_cta_href ]]" secondary="">[[ cardData.card_cta_text ]]</dorel-cta>
-      </div>
-    </template>
-    
+    </div>
 
   </template>
 
-  <script>Polymer({is:"dorel-card",properties:{cardTitle:{type:String,value:""}},_hasValue:function(e){return""!=typeof e||"undefined"!==e||e}});</script>
+  <script>Polymer({is:"dorel-card",properties:{cardData:{type:Object}},_hasValue:function(e){return""!==e&&void 0!==e&&null!==e}});</script>
 
-</dom-module></body></html>
+</dom-module>
+</body></html>

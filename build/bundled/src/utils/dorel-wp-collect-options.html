@@ -3,5 +3,5 @@
     <iron-ajax auto="" url="[[ endPoint ]]" handle-as="json" on-response="_optionsLoaded"></iron-ajax>
   </template>
 
-  <script>Polymer({is:"dorel-wp-collect-options",properties:{},observers:["_initOptions(globals.Dorel.wpUrl)"],_initOptions:function(o){"undefined"!=typeof o&&""!==o&&this._hasProps(o)&&(this.endPoint=this.globals.Dorel.wpUrl+"/acf/v2/options")},_optionsLoaded:function(o){var e=o.detail.response;Polymer.globalsManager.set("Dorel.collect.options",{});for(var r in e.acf)Polymer.globalsManager.set("Dorel.collect.options."+r,e.acf[r])},_hasProps:function(o){var e=!1;for(var r in o)e=!!o.hasOwnProperty(r);return e}});</script>
+  <script>Polymer({is:"dorel-wp-collect-options",properties:{},observers:["_initOptions(globals.Dorel.wpUrl)"],_initOptions:function(o){void 0!==o&&""!==o&&this._hasProps(o)&&(this.endPoint=this.globals.Dorel.wpUrl+"/acf/v2/options")},_optionsLoaded:function(o){var r=o.detail.response;Polymer.globalsManager.set("Dorel.collect.options",{});for(var s in r.acf)Polymer.globalsManager.set("Dorel.collect.options."+s,r.acf[s])},_hasProps:function(o){var r=!1;for(var s in o)r=!!o.hasOwnProperty(s);return r}});</script>
 </dom-module></body></html>

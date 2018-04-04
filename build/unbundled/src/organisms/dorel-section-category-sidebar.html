@@ -6,7 +6,7 @@
         float: left;
         width: 100%;
       }
-      
+
     </style>
 
     <template is="dom-if" if="[[ _hasSidebar(categorySidebarData.sidebar) ]]">
@@ -38,6 +38,6 @@
       </aside>
     </template>
   </template>
-  <script>Polymer({is:"dorel-section-category-sidebar",properties:{categorySidebarData:{type:Object,value:function(){return{}}}},ready:function(){this.contentWrappers=this.categorySidebarData.sidebar[0].content_wrappers},_hasSidebar:function(e){return"undefined"!=typeof e||e.length&&e[0].content_wrap.length},_hasValue:function(e){return"undefined"!=typeof e&&""!==e},_isMainHeader:function(e){return"undefined"!=typeof e&&e<1}});</script>
+  <script>Polymer({is:"dorel-section-category-sidebar",properties:{categorySidebarData:{type:Object,value:function(){return{}},observer:"_onCategorySidebarDataChanged"}},_onCategorySidebarDataChanged:function(){this.categorySidebarData.hasOwnProperty("sidebar")&&(this.contentWrappers=this.categorySidebarData.sidebar[0].content_wrappers)},_hasSidebar:function(e){return void 0!==e&&e.length>0&&e[0].content_wrappers.length},_hasValue:function(e){return void 0!==e&&""!==e},_isMainHeader:function(e){return void 0!==e&&e<1}});</script>
 </dom-module>
 </body></html>

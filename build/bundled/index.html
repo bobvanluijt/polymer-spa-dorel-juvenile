@@ -1,0 +1,132 @@
+<!DOCTYPE html><html lang="en"><head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1,user-scalable=yes">
+  
+  
+  <title>Maxi Cosi</title>
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="/assets/images/favicons/favicon-32x32.png" sizes="32x32">
+  <link rel="icon" type="image/png" href="/assets/images/favicons/favicon-16x16.png" sizes="16x16">
+  <link rel="manifest" href="/assets/images/favicons/manifest.json">
+  <link rel="mask-icon" href="/assets/images/favicons/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="theme-color" content="#ffffff">
+  
+  
+  <script type="text/javascript" src="/app-config.js"></script>
+
+  <script>window.performance&&performance.mark&&performance.mark("index.html"),Polymer={lazyRegister:!0,dom:"shadow"},Array.prototype.find||(Array.prototype.find=function(r){if(null==this)throw new TypeError("Array.prototype.find called on null or undefined");if("function"!=typeof r)throw new TypeError("predicate must be a function");for(var e,o=Object(this),t=o.length>>>0,n=arguments[1],i=0;i<t;i++)if(e=o[i],r.call(n,e,i,o))return e}),Array.prototype.forEach||(Array.prototype.forEach=function(r){var e,o;if(null==this)throw new TypeError("this is null or not defined");var t=Object(this),n=t.length>>>0;if("function"!=typeof r)throw new TypeError(r+" is not a function");for(arguments.length>1&&(e=arguments[1]),o=0;o<n;){var i;o in t&&(i=t[o],r.call(e,i,o,t)),o++}}),Element.prototype.remove||(Element.prototype.remove=function(){this.parentNode&&this.parentNode.removeChild(this)});</script>
+
+  
+  <link rel="import" href="/src/dorel-app.html">
+
+  
+  <style>
+    html {
+      position: relative;
+    }
+
+    body {
+      margin: 0;
+    }
+
+    #load-placeholder {
+      opacity:0;  /* make things invisible upon start */
+      -webkit-animation:fadeIn ease 1;  /* call our keyframe named fadeIn, use animattion ease-in and repeat it only 1 time */
+      -moz-animation:fadeIn ease 1;
+      animation:fadeIn ease 1;
+      -webkit-animation-duration: 1s;
+      -moz-animation-duration: .1s;
+      animation-duration: 1;
+
+      -webkit-animation-fill-mode:forwards;  /* this makes sure that after animation is done we remain at the last keyframe value (opacity: 1)*/
+      -moz-animation-fill-mode:forwards;
+      animation-fill-mode:forwards;
+    }
+
+    @-webkit-keyframes fadeIn { from { opacity:0; opacity: 1\9; /* IE9 only */ } to { opacity:1; } }
+    @-moz-keyframes fadeIn { from { opacity:0; opacity: 1\9; /* IE9 only */ } to { opacity:1; } }
+    @keyframes fadeIn { from { opacity:0; opacity: 1\9; /* IE9 only */ } to { opacity:1; } }
+
+    .spinner-wrapper {
+      position: fixed;
+      z-index: -1;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .spinner {
+      width: 40px;
+      height: 40px;
+      position: relative;
+    }
+
+    .double-bounce1, .double-bounce2 {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background-color: #a2a2a2;
+      opacity: 0.6;
+      position: absolute;
+      top: 0;
+      left: 0;
+
+      -webkit-animation: sk-bounce 2.0s infinite ease-in-out;
+      animation: sk-bounce 2.0s infinite ease-in-out;
+    }
+
+    .double-bounce2 {
+      -webkit-animation-delay: -1.0s;
+      animation-delay: -1.0s;
+    }
+
+    @-webkit-keyframes sk-bounce {
+      0%, 100% { -webkit-transform: scale(0.0) }
+      50% { -webkit-transform: scale(1.0) }
+    }
+
+    @keyframes sk-bounce {
+      0%, 100% {
+        transform: scale(0.0);
+        -webkit-transform: scale(0.0);
+      } 50% {
+        transform: scale(1.0);
+        -webkit-transform: scale(1.0);
+      }
+    }
+
+    /* TODO: Fixed for dorel-hubspot recaptcha and polyfilled browsers, remove once API is used */
+    .hs_recaptcha {
+      max-width: 46rem;
+      display: block;
+      float: none;
+      margin: 0 auto;
+      border: 0;
+      padding: 0;
+      padding: 0 0 calc(1.5rem * 1.2) 0;
+    }
+  </style>
+
+</head>
+<body unresolved="">
+
+  <div id="load-placeholder">
+    <div class="spinner-wrapper">
+      <div class="spinner">
+        <div class="double-bounce1"></div>
+        <div class="double-bounce2"></div>
+      </div>
+    </div>
+  </div>
+
+  <dorel-app>
+    
+  </dorel-app>
+
+  <script>!function(){if("registerElement"in document&&"import"in document.createElement("link")&&"content"in document.createElement("template"));else{var e=document.createElement("script");e.src="/bower_components/webcomponentsjs/webcomponents-lite.min.js",document.body.appendChild(e)}}();</script>
+
+
+</body></html>
