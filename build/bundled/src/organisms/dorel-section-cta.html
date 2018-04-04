@@ -1,4 +1,6 @@
-<html><head></head><body><dom-module id="dorel-section-cta">
+<html><head><link rel="import" href="../atoms/dorel-icons-cta-section.html">
+
+</head><body><dom-module id="dorel-section-cta">
   <template>
     <style include="iron-flex iron-flex-alignment">
       :host {
@@ -14,62 +16,58 @@
 
       .section-cta {
         @apply(--max-width-container);
-        padding: 0 var(--theme-gutter);
         float: left;
         width: 100%;
         box-sizing: border-box;
-        margin-top: -3em;
         position: relative;
-      }
-
-      .section-cta[mobile-small] {
+        margin-top: 1.5em;
         padding: 0 var(--theme-gutter-mobile);
       }
 
       .row {
         @apply(--theme-grid-row);
+        @apply(--theme-grid-row-mobile-margins);
         @apply(--layout-flex);
         justify-content: center;
       }
 
       h2 {
         @apply(--theme-grid-column);
-        -ms-flex-preferred-size: calc(var(--theme-column-width) * 4);
-        flex-basis: calc(var(--theme-column-width) * 4);
-        max-width: calc(var(--theme-column-width) * 4);
-        padding: 0 .75em;
-        margin-top: 0;
-        margin: 0;
+        -ms-flex-preferred-size: 100%;
+        -webkit-flex-basis: 100%;
+        flex-basis: 100%;
+        max-width: 100%;
         display: initial;
+        padding: 0;
+        margin: 0;
+
         font-size: 1em;
       }
 
-      [mobile-small] h2, [mobile-medium] h2 {
-        -ms-flex-preferred-size: 100%;
-        flex-basis: 100%;
-        max-width: 100%;
-        padding: 0;
+      /* Responsive styling */
+      [tablet-medium-up] h2 {
+        -ms-flex-preferred-size: calc(var(--theme-column-width) * 4);
+        -webkit-flex-basis: calc(var(--theme-column-width) * 4);
+        flex-basis: calc(var(--theme-column-width) * 4);
+        max-width: calc(var(--theme-column-width) * 4);
+        padding: 0 .75em;
       }
 
-      [mobile-small] .row {
-        margin-right: -0.125em;
-        margin-left: -0.125em;
+      .section-cta[tablet-medium-up] {
+        padding: 0 var(--theme-gutter);
+        margin-top: -3em;
       }
 
-      .section-cta[mobile-small], .section-cta[mobile-medium] {
-        margin-top: 1.5em;
+      [tablet-medium-up] .row {
+        @apply(--theme-grid-row-margins);
       }
 
     </style>
 
-    
-    <iron-media-query query="(max-width : 479px)" query-matches="{{ mobileSmall }}"></iron-media-query>
-    <iron-media-query query="(min-width : 480px) and (max-width : 767px)" query-matches="{{ mobileMedium }}"></iron-media-query>
+    <dorel-media-query breakpoints="{{ breakpoints }}"></dorel-media-query>
 
     <template is="dom-if" if="[[ ctaData.ctas.length ]]">
-
-      <section class="section-cta layout horizontal center center-justified wrap" mobile-small$="{{ mobileSmall }}" mobile-medium$="{{ mobileMedium }}">
-
+      <section class="section-cta layout horizontal center center-justified wrap" tablet-medium-up$="{{ breakpoints.tabletMediumUp }}">
         <div class="row">
           <template is="dom-repeat" items="[[ ctaData.ctas ]]" as="cta">
             <h2>
@@ -79,14 +77,10 @@
             </h2>
           </template>
         </div>
-
       </section>
-
     </template>
-
   </template>
 
   <script>Polymer({is:"dorel-section-cta",properties:{ctaData:{type:Object,value:function(){return{}}}}});</script>
-
 </dom-module>
 </body></html>

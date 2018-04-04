@@ -29,7 +29,7 @@
 
   </template>
 
-  <script>Polymer({is:"dorel-video-wrap",properties:{videoType:{type:String,value:""},videoId:{type:String,value:""},playVideo:{type:Boolean,value:!1}},hasVideoId:function(e){return"undefined"!=typeof e||""!==e||null!==e},isYoutubeVideo:function(e){return"undefined"!=typeof e&&"youtube"===e},_iframeClick:function(e){this.playVideo=!this.playVideo,this._eventTracking(e)},_eventTracking:function(e){Polymer.globalsManager.get("Dorel");Polymer.globalsManager.set("Dorel.events",{action:this.playVideo?"play":"stop",component:"big-video",element:Polymer.dom(e).localTarget,event:"polymer_event"})}});</script>
+  <script>Polymer({is:"dorel-video-wrap",properties:{videoType:{type:String,value:""},videoId:{type:String,value:""},playVideo:{type:Boolean,value:!1}},hasVideoId:function(e){return void 0!==e||""!==e||null!==e},isYoutubeVideo:function(e){return void 0!==e&&"youtube"===e},_iframeClick:function(e){this.playVideo=!this.playVideo,this._eventTracking(e)},_eventTracking:function(e){Polymer.globalsManager.get("Dorel");Polymer.globalsManager.set("Dorel.events",{action:this.playVideo?"play":"stop",component:"big-video",element:Polymer.dom(e).localTarget,event:"polymer_event"})}});</script>
 
 </dom-module>
 </body></html>

@@ -8,14 +8,10 @@
 
       .section-heroes {
         @apply(--max-width-container);
-        padding: 0 var(--theme-gutter) var(--theme-gutter) var(--theme-gutter);
+        padding: 0 var(--theme-gutter-mobile);
         float: left;
         width: 100%;
         box-sizing: border-box;
-      }
-
-      .section-heroes[mobile-small], .section-heroes[mobile-medium] {
-        padding: 0 var(--theme-gutter-mobile);
       }
 
       .section-heroes-wrap {
@@ -27,23 +23,32 @@
         margin: auto;
       }
 
+      .section-heroes-wrap:first-child .section-heroes-image-wrapper {
+        margin-top: 3em;
+      }
+
       .section-heroes-image-wrapper {
         @apply(--theme-grid-column);
-        -ms-flex-preferred-size: calc(var(--theme-column-width) * 10);
-        flex-basis: calc(var(--theme-column-width) * 10);
-        max-width: calc(var(--theme-column-width) * 10);
         float: left;
         width: 100%;
-        margin-right: calc(var(--theme-column-width) * 2);
-        margin-top: 3em;
+        margin-top: 1.5em;
         padding: 0;
+        margin-left: 0 !important;
+        margin-right: 0;
+        -ms-flex-preferred-size: 100%;
+        flex-basis: 100%;
+        max-width: 100%;
       }
 
       .section-heroes-image {
         float: left;
         width: 100%;
-        height: 28.5em;
+        height: 18em;
         border-radius: 2em;
+        /*height: 100%; */
+        display: block;
+        background-repeat: no-repeat;
+        background-size: 100% auto;
       }
 
       .section-heroes-image-overlay {
@@ -53,7 +58,6 @@
         height: 28.5em;
         width: calc(var(--theme-column-width) * 4);
         top: 10em;
-
         filter: "progid:DXImageTransform.Microsoft.Dropshadow(OffX=12, OffY=12, Color='#444') ";
         filter: url(#drop-shadow);
         -webkit-filter: drop-shadow(-7px 12px 7px rgba(0, 0, 0, .15));
@@ -61,9 +65,9 @@
       }
 
       .title {
-        @apply(--theme-typography-7);
-        color: var(--theme-brand-color-1);
+        @apply(--theme-typography-5);
         margin-top: 0;
+        color: var(--theme-brand-color-1);
       }
 
       dorel-cta {
@@ -73,13 +77,14 @@
       .description {
         @apply(--theme-typography-2);
         max-width: 28em;
+        margin-top: 0;
       }
 
       .description-column {
         @apply(--theme-grid-column);
-        -ms-flex-preferred-size: calc(var(--theme-column-width) * 4);
-        flex-basis: calc(var(--theme-column-width) * 4);
-        max-width: calc(var(--theme-column-width) * 4);
+        -ms-flex-preferred-size: 100%;
+        flex-basis: 100%;
+        max-width: 100%;
         padding: 0 .75em;
         margin-top: 0;
       }
@@ -96,15 +101,6 @@
 
       .section-heroes-wrap {
         margin-bottom: 1.5em;
-      }
-
-      /* Section heroes */
-      .section-heroes-image {
-        width: 100%;
-        height: 100%;
-        display: block;
-        background-repeat: no-repeat;
-        background-size: 100% auto;
       }
 
       .image-parent {
@@ -147,65 +143,47 @@
       }
 
       /* Responsive Behaviour */
-      [mobile-small] .section-heroes-image-overlay,
-      [mobile-medium] .section-heroes-image-overlay,
-      [tablets] .section-heroes-image-overlay {
-        display: none;
+      .section-heroes[tablet-medium-up] {
+        padding: 0 var(--theme-gutter) var(--theme-gutter) var(--theme-gutter);
       }
 
-      [mobile-small] .section-heroes-image-wrapper,
-      [mobile-medium] .section-heroes-image-wrapper,
-      [tablets] .section-heroes-image-wrapper {
-        margin-left: 0 !important;
-        margin-right: 0;
-        -ms-flex-preferred-size: 100%;
-        flex-basis: 100%;
-        max-width: 100%;
-
+      [desktop-small-up] .section-heroes-image-wrapper {
+        -ms-flex-preferred-size: calc(var(--theme-column-width) * 10);
+        flex-basis: calc(var(--theme-column-width) * 10);
+        max-width: calc(var(--theme-column-width) * 10);
+        margin-right: calc(var(--theme-column-width) * 2);
       }
 
-      [mobile-small] .section-heroes-image,
-      [mobile-medium] .section-heroes-image {
-        height: 18em;
+      [tablet-medium-up] .section-heroes-image {
+        height: 28.5em;
       }
 
-      [tablets] .section-heroes-image {
-        height: 21em;
-      }
-
-      [mobile-small] .title,
-      [mobile-medium] .title {
-        @apply(--theme-typography-5);
-        margin-top: 0;
-      }
-
-      [mobile-small] .description,
-      [mobile-medium] .description {
-        margin-top: 0;
-      }
-
-      [tablets] .description-column {
+      [tablet-medium-up] .description-column {
         -ms-flex-preferred-size: calc(var(--theme-column-width) * 6);
         flex-basis: calc(var(--theme-column-width) * 6);
         max-width: calc(var(--theme-column-width) * 6);
       }
 
-      [mobile-small] .description-column, [mobile-medium] .description-column {
-        -ms-flex-preferred-size: 100%;
-        flex-basis: 100%;
-        max-width: 100%;
+      [desktop-small-up] .description-column {
+        -ms-flex-preferred-size: calc(var(--theme-column-width) * 4);
+        flex-basis: calc(var(--theme-column-width) * 4);
+        max-width: calc(var(--theme-column-width) * 4);
+      }
+
+      [tablet-medium-up] .title {
+        @apply(--theme-typography-7);
+        margin-top: 0;
+      }
+
+      [tablet-medium-up] .description {
+        margin-top: 1.5em;
       }
 
     </style>
 
-    
-    <iron-media-query query="(max-width : 479px)" query-matches="{{ mobileSmall }}"></iron-media-query>
-    <iron-media-query query="(min-width : 480px) and (max-width : 767px)" query-matches="{{ mobileMedium }}"></iron-media-query>
-    <iron-media-query query="(min-width : 768px) and (max-width : 991px)" query-matches="{{ tablets }}"></iron-media-query>
-    <iron-media-query query="(min-width : 992px) and (max-width : 1199px)" query-matches="{{ desktopSmall }}"></iron-media-query>
-    <iron-media-query query="(min-width : 1200px)" query-matches="{{ desktopFull }}"></iron-media-query>
+    <dorel-media-query breakpoints="{{ breakpoints }}"></dorel-media-query>
 
-    <section class="section-heroes" mobile-small$="{{ mobileSmall }}" mobile-medium$="{{ mobileMedium }}" tablets$="{{ tablets }}" desktop-small$="{{ desktopSmall }}" desktop-full$="{{ desktopFull }}">
+    <section class="section-heroes" desktop-small-up$="{{ breakpoints.desktopSmallUp }}" tablet-medium-up$="{{ breakpoints.tabletMediumUp }}">
 
       <template is="dom-repeat" items="[[ heroesData.heroes ]]" as="hero">
         <div class="section-heroes-wrap layout horizontal center center-justified wrap">
@@ -218,9 +196,12 @@
               </div>
             </div>
           </div>
-          
-          <iron-image class="section-heroes-image-overlay" sizing="contain" fade="true" preload="" src$="[[ hero.overlay_image ]]">
-          </iron-image>
+          <template is="dom-if" if="{{ breakpoints.desktopSmallUp }}">
+            
+            <iron-image class="section-heroes-image-overlay" sizing="contain" fade="true" preload="" src$="[[ hero.overlay_image ]]">
+            </iron-image>
+          </template>
+
           <div class="description-column">
             <h3 class="title">[[ hero.title ]]</h3>
             <p class="description">[[ hero.sub_title ]]</p>

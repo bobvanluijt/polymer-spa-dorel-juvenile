@@ -1,19 +1,14 @@
 <html><head><link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
-<link rel="import" href="../../bower_components/iron-media-query/iron-media-query.html">
 <link rel="import" href="../../bower_components/iron-scroll-target-behavior/iron-scroll-target-behavior.html">
-
-<link rel="import" href="../molecules/dorel-list-utility.html">
 <link rel="import" href="../molecules/dorel-logo.html">
 <link rel="import" href="../molecules/dorel-navigation-main.html">
-<link rel="import" href="../molecules/dorel-search-drawer.html">
-<link rel="import" href="../molecules/dorel-user-tools.html">
 
 </head><body><dom-module id="dorel-header">
   <template>
     <style include="iron-flex iron-flex-alignment">
       .header-wrapper {
-        height: 7.5em;
+        height: 4.5em;
         float: left;
         width: 100%;
         display: block;
@@ -47,30 +42,26 @@
         filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#21000000', endColorstr='#00000000', GradientType=0); /* IE6-9 */
       }
 
-      [compact-menu] .header-items {
-        padding: 0 1.5em;
-      }
-
       .header-items {
         @apply(--max-width-container);
+        @apply(--layout-vertical);
         background-color: var(--theme-color-white);
-        -webkit-box-sizing: border-box;
-        -moz-box-sizing: border-box;
         box-sizing: border-box;
-        padding: 1.5em;
         transition: .15s ease padding;
+        padding: .75em;
       }
 
       .header-item-menu {
-        margin: var(--header-item-menu-alignment);
+        order: 1;
       }
 
       #hamburger {
         position: absolute;
-        top: 1em;
-        right: .5em;
+        top: 1.25em;
+        right: .75em;
         z-index: 1000;
         color: var(--theme-color-text-link);
+        cursor: pointer;
         transition: .3s ease color, .15s ease top;
       }
 
@@ -78,135 +69,76 @@
         color: var(--theme-color-text-link-active);
       }
 
-      #hamburger paper-icon-button {
-        padding: .25em;
+      .icon-toggle-menu {
+        width: 1.25em;
+        height: 1.25em;
+        font-size: 1.5rem;
       }
 
-      /* 
-       * screen small order:        
-       *
-      1. menu (in sidebar)
-      2. user tools (right justified)
-      3. logo (center aligned)
-      */
-
-      .header-wrapper[screenSmall] {
-        height: 4.5em;
-      }
-
-      [screenSmall] .header-item-logo {
+      .header-item-logo {
         order: 4;
         /* center the logo */
         @apply(--layout-horizontal);
       }
 
-      [screenSmall] .header-item-menu {
-        order: 1;
-      }
-
-      [screenSmall] .header-item-user-tools {
-        order: 2;
-      }
-
-      [screenSmall] .header-item-search-drawer {
-        order: 3;
-      }
-
-      [screenSmall] .header-items {
-        @apply(--layout-vertical);
-        @apply(--layout-end-justified);
-        padding: .75em;
-      }
-
-      [screenSmall][compact-menu] .header-items {
+      /* Compact Menu */
+      [compact-menu] .header-items {
         padding: 0em .75em;
       }
 
-      [screenSmall] dorel-user-tools {
-        @apply(--layout-horizontal);
-        @apply(--layout-justified);
-        background-color: var(--theme-color-monochrome-2);
+      [compact-menu][desktop-small-up] .header-items {
+        padding: 0 1.5em;
       }
 
-      [screenSmall][compact-menu] #hamburger {
-        top: 0.25em;
+      [compact-menu] #hamburger {
+        top: 0.5em;
       }
 
-      /* 
-       * screen medium order:        
-       *
-      1. logo (left aligned)
-      2. user tools(right justified)
-      3. menu (full width)
-      */
-      [screenMedium] .header-items {
-        @apply(--layout-horizontal);
-        @apply(--layout-center);
-        @apply(--layout-wrap);
-        @apply(--layout-around-justified);
+      /* Responsive Behaviour */
+      [tablet-medium-up] .header-items {
+        padding-left: 1.5em;
+        padding-right: 1.5em;
       }
 
-      [screenMedium] .header-item-logo {
+      [tablet-medium-up] #hamburger {
+        top: 2em;
+        right: 1.25em;
+      }
+
+      [compact-menu][tablet-medium-up] #hamburger {
+        top: 1.25em;
+      }
+
+      .header-wrapper[desktop-small-up] {
+        height: 7.5em;
+      }
+
+      [desktop-small-up] .header-item-logo {
         order: 1;
+        flex: 1;
       }
 
-      [screenMedium] .header-item-menu {
+      [desktop-small-up] .header-item-menu {
         @apply(--layout-wrap);
         order: 4;
         padding: .75em 0;
       }
 
-      [screenMedium] .header-item-user-tools {
-        @apply(--layout-wrap);
-        order: 2;
-      }
-
-      [screenMedium] .header-item-search-drawer {
-        order: 3;
-      }
-
-      /* 
-       * screen medium up:
-       */
-      [screenMediumUp] .header-item-search-drawer {
-        width: 100%;
-      }
-
-      /* 
-       * screen large up order:
-       *
-      1. logo (left aligned)
-      2. menu (stacked left)
-      3. user tools (right justified)
-      */
-
-      [screenLargeUp] .header-items {
+      [desktop-small-up] .header-items {
         /* layout horizontal header-main */
         @apply(--layout-horizontal);
         @apply(--layout-wrap);
-        @apply(--layout-center);
+        padding: 1.5em;
       }
 
-      [screenLargeUp] .header-contain-main-elements {
+      [desktop-small-up] .header-contain-main-elements {
         @apply(--layout-horizontal);
         @apply(--layout-justified);
       }
-
-      [screenMedium] .header-item-user-tools {
-        margin-left: auto;
-      }
     </style>
 
-    
-    
-    <iron-media-query query="(max-width : 767px)" query-matches="{{ screenSmall }}"></iron-media-query>
-    <iron-media-query query="(min-width : 768px) and (max-width : 991px)" query-matches="{{ screenMedium }}"></iron-media-query>
-    <iron-media-query query="(min-width : 992px) and (max-width : 1199px)" query-matches="{{ desktopLarge }}"></iron-media-query>
-
-    
-    <iron-media-query query="(min-width : 768px)" query-matches="{{ screenMediumUp }}"></iron-media-query>
-    <iron-media-query query="(min-width : 992px)" query-matches="{{ screenLargeUp }}"></iron-media-query>
-    <div class="header-wrapper" screensmall$="{{ screenSmall }}" screenmedium$="{{ screenMedium }}" screenmediumup$="{{ screenMediumUp }}" screenlargeup$="{{ screenLargeUp }}" compact-menu$="{{ compactMenu }}">
+    <dorel-media-query breakpoints="{{ breakpoints }}"></dorel-media-query>
+    <div class="header-wrapper" tablet-medium-up$="{{ breakpoints.tabletMediumUp }}" desktop-small-up$="{{ breakpoints.desktopSmallUp }}" compact-menu$="{{ compactMenu }}">
       <header>
         <div class="header-items">
           <div class="header-item header-item-logo">
@@ -218,25 +150,23 @@
           </div>
 
           <nav class="header-item header-item-menu">
-            <dorel-navigation-main compact-menu="[[ compactMenu ]]" search-opened="{{ searchOpened }}" sub-menu-opened="{{ subMenuOpened }}" mobile-menu-opened="{{ mobileMenuOpened }}"></dorel-navigation-main>
+            <dorel-navigation-main compact-menu="[[ compactMenu ]]" sub-menu-opened="{{ subMenuOpened }}" mobile-menu-opened="{{ mobileMenuOpened }}"></dorel-navigation-main>
           </nav>
 
-          <div id="hamburger">
-            <template is="dom-if" if="{{ screenSmall }}">
+          <template is="dom-if" if="{{ !breakpoints.desktopSmallUp }}">
+            <div id="hamburger">
               <template is="dom-if" if="{{ !mobileMenuOpened }}">
-                <paper-icon-button class="paper-icn-big icon-toggle-menu" icon="dorel-icons:menu" on-click="_toggleMobileMenu" aria-label="menu">
-                </paper-icon-button>
+                <iron-icon class="icon-toggle-menu" icon="dorel-icons:menu" on-click="_toggleMobileMenu" aria-label="menu"></iron-icon>
               </template>
               <template is="dom-if" if="{{ mobileMenuOpened }}">
-                <paper-icon-button class="paper-icn-big icon-toggle-menu" icon="dorel-icons:close" on-click="_toggleMobileMenu" aria-label="menu">
-                </paper-icon-button>
+                <iron-icon class="icon-toggle-menu" icon="dorel-icons:close" on-click="_toggleMobileMenu" aria-label="menu"></iron-icon>
               </template>
-            </template>
-          </div>
+            </div>
+          </template>
         </div>
       </header>
     </div>
   </template>
-  <script>Polymer({is:"dorel-header",behaviors:[Polymer.IronScrollTargetBehavior],properties:{compactMenu:{type:Boolean,value:!1},brandName:{type:String},loadComplete:{type:Boolean},page:{type:String},searchOpened:{type:Boolean},subMenuOpened:{type:Boolean},mobileMenuOpened:{type:Boolean}},attached:function(){this._scrollHandler()},_scrollHandler:function(){this.compactMenu=this._scrollTop>50},_logoClicked:function(e){Polymer.globalsManager.set("Dorel.events",{action:"switch",component:"logo",element:Polymer.dom(e).localTarget.parentNode,event:"polymer_event",things:{currentPage:document.URL,targetPage:Polymer.dom(e).localTarget.parentNode.href}})},_toggleMobileMenu:function(e){this.searchOpened=!1,this.subMenuOpened=!1,this.mobileMenuOpened=!this.mobileMenuOpened,Polymer.globalsManager.set("Dorel.events",{action:this.mobileMenuOpened?"open":"close",component:"hamburger",element:Polymer.dom(e).localTarget.parentNode,event:"polymer_event",things:{currentState:this.mobileMenuOpened?"close":"open",toState:this.mobileMenuOpened?"open":"close"}})}});</script>
+  <script>Polymer({is:"dorel-header",behaviors:[Polymer.IronScrollTargetBehavior],properties:{compactMenu:{type:Boolean,value:!1},brandName:{type:String},loadComplete:{type:Boolean},page:{type:String},subMenuOpened:{type:Boolean},mobileMenuOpened:{type:Boolean}},attached:function(){this._scrollHandler()},_scrollHandler:function(){this.compactMenu=this._scrollTop>50},_logoClicked:function(e){Polymer.globalsManager.set("Dorel.events",{action:"switch",component:"logo",element:Polymer.dom(e).localTarget.parentNode,event:"polymer_event",things:{currentPage:document.URL,targetPage:Polymer.dom(e).localTarget.parentNode.href}})},_toggleMobileMenu:function(e){this.subMenuOpened=!1,this.mobileMenuOpened=!this.mobileMenuOpened,Polymer.globalsManager.set("Dorel.events",{action:this.mobileMenuOpened?"open":"close",component:"hamburger",element:Polymer.dom(e).localTarget.parentNode,event:"polymer_event",things:{currentState:this.mobileMenuOpened?"close":"open",toState:this.mobileMenuOpened?"open":"close"}})}});</script>
 </dom-module>
 </body></html>

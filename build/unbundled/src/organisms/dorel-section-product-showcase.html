@@ -1,6 +1,4 @@
-<html><head><link rel="import" href="../atoms/dorel-inline-usps.html">
-<link rel="import" href="../atoms/dorel-color-switcher.html">
-<link rel="import" href="../molecules/dorel-expandable-content.html">
+<html><head><link rel="import" href="../molecules/dorel-expandable-content.html">
 
 </head><body><dom-module id="dorel-section-product-showcase">
   <template>
@@ -16,9 +14,9 @@
 
       .section-product-showcase {
         @apply(--max-width-container);
+        padding: 1.5em var(--theme-gutter-mobile) 1.5em var(--theme-gutter-mobile);
         width: 100%;
         float: left;
-        padding: 1.5em var(--theme-gutter) 3em var(--theme-gutter);
         box-sizing: border-box;
       }
 
@@ -26,13 +24,15 @@
         @apply(--theme-grid-row);
         @apply(--layout-flex);
         @apply(--layout-center-justified);
+        @apply(--theme-grid-row-mobile-margins);
       }
 
       .showcase-gallery-view {
         @apply(--theme-grid-column);
-        -ms-flex-preferred-size: calc(var(--theme-column-width) * 6);
-        flex-basis: calc(var(--theme-column-width) * 6);
-        max-width: calc(var(--theme-column-width) * 6);
+        -ms-flex-preferred-size: 100%;
+        flex-basis: 100%;
+        max-width: 100%;
+        margin: auto;
       }
 
       .showcase-description {
@@ -55,21 +55,27 @@
       }
 
       .showcase-product-specs {
+        @apply(--theme-typography-1);
+        margin-top: 0;
         list-style: none;
-        @apply(--theme-typography-2);
         float: left;
-        width: 100%;
         padding: 0;
+        width: initial;
       }
 
       .showcase-product-specs li {
         float: left;
-        margin-right: 1.5em;
+        margin-right: 1em;
+      }
+
+      .actions, .color-mobile-container {
+        -ms-flex-preferred-size: 100%;
+        flex-basis: 100%;
+        max-width: 100%;
       }
 
       .actions dorel-cta {
-        margin: 0 1em 0 0;
-        float: left;
+        margin: 0 .5em 0 0;
       }
 
       .actions dorel-cta:first-child {
@@ -81,85 +87,75 @@
       }
 
       .showcase-gallery-view .image {
-        margin: auto;
-        display: block;
-        width: 31em;
-        height: 35em;
+        width: 100%;
+        height: 24em;
+        margin: 1.5em auto 0 auto;
       }
 
       /* Responsive Behaviour */
-      [mobile] .showcase-gallery-view {
-        -ms-flex-preferred-size: 100%;
-        flex-basis: 100%;
-        max-width: 100%;
-        margin: auto;
-      }
-
-      [mobile] .showcase-product-specs {
-        margin: auto;
-        width: initial;
-      }
-
-      [mobile] .actions, [mobile] .color-mobile-container {
-        -ms-flex-preferred-size: 100%;
-        flex-basis: 100%;
-        max-width: 100%;
-      }
-
-      [mobile] .showcase-gallery-view .image {
-        width: auto;
-        height: 24em;
-        margin-top: 1.5em;
-      }
-
-      [tablets] .showcase-gallery-view .image {
-
-        width: 23.25em;
-        height: 26.25em;
-        margin-top: 1.5em;
-      }
-
-      [tablets] .showcase-description {
+      [tablet-medium-up] .showcase-gallery-view {
         -ms-flex-preferred-size: calc(var(--theme-column-width) * 6);
         flex-basis: calc(var(--theme-column-width) * 6);
         max-width: calc(var(--theme-column-width) * 6);
       }
 
-      [mobile] {
-        padding: 1.5em var(--theme-gutter-mobile) 1.5em var(--theme-gutter-mobile);
+      /* TODO: not sure if we actually need this */
+      [tablet-medium-up] .actions, [tablet-medium-up] .color-mobile-container {
+
       }
 
-      [mobile] .row {
-        margin-right: calc(1em * -0.25);
-        margin-left: calc(1em * -0.25);
+      [tablet-medium-up] .showcase-gallery-view .image {
+        margin: auto;
+        display: block;
+        width: 31em;
+        height: 34.5em;
       }
 
-      [mobile] .actions dorel-cta {
-        margin: 0 .5em 0 0;
+      [tablet-medium] .showcase-gallery-view .image {
+        width: 23.25em;
+        height: 26.25em;
+        margin-top: 1.5em;
       }
 
-      [mobile] .showcase-product-specs {
-        @apply(--theme-typography-1);
-        margin-top: 0;
+      [tablet-medium-up] .showcase-description {
+        -ms-flex-preferred-size: calc(var(--theme-column-width) * 6);
+        flex-basis: calc(var(--theme-column-width) * 6);
+        max-width: calc(var(--theme-column-width) * 6);
       }
 
-      [mobile] .showcase-product-specs li {
-        margin-right: 1em;
+      .section-product-showcase[tablet-medium-up] {
+        padding: 1.5em var(--theme-gutter) 3em var(--theme-gutter);
+      }
+
+      [tablet-medium-up] .actions dorel-cta {
+        margin: 0 1em 0 0;
+        float: left;
+      }
+
+      [tablet-medium-up] .showcase-product-specs {
+        @apply(--theme-typography-2);
+        width: 100%;
+        margin: 1.5em 0 0 0;
+      }
+
+      [tablet-medium-up] .showcase-product-specs li {
+        margin-right: 1.5em;
+      }
+
+      [tablet-medium-up] .row {
+        @apply(--theme-grid-row-margins);
       }
 
     </style>
 
-
-    
-    <iron-media-query query="(max-width : 767px)" query-matches="{{ mobile }}"></iron-media-query>
-    <iron-media-query query="(min-width : 768px) and (max-width : 991px)" query-matches="{{ tablets }}"></iron-media-query>
+    <dorel-media-query breakpoints="{{ breakpoints }}"></dorel-media-query>
 
     <template is="dom-if" if="[[ showcaseData ]]">
-      <section class="section-product-showcase layout horizontal center center-justified wrap" mobile$="{{ mobile }}" tablets$="{{ tablets }}">
+      <section class="section-product-showcase layout horizontal center center-justified wrap" tablet-medium-up$="{{ breakpoints.tabletMediumUp }}" tablet-medium$="{{ breakpoints.tabletMedium }}">
 
         <div class="row">
           
-          <template is="dom-if" if="{{ mobile }}">
+          <template is="dom-if" if="{{ !breakpoints.tabletMediumUp }}">
             
             <ul class="showcase-product-specs">
               <template is="dom-if" if="[[ _hasValue(showcaseData.age_category) ]]">
@@ -211,7 +207,7 @@
           
 
           
-          <template is="dom-if" if="{{ !mobile }}">
+          <template is="dom-if" if="{{ breakpoints.tabletMediumUp }}">
             <div class="showcase-gallery-view" on-track="handleTrack">
               <iron-image class="image" id="rotation-element" sizing="cover" fade="true" preload="" src$="{{ currentImage }}"></iron-image>
             </div>
@@ -272,6 +268,6 @@
     </template>
   </template>
 
-  <script>Polymer({is:"dorel-section-product-showcase",properties:{accessoryScrollHandler:{type:Boolean,notify:!0},showcaseData:{type:Object},currentImage:{type:String}},_hasAccessories:function(e){var r="undefined"!=typeof e&&""!==e&&e,o=Polymer.globalsManager.get("Dorel.current.page"),c=o.acf.page_builder.find(function(e){return"section_product_accessories"===e.acf_fc_layout});return r&&c.accessories.length},_hasStoreLocator:function(e,r){return e="undefined"!=typeof e&&""!==e&&e,r="undefined"!=typeof r&&""!==r,e&&r},_hasValue:function(e){return"undefined"!=typeof e&&""!==e&&e},_viewAccessories:function(e){this.accessoryScrollHandler=!this.accessoryScrollHandler}});</script>
+  <script>Polymer({is:"dorel-section-product-showcase",properties:{accessoryScrollHandler:{type:Boolean,notify:!0},showcaseData:{type:Object},currentImage:{type:String}},_hasAccessories:function(e){var r=void 0!==e&&""!==e&&e,o=Polymer.globalsManager.get("Dorel.current.page"),c=o.acf.page_builder.find(function(e){return"section_product_accessories"===e.acf_fc_layout});return r&&c.accessories.length},_hasStoreLocator:function(e,r){return e=void 0!==e&&""!==e&&e,r=void 0!==r&&""!==r,e&&r},_hasValue:function(e){return void 0!==e&&""!==e&&e},_viewAccessories:function(e){this.accessoryScrollHandler=!this.accessoryScrollHandler}});</script>
 </dom-module>
 </body></html>

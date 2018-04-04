@@ -14,6 +14,10 @@
         @apply(--theme-typography-6);
       }
 
+      .class-for-h3 {
+        @apply(--theme-typography-4);
+      }
+
       p {
         @apply(--theme-paragraph-text);
       }
@@ -37,7 +41,8 @@
         background-color: var(--theme-color-monochrome-2);
         margin-top: 1.75em;
         line-height: calc(var(--theme-scale-3));
-        padding: calc(var(--theme-scale-1) * 7);
+        /* Note: we're using pixels here because the ems because of table styling quirks */
+        padding: 23px;
         clear: both;
         float: left;
       }

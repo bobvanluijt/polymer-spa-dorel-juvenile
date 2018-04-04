@@ -11,7 +11,7 @@
         @apply(--max-width-container);
         float: left;
         width: 100%;
-        padding: 4.5em var(--theme-gutter) 3em var(--theme-gutter);
+        padding: 3em var(--theme-gutter-mobile);
         box-sizing: border-box;
       }
 
@@ -22,17 +22,17 @@
 
       .accordion {
         @apply(--theme-grid-column);
-        -ms-flex-preferred-size: calc(var(--theme-column-width) * 6);
-        flex-basis: calc(var(--theme-column-width) * 6);
-        max-width: calc(var(--theme-column-width) * 6);
-        padding: 0 .75em;
+        -ms-flex-preferred-size: 100%;
+        flex-basis: 100%;
+        max-width: 100%;
         margin: auto;
+        padding: 0;
       }
 
       .accordion-heading {
         @apply(--theme-typography-3);
         margin-top: 0;
-        padding: 1.5rem;
+        padding: 1.25em;
         transition: color .3s ease;
         color: var(--theme-color-text-link);
       }
@@ -60,6 +60,7 @@
         margin-top: -1.5em;
         float: left;
         width: 100%;
+        box-sizing: border-box;
       }
 
       .accordion-icon {
@@ -80,35 +81,26 @@
       }
 
       /* Responsive Behaviour */
-      [mobile-small] .accordion, [mobile-medium] .accordion, [tablets] .accordion {
-        -ms-flex-preferred-size: 100%;
-        flex-basis: 100%;
-        max-width: 100%;
+      [desktop-small-up] .accordion {
+        -ms-flex-preferred-size: calc(var(--theme-column-width) * 6);
+        flex-basis: calc(var(--theme-column-width) * 6);
+        max-width: calc(var(--theme-column-width) * 6);
       }
 
-      .section-product-accordions[mobile-medium], .section-product-accordions[mobile-small] {
-        padding: 3em var(--theme-gutter-mobile) 1.5em var(--theme-gutter-mobile);
+      .section-product-accordions[tablet-medium-up] {
+        padding: 4.5em var(--theme-gutter);
       }
 
-      [mobile-small] .accordion-heading, [mobile-medium] .accordion-heading {
-        padding-left: 0;
+      [tablet-medium-up] .accordion-content {
+        padding: 0 1.5em 1.5em 1.5em;
       }
-
-      [mobile-small] .accordion-content, [mobile-medium] .accordion-content {
-        padding: 0 0 1.5em 0;
-      }
-
     </style>
 
-
     <template is="dom-if" if="[[ accordionsData.accordions.length ]]">
-      
-      <iron-media-query query="(max-width : 479px)" query-matches="{{ mobileSmall }}"></iron-media-query>
-      <iron-media-query query="(min-width : 480px) and (max-width : 767px)" query-matches="{{ mobileMedium }}"></iron-media-query>
-      <iron-media-query query="(min-width : 768px) and (max-width : 991px)" query-matches="{{ tablets }}"></iron-media-query>
-      <iron-media-query query="(min-width : 767px) and (max-width : 1600[x)" query-matches="{{ screenLarge }}"></iron-media-query>
 
-      <section class="section-product-accordions layout horizontal" mobile-small$="{{ mobileSmall }}" mobile-medium$="{{ mobileMedium }}" tablets$="{{ tablets }}">
+      <dorel-media-query breakpoints="{{ breakpoints }}"></dorel-media-query>
+
+      <section class="section-product-accordions layout horizontal" tablet-medium-up$="{{ breakpoints.tabletMediumUp }}" desktop-small-up$="{{ breakpoints.desktopSmallUp }}">
 
         <div class="row center center-justified">
           <div class="accordion">
@@ -134,6 +126,6 @@
       </section>
     </template>
   </template>
-  <script>Polymer({is:"dorel-section-product-accordions",properties:{accordionsData:{type:Object,value:function(){return{}}}},_getIconState:function(e){return opened},_toggleCollapse:function(e){var t="true"==e.target.getAttribute("aria-expanded");e.target.setAttribute("aria-expanded",!t);var n=e.target.dataset.selector,r=this.$$(n).classList.contains("iron-collapse-opened");this.$$(n).toggle(),this._eventTracking(e,e.target,r)},_hasValue:function(e){return"undefined"!=typeof e||""!==e},_eventTracking:function(e,t,n){var r=(Polymer.globalsManager.get("Dorel"),t.getAttribute("gtm-cta-index"));Polymer.globalsManager.set("Dorel.events",{action:"toggle-accordion",component:"accordion",structure:{name:this.gtmParent,index:Number(this.gtmParentIndex)+1,event:{name:"accordion-heading",index:Number(r)+1,state:n?"closed":"open"}},element:t.innerHTML,event:"polymer_event",things:{currentState:n?"open":"closed",targetState:n?"closed":"open"}})}});</script>
+  <script>Polymer({is:"dorel-section-product-accordions",properties:{accordionsData:{type:Object,value:function(){return{}}}},_getIconState:function(e){return opened},_toggleCollapse:function(e){var t="true"==e.target.getAttribute("aria-expanded");e.target.setAttribute("aria-expanded",!t);var n=e.target.dataset.selector,r=this.$$(n).classList.contains("iron-collapse-opened");this.$$(n).toggle(),this._eventTracking(e,e.target,r)},_hasValue:function(e){return void 0!==e||""!==e},_eventTracking:function(e,t,n){var r=(Polymer.globalsManager.get("Dorel"),t.getAttribute("gtm-cta-index"));Polymer.globalsManager.set("Dorel.events",{action:"toggle-accordion",component:"accordion",structure:{name:this.gtmParent,index:Number(this.gtmParentIndex)+1,event:{name:"accordion-heading",index:Number(r)+1,state:n?"closed":"open"}},element:t.innerHTML,event:"polymer_event",things:{currentState:n?"open":"closed",targetState:n?"closed":"open"}})}});</script>
 </dom-module>
 </body></html>

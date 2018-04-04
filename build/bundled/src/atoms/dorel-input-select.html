@@ -71,5 +71,5 @@
   </template>
 </dom-module>
 
-<script>Polymer({is:"dorel-input-select",properties:{selected:{type:String,notify:!0,readOnly:!1},options:{type:Object,observer:"_setSelectionOptions"},hostValue:{type:String,observer:"_onChange"}},behaviors:[Polymer.IronFormElementBehavior],_onChange:function(e){var t=e.path[0].value,n=this.options[t];this.selected=n.label},_isSelected:function(e,t){return e===t},_setSelectionOptions:function(){for(var e=this.$.input,t=0;t<this.options.length;t++){var n=this.options[t],o=document.createElement("option");o.textContent=n.label,o.value=t,o.selected=this._isSelected(o.textContent,this.selected),e.appendChild(o)}}});</script>
+<script>Polymer({is:"dorel-input-select",properties:{selected:{type:String,notify:!0,readOnly:!1},options:{type:Object,observer:"_setSelectionOptions"},hostValue:{type:String,observer:"_onChange"}},behaviors:[Polymer.IronFormElementBehavior],_onChange:function(e){var t=e.path[0].value,n=this.options.find(function(e){return e.value===t});this.selected={label:n.label,value:n.value}},_isSelected:function(e,t){return e===t},_setSelectionOptions:function(){for(var e=this.$.input,t=0;t<this.options.length;t++){var n=this.options[t],o=document.createElement("option");o.textContent=n.label,o.value=n.value,o.selected=this._isSelected(o.textContent,this.selected.label),e.appendChild(o)}}});</script>
 </body></html>

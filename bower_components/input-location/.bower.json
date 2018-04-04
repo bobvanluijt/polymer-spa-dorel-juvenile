@@ -1,0 +1,23 @@
+{
+  "name": "input-location",
+  "description": "input location",
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.0",
+    "google-apis": "GoogleWebComponents/google-apis#^1.0"
+  },
+  "keywords": [
+    "web-components",
+    "input",
+    "location"
+  ],
+  "homepage": "https://github.com/x-element/input-location",
+  "_release": "2db14906c8",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "2db14906c886123ce67355eafb64de6e1c9b49c9"
+  },
+  "_source": "https://github.com/x-element/input-location.git",
+  "_target": "*",
+  "_originalSource": "input-location"
+}

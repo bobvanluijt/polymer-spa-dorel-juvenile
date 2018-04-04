@@ -14,55 +14,53 @@
         @apply(--max-width-container);
         width: 100%;
         float: left;
-        padding: 1.5em var(--theme-gutter) 3em var(--theme-gutter);
+        padding: 1.5em var(--theme-gutter-mobile);
         box-sizing: border-box;
       }
 
       .row {
         @apply(--theme-grid-row);
         @apply(--layout-flex);
+        @apply(--theme-grid-row-mobile-margins);
       }
 
       dorel-card {
         @apply(--theme-grid-column);
-        -ms-flex-preferred-size: calc(var(--theme-column-width) * 6);
-        flex-basis: calc(var(--theme-column-width) * 6);
-        max-width: calc(var(--theme-column-width) * 6);
-        padding: 0 .75em;
         margin-top: 0;
-      }
-
-      [mobile-small] dorel-card, [mobile-medium] dorel-card {
-
         -ms-flex-preferred-size: 100%;
         flex-basis: 100%;
         max-width: 100%;
         padding: 0;
       }
 
+      [tablet-medium-up] dorel-card {
+        -ms-flex-preferred-size: calc(var(--theme-column-width) * 6);
+        flex-basis: calc(var(--theme-column-width) * 6);
+        max-width: calc(var(--theme-column-width) * 6);
+        padding: 0 .75em;
+      }
+
+      .section-cards[tablet-medium-up] {
+        padding: 1.5em var(--theme-gutter);
+      }
+
+      [tablet-medium-up] .row {
+        @apply(--theme-grid-row-margins);
+      }
     </style>
 
-    
-    <iron-media-query query="(max-width : 479px)" query-matches="{{ mobileSmall }}"></iron-media-query>
-    <iron-media-query query="(min-width : 480px) and (max-width : 767px)" query-matches="{{ mobileMedium }}"></iron-media-query>
+    <dorel-media-query breakpoints="{{ breakpoints }}"></dorel-media-query>
 
     <template is="dom-if" if="[[ cardsData.cards.length ]]">
 
-      <section class="section-cards layout horizontal center center-justified wrap" mobile-small$="{{ mobileSmall }}" mobile-medium$="{{ mobileMedium }}">
+      <section class="section-cards layout horizontal center center-justified wrap" tablet-medium-up$="{{ breakpoints.tabletMediumUp }}">
         <div class="row">
-
           <template is="dom-repeat" items="[[ cardsData.cards ]]" as="card">
-
             <dorel-card card-data="[[ card ]]" gtm-parent="[[ gtmParent ]]" gtm-parent-index="[[ gtmParentIndex ]]" gtm-child="dorel-card" gtm-child-index="[[ index ]]"></dorel-card>
-
           </template>
-
         </div>
-
       </section>
-
     </template>
-
   </template>
 
   <script>Polymer({is:"dorel-section-cards",properties:{cardsData:{type:Object,value:function(){return{}}}}});</script>

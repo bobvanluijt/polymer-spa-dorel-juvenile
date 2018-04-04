@@ -3,6 +3,6 @@
     <iron-ajax id="page" url="" handle-as="json" on-response="_pageLoaded"></iron-ajax>
   </template>
 
-  <script>Polymer({is:"dorel-wp-collect-page",properties:{endPoint:{type:String},pageSlug:{type:String}},observers:["_retrievePage(pageSlug, globals.Dorel.wpUrl)"],_retrievePage:function(e,r){if("undefined"!=typeof e&&""!==e&&"undefined"!=typeof r&&""!==r&&this._hasProps(r)){var t=this.$.page;t.url=this.globals.Dorel.wpUrl+"/wp/v2/pages?slug="+e,t.generateRequest()}},_pageLoaded:function(e){var r=e.detail.response,t=r[0],a=t.template.slice(0,-4),l=a.replace("page-","");t.template=l,Polymer.globalsManager.set("Dorel.current.page",t)},_getLastUrlSegment:function(e){var r=document.URL.split("/");r.clean("");newVal=r[r.length-1]},_hasProps:function(e){var r=!1;for(var t in e)r=!!e.hasOwnProperty(t);return r}});</script>
+  <script>Polymer({is:"dorel-wp-collect-page",properties:{endPoint:{type:String},pageSlug:{type:String}},observers:["_retrievePage(pageSlug, globals.Dorel.wpUrl)"],_retrievePage:function(e,r){if(void 0!==e&&""!==e&&void 0!==r&&""!==r&&this._hasProps(r)){var t=this.$.page;t.url=this.globals.Dorel.wpUrl+"/wp/v2/pages?slug="+e,t.generateRequest()}},_pageLoaded:function(e){var r=e.detail.response,t=r[0],a=t.template.slice(0,-4),l=a.replace("page-","");t.template=l,Polymer.globalsManager.set("Dorel.current.page",t)},_getLastUrlSegment:function(e){var r=document.URL.split("/");r.clean("");newVal=r[r.length-1]},_hasProps:function(e){var r=!1;for(var t in e)r=!!e.hasOwnProperty(t);return r}});</script>
 </dom-module>
 </body></html>

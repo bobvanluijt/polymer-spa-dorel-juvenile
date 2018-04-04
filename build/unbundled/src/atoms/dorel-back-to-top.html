@@ -27,13 +27,13 @@
 
     <div class="layout horizontal center center-justified">
       <div class="back-to-top flex-center-justified" role="button" aria-label="Back to top" tabindex="0" on-click="_backToTopTap">
-        <iron-icon icon="dorel-icons:vertical-align-top"></iron-icon>
+        <iron-icon icon="dorel-icons:back-to-top"></iron-icon>
       </div>
     </div>
 
   </template>
 
-  <script>Polymer({is:"dorel-back-to-top",properties:{scrollDuration:{type:Number,value:1e3},_cosParameter:{type:Number},_scrollCount:{type:Number},_oldTimestamp:{type:Number}},_scrollAnimationHandler:function(o){return this._scrollCount+=Math.PI/(this.scrollDuration/(o-this._oldTimestamp)),this._scrollCount>=Math.PI?void window.scrollTo(0,0):(window.scrollTo(0,Math.round(this._cosParameter+this._cosParameter*Math.cos(this._scrollCount))),this._oldTimestamp=o,void window.requestAnimationFrame(this._scrollAnimationHandler.bind(this)))},_backToTopTap:function(o){this._cosParameter=window.scrollY/2,this._scrollCount=0,this._oldTimestamp=performance.now(),window.requestAnimationFrame(this._scrollAnimationHandler.bind(this)),Polymer.globalsManager.set("Dorel.events",{action:"click",component:"back-to-top",element:o.target,event:"polymer_event"})}});</script>
+  <script>Polymer({is:"dorel-back-to-top",properties:{scrollDuration:{type:Number,value:1e3},_cosParameter:{type:Number},_scrollCount:{type:Number},_oldTimestamp:{type:Number}},_scrollAnimationHandler:function(o){if(this._scrollCount+=Math.PI/(this.scrollDuration/(o-this._oldTimestamp)),this._scrollCount>=Math.PI)return void window.scrollTo(0,0);window.scrollTo(0,Math.round(this._cosParameter+this._cosParameter*Math.cos(this._scrollCount))),this._oldTimestamp=o,window.requestAnimationFrame(this._scrollAnimationHandler.bind(this))},_backToTopTap:function(o){this._cosParameter=window.scrollY/2,this._scrollCount=0,this._oldTimestamp=performance.now(),window.requestAnimationFrame(this._scrollAnimationHandler.bind(this)),Polymer.globalsManager.set("Dorel.events",{action:"click",component:"back-to-top",element:o.target,event:"polymer_event"})}});</script>
 
 </dom-module>
 

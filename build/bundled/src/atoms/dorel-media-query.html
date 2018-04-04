@@ -1,0 +1,27 @@
+<html><head></head><body><dom-module id="dorel-media-query">
+  <template>
+    
+    <iron-media-query query="[[ mediaQueries.mobileSmall ]]" query-matches="{{ breakpoints.mobileSmall }}"></iron-media-query>
+    <iron-media-query query="[[ mediaQueries.mobileMedium ]]" query-matches="{{ breakpoints.mobileMedium }}"></iron-media-query>
+    <iron-media-query query="[[ mediaQueries.tabletSmall ]]" query-matches="{{ breakpoints.tabletSmall }}"></iron-media-query>
+    <iron-media-query query="[[ mediaQueries.tabletMedium ]]" query-matches="{{ breakpoints.tabletMedium }}"></iron-media-query>
+    <iron-media-query query="[[ mediaQueries.desktopSmall ]]" query-matches="{{ breakpoints.desktopSmall }}"></iron-media-query>
+    <iron-media-query query="[[ mediaQueries.desktopLarge ]]" query-matches="{{ breakpoints.desktopLarge }}"></iron-media-query>
+
+    
+    <iron-media-query query="[[ mediaQueries.tabletMediumUp ]]" query-matches="{{ breakpoints.tabletMediumUp }}"></iron-media-query>
+    <iron-media-query query="[[ mediaQueries.desktopSmallUp ]]" query-matches="{{ breakpoints.desktopSmallUp }}"></iron-media-query>
+
+    
+    <iron-media-query query="[[ mediaQueries.portraitSmall ]]" query-matches="{{ breakpoints.portraitSmall }}"></iron-media-query>
+    <iron-media-query query="[[ mediaQueries.portraitMedium ]]" query-matches="{{ breakpoints.portraitMedium }}"></iron-media-query>
+
+    
+    <iron-media-query query="[[ mediaQueries.landscapeSmall ]]" query-matches="{{ breakpoints.landscapeSmall }}"></iron-media-query>
+    <iron-media-query query="[[ mediaQueries.landscapeMedium ]]" query-matches="{{ breakpoints.landscapeMedium }}"></iron-media-query>
+    <iron-media-query query="[[ mediaQueries.landscapeLarge ]]" query-matches="{{ breakpoints.landscapeLarge }}"></iron-media-query>
+    <iron-media-query query="[[ mediaQueries.landscapeExtraLarge ]]" query-matches="{{ breakpoints.landscapeExtraLarge }}"></iron-media-query>
+  </template>
+  <script>Polymer({is:"dorel-media-query",properties:{mediaQueries:{type:Object,readOnly:!0,notify:!0,value:{mobileSmall:"(max-width : 360px)",mobileMedium:"(min-width : 361px) and (max-width : 640px)",tabletSmall:"(min-width : 641px) and (max-width : 768px)",tabletMedium:"(min-width : 769px) and (max-width : 1024px)",desktopSmall:"(min-width : 1025px) and (max-width : 1440px)",desktopLarge:"(min-width : 1441px)",tabletMediumUp:"(min-width : 769px)",desktopSmallUp:"(min-width: 1025px)",portraitSmall:"(max-width : 360px) and (orientation : portrait)",portraitMedium:"(min-width : 361px) and (orientation : portrait)",landscapeSmall:"(max-width : 360px) and (orientation : landscape)",landscapeMedium:"(min-width : 361px) and (max-width : 1024px) and (orientation : landscape)",landscapeLarge:"(min-width : 1025px) and (max-width : 1440px) and (orientation : landscape)",landscapeExtraLarge:"(min-width : 1441px) and (orientation : landscape)"}},breakpoints:{type:Object,notify:!0,value:{mobileSmall:!1,mobileMedium:!1,tabletSmall:!1,tabletMedium:!1,tabletMediumUp:!1,desktopSmall:!1,desktopSmallUp:!1,desktopLarge:!1,portraitSmall:!1,portraitMedium:!1,landscapeSmall:!1,landscapeMedium:!1,landscapeLarge:!1,landscapeExtraLarge:!1}}}});</script>
+</dom-module>
+</body></html>

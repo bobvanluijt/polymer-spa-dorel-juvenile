@@ -1,48 +1,127 @@
-<html><head><link rel="import" href="../../bower_components/polymer/polymer.html">
-
-<link rel="import" href="dorel-animate-classes.html">
-<link rel="import" href="https://dev.cdn.dorel.io/includes/brands/maxicosi/theme-maxicosi-shared-styles.html">
-
-
-</head><body><dom-module id="dorel-cta">
-
+<html><head></head><body><dom-module id="dorel-cta">
   <template>
+    <style include="iron-flex">
 
-    <style is="custom-style" include="theme-maxicosi-shared-styles dorel-animate-classes">
-      [class^="theme-cta-"] {
-        font-size: 16px;
-        line-height: 20px;
-        padding: 15px 22px 16px;
-        text-decoration: none;
-        border-radius: var(--theme-border-radius-large);
-        border-width: 2px;
-        border-style: solid;
+      .theme-cta {
+        @apply(--theme-button);
+        @apply(--theme-button-primary);
+        @apply(--theme-button-small);
+        width: 100%;
+        margin-top: var(--button-margin-spacing, 1.5em) !important;
       }
-      [class*="-primary"] {
-        color: white;
-        border-color: var(--theme-color-cta);
-        background-color: var(--theme-color-cta);
+
+      .theme-cta:hover, .theme-cta:focus {
+        @apply(--theme-button-active);
+        cursor: pointer;
       }
-      [class*="-primary"]:hover {
-        opacity: 0.9;
+
+      .theme-cta--primary {
+        @apply(--theme-button-primary);
       }
-      [class*="-secondary"] {
-        color: var(--theme-brand-color-accent-dark-grey);
-        border-color: var(--theme-brand-color-accent-medium-grey);
+
+      .theme-cta--secondary {
+        @apply(--theme-button-secondary);
       }
-      .light {
-        color: white;
-        border-color: rgba(255, 255, 255, 0.3);
+
+      .theme-cta--tertiary {
+        @apply(--theme-button-tertiary);
       }
+
+      .theme-cta--link {
+        @apply(--theme-button-link);
+      }
+
+      .theme-cta--link .theme-cta__content {
+        padding: 0;
+      }
+
+      .theme-cta--link .theme-cta__icon {
+        padding-right: 0;
+      }
+
+      .theme-cta--link:hover, .theme-cta--link:focus {
+        @apply(--theme-button-link-active);
+      }
+
+      .theme-cta--small {
+        @apply(--theme-button-small);
+      }
+
+      .theme-cta--medium {
+        @apply(--theme-button-medium);
+      }
+
+      .theme-cta--large {
+        @apply(--theme-button-large);
+        height: 3em;
+      }
+
+      .theme-cta--large .theme-cta__content {
+        padding: 0;
+      }
+
+      .theme-cta__content {
+        -webkit-box-align: center;
+        -webkit-flex-align: center;
+        -ms-flex-align: center;
+        -webkit-align-items: center;
+        -webkit-flex-grow: 1;
+        flex-grow: 1;
+        padding: 0 0 0 0.75em;
+      }
+
+      .theme-cta__icon {
+        @apply(--theme-button-icon);
+      }
+
+      .theme-cta__icon--left {
+        width: 3em;
+        height: 2.5em;
+        margin: 0;
+
+      }
+
+      :host([disabled]) a {
+        opacity: .35;
+        pointer-events: none;
+      }
+
+      :host([disabled]) {
+        cursor: not-allowed;
+      }
+
+      /* Responsive Behaviour */
+      [tablet-medium-up] .theme-cta__icon--left {
+        width: 5.125em;
+        height: 3.125em;
+        margin: .475em 0;
+      }
+
+      .theme-cta--large[tablet-medium-up] {
+        @apply(--theme-button-large);
+        height: auto;
+      }
+
     </style>
 
-    <a href="{{href}}" class="theme-cta-primary hvr-pop">
-      <content></content>
-    </a>
+    <dorel-media-query breakpoints="{{ breakpoints }}"></dorel-media-query>
 
+    <a href$="[[ link ]]" title$="[[ title ]]" target$="[[ target ]]" class$="theme-cta theme-cta--[[ type ]] theme-cta--[[ size ]]" tablet-medium-up$="{{ breakpoints.tabletMediumUp }}" gtm-action$="[[ gtmAction ]]" gtm-parent$="[[ gtmParent ]]" gtm-parent-index$="[[ gtmParentIndex ]]" gtm-child$="[[ gtmChild ]]" gtm-child-index$="[[ gtmChildIndex ]]" gtm-cta-index$="[[ gtmCtaIndex ]]" on-click="_clickCTA">
+
+      <template is="dom-if" if="[[ extraIcon ]]">
+        <iron-icon class="theme-cta__icon theme-cta__icon--left" icon="[[ extraIcon ]]"></iron-icon>
+      </template>
+
+      <span class="theme-cta__content"><content id="content"></content></span>
+
+      <template is="dom-if" if="[[ icon ]]">
+        <iron-icon class="theme-cta__icon" icon="[[ icon ]]"></iron-icon>
+      </template>
+
+    </a>
   </template>
 
-  <script>Polymer({is:"dorel-cta",properties:{href:{type:String}}});</script>
+  <script>Polymer({is:"dorel-cta",properties:{link:{type:String},target:{type:String},title:{type:String},linkTarget:{type:String,value:""},type:{type:String,value:"primary"},size:{type:String,value:"small"},icon:{type:String,value:"dorel-icons:chevron-right"},extraIcon:{type:String}},_clickCTA:function(t){if("A"===Polymer.dom(t).rootTarget.tagName)var e=Polymer.dom(t).rootTarget;else var e=Polymer.dom(t).path[1];var n=(e.getAttribute("gtm-action"),{name:this.gtmParent,index:Number(this.gtmParentIndex)+1});void 0!==this.gtmChild&&null!==this.gtmChild?n.child={name:this.gtmChild,index:Number(this.gtmChildIndex)+1,event:{name:"call-to-action",type:this.type,text:this.$.content.getDistributedNodes()[0].textContent,index:Number(this.gtmCtaIndex)+1}}:n.event={name:"call-to-action",type:this.type,text:this.$.content.getDistributedNodes()[0].textContent,index:Number(this.gtmCtaIndex)+1},Polymer.globalsManager.set("Dorel.events",{action:this.gtmAction?this.gtmAction:"click",component:"call-to-action",structure:n,element:e,event:"polymer_event",things:{currentPage:document.URL,targetPage:e.href}})},_isExternal:function(t){return void 0!==t&&t?"_blank":"_self"}});</script>
 
 </dom-module>
 </body></html>

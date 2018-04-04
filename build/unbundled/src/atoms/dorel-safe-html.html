@@ -24,7 +24,7 @@
     <div id="content"></div>
   </template>
 
-  <script>Polymer({is:"dorel-safe-html",properties:{html:{type:String,value:"",observer:"_htmlChanged"}},_htmlChanged:function(){Polymer.dom(this.$.content).innerHTML="undefined"==typeof this.html?"":this.html}});</script>
+  <script>Polymer({is:"dorel-safe-html",properties:{html:{type:String,value:"",observer:"_htmlChanged"}},_htmlChanged:function(){Polymer.dom(this.$.content).innerHTML=void 0===this.html?"":this.html}});</script>
 
 </dom-module>
 </body></html>

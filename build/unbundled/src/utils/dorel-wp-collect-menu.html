@@ -3,5 +3,5 @@
     <iron-ajax auto="" url="[[ endPoint ]]" handle-as="json" on-response="_menuLoaded"></iron-ajax>
   </template>
   
-  <script>Polymer({is:"dorel-wp-collect-menu",properties:{menuId:{type:String},wpUrl:{type:String},endPoint:{type:String}},ready:function(){return"undefined"==typeof this.menuId?void console.error("Please provide the menu-id attribute for <dorel-wp-collect-menu/> or use <dorel-wp-collect-menus/> to retrieve all available menus."):void(this.endPoint=this.wpUrl+"/wp-api-menus/v2/menus/"+this.menuId)},_menuLoaded:function(e){for(var t=e.detail.response,o=0,r=t.length;o<r;o++)t[o].title=t[o].title.toLowerCase();console.error("set globals straight!")}});</script>
+  <script>Polymer({is:"dorel-wp-collect-menu",properties:{menuId:{type:String},wpUrl:{type:String},endPoint:{type:String}},ready:function(){if(void 0===this.menuId)return void console.error("Please provide the menu-id attribute for <dorel-wp-collect-menu/> or use <dorel-wp-collect-menus/> to retrieve all available menus.");this.endPoint=this.wpUrl+"/wp-api-menus/v2/menus/"+this.menuId},_menuLoaded:function(e){for(var t=e.detail.response,r=0,o=t.length;r<o;r++)t[r].title=t[r].title.toLowerCase();console.error("set globals straight!")}});</script>
 </dom-module></body></html>

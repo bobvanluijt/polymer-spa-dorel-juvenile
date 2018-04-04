@@ -1,0 +1,38 @@
+{
+  "name": "beautify-json",
+  "version": "1.0.1",
+  "authors": [
+    "Marnix Harderwijk <marnix@littlebigagency.com>"
+  ],
+  "description": "Polymer 1.2 element to output json in a human readable way",
+  "keywords": [
+    "web-component",
+    "web-components",
+    "polymer",
+    "json",
+    "output"
+  ],
+  "main": "beautify-json.html",
+  "license": "http://polymer.github.io/LICENSE.txt",
+  "homepage": "https://github.com/mrpharderwijk/beautify-json/",
+  "ignore": [
+    "/.*",
+    "/test/"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.2.0"
+  },
+  "devDependencies": {
+    "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
+    "web-component-tester": "^3.4.0"
+  },
+  "_release": "1.0.1",
+  "_resolution": {
+    "type": "version",
+    "tag": "v1.0.1",
+    "commit": "16c2db1c0565fda305a45d062c06ff353cf1e744"
+  },
+  "_source": "https://github.com/mrpharderwijk/beautify-json.git",
+  "_target": "^1.0.1",
+  "_originalSource": "mrpharderwijk/beautify-json"
+}

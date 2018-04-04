@@ -1,21 +1,39 @@
-<html><head><link rel="import" href="../../bower_components/polymer/polymer.html">
-<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
-
-<link rel="import" href="../atoms/dorel-ripple-container.html">
-
-</head><body><dom-module id="dorel-tab">
+<html><head></head><body><dom-module id="dorel-tab">
   <template strip-whitespace="">
     <style>
+	    :host {
+		    padding: 0;
+		    margin: 0;
+        opacity: 0;  /* make things invisible upon start */
+        -webkit-animation: fadeIn ease 1;  /* call our keyframe named fadeIn, use animattion ease-in and repeat it only 1 time */
+        -moz-animation: fadeIn ease 1;
+        animation: fadeIn ease 1;
+        -webkit-animation-duration: 1s;
+        -moz-animation-duration: .1s;
+        animation-duration: 1s;
+        -webkit-animation-fill-mode: forwards;  /* this makes sure that after animation is done we remain at the last keyframe value (opacity: 1)*/
+        -moz-animation-fill-mode: forwards;
+        animation-fill-mode: forwards;
+	    }
+
+      @-webkit-keyframes fadeIn { from { opacity: 0; opacity: 1\9; /* IE9 only */ } to { opacity: 1; } }
+      @-moz-keyframes fadeIn { from { opacity: 0; opacity: 1\9; /* IE9 only */ } to { opacity: 1; } }
+      @keyframes fadeIn { from { opacity: 0; opacity: 1\9; /* IE9 only */ } to { opacity: 1; } }
+      
+      :host(.dorel-tabs-overlay-static-above) #overlay {
+        display: block;
+      }
+
+      :host:hover {
+        color: var(--theme-color-text-link-active);
+        cursor: pointer;
+      }
+
       [hidden] {
         display: none !important;
       }
 
-      :host {
-        display: inline-block;
-        position: relative;
-      }
-
-      #overlay {
+      .overlay {
         pointer-events: none;
         display: none;
         position: absolute;
@@ -23,17 +41,11 @@
         right: 0;
         bottom: 0;
         left: 0;
-        @apply(--dorel-tab-overlay);
       }
 
-      :host(.dorel-tabs-overlay-static-above) #overlay {
-        display: block;
-      }
     </style>
-    <div id="overlay"></div>
-    <dorel-ripple-container>
-      <content></content>
-    </dorel-ripple-container>
+    <div class="overlay"></div>
+    <content></content>
   </template>
   <script>Polymer({is:"dorel-tab"});</script>
 </dom-module>

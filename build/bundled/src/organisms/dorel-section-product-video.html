@@ -7,9 +7,9 @@
 
       .section-product-video {
         @apply(--max-width-container);
+        padding: 3em var(--theme-gutter-mobile) 1.5em var(--theme-gutter-mobile);
         width: 100%;
         float: left;
-        padding: 7.5em var(--theme-gutter);
         box-sizing: border-box;
       }
 
@@ -21,17 +21,18 @@
 
       .video {
         @apply(--theme-grid-column);
-        -ms-flex-preferred-size: calc(var(--theme-column-width) * 8);
-        flex-basis: calc(var(--theme-column-width) * 8);
-        max-width: calc(var(--theme-column-width) * 8);
+        padding: 0;
+        -ms-flex-preferred-size: 100%;
+        flex-basis: 100%;
+        max-width: 100%;
         margin-top: 0;
       }
 
       .video-wrapper {
         position: relative;
-        padding-bottom: 30em;
         height: 0;
         overflow: hidden;
+        padding-bottom: 20em;
       }
 
       iframe {
@@ -42,37 +43,30 @@
         height: 100%;
       }
 
-      .section-product-video[mobile-small], .section-product-video[mobile-medium] {
-        padding: 3em var(--theme-gutter-mobile) 1.5em var(--theme-gutter-mobile);
+      .section-product-video[tablet-medium-up] {
+        padding: 7.5em var(--theme-gutter);
       }
 
-      [mobile-small] .video, [mobile-medium] .video, [tablets] .video {
-        -ms-flex-preferred-size: 100%;
-        flex-basis: 100%;
-        max-width: 100%;
+      [tablet-medium-up] .video {
+        -ms-flex-preferred-size: calc(var(--theme-column-width) * 8);
+        flex-basis: calc(var(--theme-column-width) * 8);
+        max-width: calc(var(--theme-column-width) * 8);
       }
 
-      [mobile-small] .video-wrapper {
-        padding-bottom: 15em;
-      }
-
-      [mobile-medium] .video-wrapper {
+      [tablet-medium] .video-wrapper {
         padding-bottom: 21em;
       }
 
-      [tablets] .video-wrapper {
+      [tablet-medium-up] .video-wrapper {
         padding-bottom: 27em;
       }
 
+
     </style>
 
-    
-    <iron-media-query query="(max-width : 479px)" query-matches="{{ mobileSmall }}"></iron-media-query>
-    <iron-media-query query="(min-width : 480px) and (max-width : 767px)" query-matches="{{ mobileMedium }}"></iron-media-query>
-    <iron-media-query query="(min-width : 768px) and (max-width : 991px)" query-matches="{{ tablets }}"></iron-media-query>
-
+    <dorel-media-query breakpoints="{{ breakpoints }}"></dorel-media-query>
     <template is="dom-if" if="[[ videoData.video_id ]]">
-      <section class="section-product-video layout horizontal center center-justified wrap" mobile-small$="{{ mobileSmall }}" mobile-medium$="{{ mobileMedium }}" tablets$="{{ tablets }}">
+      <section class="section-product-video layout horizontal center center-justified wrap" tablet-medium$="{{ breakpoints.tabletMedium }}" tablet-medium-up$="{{ breakpoints.tabletMediumUp }}">
         <div class="row">
           <div class="video">
             <div class="video-wrapper" on-click="_iframeClick" gtm-parent$="[[ gtmParent ]]" gtm-parent-index$="[[ gtmParentIndex ]]" gtm-child$="[[ gtmChild ]]" gtm-child-index$="[[ gtmChildIndex ]]" gtm-cta-index$="[[ gtmCtaIndex ]]">
@@ -83,6 +77,6 @@
       </section>
     </template>
   </template>
-  <script>Polymer({is:"dorel-section-product-video",properties:{videoData:{type:Object,value:function(){return{}}}},_iframeClick:function(e){if(this.playVideo=!this.playVideo,"A"===Polymer.dom(e).rootTarget.tagName)var t=Polymer.dom(e).rootTarget;else var t=Polymer.dom(e).path[1];var n={name:this.gtmParent,index:Number(this.gtmParentIndex)+1};"undefined"!=typeof this.gtmChild&&null!==this.gtmChild?n.child={name:this.gtmChild,index:Number(this.gtmChildIndex)+1,event:{name:"call-to-action",type:this.type,text:this.$.content.getDistributedNodes()[0].textContent,index:Number(this.gtmCtaIndex)+1}}:n.event={name:"call-to-action",type:this.type,text:this.$.content.getDistributedNodes()[0].textContent,index:Number(this.gtmCtaIndex)+1},Polymer.globalsManager.set("Dorel.events",{action:"click",component:n,element:t,event:"polymer_event",things:{currentPage:document.URL,targetPage:t.href}}),this._eventTracking(e)},_hasValue:function(e){return"undefined"!=typeof e||""!==e},_eventTracking:function(e){Polymer.globalsManager.get("Dorel");Polymer.globalsManager.set("Dorel.events",{action:this.playVideo?"play":"stop",component:"product-video",element:Polymer.dom(e).localTarget,event:"polymer_event"})}});</script>
+  <script>Polymer({is:"dorel-section-product-video",properties:{videoData:{type:Object,value:function(){return{}}}},_iframeClick:function(e){if(this.playVideo=!this.playVideo,"A"===Polymer.dom(e).rootTarget.tagName)var t=Polymer.dom(e).rootTarget;else var t=Polymer.dom(e).path[1];var n={name:this.gtmParent,index:Number(this.gtmParentIndex)+1};void 0!==this.gtmChild&&null!==this.gtmChild?n.child={name:this.gtmChild,index:Number(this.gtmChildIndex)+1,event:{name:"call-to-action",type:this.type,text:this.$.content.getDistributedNodes()[0].textContent,index:Number(this.gtmCtaIndex)+1}}:n.event={name:"call-to-action",type:this.type,text:this.$.content.getDistributedNodes()[0].textContent,index:Number(this.gtmCtaIndex)+1},Polymer.globalsManager.set("Dorel.events",{action:"click",component:n,element:t,event:"polymer_event",things:{currentPage:document.URL,targetPage:t.href}}),this._eventTracking(e)},_hasValue:function(e){return void 0!==e||""!==e},_eventTracking:function(e){Polymer.globalsManager.get("Dorel");Polymer.globalsManager.set("Dorel.events",{action:this.playVideo?"play":"stop",component:"product-video",element:Polymer.dom(e).localTarget,event:"polymer_event"})}});</script>
 </dom-module>
 </body></html>

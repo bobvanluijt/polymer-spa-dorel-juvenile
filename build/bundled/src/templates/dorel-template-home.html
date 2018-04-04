@@ -1,74 +1,81 @@
-<html><head><link rel="import" href="../../bower_components/polymer/polymer.html">
-
-</head><body><dom-module id="dorel-template-home">
+<html><head></head><body><dom-module id="dorel-template-home">
   <template>
-    <style is="custom-style" include="shadow">
-      dorel-hero {
-        --dorel-hero-bg: {
-          padding: 3rem 0 16rem;
-        };
-      }
-      .car-seats {
-        display: flex;
-        margin-top: calc(75px + 50px); /* 75 px is offset for dorel-layout-section */
-      }
-      .category-section paper-card {
-         margin: -10px auto 0 auto;
-         display: block;
-         max-width: 340px;
-         @apply(--shadow-elevation-6dp);
-      }
-      .strollers {
-        --dorel-layout-section-skewed-bg: {
-          /*background-color: var(--theme-brand-color-accent-green);*/
-          background-color: white;
-        };
+    <style>
+      .wrapper {
+        float: left;
+        width: 100%;
       }
     </style>
 
     
-    <template is="dom-if" if="[[ templateData.acf.length ]]">
-      <template is="dom-repeat" items="[[ templateData.acf ]]" as="component">
-        
+    
+
+    <div class="wrapper">
 
 
+      <div class="container layout horizontal center center-justified wrap">
+        <div class="row">
 
+          
+          <template is="dom-if" if="{{ templateData.acf.page_builder.length }}">
 
-        
-        <template is="dom-if" if="{{ _isPageComponent(component, 'hero') }}">
             
-          <dorel-hero hero-data="[[ component ]]"></dorel-hero>
+            <template is="dom-repeat" items="[[ templateData.acf.page_builder ]]" as="component" targetframerate="1000">
 
-        </template>
-        
+              
+              <template is="dom-if" if="{{ isPageComponent(component.acf_fc_layout, 'section_hero_header') }}">
+                
+                <dorel-section-hero-header hero-header-data="[[ component ]]" gtm-parent="dorel-section-hero-header" gtm-parent-index="[[ index ]]"></dorel-section-hero-header>
 
-
-
-
-
-      </template>
-
-    </template>
+              </template>
+              
 
 
 
 
+              
+              <template is="dom-if" if="{{ isPageComponent(component.acf_fc_layout, 'section_cta') }}">
+
+                <dorel-section-cta cta-data="[[ component ]]" gtm-parent="dorel-section-cta" gtm-parent-index="[[ index ]]"></dorel-section-cta>
+
+              </template>
+              
 
 
+
+
+
+              
+              <template is="dom-if" if="{{ isPageComponent(component.acf_fc_layout, 'section_heroes') }}">
+                
+                <dorel-section-heroes heroes-data="[[ component ]]" gtm-parent="dorel-section-heroes" gtm-parent-index="[[ index ]]"></dorel-section-heroes>
+
+              </template>
+              
+
+
+
+
+              
+              <template is="dom-if" if="{{ isPageComponent(component.acf_fc_layout, 'section_cards') }}">
+
+                <dorel-section-cards cards-data="[[ component ]]" gtm-parent="dorel-section-cards" gtm-parent-index="[[ index ]]"></dorel-section-cards>
+
+              </template>
+              
+
+            </template>
+
+          </template>
+
+        </div>
+      </div>
+
+
+    </div>
     
-    <template is="dom-repeat" items="[[ templateData.acf.standout ]]">
-        
-      <dorel-section-standout standout-data="[[ item ]]" standout-index="[[ index ]]"></dorel-section-standout>
-
-    </template>
-    
-
-
-
-
-
   </template>
 
-  <script>Polymer({is:"dorel-template-home",properties:{templateData:{type:String}},_isPageComponent:function(e,t){return e===t}});</script>
+  <script>Polymer({is:"dorel-template-home",properties:{templateData:{type:String}},isPageComponent:function(e,t){var p=e.substr(e.length-1);if(!isNaN(Number(p))){var r=e.split("_");return r.pop(),strippedResponse=r.join("_"),strippedResponse===t}return e===t}});</script>
 </dom-module>
 </body></html>

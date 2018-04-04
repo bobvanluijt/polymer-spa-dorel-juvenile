@@ -1,0 +1,153 @@
+<html><head></head><body><dom-module id="dorel-section-header">
+  <template>
+    <style>
+      .section-header {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        position: relative;
+        background-color: var(--theme-brand-color-1);
+      }
+
+      .title {
+        @apply(--theme-typography-6);
+        margin: 0;
+        color: var(--theme-color-white);
+        text-shadow: var(--theme-text-shadow);
+      }
+
+      .subtitle {
+        @apply(--theme-typography-4);
+        font-weight: var(--theme-font-weight-light);
+        margin-top: 0;
+        color: var(--theme-color-white);
+        text-shadow: var(--theme-text-shadow);
+      }
+
+      .image {
+        width: 100%;
+        display: block;
+        background-position: 50% 50%;
+        background-repeat: no-repeat;
+        background-size: cover;
+        height: 16.5em;
+      }
+
+      dorel-safe-html {
+        color: var(--theme-color-white);
+      }
+
+      .content-wrapper {
+        padding: var(--theme-gutter) var(--theme-gutter-mobile);
+        width: 100%;
+        height: 100%;
+        box-sizing: border-box;
+        position: absolute;
+        left: 0;
+        top: 0;
+        right: 0;
+        max-width: 1280px;
+        margin: auto;
+      }
+
+      .content {
+        @apply(--theme-grid-column);
+        padding: 0 var(--theme-gutter);
+        position: absolute;
+        left: 0;
+        text-align: left;
+        margin-top: 0;
+        bottom: 3em;
+        margin-left: 0;
+      }
+
+      [info-header] .content {
+        width: var(--theme-base-paragraph-width);
+        max-width: var(--theme-base-paragraph-width);
+        position: absolute;
+        padding: 0;
+      }
+
+      [info-header] .content {
+        bottom: 3em;
+        margin-left: 0;
+        left: 1em;
+        right: 1em;
+        width: auto;
+      }
+
+
+      [text-header] .image {
+        display: none;
+      }
+
+      [text-header] .content, [text-header] .content-wrapper {
+        position: initial;
+      }
+
+
+      /* Responsive behaviour */
+
+      [tablet-medium-up] .title {
+        @apply(--theme-typography-8);
+        font-size: var(--theme-scale-6);
+        margin: 0;
+      }
+
+      [tablet-medium-up] .subtitle {
+        @apply(--theme-typography-6);
+        font-weight: var(--theme-font-weight-light);
+        margin-top: .375em;
+      }
+
+      [tablet-medium-up] .content-wrapper {
+        padding: var(--theme-gutter);
+      }
+
+      [text-header][tablet-medium-up] .content-wrapper {
+        padding: 3em var(--theme-gutter);
+      }
+
+      [tablet-medium-up] .content {
+        margin-left: var(--theme-column-width);
+        bottom: 4.5em;
+      }
+
+      [info-header][tablet-medium-up] .content {
+        left: 1em;
+        right: 1em;
+        width: auto;
+        margin: auto;
+      }
+
+      [desktop-large] .image {
+        height: 30.5em;
+      }
+
+      [tablet-medium-up] .image {
+        height: 25.5em;
+      }
+    </style>
+
+    <dorel-media-query breakpoints="{{ breakpoints }}"></dorel-media-query>
+
+    <section class="section-header" text-header$="{{ textHeader }}" info-header$="{{ infoHeader }}" tablet-medium-up$="{{ breakpoints.tabletMediumUp }}" desktop-large$="{{ breakpoints.desktopLarge }}">
+      <iron-image class="image" sizing="cover" fade="true" preload="" src$="[[ sectionHeaderData.background_image ]]"></iron-image>
+      <div class="content-wrapper">
+        <div class="content">
+          <template is="dom-if" if="{{ _hasValue(sectionHeaderData.title) }}">
+            <h1 class="title">[[ sectionHeaderData.title ]]</h1>
+          </template>
+          <template is="dom-if" if="{{ _hasValue(sectionHeaderData.sub_title) }}">
+            <h3 class="subtitle">[[ sectionHeaderData.sub_title ]]</h3>
+          </template>
+          <template is="dom-if" if="{{ _hasValue(sectionHeaderData.text) }}">
+            <dorel-safe-html html="[[ sectionHeaderData.text ]]"></dorel-safe-html>
+          </template>
+        </div>
+      </div>
+    </section>
+  </template>
+  <script>Polymer({is:"dorel-section-header",properties:{textHeader:{type:Boolean,value:!1},infoHeader:{type:Boolean,value:!1},sectionHeaderData:{type:Object,value:function(){return{}}}},_hasValue:function(e){return void 0!==typeof e||""!==e}});</script>
+</dom-module>
+</body></html>

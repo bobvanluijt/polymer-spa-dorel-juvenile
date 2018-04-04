@@ -1,0 +1,129 @@
+<html><head><link rel="import" href="dorel-component-guide-shared-styles.html">
+<link rel="import" href="../../atoms/dorel-media-query.html">
+
+</head><body><dom-module id="dorel-component-guide-breakpoints">
+  <template>
+    <style include="dorel-component-guide-shared-styles">
+      .breakpoints-demo, ul, p, li {
+        float: left;
+        width: 100%;
+      }
+
+      .breakpoint {
+        margin-top: 0;
+        font-style: italic;
+      }
+
+      [active] {
+        background-color: green;
+      }
+
+      ul {
+        list-style: none;
+        margin-right: .75em;
+      }
+
+      li {
+        padding: .75em;
+        float: left;
+        width: auto;
+        display: inline-block;
+      }
+
+    </style>
+    <dorel-media-query media-queries="{{ mediaQueries }}" breakpoints="{{ breakpoints }}"></dorel-media-query>
+    <h1 class="class-for-h1">Breakpoints and screen sizes</h1>
+    <p>
+      The following section documents and displays the breakpoints and screen breakpoints.
+    </p>
+    <hr>
+    <h2 class="class-for-h2">
+      Current breakpoint(s)
+    </h2>
+
+    <table>
+      <thead>
+      <tr>
+        <th>Breakpoint</th>
+        <th>Media query</th>
+        <th>Currently Active</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+        <td>Mobile Small</td>
+        <td>[[ mediaQueries.mobileSmall ]]</td>
+        <td>[[ breakpoints.mobileSmall ]]</td>
+      </tr>
+      <tr>
+        <td>Mobile Medium</td>
+        <td>[[ mediaQueries.mobileMedium ]]</td>
+        <td>[[ breakpoints.mobileMedium ]]</td>
+      </tr>
+      <tr>
+        <td>Tablet Small</td>
+        <td>[[ mediaQueries.tabletSmall ]]</td>
+        <td>[[ breakpoints.tabletSmall ]]</td>
+      </tr>
+      <tr>
+        <td>Tablet Medium</td>
+        <td>[[ mediaQueries.tabletMedium ]]</td>
+        <td>[[ breakpoints.tabletMedium ]]</td>
+      </tr>
+      <tr>
+        <td>Tablet Medium Up</td>
+        <td>[[ mediaQueries.tabletMediumUp ]]</td>
+        <td>[[ breakpoints.tabletMediumUp ]]</td>
+      </tr>
+      <tr>
+        <td>Desktop Small</td>
+        <td>[[ mediaQueries.desktopSmall ]]</td>
+        <td>[[ breakpoints.desktopSmall ]]</td>
+      </tr>
+      <tr>
+        <td>Desktop Small Up</td>
+        <td>[[ mediaQueries.desktopSmallUp ]]</td>
+        <td>[[ breakpoints.desktopSmallUp ]]</td>
+      </tr>
+      <tr>
+        <td>Desktop Large</td>
+        <td>[[ mediaQueries.desktopLarge ]]</td>
+        <td>[[ breakpoints.desktopLarge ]]</td>
+      </tr>
+      <tr>
+        <td>Portrait Small</td>
+        <td>[[ mediaQueries.portraitSmall ]]</td>
+        <td>[[ breakpoints.portraitSmall ]]</td>
+      </tr>
+      <tr>
+        <td>Portrait Medium</td>
+        <td>[[ mediaQueries.portraitMedium ]]</td>
+        <td>[[ breakpoints.portraitMedium ]]</td>
+      </tr>
+      <tr>
+        <td>Landscape Small</td>
+        <td>[[ mediaQueries.landscapeSmall ]]</td>
+        <td>[[ breakpoints.landscapeSmall ]]</td>
+      </tr>
+      <tr>
+        <td>Landscape Medium</td>
+        <td>[[ mediaQueries.landscapeMedium ]]</td>
+        <td>[[ breakpoints.landscapeMedium ]]</td>
+      </tr>
+      <tr>
+        <td>Landscape Large</td>
+        <td>[[ mediaQueries.landscapeLarge ]]</td>
+        <td>[[ breakpoints.landscapeLarge ]]</td>
+      </tr>
+      <tr>
+        <td>Landscape Extra Large</td>
+        <td>[[ mediaQueries.landscapeExtraLarge ]]</td>
+        <td>[[ breakpoints.landscapeExtraLarge ]]</td>
+      </tr>
+      </tbody>
+    </table>
+  </template>
+
+  <script>Polymer({is:"dorel-component-guide-breakpoints"});</script>
+</dom-module>
+</body></html>

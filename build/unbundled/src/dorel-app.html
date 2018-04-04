@@ -1,0 +1,127 @@
+<html><head><link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="utils/dorel-global-variables.html">
+<link rel="import" href="../bower_components/app-route/app-location.html">
+<link rel="import" href="../bower_components/app-route/app-route.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../bower_components/iron-media-query/iron-media-query.html">
+<link rel="import" href="../bower_components/iron-pages/iron-pages.html">
+
+
+<link rel="import" href="atoms/dorel-safe-html.html">
+
+
+<link rel="import" href="themes/theme-maxi-cosi-shared-styles.html">
+<link rel="import" href="themes/theme-dorel-shared-styles.html">
+
+
+<link rel="import" href="organisms/dorel-header.html">
+
+
+<link rel="import" href="templates/dorel-template-home.html">
+
+
+<link rel="import" href="atoms/dorel-media-query.html">
+
+<link rel="import" href="utils/dorel-wp-collect-menu-locations.html">
+<link rel="import" href="utils/dorel-wp-collect-pages.html">
+<link rel="import" href="utils/dorel-wp-collect-options.html">
+<link rel="import" href="utils/dorel-wp-collect-widgets.html">
+<link rel="import" href="utils/dorel-wp-collect-categories.html">
+<link rel="import" href="utils/dorel-meta-manager.html">
+<link rel="import" href="atoms/dorel-grid-overlay.html">
+
+</head><body><dom-module id="dorel-app">
+  <template>
+    <style>
+      /*
+       * Application wide styling
+       * - Will define standard styling for components
+       */
+      :host {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        @apply(--theme-typography-2);
+        margin: 0;
+        --primary-color: var(--theme-brand-color-1);
+        color: var(--theme-color-black);
+        display: block;
+        min-height: 100vh;
+      }
+
+      :root {
+        /* global input colors */
+        --paper-input-container-underline: {
+          border-bottom: 2px solid var(--theme-brand-color-1);
+        };
+
+      }
+
+      main {
+        min-height: calc(100vh - 155px);
+      }
+
+      iron-pages {
+        margin: 0 auto;
+      }
+
+    </style>
+
+    
+    <dorel-wp-collect-menu-locations wp-url="{{ globals.Dorel.wpUrl }}"></dorel-wp-collect-menu-locations>
+
+    
+    <dorel-wp-collect-pages></dorel-wp-collect-pages>
+
+    
+    <dorel-wp-collect-options wp-url="[[ globals.Dorel.wpUrl ]]"></dorel-wp-collect-options>
+
+    
+    <dorel-wp-collect-widgets></dorel-wp-collect-widgets>
+
+    <dorel-wp-collect-categories></dorel-wp-collect-categories>
+
+    
+    <google-tag-manager cid="GTM-TW3TM86"></google-tag-manager>
+    <dorel-gtm-events gtm-data="[[ globals.Dorel ]]"></dorel-gtm-events>
+
+    <dorel-third-party hubspot-toggle="{{ globals.Dorel.collect.options.hubspot_toggle }}" hubspot-portal-id="{{ globals.Dorel.collect.options.hubspot_portal_id }}" zendesk-toggle="[[ globals.Dorel.collect.options.zendesk_toggle ]]" zendesk-host="[[ globals.Dorel.collect.options.zendesk_host ]]"></dorel-third-party>
+
+    
+    <app-location route="{{ route }}"></app-location>
+    <app-route route="{{ route }}" pattern="/:page" data="{{ routeData }}" tail="{{ subroute }}"></app-route>
+
+    <dorel-meta-manager brand-name="[[ brandName ]]" id="metaManager"></dorel-meta-manager>
+
+    <dorel-header load-complete="[[ loadComplete ]]" page="[[ page ]]" brand-name="[[ brandName ]]"></dorel-header>
+
+    
+    <main id="main" role="main">
+
+      <iron-pages role="main" selected="[[ currentPage.template ]]" attr-for-selected="name">
+
+        <dorel-template-home name="home" template-data="[[ currentPage ]]"></dorel-template-home>
+
+        <dorel-template-info name="info" template-data="[[ currentPage ]]"></dorel-template-info>
+
+        <dorel-template-store-locator name="store-locator" template-data="[[ currentPage ]]"></dorel-template-store-locator>
+
+        <dorel-template-products name="products" route="[[ subroute ]]" template-data="[[ currentPage ]]"></dorel-template-products>
+
+        <dorel-template-product-category name="product-category" template-data="[[ currentPage ]]"></dorel-template-product-category>
+
+        <dorel-template-component-guide name="component-guide" brand="{{ brandName }}" available-brands="{{ brandNames }}" route="{{ subroute }}"></dorel-template-component-guide>
+
+        <dorel-template-404 name="404"></dorel-template-404>
+      </iron-pages>
+    </main>
+
+    <dorel-footer></dorel-footer>
+
+    <dorel-grid-overlay available-brands="{{ brandNames }}" selected-brand="{{ brandName }}" page-route-path="{{ route.path }}"></dorel-grid-overlay>
+  </template>
+
+  <script>window.performance&&performance.mark&&performance.mark("dorel-app - before register"),Polymer({is:"dorel-app",properties:{route:{type:String},page:{type:String,notify:!0,readOnly:!1},brandName:{type:String,notify:!0,readOnly:!1},brandNames:{type:Array,value:[]},currentPage:{type:Object}},observers:["_routePageChanged(route, globals.Dorel.collect.pages)","_pageChanged(page, currentPage)","_setCurrentPage(currentPage)","_brandChanged(brandName)"],created:function(){window.performance&&performance.mark&&performance.mark("dorel-app.created"),Polymer.globalsManager.set("Dorel",{wpUrl:{},dioApiUrl:{},locale:{},collect:{},current:{},events:{},grid:{horizontal:!1,vertical:!1}}),this.removeAttribute("unresolved")},ready:function(){Polymer.globalsManager.set("Dorel.wpUrl",CONFIG.CMS_URL),Polymer.globalsManager.set("Dorel.dioApiUrl",CONFIG.DIO_API_URL),Polymer.globalsManager.set("Dorel.locale",CONFIG.LOCALE),this.brandNames=CONFIG.AVAILABLE_BRANDS,this.brandName=this.brandNames[CONFIG.SELECTED_BRAND].label},_brandChanged:function(e){var t=Polymer.dom(this.root).querySelector("#brand-shared-style");void 0!=t&&t.remove();var r=["theme",this.brandName,"shared-styles"].join("-").toLowerCase(),a=document.createElement("style","custom-style");a.setAttribute("include",r),a.setAttribute("id","brand-shared-style"),Polymer.dom(this.root).appendChild(a),Polymer.updateStyles()},_routePageChanged:function(e,t){if(void 0!==e&&void 0!==t&&t.length){e=e.path.match(/([^\/]*)\/*$/).pop();var r=this;if(this.page=e||"home","component-guide"===this.page)return void(this.currentPage={template:"component-guide"});this.currentPage=t.find(function(e){return e.products?e.products.find(function(e){return e.slug===r.page}):e.slug===r.page}),void 0===this.currentPage&&(this.page="404",this.currentPage={template:"404"})}},_pageChanged:function(e,t){if(void 0!==e&&""!==e&&void 0!==t&&""!==t)if("home"===e)this._ensureLazyLoaded();else{if("home"===t.template||void 0===t.template)return;this.importHref(this.resolveUrl("templates/dorel-template-"+t.template+".html"),function(){this._ensureLazyLoaded()},null,!1)}},_setCurrentPage:function(e){if("products"===e.slug){var t=this._getLastSegment(document.URL);e=e.products.find(function(e){return e.slug===t})}Polymer.globalsManager.set("Dorel.current.page",e),void 0!==e&&e.acf&&e.acf.meta_title&&e.acf.meta_description&&this.$.metaManager.addMetaData({metaTitle:e.acf.meta_title,metaDescription:e.acf.meta_description}),this._eventTracking()},_ensureLazyLoaded:function(){window.scrollTo(0,0),this.loadComplete||Polymer.RenderStatus.afterNextRender(this,function(){this.importHref(this.resolveUrl("dorel-app-resources.html"),function(){navigator,this.loadComplete=!0,this._removeLoadPlaceholder(),this.importHref(this.resolveUrl("organisms/dorel-footer.html"),null,null,!1)})})},_removeLoadPlaceholder:function(){document.getElementById("load-placeholder").remove()},_eventTracking:function(){var e=Polymer.globalsManager.get("Dorel"),t=this._cloneObj(e);Polymer.globalsManager.set("Dorel.events",{action:"loaded",component:"page",element:this,event:"polymer_event",things:{currentPage:void 0===t.current.page?document.URL:t.current.page,globals:t}})},_cloneObj:function(e){if(null==e||"object"!=typeof e)return e;var t=e.constructor();for(var r in e)e.hasOwnProperty(r)&&(t[r]=e[r]);return t},_getLastSegment:function(e){return e=e.replace(/(^\w+:|^)\/\//,""),e.lastIndexOf("/")===e.length-1&&(e=e.substr(0,e.lastIndexOf("/"))),e.substr(e.lastIndexOf("/")+1,e.length)}});</script>
+</dom-module>
+</body></html>

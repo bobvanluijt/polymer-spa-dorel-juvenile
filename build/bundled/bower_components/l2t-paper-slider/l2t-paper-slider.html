@@ -1,0 +1,109 @@
+<html><head><link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../iron-a11y-keys-behavior/iron-a11y-keys-behavior.html">
+<link rel="import" src="../inert/inert.html">
+
+
+
+</head><body><dom-module id="l2t-paper-slider">
+  <template>
+    <style>
+      .slider {
+        position: relative;
+        overflow: hidden;
+        display: box;
+        display: -webkit-box;
+        white-space: nowrap;
+        @apply(--paper-slider-styles);
+      }
+      .slider__slides {
+        position: relative;
+        font-size: 0;
+        width: 100%;
+        height: 100%;
+        background: var(--paper-slide-background, rgba(0,0,0,0));
+        will-change: transform
+      }
+      .slider__slides.mouseup {
+        -webkit-transition: -webkit-transform .3s cubic-bezier(.51, .92, .24, 1);
+        transition: -webkit-transform .3s cubic-bezier(.51, .92, .24, 1);
+        transition: transform .3s cubic-bezier(.51, .92, .24, 1);
+        transition: transform .3s cubic-bezier(.51, .92, .24, 1), -webkit-transform .3s cubic-bezier(.51, .92, .24, 1);
+      }
+      .slider__dots {
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex;
+        position: absolute;
+        bottom: 5%;
+        left: 50%;
+        -webkit-transform: translateX(-50%);
+        transform: translateX(-50%);
+        @apply(--paper-slider-dot-container-styles);
+      }
+      *[hidden] {
+        display: none;
+      }
+      .slider__dot,
+      .slider__indicator {
+        display: block;
+        margin: 8px;
+        width: 16px;
+        height: 16px;
+        background: var(--paper-slide-dot, rgba(255, 255, 255, .5));
+        border-radius: 8px;
+        cursor: pointer;
+        @apply(--paper-slide-dot-styles);
+      }
+      .slider__dot:focus {
+        outline: none;
+        box-shadow: 0 0 7px 1px var(--paper-slide-dot, rgba(255, 255, 255, .5));
+      }
+      .slider__indicator {
+        -webkit-transition: opacity .5s .1s cubic-bezier(.51, .92, .24, 1.15);
+        transition: opacity .5s .1s cubic-bezier(.51, .92, .24, 1.15);
+        position: absolute;
+        background: var(--paper-slide-dot-selected, #FFF);
+        border-color: rgba(0,0,0,0);
+        background-clip: padding-box;
+        opacity: 0;
+        width: auto
+      }
+      .slider__indicator--left {
+        -webkit-transition: left .3s cubic-bezier(.51, .92, .24, 1.15), right .3s .1s cubic-bezier(.51, .92, .24, 1.15);
+        transition: left .3s cubic-bezier(.51, .92, .24, 1.15), right .3s .1s cubic-bezier(.51, .92, .24, 1.15)
+      }
+      .slider__indicator--right {
+        -webkit-transition: left .3s .1s cubic-bezier(.51, .92, .24, 1.15), right .3s cubic-bezier(.51, .92, .24, 1.15);
+        transition: left .3s .1s cubic-bezier(.51, .92, .24, 1.15), right .3s cubic-bezier(.51, .92, .24, 1.15)
+      }
+      .slider {
+        width: var(--paper-slide-width, 100%);
+        height: var(--paper-slide-height, 600px)
+      }
+      :host ::slotted(*), :host ::content * {
+        font-size: medium;
+      }
+      :host ::slotted(paper-slide), :host ::content paper-slide{
+        width: var(--paper-slide-width, 100%);
+        height: var(--paper-slide-height, 600px);
+        overflow-x: hidden;
+        display: inline-block;
+      }
+    </style>
+    <div id="container" class="slider" data-pos$="[[position]]">
+      <div class="slider__slides mouseup">
+        <slot></slot>
+        <content></content>
+      </div>
+      <div role="menubar" hidden$="[[hideNav]]" class="slider__dots">
+        <span class="slider__indicator"></span>
+        <template is="dom-repeat" items="[[_totalDots]]">
+          <span tabindex="0" role="menuitemradio" aria-checked="false" class="slider__dot" aria-posinset$="[[item]]"></span>
+        </template>
+      </div>
+    </div>
+  </template> 
+</dom-module> 
+<script>!function(){Polymer({is:"l2t-paper-slider",listeners:{"container.track":"_swipeHandler"},behaviors:[Polymer.IronA11yKeysBehavior],hostAttributes:{tabindex:0},properties:{_totalDots:{type:Array,value:[],notify:!0,computed:"_createDots(totalSlides)"},_dotStyles:{type:Object,notify:!0,observer:"_animateCSS"},autoProgress:{type:Boolean,value:!1,notify:!0},disableSwipe:{type:Boolean,value:!1},hideNav:{type:Boolean,value:!1,notify:!0,reflectToAttribute:!0,observer:"_reInit"},position:{type:Number,value:0,notify:!0,reflectToAttribute:!0,observer:"_posObs"},sensitivity:{type:String,value:"default",notify:!0},slideDuration:{type:Number,value:5,notify:!0},totalSlides:{type:Number,value:1,notify:!0,reflectToAttribute:!0,observer:"_reInit"}},keyBindings:{right:"_keyRight",left:"_keyLeft",space:"_spaceCatcher",enter:"_spaceCatcher"},_animateCSS:function(){var t=this.$.container,e=t.querySelector(".slider__indicator");this._dotStyles&&(t.querySelector(".slider__slides").style.transform="translateX(-"+100*this.position+"%)",e.style.opacity="1",e.style.left="calc(((("+this._dotStyles.marginRight+" + "+this._dotStyles.marginLeft+") + ("+this._dotStyles.paddingRight+" + "+this._dotStyles.paddingLeft+") + "+this._dotStyles.width+") * "+this.position+") + "+this.position+" * ("+this._dotStyles.borderLeftWidth+" + "+this._dotStyles.borderRightWidth+"))",e.style.right="calc("+(this.totalSlides-(this.position+1))+"*(("+this._dotStyles.marginRight+" + "+this._dotStyles.marginLeft+") + ("+this._dotStyles.borderLeftWidth+" + "+this._dotStyles.borderRightWidth+") + ("+this._dotStyles.paddingLeft+" + "+this._dotStyles.paddingRight+") + "+this._dotStyles.width+"))")},_ariaChecked:function(){var t=this.$.container.querySelectorAll(".slider__dot");if(t.length>0){for(var e=0;e<this.totalSlides;e++)t[e].setAttribute("aria-checked","false");t[this.position].setAttribute("aria-checked","true")}},_autoProceed:function(){var t=this,e=setInterval(function(){t.moveNext()},1e3*t.slideDuration);this.$.container.addEventListener("mouseover",function(){clearInterval(e)}),this.$.container.addEventListener("mouseout",function(){e=setInterval(function(){t.moveNext()},1e3*t.slideDuration)})},_createDots:function(t){var e,i=[];for(e=0;e<t;++e)i.push(e);return i},_keyLeft:function(){var t=parseInt(this.$.container.getAttribute("data-pos")),e=t>0?t-1:this.totalSlides-1;this.movePos(e),this.moveFocus(e)},_keyRight:function(){var t=parseInt(this.$.container.getAttribute("data-pos")),e=t<this.totalSlides-1?t+1:0;this.movePos(e),this.moveFocus(e)},_moveInd:function(t){if(void 0!=t){var e=this.$.container,i=e.querySelector(".slider__indicator"),s=parseInt(e.getAttribute("data-pos")),o=parseInt(t.getAttribute("aria-posinset")),r=o>s?"right":"left",a=o<s?"right":"left";i.classList.remove("slider__indicator--"+a),i.classList.add("slider__indicator--"+r),this.position=o}},_moveManual:function(){var t,e=this,i=this.$.container.querySelectorAll(".slider__dot");for(t=0;t<this.totalSlides;++t)i[t].setAttribute("aria-label","Slide "+(parseInt(i[t].getAttribute("aria-posinset"))+1)+" selector"),i[t].addEventListener("click",function(t){e.movePos(t.target.getAttribute("aria-posinset"))});this.totalSlides&&(this._dotStyles=window.getComputedStyle(i[0]))},_posObs:function(){this._animateCSS(),this._setInert(),this._ariaChecked(),this.fire("change")},_reInit:function(){var t=this;this._animateCSS(),setTimeout(function(){t._moveManual()},0)},_setInert:function(){for(var t=this.$.container,e=t.querySelectorAll("paper-slide"),i=0;i<e.length;i++)i!=this.position&&e[i].setAttribute("inert","");e[this.position]&&e[this.position].removeAttribute("inert")},_spaceCatcher:function(t){t.preventDefault();var e=document.activeElement.getAttribute("aria-posinset");e&&this.movePos(e)},_swipeHandler:function(t){if(!this.disableSwipe){var e=this.$.container;switch(t.detail.state){case"start":this.startPosX=t.detail.x,e.querySelector(".slider__slides").classList.remove("mouseup");break;case"track":var i=e.offsetWidth,s=this.startPosX-t.detail.x,o=0==this.position&&s<0?0:this.position==this.totalSlides-1&&s>0?0:s/i*100,r=o>100?100*this.position+100:o<-100?100*this.position-100:o+100*this.position;this.perMov=r<=100*(this.totalSlides-1)?r>=0&&r:this.totalSlides,e.querySelector(".slider__slides").style.transform="translateX(-"+this.perMov+"%)";break;case"end":var a="high"==this.sensitivity?.25:"low"==this.sensitivity?-.25:0,n=this.perMov>100*this.position?1:-1,l=Math.round(this.perMov/100+a*n);e.querySelector(".slider__slides").classList.add("mouseup"),this.position==l&&(e.querySelector(".slider__slides").style.transform="translateX(-"+100*this.position+"%)"),this.movePos(l)}}},moveFocus:function(t){this.$.container.querySelectorAll(".slider__dot")[t].focus()},moveNext:function(){var t=parseInt(this.$.container.getAttribute("data-pos")),e=t<this.totalSlides-1?t+1:0;this.movePos(e)},movePos:function(t){var e=this.$.container.querySelectorAll(".slider__dot")[t];this._moveInd(e)},movePrev:function(){var t=parseInt(this.$.container.getAttribute("data-pos")),e=t>0?t-1:this.totalSlides-1;this.movePos(e)},attached:function(){var t=this;1==this.autoProgress&&setTimeout(function(){t._autoProceed()},0),setTimeout(function(){t._moveManual(),t._ariaChecked()},0),this.setScrollDirection("y",this.$.container)}})}();</script>
+</body></html>

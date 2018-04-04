@@ -1,121 +1,118 @@
-<html><head><link rel="import" href="../../bower_components/polymer/polymer.html">
-<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
-<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
-<link rel="import" href="../../bower_components/paper-input/paper-input.html">
-<link rel="import" href="../../bower_components/paper-button/paper-button.html">
-<link rel="import" href="../../bower_components/paper-styles/shadow.html">
-<link rel="import" href="../../bower_components/paper-input/paper-textarea.html">
-<link rel="import" href="../../bower_components/iron-icons/communication-icons.html">
-
-<link rel="import" href="../../assets/cdn/theme-maxicosi-shared-styles.html">
-
-</head><body><dom-module id="dorel-template-info">
+<html><head><meta charset="UTF-8"><link rel="import" href="../dorel-app.html"></head><body><div hidden="" by-vulcanize=""><dom-module id="dorel-section-content-wrap" assetpath="../organisms/">
   <template>
-    <style include="theme-maxicosi-shared-styles iron-flex iron-flex-alignment">
-      /* 
-       * reusable classes 
-       */
-
-      .display2 {
-        font-size: var(--theme-size-display2);
-        @apply(--theme-heading);
-      }
-      /* 
-       * this component classes 
-       */
-
-      dorel-section-standout.bg-color-background {
-        --dorel-layout-section-bg: {
-          background-color: var(--theme-color-background);
-        };
-      }
-      .subscribe {
-        --dorel-layout-section-column: {
-          /*max-width: 700px;*/
-          padding-bottom: 2rem;
-        };
-      }
-      .container-form-subscribe {
-        padding: var(--theme-component-space-inner);
-      }
-      .text-center {
-        text-align: center;
-      }
-      .section-about-hero {
-        background-color: var(--theme-brand-color);
+    <style>
+      .section-content-wrap {
+        width: 100%;
+        float: left;
+        box-sizing: border-box;
+        padding: 1.5em var(--theme-gutter-mobile);
       }
 
-      .section-careers {
-        --dorel-layout-section-bg: {
-          min-height: 540px; /* temporary */
-          background-image: url('../../assets/images/office-space-6.jpg'); /* office-space-6, office-space-3 */
-          background-size: cover;
-          background-position: center;
-          background-repeat: no-repeat;
-        };
+      .row {
+        @apply(--theme-grid-row);
+        @apply(--layout-flex);
       }
 
-      .column-headline {
-        font-size: 2em;
-        @apply(--theme-heading);
-        max-width: none !important; /* reset max width so text is centered */
+      .wrap-container {
+        width: 100%;
+        display: flex;
       }
 
-      dorel-column-content p {
-        @apply(--theme-bodycopy);
+      dorel-content-wrap {
+        margin: inherit;
       }
 
-      .headline {
-        font-size: 2em;
-        @apply(--theme-heading);
+      /* Responsive behaviour */
+      [tablet-medium-up] dorel-content-wrap {
+        margin: auto;
       }
 
-      .section-contact {
-        --dorel-layout-section-skewed-bg: {
-          /*background-color: var(--theme-brand-color-accent-green);*/
-          background-color: white;
-        };
+      [tablet-medium-up] .section-content-wrap {
+        padding: 3em var(--theme-gutter);
       }
 
-      .section-contact-column {
-        --dorel-layout-section-column: {
-          padding-top: 2.5rem;
-          padding-bottom: 3.5rem;
-        };
-      }
-
-      .column-headline {
-        font-size: 2em;
-        @apply(--theme-heading);
-        max-width: none !important; /* reset max width so text is centered */
-      }
-      dorel-column-content p {
-        @apply(--theme-bodycopy);
-      }
-      .headline {
-        font-size: 2em;
-        @apply(--theme-heading);
-      }
     </style>
 
-    <iron-media-query query="(min-width:800px)" query-matches="{{isAtLeast800px}}"></iron-media-query>
-    
-    <dorel-page-builder builder-data="[[ templateData.acf.page_builder ]]"></dorel-page-builder>
-    
-    
+    <template is="dom-if" if="[[ contentWrappers.wrappers.length ]]">
 
-    
+      <dorel-media-query breakpoints="{{ breakpoints }}"></dorel-media-query>
 
+      <section class="section-content-wrap" tablet-medium-up$="{{ breakpoints.tabletMediumUp }}">
 
-    
-    
+        <div class="row">
+          <template is="dom-repeat" items="[[ contentWrappers.wrappers ]]" as="contentWrap">
+            <div class="wrap-container">
+              <dorel-content-wrap content-index="[[ index ]]" content-title="[[ contentWrap.title ]]" content-text="[[ contentWrap.text ]]">
+            </dorel-content-wrap></div>
+          </template>
+        </div>
 
-    
-    
+      </section>
 
+    </template>
 
   </template>
 
-  <script>Polymer({is:"dorel-template-info",properties:{templateData:{type:String}},clearInput:function(){document.getElementById("inputWithButton").value=""}});</script>
+  <script>Polymer({is:"dorel-section-content-wrap",properties:{contentWrappers:{type:Object,value:function(){return{}}}}});</script>
+
+</dom-module>
+</div><dom-module id="dorel-template-info">
+  <template>
+    <style>
+      .wrapper {
+        float: left;
+        width: 100%;
+        padding-bottom: 1.5em;
+      }
+    </style>
+
+    
+    
+
+    <div class="wrapper">
+
+
+      <div class="container layout horizontal center center-justified wrap">
+        <div class="row">
+
+          
+          <template is="dom-if" if="{{ templateData.acf.page_builder.length }}">
+
+            
+            <template is="dom-repeat" items="[[ templateData.acf.page_builder ]]" as="component" targetframerate="1000">
+
+                  
+                  <template is="dom-if" if="{{ isPageComponent(component.acf_fc_layout, 'section_info_header') }}">
+
+                    <dorel-section-header section-header-data="[[ component ]]" info-header="true"></dorel-section-header>
+
+                  </template>
+                  
+
+                  
+                  <template is="dom-if" if="{{ isPageComponent(component.acf_fc_layout, 'section_content_wrap') }}">
+
+                    <dorel-section-content-wrap content-wrappers="[[ component ]]"></dorel-section-content-wrap>
+
+                  </template>
+                  
+
+                  
+                  <template is="dom-if" if="{{ isPageComponent(component.acf_fc_layout, 'section_hubspot') }}">
+
+                    <dorel-hubspot hubspot-loaded="[[ globals.Dorel.collect.options.hubspot_loaded ]]" portal-id="[[ globals.Dorel.collect.options.hubspot_portal_id ]]" form-id="{{ component.hubspot_form_id }}"></dorel-hubspot>
+
+                  </template>
+                  
+
+            </template>
+          </template>
+
+        </div>
+      </div>
+    </div>
+  </template>
+
+  <script>Polymer({is:"dorel-template-info",properties:{templateData:{type:String}},isPageComponent:function(e,t){var p=e.substr(e.length-1);if(!isNaN(Number(p))){var r=e.split("_");return r.pop(),strippedResponse=r.join("_"),strippedResponse===t}return e===t}});</script>
 </dom-module>
 </body></html>

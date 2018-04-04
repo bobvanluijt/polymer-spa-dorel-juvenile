@@ -1,34 +1,17 @@
 /**
  * @constant
  * @name CONFIG
- * @description all constants for the application to use
+ * @description all constants for the application to use 
  */
 var CONFIG = {
-  /**
-   * build script will change this
-   */
-  CMS_URL: "//dorel-wp.dev/wp-json",
-  DIO_API_URL: "https://api.dorel.io/v1",
-
-  /**
-   * Determines the shared brand theme used for the application.
-   * Name strings can only contain alphabetic values
-   * and dashes to separate words:
-   * - maxi-cosi
-   * - dorel
-   * - quinny
-   * - safety-first
-   * - baby-art
-   */
-  AVAILABLE_BRANDS: [{'label': 'Maxi-Cosi'}, {'label': 'Dorel'}],
-  SELECTED_BRAND: 0,
-  /**
-   * The following information is localization info used in several parts
-   */
+  CMS_URL: "https://wrps.api.www.maxi-cosi.com.au/wp-json",                                           // Used for endpoints to CMS
+  DIO_API_URL: "https://api.dorel.io/v1",                                   // Used for the multi management tool
+  AVAILABLE_BRANDS: [{'label': 'Maxi-Cosi'}, {'label': 'Dorel'}],   // Available brands to pick from
+  SELECTED_BRAND: 0,                               // Selects a brand from AVAILABLE_BRANDS
   LOCALE: {
-    COUNTRY_NAME: 'australia',       // country name in own country language (capitalized)
-    COUNTRY_CODE: 'AU',         // country code (used for storelocator)
-    LANGUAGE: 'en',             // language in short notation
+    COUNTRY_NAME: 'Australia',
+    COUNTRY_CODE: 'AU',
+    LANGUAGE: 'en',
     LANG_CONTENT: 'en-AU',
     LINK_ALT: 'http://www.maxi-cosi.com/au-en'
   },

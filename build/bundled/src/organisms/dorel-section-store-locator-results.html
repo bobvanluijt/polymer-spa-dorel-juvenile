@@ -9,7 +9,7 @@
       }
 
       .results {
-        padding: 3em var(--theme-gutter);
+        padding: 1.5em var(--theme-gutter-mobile);
         float: left;
         width: 100%;
         box-sizing: border-box;
@@ -23,6 +23,7 @@
 
       .title {
         @apply(--theme-typography-7);
+        margin-top: 0;
         color: var(--theme-brand-color-1);
         width: 100%;
         text-align: left;
@@ -42,10 +43,10 @@
       }
 
       .results-content {
+        @apply(--theme-grid-column-mobile);
         max-width: var(--theme-base-paragraph-width);
-        padding: 0 .75em;
-        margin-top: 0;
-        margin: auto;
+        width: 100%;
+        padding: 0;
       }
 
       ul {
@@ -58,6 +59,8 @@
         float: left;
         width: 100%;
         margin-top: 1.5em;
+        padding-bottom: 1.5em;
+        border-bottom: 1px solid var(--theme-color-monochrome-2);
       }
 
       dorel-cta {
@@ -67,36 +70,24 @@
       }
 
       /* Responsive Behaviour */
-      [mobile-small] ul, [mobile-medium] ul, [mobile-small] .title, [mobile-medium] .title {
-        padding-left: 0;
-        margin-top: 0;
+      [tablet-medium-up] li {
+        padding-bottom: 0;
+        border-bottom: 0;
       }
 
-      [mobile-small] li, [mobile-medium] li {
-        margin-top: 1.5em;
-        padding-bottom: 1.5em;
-        border-bottom: 1px solid var(--theme-color-monochrome-2);
+      .results[tablet-medium-up] {
+        padding: 3em var(--theme-gutter);
       }
 
-      .results[mobile-small],
-      .results[mobile-medium] {
-        padding: 1.5em var(--theme-gutter-mobile);
-      }
-
-      [mobile-small] .results-content,
-      [mobile-medium] .results-content {
-        @apply(--theme-grid-column-mobile);
-        padding: 0 .75em;
-        margin-top: 0;
+      [tablet-medium-up] .results-content {
+        margin: auto;
       }
 
     </style>
 
-    
-    <iron-media-query query="(max-width : 479px)" query-matches="{{ mobileSmall }}"></iron-media-query>
-    <iron-media-query query="(min-width : 480px) and (max-width : 767px)" query-matches="{{ mobileMedium }}"></iron-media-query>
+    <dorel-media-query breakpoints="{{ breakpoints }}"></dorel-media-query>
 
-    <div class="results layout horizontal center center-justified wrap" mobile-small$="{{ mobileSmall }}" mobile-medium$="{{ mobileMedium }}">
+    <div class="results layout horizontal center center-justified wrap" tablet-medium-up$="{{ breakpoints.tabletMediumUp }}">
       <div class="row">
         <div class="results-content">
           <h2 class="title">Results</h2>

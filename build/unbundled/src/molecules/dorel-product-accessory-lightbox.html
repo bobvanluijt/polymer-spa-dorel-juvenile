@@ -1,5 +1,4 @@
-<html><head><link rel="import" href="../atoms/dorel-color-switcher.html">
-<link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
+<html><head><link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
 
 </head><body><dom-module id="dorel-product-accessory-lightbox">
   <template>
@@ -47,30 +46,33 @@
         padding: 1.5em;
         font-size: 1rem;
         border-radius: var(--theme-border-radius-2);
-        -ms-flex-preferred-size: calc(var(--theme-column-width) * 6);
-        flex-basis: calc(var(--theme-column-width) * 6);
-        width: calc(var(--theme-column-width) * 6);
-        max-width: calc(var(--theme-column-width) * 6);
+        -ms-flex-preferred-size: 100%;
+        flex-basis: 100%;
+        width: 100%;
+        max-width: 100%;
       }
 
-      paper-dialog .lightbox-wrapper {
+      .lightbox-wrapper {
+        @apply(--layout-center-justified);
         position: relative;
         float: left;
         width: 100%;
-        padding: 0;
+        padding: 0 !important;
         margin-top: 0 !important;
         margin-bottom: 0 !important;
+
       }
 
       .close-dialog-cta {
         position: absolute;
-        right: 0;
-        top: -1em;
         padding: 0;
         margin: 0;
+        top: -1em;
+        right: 0;
       }
 
       .lightbox-description {
+        min-width: 100%;
         padding-top: 1.5em;
         box-sizing: border-box;
       }
@@ -78,8 +80,9 @@
       .lightbox-image {
         box-sizing: border-box;
         float: left;
-        padding-right: 1.5em;
         position: relative;
+        margin-top: 1.5em;
+        padding-right: 0;
       }
 
       .accessory-included-badge {
@@ -102,65 +105,52 @@
         border-radius: .5em;
       }
 
-      /*dorel-color-switcher {
-        min-width: 16.5em;
-      } */
+      dorel-color-switcher {
+        width: 100%;
+        min-width: 100%;
+      }
 
       /*
       * Responsive behaviour
       */
-      [tablets] paper-dialog, [desktop-small] paper-dialog {
+      [tablet-medium-up] paper-dialog {
         -ms-flex-preferred-size: calc(var(--theme-column-width) * 9);
         flex-basis: calc(var(--theme-column-width) * 9);
         width: calc(var(--theme-column-width) * 9);
         max-width: calc(var(--theme-column-width) * 9);
       }
 
-      [mobile-small] paper-dialog, [mobile-medium] paper-dialog {
-        -ms-flex-preferred-size: 100%;
-        flex-basis: 100%;
-        width: 100%;
-        max-width: 100%;
+      [desktop-small-up] paper-dialog {
+        -ms-flex-preferred-size: calc(var(--theme-column-width) * 6);
+        flex-basis: calc(var(--theme-column-width) * 6);
+        width: calc(var(--theme-column-width) * 6);
+        max-width: calc(var(--theme-column-width) * 6);
       }
 
-      [mobile-small] .lightbox-description {
-        min-width: 100%;
+      [tablet-medium-up] .lightbox-image {
+        padding-right: 1.5em;
+        margin-top: 0;
       }
 
-      [mobile-small] .lightbox-image {
-        margin-top: 1.5em;
-        padding-right: 0;
+      [tablet-medium-up] dorel-color-switcher {
+        width: auto;
+        min-width: auto;
       }
 
-      [mobile-small] .lightbox-wrapper {
-        @apply(--layout-center-justified);
+      [tablet-medium-up] .lightbox-description {
+        min-width: auto;
       }
-
-      [mobile-small] dorel-color-switcher, [mobile-medium] dorel-color-switcher {
-        width: 100%;
-        min-width: 100%;
-      }
-
-      [mobile-small] .close-dialog-cta, [mobile-medium] .close-dialog-cta {
-        top: -1.5em;
-        right: -1em;
-      }
-
     </style>
 
-    
-    <iron-media-query query="(max-width : 649px)" query-matches="{{ mobileSmall }}"></iron-media-query>
-    <iron-media-query query="(min-width : 650px) and (max-width : 820px)" query-matches="{{ mobileMedium }}"></iron-media-query>
-    <iron-media-query query="(min-width : 821px) and (max-width : 991px)" query-matches="{{ tablets }}"></iron-media-query>
-    <iron-media-query query="(min-width : 992px) and (max-width : 1199px)" query-matches="{{ desktopSmall }}"></iron-media-query>
+    <dorel-media-query breakpoints="{{ breakpoints }}"></dorel-media-query>
 
-    <section class="section-product-accessory-lightbox" mobile-small$="{{ mobileSmall }}" mobile-medium$="{{ mobileMedium }}" tablets$="{{ tablets }}" desktop-small$="{{ desktopSmall }}">
+    <section class="section-product-accessory-lightbox" tablet-medium-up$="{{ breakpoints.tabletMediumUp }}" desktop-small-up$="{{ breakpoints.desktopSmallUp }}">
 
       <div class="lightbox-backdrop" opened$="{{ opened }}"></div>
       <paper-dialog id="lightbox">
 
         
-        <template is="dom-if" if="{{ mobileSmall }}">
+        <template is="dom-if" if="{{ !breakpoints.tabletMediumUp  }}">
           <div class="lightbox-wrapper layout horizontal wrap">
             <dorel-cta class="close-dialog-cta" type="link" link="" size="small" icon="dorel-icons:close" dialog-confirm="" autofocus="">
               Close
@@ -199,7 +189,7 @@
         </template>
 
         
-        <template is="dom-if" if="{{ !mobileSmall }}">
+        <template is="dom-if" if="{{ breakpoints.tabletMediumUp }}">
           <div class="lightbox-wrapper layout horizontal">
             <dorel-cta class="close-dialog-cta" type="link" link="" size="small" icon="dorel-icons:close" dialog-confirm="" autofocus="" gtm-action="close-accessory-lightbox" gtm-parent="[[ gtmParent ]]" gtm-parent-index="[[ gtmParentIndex ]]" gtm-child="[[ gtmChild ]]" gtm-child-index="[[ gtmChildIndex ]]" gtm-cta-index="0">
               Close
@@ -240,7 +230,7 @@
     </section>
   </template>
 
-  <script>Polymer({is:"dorel-product-accessory-lightbox",listeners:{"iron-overlay-opened":"_onOverlayOpened","iron-overlay-closed":"_onOverlayClosed"},properties:{accessoryLightboxData:{type:Object,value:function(){return{}}},opened:{type:Boolean,value:!1}},_showLargeDialog:function(e,o){return!e||!o},_hasValue:function(e){return"undefined"!=typeof e||""!==e},_onOverlayOpened:function(e){this.opened=!0},_onOverlayClosed:function(e){this.opened=!1},open:function(e){this.$$("#lightbox").open()}});</script>
+  <script>Polymer({is:"dorel-product-accessory-lightbox",listeners:{"iron-overlay-opened":"_onOverlayOpened","iron-overlay-closed":"_onOverlayClosed"},properties:{accessoryLightboxData:{type:Object,value:function(){return{}}},opened:{type:Boolean,value:!1}},_showLargeDialog:function(e,o){return!e||!o},_hasValue:function(e){return void 0!==e||""!==e},_onOverlayOpened:function(e){this.opened=!0},_onOverlayClosed:function(e){this.opened=!1},open:function(e){this.$$("#lightbox").open()}});</script>
 
 </dom-module>
 </body></html>
