@@ -39,6 +39,24 @@
                 }) : review;
             })
           });
+        /**
+         * adds more reviews to the current reviews appropiatly for this sku
+         */
+        case 'REQUEST_MORE_REVIEWS_SUCCESS':
+          return Object.assign({}, state, {
+            reviews: state.reviews.map(review => {
+              let newResults = [...review.results, ...action.payload.results[0].reviews];
+              return review.sku === action.payload.results[0].page_id ?
+                Object.assign({}, {
+                  paging: action.payload.paging,
+                  sku: action.payload.results[0].page_id,
+                  rollup: review.rollup,
+                  results: newResults,
+                  isLoading: false,
+                  isNotAvailable: false,
+                }) : review;
+            })
+          });
 
         /**
          * when the request fails set the object in the reviews for the designated sku
@@ -52,8 +70,8 @@
             })
           });
 
-      default:
-        return state;
+        default:
+          return state;
       }
     };
 }());
