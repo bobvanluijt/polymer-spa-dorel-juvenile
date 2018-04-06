@@ -15,6 +15,20 @@
       }
     }
 
+    function requestMoreReviews(product_sku, url) {
+      return (dispatch, getState) => {
+        const state = getState();
+        const prConfig = state.config.third_party[0].power_reviews;
+        const init = { method: 'GET', mode: 'cors', cache: 'default' };
+        let fullUrl = state.config.reviewsUrl.replace('/m', '') + url + `&apikey=${prConfig.api_key}`;
+        return fetch(fullUrl, init)
+          .then(handleErrors)
+          .then(response => response.json())
+          .then(json => dispatch(requestMoreReviewsSuccess(product_sku, json)))
+          .catch(() => dispatch(requestReviewsFailed(product_sku)));
+      }
+    }
+
     /**
      * prepare the reducer info
      */
@@ -44,7 +58,7 @@
          * example request for power reviews (url defined at app-config level):
          * https://readservices-b2c.powerreviews.com/m/64172/l/en_GB/product/2d7c2112-7cc1-47cc-8b6f-2cc7cd0a9d95/reviews?apikey=38f8abea-6154-4785-9c17-fe7d24b4148c
          */
-        let url = `${state.config.reviewsUrl}/${prConfig.merchant_id}/l/${locale}_${countryCode.toUpperCase()}/product/${product_sku}/reviews?apikey=${prConfig.api_key}&paging.size=20`;
+        let url = `${state.config.reviewsUrl}/${prConfig.merchant_id}/l/${locale}_${countryCode.toUpperCase()}/product/${product_sku}/reviews?apikey=${prConfig.api_key}&paging.size=10`;
         // let url = 'https://readservices-b2c.powerreviews.com/m/64172/l/en_GB/product/2d7c2112-7cc1-47cc-8b6f-2cc7cd0a9d95/reviews?apikey=38f8abea-6154-4785-9c17-fe7d24b4148c'
 
         // when sorting is defined extend the api request url
@@ -108,6 +122,19 @@
       }
     }
 
+    function requestMoreReviewsSuccess(product_sku, reviews) {
+      if(reviews.results.length) {
+        return {
+          type: 'REQUEST_MORE_REVIEWS_SUCCESS',
+          payload: reviews
+        }
+      } else {
+        return (dispatch) => {
+          return dispatch(requestReviewsFailed(product_sku))
+        }
+      }
+    }
+
     /**
      * set the right state when the request fails
      *
@@ -137,7 +164,8 @@
      * Tiewrap all public functions to the actions
      */
     reviewsActions = {
-      requestReviews
+      requestReviews,
+      requestMoreReviews
     };
   }());
 </script>

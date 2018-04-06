@@ -1,7 +1,7 @@
 <link rel="import" href="../../molecules/product/reviews/dorel-product-reviews.html">
 <link rel="import" href="../../molecules/product/reviews/dorel-product-review-total-summary.html">
 <link rel="import" href="../../utils/behaviors/single/dorel-multilingual-behavior.html">
-
+<link rel="import" href="../../molecules/dorel-overlay-modal.html">
 
 <dom-module id="dorel-section-product-reviews">
   <template>
@@ -15,6 +15,22 @@
         float: left;
         width: 100%;
       }
+
+      .reviews-container {
+        background-color: var(--theme-color-monochrome-2);
+        border-radius: 5px;
+        padding: 1rem;
+      }
+
+      .link {
+        text-align: center;
+        color: var(--theme-brand-color-2);
+        cursor: pointer;
+      }
+
+      .link:hover {
+        color: var(--theme-brand-color-1);
+      }
     </style>
 
     <dorel-media-query breakpoints="{{ breakpoints }}"></dorel-media-query>
@@ -27,7 +43,6 @@
         <dorel-titling title="[[localize('product_reviews#title')]]"></dorel-titling>
 
         <dorel-layout-row>
-
           <dorel-layout-column desktop-column-span="3" mobile-column-span="12">
             <dorel-product-review-total-summary
               number-of-stars="[[reviews.rollup.rating_histogram.length]]"
@@ -36,10 +51,10 @@
               total-reviews="[[reviews.rollup.review_count]]"></dorel-product-review-total-summary>
           </dorel-layout-column>
 
-          <dorel-layout-column desktop-column-span="9" mobile-column-span="12">
+          <dorel-layout-column desktop-column-span="9" mobile-column-span="12" class="reviews-container">
             <template
               is="dom-repeat"
-              items="[[reviews.results]]"
+              items="[[shortReviews]]"
               as="review">
               <dorel-product-reviews
                 heading="[[review.details.headline]]"
@@ -53,11 +68,54 @@
                 rating="[[review.metrics.rating]]"
                 number-of-stars="[[reviews.rollup.rating_histogram.length]]"></dorel-product-reviews>
             </template>
+            <div class="link" on-click="_openMoreReviews">
+              <span>[[localize('more_reviews')]]</span>
+              <iron-icon class="menu-item__icon" icon="dorel-icons:chevron-right"></iron-icon>
+            </div>
           </dorel-layout-column>
-
         </dorel-layout-row>
       </dorel-layout-container>
     </template>
+
+    <dorel-overlay-modal id="overlay" title="[[localize('ratings_and_reviews')]]" subtitle="[[productName]]">
+      <dorel-layout-container>
+        <dorel-layout-row>
+        <dorel-layout-column desktop-column-span="3" mobile-column-span="12">
+          <dorel-product-review-total-summary
+            number-of-stars="[[reviews.rollup.rating_histogram.length]]"
+            rating="[[reviews.rollup.average_rating]]"
+            rating-distribution="[[reviews.rollup.rating_histogram]]"
+            total-reviews="[[reviews.rollup.review_count]]"></dorel-product-review-total-summary>
+        </dorel-layout-column>
+        <dorel-layout-column desktop-column-span="9" mobile-column-span="12" class="reviews-container">
+          <template
+            is="dom-repeat"
+            items="[[reviews.results]]"
+            as="review">
+            <dorel-product-reviews
+              heading="[[review.details.headline]]"
+              description="[[review.details.comments]]"
+              date="[[review.details.created_date]]"
+              location="[[review.details.location]]"
+              author="[[review.details.nickname]]"
+              helpful-score="[[review.metrics.helpful_score]]"
+              helpful-votes="[[review.metrics.helpful_votes]]"
+              not-helpful-votes="[[review.metrics.not_helpful_votes]]"
+              rating="[[review.metrics.rating]]"
+              number-of-stars="[[reviews.rollup.rating_histogram.length]]"></dorel-product-reviews>
+          </template>
+          <template
+            is="dom-if"
+            if="[[loadMoreReviews]]">
+            <div class="link" on-click="_loadMoreReviews">
+              <span>[[localize('more_reviews')]]</span>
+              <iron-icon class="menu-item__icon" icon="dorel-icons:plus"></iron-icon>
+            </div>
+          </template>
+        </dorel-layout-column>
+      </dorel-layout-row>
+    </dorel-layout-container>
+    </dorel-overlay-modal>
   </template>
   <script>
     class DorelSectionProductReviews extends ReduxMixin(Polymer.mixinBehaviors([ConditionalBehaviors, DorelMultilingualBehavior], Polymer.Element)) {
@@ -74,6 +132,11 @@
             type: String,
             observer: '_productChanged'
           },
+
+          /**
+           * product name
+           */
+           productName: String,
 
           /**
            * the sorting of the reviews
@@ -99,10 +162,20 @@
             statePath: function(state) {
               const review = state.review.reviews.find(review => review.sku === this.get('productSku'));
               // const review = state.review.reviews.find(review => review.sku === '2d7c2112-7cc1-47cc-8b6f-2cc7cd0a9d95');
-
               return review ? review : { isLoading: true };
-            }
-          }
+            },
+            observer: '_reviewsUpdated'
+          },
+
+          /**
+           * first 3 reviews
+           */
+          shortReviews: Array,
+
+          /**
+           * all the reviews for this product
+           */
+          loadMoreReviews: Boolean
         };
       }
 
@@ -116,6 +189,43 @@
           this.dispatch('requestReviews', productSku, this.get('reviewsSorting'));
           // this.dispatch('requestReviews', '2d7c2112-7cc1-47cc-8b6f-2cc7cd0a9d95', this.get('reviewsSorting'), this.get('imageOnly'));
         }
+      }
+
+      /**
+       * observer: when the reviews is added/updated
+       *
+       * @param {string} the new reviews 
+       */
+      _reviewsUpdated(newReviews) {
+        let shortReviews = [];
+        const results = newReviews.results;
+
+        if (results) {
+          shortReviews = results.length > 3 ? results.slice(0, 3) : results;
+        }
+        this.set('shortReviews', shortReviews);
+
+        if (newReviews.paging) {
+          this.set('loadMoreReviews', newReviews.paging.total_results === results.length ? false : true);
+        }
+      }
+
+      /**
+       * open More Reviews modal
+       *
+       * @param {}
+       */
+      _openMoreReviews() {
+        this.$.overlay.open();
+      }
+
+      /**
+       * load More Reviews
+       *
+       * @param {}
+       */
+      _loadMoreReviews() {
+        this.dispatch('requestMoreReviews', this.get('productSku'), this.reviews.paging.next_page_url);
       }
     };
 
