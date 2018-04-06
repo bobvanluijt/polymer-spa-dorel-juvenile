@@ -73,7 +73,7 @@
                 <a class="dorel-cookie-notification__more-info"
                   href="[[cookieInformationLink]]"
                   target="_blank"
-                >[[localize('cookie_notification#link')]]</a>
+                >[[cookieInformationLinkTitle]]</a>
               </template>
             </p>
 
@@ -141,7 +141,19 @@
           cookieInformationLink: {
             type: String,
             statePath: function(state) {
-              return state.config.cookie.information_link;
+              return state.config.cookie.information_link ? state.config.cookie.information_link.url : '';
+            }
+          },
+
+          /**
+           * @attribute
+           * @name cookieInformationLinkTitle
+           * @description holds the link text
+           */
+          cookieInformationLinkTitle: {
+            type: String,
+            statePath: function(state) {
+              return state.config.cookie.information_link ? state.config.cookie.information_link.title : '';
             }
           },
 
