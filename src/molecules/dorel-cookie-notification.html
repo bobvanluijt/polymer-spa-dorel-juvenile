@@ -72,6 +72,7 @@
                 if="[[cookieInformationLink]]">
                 <a class="dorel-cookie-notification__more-info"
                   href="[[cookieInformationLink]]"
+                  target="[[cookieInformationLinkTarget]]"
                 >[[cookieInformationLinkTitle]]</a>
               </template>
             </p>
@@ -153,6 +154,18 @@
             type: String,
             statePath: function(state) {
               return state.config.cookie.information_link ? state.config.cookie.information_link.title : '';
+            }
+          },
+
+          /**
+           * @attribute
+           * @name cookieInformationLinkTarget
+           * @description holds the target for more information defined in Wordpress
+           */
+          cookieInformationLinkTarget: {
+            type: String,
+            statePath: function(state) {
+              return state.config.cookie.information_link ? state.config.cookie.information_link.target : '';
             }
           },
 
