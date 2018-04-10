@@ -22,7 +22,7 @@
       items="[[stars]]"
       as="star">
       <div class="star" large-mode$="[[ largeMode ]]">
-        <iron-icon icon="dorel-icons:star-[[star.type]]"></iron-icon>
+        <iron-icon icon="dorel-icons:star-[[star.type]]" on-click="_setRating"></iron-icon>
       </div>
     </template>
 
@@ -67,6 +67,7 @@
           rating: {
             type: Number,
             value: 5,
+            notify: true,
             observer: '_ratingChanged'
           },
 
@@ -82,6 +83,11 @@
            * show the numeric rating next to the stars
            */
           showRating: {
+            type: Boolean,
+            value: false
+          },
+
+          interactiveEnabled: {
             type: Boolean,
             value: false
           }
@@ -127,6 +133,12 @@
           return 'half'
         } else {
           return 'empty';
+        }
+      }
+
+      _setRating(e) {
+        if (this.interactiveEnabled) {
+          this.set('rating', e.model.__data.index + 1);
         }
       }
     };

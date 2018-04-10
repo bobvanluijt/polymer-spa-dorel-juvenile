@@ -143,6 +143,13 @@
           return this.dispatch('setCurrentPage', this.currentPage);
         }
 
+        if (route.path.indexOf('submit-review') !== -1) {
+          this.currentPage = {
+            template: 'submit-review'
+          };
+          return this.dispatch('setCurrentPage', this.currentPage);
+        }
+
         const currentPage = await this.$.collectPageEl.getPageBySlug(slug, pageLink);
 
         this.set('currentPage', currentPage);

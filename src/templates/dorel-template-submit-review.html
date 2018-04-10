@@ -1,0 +1,264 @@
+<link rel="import" href="../molecules/product/reviews/dorel-product-review-stars.html">
+<link rel="import" href="../atoms/dorel-input.html">
+<link rel="import" href="../atoms/dorel-input-textarea.html">
+<link rel="import" href="../atoms/dorel-radio-group.html">
+<link rel="import" href="../atoms/dorel-checkbox.html">
+
+<dom-module id="dorel-template-submit-review">
+  <template>
+    <style>
+      .header {
+        background-color: var(--theme-brand-color-1);
+        color: var(--theme-color-white);
+        float: left;
+        width: 100%;
+        height: 7rem;
+      }
+
+      .form-container {
+        margin-bottom: 4rem;
+      }
+
+      .question {
+        @apply(--theme-typography-5);
+      }
+
+      .property {
+        @apply(--theme-typography-4);
+        line-height: 2.5rem;
+      }
+
+      .property-description {
+        @apply(--theme-typography-3);
+        font-weight: var(--theme-font-weight-light);
+        line-height: 2.5rem;
+        margin-top: 0;
+      }
+
+      .stars {
+        font-size: var(--theme-typography-8_-_font-size);
+      }
+
+      .details-container {
+        display: flex;
+        align-items: center;
+      }
+
+      .details-container--form, .details-container--tips {
+        flex: 1
+      }
+
+      .input {
+        width: 90%;
+      }
+
+      .link-text {
+        color: var(--theme-brand-color-3);
+      }
+
+      .limit-text {
+        font-weight: var(--theme-font-weight-light);
+      }
+
+      .link-text:hover {
+        cursor: pointer;
+        color: var(--theme-brand-color-1);
+      }
+
+      .details-bonus {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 11rem;
+        width: 90%;
+      }
+
+      .tips {
+        background-color: var(--theme-color-monochrome-2);
+        border-radius: 5px;
+        height: auto;
+        padding: .2rem 1rem;
+      }
+
+      .info-container {
+        margin-top: 6rem;
+      }
+
+      .info-input {
+        width: 50%;
+      }
+
+      .checkbox {
+        margin-top: 2rem;
+      }
+
+      .form-buttons {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 6rem;
+        width: 50%;
+      }
+    </style>
+    <dorel-section-page-nav
+      breadcrumbs-toggle="true"></dorel-section-page-nav>
+
+    <dorel-layout-container class="header">
+      <h1 class="title">Submit your review</h1>
+      <h2 class="subtitle">....</h2>
+    </dorel-layout-container>
+
+    <dorel-layout-container class="form-container">
+      <dorel-layout-row>
+        <dorel-layout-column
+          desktop-column-span="9"
+          tablet-column-span="9"
+          mobile-column-span="12">
+          <section>
+            <h3 class="question">1. How would you rate the following regarding the Nova 4 wheels?</h3>
+            <section>
+              <p class="property">Product Quality</p>
+              <p class="property-description">Descriptive explanatory text to help the user.</p>
+              <dorel-product-review-stars
+                class="stars"
+                rating="{{productQualityRating}}"
+                number-of-stars="5"
+                interactive-enabled></dorel-product-review-stars>
+            </section>
+            <section>
+              <p class="property">Ease of use</p>
+              <p class="property-description">Descriptive explanatory text to help the user.</p>
+              <dorel-product-review-stars
+                class="stars"
+                rating="{{easeOfUseRating}}"
+                number-of-stars="5"
+                interactive-enabled></dorel-product-review-stars>
+            </section>
+          </section>
+          <section>
+            <h3 class="question">2. How would you describe your experience with the Nova 4 wheels?</h3>
+            <section class="details-container">
+              <section class="details-container--form">
+                <p class="property">In one sentence <span>(optional)</span></p>
+                <dorel-input
+                  class="input"
+                  id="one-sentence"
+                  value="{{oneSentence}}"></dorel-input>
+
+                <p class="property">Write more details</p>
+                <dorel-input-textarea
+                  class="input"
+                  id="details"
+                  value="{{details}}"
+                  required></dorel-input-textarea>
+                <div class="details-bonus">
+                  <span class="limit-text">0/120 characters</span>
+                  <span class="link-text">Add attachment</span>
+                </div>
+              </section>
+              <section class="details-container--tips">
+                <div class="tips">
+                  <h3 class="property">Writing Tips</h3>
+                  <p>When writing your review, please consider the following guidelines:</p>
+                  <ul>
+                    <li>Focus on the product and your individual experience using it</li>
+                    <li>Provide details about why you liked or disliked a product</li>
+                    <li>Help others decide if the product will meet their needs</li>
+                    <li>All submitted reviews are subject to the terms set forth in our Privacy Policy, Terms of Use, and the Terms of Service for this site feature.</li>
+                  </ul>
+                  <p class="link-text">Learn more</p>
+                </div>
+              </section>
+            </section>
+            <section>
+              <p>Would you recommend this product?</p>
+              <dorel-radio-group options="[[ radioOptions ]]"
+                                 selected="{{ radioSelected }}">
+              </dorel-radio-group>
+            </section>
+          </section>
+
+         <section class="info-container">
+           <h3 class="question">Your information</h3>
+           <p class="property">Name/ Nickname</p>
+           <p class="property-description">This name will appear under your review</p>
+           <dorel-input
+             class="info-input"
+             id="name"
+             value="{{name}}"></dorel-input>
+
+           <p class="property">Email</p>
+           <p class="property-description">This email will not be publicly shared</p>
+           <dorel-input
+             class="info-input"
+             id="email"
+             value="{{email}}"></dorel-input>
+         </section>
+
+         <dorel-checkbox class="checkbox" label="I agree with the Terms of Use and the Privacy Policy" color-code="#0096C3"></dorel-checkbox>
+
+         <section class="form-buttons">
+            <dorel-cta type="secondary" size="large" icon="dorel-icons:close">Cancel</dorel-cta>
+            <dorel-cta type="primary" size="large" icon="dorel-icons:chevron-right">Submit</dorel-cta>
+         </section>
+        </dorel-layout-column>
+      </dorel-layout-row>
+    </dorel-layout-container>
+  </template>
+
+  <script>
+    class DorelTemplateSubmitReview extends Polymer.mixinBehaviors([TemplateBehaviors, DorelMultilingualBehavior], Polymer.Element) {
+
+      static get is() { return 'dorel-template-submit-review'; }
+
+      static get properties() {
+        return {
+          /**
+           * @attribute
+           * @name templateData
+           * @description all data needed to build up a certain component
+           */
+          templateData: {
+            type: Object
+          },
+
+          productQualityRating: {
+            type: Number,
+            value: 0,
+            observer: "_ratingChanged"
+          },
+
+          easeOfUseRating: {
+            type: Number,
+            value: 0,
+            observer: "_ratingChanged"
+          },
+
+          oneSentence: {
+            type: String,
+            value: ''
+          },
+
+          /**
+           * @name radioOptions
+           * @description recommend options
+           */
+          radioOptions: {
+            type: Array,
+            notify: true,
+            readOnly: false,
+            value: [
+              {'name': 'yes', 'label': 'Yes'},
+              {'name': 'no', 'label': 'No'}
+            ]
+          },
+        }
+      }
+
+      _ratingChanged() {
+        console.log('_ratingChanged');
+      }
+
+    }
+
+    customElements.define(DorelTemplateSubmitReview.is, DorelTemplateSubmitReview);
+  </script>
+</dom-module>
