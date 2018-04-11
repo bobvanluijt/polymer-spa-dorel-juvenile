@@ -21,6 +21,7 @@
         min-height: var(--theme-accordion-heading-height);
         cursor: pointer;
       }
+      
       [small] .accordion-toggle {
         min-height: var(--theme-accordion-heading-height-small);
       }
@@ -48,10 +49,10 @@
         border-top: var(--theme-accordion-item-border);
         border-bottom: var(--theme-accordion-item-border);
       }
+
       [opened].accordion-container {
         background-color: var(--theme-accordion-background-color-open);
       }
-
 
       .accordion-content {
         padding: 0 .75em 1.5em .75em;
@@ -146,72 +147,75 @@
   </template>
 
   <script>
-    Polymer({
-      is: 'dorel-accordion-item',
-      behaviors: [ GtmBehavior ],
-      properties: {
-        /**
-         * @name heading
-         * @description Title of the accordion heading
-         */
-        heading: {
-          type: String,
-          value: ''
-        },
-        /**
-         * @name icon
-         * @description Icon used next to the heading
-         */
-        icon: {
-          type: String,
-          value: ''
-        },
+    class DorelAccordionItem extends Polymer.mixinBehaviors([GtmBehavior], Polymer.Element) {
 
-        /**
-         * @name small
-         * @description Small variation of the accordion
-         */
-        small: {
-          type: Boolean
-        },
+      static get is() { return 'dorel-accordion-item'; }
 
-        /**
-         * @name light
-         * @description Small variation of the accordion
-         */
-        light: {
-          type: Boolean
-        },
+      static get properties() {
+        return {
+          /**
+           * @name heading
+           * @description Title of the accordion heading
+           */
+          heading: {
+            type: String,
+            value: ''
+          },
+          /**
+           * @name icon
+           * @description Icon used next to the heading
+           */
+          icon: {
+            type: String,
+            value: ''
+          },
 
-        /**
-         * @name opened
-         * @description State of the accordion
-         */
-        opened: {
-          type: Boolean,
-          value: false,
-          reflectToAttribute: true,
-          observer: '_openedStateChanged'
-        },
+          /**
+           * @name small
+           * @description Small variation of the accordion
+           */
+          small: {
+            type: Boolean
+          },
 
-        /**
-         * @name autoScroll
-         * @description If set to true, the window will scroll accordion is opened outside of the viewport
-         */
-        autoScroll: {
-          type: Boolean,
-          value: false,
+          /**
+           * @name light
+           * @description Small variation of the accordion
+           */
+          light: {
+            type: Boolean
+          },
+
+          /**
+           * @name opened
+           * @description State of the accordion
+           */
+          opened: {
+            type: Boolean,
+            value: false,
+            reflectToAttribute: true,
+            observer: '_openedStateChanged'
+          },
+
+          /**
+           * @name autoScroll
+           * @description If set to true, the window will scroll accordion is opened outside of the viewport
+           */
+          autoScroll: {
+            type: Boolean,
+            value: false,
+          }
         }
-      },
+      }
 
-      _getIconState: function (selector) {
+      _getIconState(selector) {
         return opened;
-      },
+      }
       /**
        * @name _isInViewport
        * @description Checks if the accordion item is visible in the viewport
        **/
-      _isInViewport: function (domElement) {
+      _isInViewport(domElement) {
         // Retrieve the bounding box and position of the DOM element
         var boundingBox = domElement.getBoundingClientRect();
         var boundingBoxTop = boundingBox.top;
@@ -224,13 +228,13 @@
         var isInViewport = boundingBoxTop > 0 && boundingBoxTop < viewportHeight;
 
         return isInViewport;
-      },
+      }
 
       /**
        * @name _openedStateChanged
        * @description Observer for the opened state
        **/
-      _openedStateChanged: function () {
+      _openedStateChanged() {
         var self = this;
         setTimeout(function () {
           //Accessing the accordion here through shadowroot queryselect because it's dynamically created
@@ -264,14 +268,14 @@
           }
         }, 1000);
 
-      },
+      }
 
       /**
        * @name _toggleCollapse
        * @description collapses the right accordion
        *
        */
-      _toggleCollapse: function (e) {
+      _toggleCollapse(e) {
         /* Toggle the class and aria attribute  */
         // Get the aria expanded attribute, and convert it to a boolean
         var ariaExpanded = e.target.getAttribute('aria-expanded') == "true";
@@ -287,14 +291,14 @@
 
         // event tracking
         this._eventTracking(e.target, e, state);
-      },
+      }
 
       /**
        * @name _eventTracking
        * @description this is for cta tracking only
        * more info http://bit.ly/2nb6I7G
        */
-      _eventTracking: function (selector, event, accordionState) {
+      _eventTracking(selector, event, accordionState) {
         // track event
         this.prepareGtmEvent('google-map-marker', event, {
           action: 'toggle-accordion',
@@ -306,6 +310,8 @@
           }
         });
       }
-    });
+    }
+
+    customElements.define(DorelAccordionItem.is, DorelAccordionItem);
   </script>
 </dom-module>

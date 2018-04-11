@@ -141,6 +141,7 @@
           if="[[_shouldShowReviews(reviewsConfig.toggle, reviewsConfig.merchant_id, reviewsConfig.api_key)]]">
           <dorel-section-product-reviews
             product-sku="[[product.sku]]"
+            product-name="[[product.name.value]]"
             reviews-sorting="[[reviewsConfig.sorting]]"
             image-only="[[reviewsConfig.image_only]]"></dorel-section-product-reviews>
         </template>

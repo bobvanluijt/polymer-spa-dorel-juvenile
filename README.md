@@ -1,6 +1,8 @@
 # Dorel Juvenile SPA
 ## Powered by Polymer 2 Web Components
 
+[![CircleCI](https://circleci.com/gh/dorel/polymer-spa-dorel-juvenile/tree/develop.svg?style=svg)](https://circleci.com/gh/dorel/polymer-spa-dorel-juvenile/tree/develop)
+
 ### About Dorel Juvenile
 Dorel Juvenile is the world's leading juvenile products company. Our products are available in more than 100 countries. All of our talented employees share the same mission: to Care for Precious Life. We help families live carefree lives by providing them with juvenile products that rank highest in consumer reviews. That's what sets our products apart; durable, helpful and caring.
 
@@ -39,17 +41,17 @@ The SPA is hosted from it's own container so all you need is Docker:
 
 Inside the new dorel-spa folder:
 
-    docker build -t dorel-spa .
+    docker build -f Dockerfile-dev -t dorel-spa .
 
 ##### Run the container
 
 Adjust your dorel-spa path accordingly
 
-    docker run -d --name dorel-spa -p 80:80 -v /Users/username/Documents/dorel-spa:/code dorel-spa
+    docker run -d --name dorel-spa -e "NGINX_FRONTEND=local-mc.localhost" -p 80:80 -v /Users/username/Documents/dorel-spa:/code dorel-spa
     
 Windows:
 
-    docker run -d --name dorel-spa -p 80:80 -v C:\\Users\username\Documents\dorel-spa:/code dorel-spa
+    docker run -d --name dorel-spa -e "NGINX_FRONTEND=local-mc.localhost" -p 80:80 -v C:\\Users\username\Documents\dorel-spa:/code dorel-spa
     
 ##### Install dependencies
     
