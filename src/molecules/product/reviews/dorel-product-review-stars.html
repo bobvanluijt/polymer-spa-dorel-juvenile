@@ -7,6 +7,11 @@
       .star {
         display: inline-block;
       }
+
+      .star.interactive:hover {
+        cursor: pointer;
+      }
+
       .star iron-icon {
         height: 1.2rem;
         width: 1.2rem;
@@ -16,12 +21,17 @@
         height: 2rem;
         width: 2rem;
       }
+
+      .star.interactive iron-icon {
+        font-weight: var(--theme-font-weight-light);
+        color: var(--theme-color-black);
+      }
     </style>
     <template
       is="dom-repeat"
       items="[[stars]]"
       as="star">
-      <div class="star" large-mode$="[[ largeMode ]]">
+      <div class$="star [[classAddition]]" large-mode$="[[ largeMode ]]">
         <iron-icon icon="dorel-icons:star-[[star.type]]" on-click="_setRating"></iron-icon>
       </div>
     </template>
@@ -90,6 +100,11 @@
           interactiveEnabled: {
             type: Boolean,
             value: false
+          },
+
+          classAddition: {
+            type: String,
+            value: ''
           }
 
         }

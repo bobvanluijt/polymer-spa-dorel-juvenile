@@ -1,4 +1,5 @@
 <link rel="import" href="../molecules/product/reviews/dorel-product-review-stars.html">
+<link rel="import" href="../organisms/dorel-section-submit-review-tips.html">
 <link rel="import" href="../atoms/dorel-input.html">
 <link rel="import" href="../atoms/dorel-input-textarea.html">
 <link rel="import" href="../atoms/dorel-radio-group.html">
@@ -39,16 +40,29 @@
         font-size: var(--theme-typography-8_-_font-size);
       }
 
-      .details-container {
+      [tablet-medium-up] .details-container {
         display: flex;
         align-items: center;
+        flex-wrap: wrap;
       }
 
-      .details-container--form, .details-container--tips {
+      [tablet-medium-up] .details-container--form, [tablet-medium-up] .details-container--tips {
         flex: 1
       }
 
-      .input {
+      .details-container--tips, .details-container--tips-mobile {
+        display: none;
+      }
+
+      .details-container--tips-mobile_open {
+        display: block;
+      }
+
+      [tablet-medium-up] .details-container--tips {
+        display: block;
+      }
+
+      [tablet-medium-up] .input {
         width: 90%;
       }
 
@@ -69,72 +83,111 @@
         display: flex;
         justify-content: space-between;
         margin-top: 11rem;
+      }
+
+      [tablet-medium-up] .details-bonus {
         width: 90%;
       }
 
-      .tips {
-        background-color: var(--theme-color-monochrome-2);
-        border-radius: 5px;
-        height: auto;
-        padding: .2rem 1rem;
+      [tablet-medium-up] .help-button {
+        display: none
       }
 
       .info-container {
         margin-top: 6rem;
       }
 
-      .info-input {
-        width: 50%;
-      }
-
       .checkbox {
         margin-top: 2rem;
       }
 
-      .form-buttons {
+      .flex-two {
         display: flex;
         justify-content: space-between;
-        margin-top: 6rem;
+        align-items: baseline;
+      }
+
+      [tablet-medium-up] .info-input, [tablet-medium-up] .flex-two {
         width: 50%;
       }
+
+      .form-buttons {
+        margin-top: 6rem;
+      }
     </style>
+
+    <app-route
+      route="{{ route }}"
+      pattern="/:productName/submit-review"
+      data="{{ routeData }}"
+      tail="{{ subroute }}"></app-route>
+
+    <dorel-media-query
+      breakpoints="{{breakpoints}}"></dorel-media-query>
+
     <dorel-section-page-nav
       breadcrumbs-toggle="true"></dorel-section-page-nav>
 
     <dorel-layout-container class="header">
       <h1 class="title">Submit your review</h1>
-      <h2 class="subtitle">....</h2>
+      <h2 class="subtitle">[[product.name.value]]</h2>
     </dorel-layout-container>
 
-    <dorel-layout-container class="form-container">
+    <dorel-layout-container class="form-container" tablet-medium-up$="[[breakpoints.tabletMediumUp]]">
       <dorel-layout-row>
         <dorel-layout-column
           desktop-column-span="9"
           tablet-column-span="9"
           mobile-column-span="12">
           <section>
-            <h3 class="question">1. How would you rate the following regarding the Nova 4 wheels?</h3>
+            <h3 class="question">1. How would you rate the following regarding the [[product.name.value]]?</h3>
             <section>
               <p class="property">Product Quality</p>
               <p class="property-description">Descriptive explanatory text to help the user.</p>
               <dorel-product-review-stars
                 class="stars"
+                class-addition="interactive"
                 rating="{{productQualityRating}}"
                 number-of-stars="5"
-                interactive-enabled></dorel-product-review-stars>
+                interactive-enabled
+                large-mode></dorel-product-review-stars>
             </section>
             <section>
               <p class="property">Ease of use</p>
               <p class="property-description">Descriptive explanatory text to help the user.</p>
               <dorel-product-review-stars
                 class="stars"
+                class-addition="interactive"
                 rating="{{easeOfUseRating}}"
                 number-of-stars="5"
-                interactive-enabled></dorel-product-review-stars>
+                interactive-enabled
+                large-mode></dorel-product-review-stars>
+            </section>
+            <section>
+              <p class="property">Maintenance</p>
+              <p class="property-description">Descriptive explanatory text to help the user.</p>
+              <dorel-product-review-stars
+                class="stars"
+                class-addition="interactive"
+                rating="{{maintenanceRating}}"
+                number-of-stars="5"
+                interactive-enabled
+                large-mode></dorel-product-review-stars>
+            </section>
+            <section>
+              <p class="property">Comfort</p>
+              <p class="property-description">Descriptive explanatory text to help the user.</p>
+              <dorel-product-review-stars
+                class="stars"
+                class-addition="interactive"
+                rating="{{comfortRating}}"
+                number-of-stars="5"
+                interactive-enabled
+                large-mode></dorel-product-review-stars>
             </section>
           </section>
           <section>
-            <h3 class="question">2. How would you describe your experience with the Nova 4 wheels?</h3>
+            <h3 class="question">2. How would you describe your experience with the [[product.name.value]]?</h3>
             <section class="details-container">
               <section class="details-container--form">
                 <p class="property">In one sentence <span>(optional)</span></p>
@@ -143,7 +196,11 @@
                   id="one-sentence"
                   value="{{oneSentence}}"></dorel-input>
 
-                <p class="property">Write more details</p>
+                <div class="flex-two">
+                  <p class="property">Write more details</p>
+                  <iron-icon class="help-button" on-click="_showTips" icon="dorel-icons:help-outline"></iron-icon>
+                </div>
+                <dorel-section-submit-review-tips class$="details-container--tips-mobile [[tipsOpenClassName]]"></dorel-section-submit-review-tips>
                 <dorel-input-textarea
                   class="input"
                   id="details"
@@ -154,19 +211,7 @@
                   <span class="link-text">Add attachment</span>
                 </div>
               </section>
-              <section class="details-container--tips">
-                <div class="tips">
-                  <h3 class="property">Writing Tips</h3>
-                  <p>When writing your review, please consider the following guidelines:</p>
-                  <ul>
-                    <li>Focus on the product and your individual experience using it</li>
-                    <li>Provide details about why you liked or disliked a product</li>
-                    <li>Help others decide if the product will meet their needs</li>
-                    <li>All submitted reviews are subject to the terms set forth in our Privacy Policy, Terms of Use, and the Terms of Service for this site feature.</li>
-                  </ul>
-                  <p class="link-text">Learn more</p>
-                </div>
-              </section>
+              <dorel-section-submit-review-tips class="details-container--tips"></dorel-section-submit-review-tips>
             </section>
             <section>
               <p>Would you recommend this product?</p>
@@ -195,7 +240,7 @@
 
          <dorel-checkbox class="checkbox" label="I agree with the Terms of Use and the Privacy Policy" color-code="#0096C3"></dorel-checkbox>
 
-         <section class="form-buttons">
+         <section class="flex-two form-buttons">
             <dorel-cta type="secondary" size="large" icon="dorel-icons:close">Cancel</dorel-cta>
             <dorel-cta type="primary" size="large" icon="dorel-icons:chevron-right">Submit</dorel-cta>
          </section>
@@ -205,7 +250,7 @@
   </template>
 
   <script>
-    class DorelTemplateSubmitReview extends Polymer.mixinBehaviors([TemplateBehaviors, DorelMultilingualBehavior], Polymer.Element) {
+    class DorelTemplateSubmitReview extends ReduxMixin(Polymer.mixinBehaviors([TemplateBehaviors, DorelMultilingualBehavior], Polymer.Element)) {
 
       static get is() { return 'dorel-template-submit-review'; }
 
@@ -217,7 +262,18 @@
            * @description all data needed to build up a certain component
            */
           templateData: {
-            type: Object
+            type: Object,
+            statePath: 'page.currentPage',
+          },
+
+          routeData: Object,
+
+          product: {
+            type: Object,
+            statePath: function(state) {
+              const product = state.product.products.find(product => product.url === this.routeData.productName);
+              return product;
+            }
           },
 
           productQualityRating: {
@@ -227,6 +283,18 @@
           },
 
           easeOfUseRating: {
+            type: Number,
+            value: 0,
+            observer: "_ratingChanged"
+          },
+
+          maintenanceRating: {
+            type: Number,
+            value: 0,
+            observer: "_ratingChanged"
+          },
+
+          comfortRating: {
             type: Number,
             value: 0,
             observer: "_ratingChanged"
@@ -250,6 +318,33 @@
               {'name': 'no', 'label': 'No'}
             ]
           },
+          /**
+           * @name tipsOpenClassName
+           * @description the class name when the tips is opened in mobile view
+           */
+          tipsOpenClassName: {
+            type: String,
+            value: ''
+          }
+        }
+      }
+
+      static get observers() {
+        return [
+          '_productNameChanged(routeData.productName)'
+        ]
+      }
+
+      /**
+       * @name _productNameChanged
+       * @description if the productName changes dispatch an action to retrieve product
+       * @param product - Object
+       * @returns Boolean
+       */
+      _productNameChanged(productName) {
+        if(productName) {
+          this.dispatch('requestProduct', productName);
+          this.dispatch('setCurrentProduct', productName);
         }
       }
 
@@ -257,6 +352,13 @@
         console.log('_ratingChanged');
       }
 
+      /**
+       * @name _showTips
+       * @description set the tipsOpenClassName to the mobile tips element
+       */
+      _showTips() {
+        this.tipsOpenClassName = this.tipsOpenClassName === '' ? 'details-container--tips-mobile_open' : '';
+      }
     }
 
     customElements.define(DorelTemplateSubmitReview.is, DorelTemplateSubmitReview);

@@ -143,13 +143,6 @@
           return this.dispatch('setCurrentPage', this.currentPage);
         }
 
-        if (route.path.indexOf('submit-review') !== -1) {
-          this.currentPage = {
-            template: 'submit-review'
-          };
-          return this.dispatch('setCurrentPage', this.currentPage);
-        }
-
         const currentPage = await this.$.collectPageEl.getPageBySlug(slug, pageLink);
 
         this.set('currentPage', currentPage);
@@ -161,11 +154,21 @@
         const parentSlug = fullParentUrl.match(/([^\/]*)\/*$/).pop();
         const parent = await await this.$.collectPageEl.getPageBySlug(parentSlug);
 
+        if (route.path.indexOf('submit-review') !== -1) {
+          const productName = route.path.split('/')[2];
+          this.currentPage = {
+            template: 'submit-review',
+            productName: productName
+          };
+          return this.dispatch('setCurrentPage', this.currentPage);
+        }
+
         if (!this.currentPage && route.path && route.path.length) {
           if (!parent) {
             return this._setPageNotFound();
           }
           var productDetailTemplate = parent.acf.detail_template_selector;
+
           if (!productDetailTemplate) {
             return this._setPageNotFound();
           } else {
@@ -173,7 +176,6 @@
               template: productDetailTemplate
             };
           }
-          this.dispatch('setProductCategoryPage', parent);
         } else {
           this.dispatch('setProductCategoryPage', this.currentPage);
         }

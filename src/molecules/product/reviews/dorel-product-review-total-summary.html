@@ -1,5 +1,6 @@
 <link rel="import" href="dorel-product-review-stars.html">
 <link rel="import" href="dorel-product-review-bar.html">
+<link rel="import" href="../../atoms/dorel-cta.html">
 
 <dom-module id="dorel-product-review-total-summary">
   <template>
@@ -47,6 +48,11 @@
         padding: 0 .5em;
         flex: 2 1 auto;
       }
+
+      .submit-review-btn {
+        margin-bottom: 6rem;
+        width: fit-content;
+      }
     </style>
 
     <div id="rating-overview">
@@ -59,6 +65,10 @@
         <div id="overview-short-summary">
           <span itemprop="ratingValue">[[rating]]</span>
           <span itemprop="reviewCount">([[localize('reviews_rating-overview#review-count')]] [[totalReviews]] [[localize('reviews_rating-overview#reviews')]])</span>
+        </div>
+
+        <div class="submit-review-btn">
+          <dorel-cta title="Submit your review" type="link" link="[[submitReviewUrl]]" size="medium">Submit your review</dorel-cta>
         </div>
 
         <template
@@ -99,7 +109,12 @@
           numberOfStars: Number,
           rating: Number,
           ratingDistribution: Array,
-          totalReviews: Number
+          totalReviews: Number,
+          productSku: {
+            type: String,
+            observer: "_productSkuChanged"
+          },
+          submitReviewUrl: String
         }
       }
 
@@ -123,6 +138,13 @@
        */
       _getStarCount(ratingDistribution, index) {
         return ratingDistribution.length - index;
+      }
+
+      /**
+       * set a value for the submitReviewUrl
+       */
+      _productSkuChanged() {
+        this.set('submitReviewUrl', `${window.location.origin}${window.location.pathname}/submit-review`);
       }
     };
 
