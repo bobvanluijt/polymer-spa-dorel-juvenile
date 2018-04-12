@@ -31,7 +31,8 @@
     "src/templates/dorel-template-product-advisory-tool.html",
     "src/templates/dorel-template-product-detail.html",
     "src/templates/dorel-template-product-listing.html",
-    "src/templates/dorel-template-store-locator.html"
+    "src/templates/dorel-template-store-locator.html",
+    "src/templates/dorel-template-submit-review.html"
   ],
   "sources": [
     "src/**/*",
