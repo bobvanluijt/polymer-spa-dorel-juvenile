@@ -281,7 +281,7 @@
 
               <template
                 is="dom-if"
-                if="[[_showCflCta(carFittingToolPage)]]">
+                if="[[carfittingShown]]">
                 <!-- CFL CTA -->
                 <dorel-cta
                   type="secondary"
@@ -381,7 +381,22 @@
           slides: {
             type: Array,
             value: []
-          }
+          },
+
+          /**
+           * enable the carfitting button
+           */
+          carfittingEnabled: {
+            type: Boolean,
+            observer: '_carfittingEnabledChanged'
+          },
+
+          carFittingToolPage: {
+            type: String,
+            observer: '_carFittingToolPageChanged'
+          },
+
+          carfittingShown: Boolean
         };
       }
 
@@ -455,14 +470,23 @@
         return (typeof pageObject !== 'undefined' && pageObject !== '' && this._hasProperties(pageObject) && !hatchToggle);
       }
 
+      _carfittingEnabledChanged(carfittingEnabled) {
+        this.set('carfittingShown', this._showCfl(this.carFittingToolPage, carfittingEnabled));
+      }
+
+      _carFittingToolPageChanged(carFittingToolPage) {
+        this.set('carfittingShown', this._showCfl(carFittingToolPage, this.carfittingEnabled));
+      }
+
       /**
        * check to see if a cfl page is set and returns a boolean
        *
-       * @param {object} the page object containing the cfl page
+       * @param {carFittingToolPage} the page object containing the cfl page
+       * @param {carfittingEnabled} boolean enable carfitting
        * @return Boolean
        */
-      _showCflCta(pageObject) {
-        return (typeof pageObject !== 'undefined' && pageObject !== '' && this._hasProperties(pageObject));
+      _showCfl(carFittingToolPage, carfittingEnabled) {
+        return (typeof carFittingToolPage !== 'undefined' && carFittingToolPage !== '' && this._hasProperties(carFittingToolPage) && carfittingEnabled);
       }
 
       /**

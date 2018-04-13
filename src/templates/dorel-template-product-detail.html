@@ -102,7 +102,9 @@
 
         <dorel-section-product-showcase
           accessory-scroll-handler="{{ accessoryScrollHandler }}"
-          showcase-data="[[ product ]]"></dorel-section-product-showcase>
+          showcase-data="[[ product ]]"
+          carfitting-enabled="[[carfittingEnabled]]"
+          ></dorel-section-product-showcase>
 
         <dorel-section-product-usps
           product-id="[[ product.id ]]"></dorel-section-product-usps>
@@ -196,7 +198,8 @@
             statePath: function(state) {
               const product = state.product.products.find(product => product.url === this.routeData.productName);
               return product ? product : { isLoading: true };
-            }
+            },
+            observer: '_productChanged'
           },
 
           reviewsConfig: {
@@ -205,7 +208,29 @@
               if (!state.config.third_party || !state.config.third_party.length || !state.config.third_party[0].power_reviews) return;
               return state.config.third_party[0].power_reviews;
             }
-          }
+          },
+
+          /**
+           * array contains paths/urls of the menu item which enables carFitting
+           */
+          carfittingUrls: {
+            type: Array,
+            statePath: function(state) {
+              if (!this.carfittingUrls || this.carfittingUrls.length === 0) {
+                const carfittingUrls = state.menu.items.reduce((result, item) => {
+                  if (item.carfitting_enabled) {
+                    result.push(item.link);
+                  }
+                  return result;
+                }, []);
+                this._enableCarfitting(this.carfittingUrls);
+                return carfittingUrls;
+              }
+              return this.carfittingUrls;
+            }
+          },
+
+          carfittingEnabled: Boolean
         }
       }
 
@@ -251,6 +276,22 @@
 
       _shouldShowReviews(toggle, merchantId, apiKey) {
         return toggle && merchantId && apiKey;
+      }
+
+      _productChanged() {
+        this._enableCarfitting(this.carfittingUrls);
+      }
+
+      /**
+       * check if the current route prefix match with any of the carfitting urls
+       *
+       * @param {carfittingUrls}
+       */
+      _enableCarfitting(carfittingUrls) {
+        if (carfittingUrls && carfittingUrls.length > 0) {
+          const carfittingEnabled = carfittingUrls.some(url => url.match(this.route.prefix));
+          this.set('carfittingEnabled', carfittingEnabled);
+        }
       }
     }
 
