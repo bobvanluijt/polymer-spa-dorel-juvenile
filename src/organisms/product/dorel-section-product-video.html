@@ -28,10 +28,13 @@
     </template>
   </template>
   <script>
-    Polymer({
-      is: 'dorel-section-product-video',
-      properties: {
+  class DorelSectionProductVideo extends Polymer.mixinBehaviors([ConditionalBehaviors, GtmBehavior], Polymer.Element) {
+    static get is() {
+      return 'dorel-section-product-video';
+    }
 
+    static get properties() {
+      return {
         /**
          * @attribute
          * @name videoData
@@ -44,15 +47,14 @@
             return {};
           }
         }
-      },
-
-      behaviors: [ConditionalBehaviors, GtmBehavior],
+      }
+    }
 
       /**
        * @name iframeClick
        * @description handles clicks on the iframe
        */
-      _iframeClick: function (event) {
+      _iframeClick(event) {
         this.playVideo = !this.playVideo;
 
         if (Polymer.dom(event).rootTarget.tagName === 'A') {
@@ -101,7 +103,7 @@
         };
         this._dispatchGtmEvent(event);
         this._eventTracking(event);
-      },
+      }
 
       /**
        * @name _eventTracking
@@ -110,7 +112,7 @@
        *
        * @todo tracking isn't working currently, because an iframe is used for videos
        */
-      _eventTracking: function (event) {
+      _eventTracking(event) {
 
         /**
          * Tracking on click for cta
@@ -123,6 +125,7 @@
         };
         this._dispatchGtmEvent(event);
       }
-    });
+    }
+    customElements.define(DorelSectionProductVideo.is, DorelSectionProductVideo);
   </script>
 </dom-module>

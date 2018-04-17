@@ -21,7 +21,7 @@
         min-height: var(--theme-accordion-heading-height);
         cursor: pointer;
       }
-      
+
       [small] .accordion-toggle {
         min-height: var(--theme-accordion-heading-height-small);
       }
@@ -36,18 +36,6 @@
         @apply(--theme-accordion-heading);
         margin: 0;
         transition: color .3s;
-      }
-
-      .accordion-container {
-        background-color: var(--theme-accordion-background-color);
-        border-radius: var(--theme-border-radius-1);
-        position: relative;
-        float: left;
-        width: 100%;
-        transition: background-color .3s ease;
-        margin-bottom: var(--theme-accordion-item-bottom-margin);
-        border-top: var(--theme-accordion-item-border);
-        border-bottom: var(--theme-accordion-item-border);
       }
 
       [opened].accordion-container {
@@ -100,6 +88,36 @@
       }
     </style>
 
+    <template is="dom-if" if="{{ isBrand('Maxi-Cosi') }}">
+      <style>
+        .accordion-container {
+           background-color: var(--theme-accordion-background-color);
+           border-radius: var(--theme-border-radius-1);
+           position: relative;
+           float: left;
+           width: 100%;
+           transition: background-color .3s ease;
+           margin-bottom: var(--theme-accordion-item-bottom-margin);
+           border-top: var(--theme-accordion-item-border);
+           border-bottom: var(--theme-accordion-item-border);
+         }
+     </style>
+    </template>
+
+    <template is="dom-if" if="{{ isBrand('Quinny') }}">
+      <style>
+        .accordion-container {
+           background-color: var(--theme-accordion-background-color);
+           border-radius: var(--theme-border-radius-1);
+           position: relative;
+           float: left;
+           width: 100%;
+           transition: background-color .3s ease;
+           border-bottom: var(--theme-accordion-item-border);
+         }
+      </style>
+    </template>
+
     <dorel-media-query breakpoints="{{ breakpoints }}"></dorel-media-query>
 
     <div class="accordion-container"
@@ -147,7 +165,7 @@
   </template>
 
   <script>
-    class DorelAccordionItem extends Polymer.mixinBehaviors([GtmBehavior], Polymer.Element) {
+    class DorelAccordionItem extends Polymer.mixinBehaviors([GtmBehavior, ConditionalBehaviors], Polymer.Element) {
 
       static get is() { return 'dorel-accordion-item'; }
 

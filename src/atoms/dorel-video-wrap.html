@@ -11,7 +11,9 @@
         position: relative;
         padding-bottom: 56.25%; /*16:9*/
         height: 0;
-        overflow: hidden;
+        min-height: 0;
+        max-height: 100%;
+        overflow: visible;
       }
 
       .video-wrap iframe {
@@ -36,8 +38,6 @@
                   frameborder="0"
                   allowfullscreen
                   on-click="_iframeClick"></iframe>
-
-
         </div>
       </template>
 
