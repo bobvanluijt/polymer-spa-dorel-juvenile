@@ -163,7 +163,6 @@
             type: Array,
             statePath: function(state) {
               const review = state.review.reviews.find(review => review.sku === this.get('productSku'));
-              // const review = state.review.reviews.find(review => review.sku === '2d7c2112-7cc1-47cc-8b6f-2cc7cd0a9d95');
               return review ? review : { isLoading: true };
             },
             observer: '_reviewsUpdated'

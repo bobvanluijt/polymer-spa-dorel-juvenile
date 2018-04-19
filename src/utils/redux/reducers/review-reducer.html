@@ -3,6 +3,14 @@
     const initial = {
       reviews: [],
       currentReview: 'none',
+      reviewTemplate: {
+        form: null,
+        error: false
+      },
+      submitReview: {
+        success: false,
+        error: null
+      }
     };
 
     reviewReducer = (state = initial, action) => {
@@ -62,12 +70,46 @@
          * when the request fails set the object in the reviews for the designated sku
          */
         case 'REQUEST_REVIEW_FAILED':
-          console.log('REQUEST_REVIEW_FAILED');
           return Object.assign({}, state, {
             products: state.reviews.map(product => {
               return review.sku === action.payload.page_id ?
                 Object.assign({}, review, { isLoading: false, notAvailable: true }) : review;
             })
+          });
+        /**
+         * add the form fetched from PowerReview write API
+         */
+        case 'GET_REVIEW_TEMPLATE_SUCCESS':
+          return Object.assign({}, state, {
+            reviewTemplate: {
+              form: action.payload,
+              error: false
+            }
+          });
+        case 'GET_REVIEW_TEMPLATE_FAILED':
+          return Object.assign({}, state, {
+            reviewTemplate: {
+              form: state.reviewTemplate.form,
+              error: true
+            }
+          });
+
+        /**
+         * change the submitReview state
+         */
+        case 'SUBMIT_REVIEW_SUCCESS':
+          return Object.assign({}, state, {
+            submitReview: {
+              success: true,
+              error: null
+            }
+          });
+        case 'SUBMIT_REVIEW_FAILED':
+          return Object.assign({}, state, {
+            submitReview: {
+              success: false,
+              error: action.payload
+            }
           });
 
         default:
