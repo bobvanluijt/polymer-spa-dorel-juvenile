@@ -17,9 +17,6 @@
 
       .feature-title {
         @apply(--theme-typography-3);
-        margin-top: 0;
-        float: left;
-        width: 100%;
       }
 
       .feature-description {
@@ -45,17 +42,55 @@
         float: none;
       }
 
+      [tablet-medium-up] .feature-title {
+        @apply(--theme-typography-3);
+      }
+
       [tablet-medium-up] .feature-content {
         width: auto;
         padding: 0.75rem 1.5rem;
         float: none;
       }
-
-      [tablet-medium-up] .feature-title {
-        @apply(--theme-typography-3);
-        margin-top: 0;
-      }
     </style>
+
+    <template is="dom-if" if="{{ isBrand('Maxi-Cosi') }}">
+      <style>
+        .feature-title {
+          margin-top: 0;
+          float: left;
+          width: 100%;
+        }
+
+        [tablet-medium-up] .feature-title {
+          margin-top: 0;
+        }
+      </style>
+    </template>
+
+    <template is="dom-if" if="{{ isBrand('Quinny') }}">
+      <style>
+        :host {
+          text-align: center;
+        }
+
+        .feature-title {
+          margin-top: 0;
+          margin-bottom: .75em;
+          float: left;
+          width: 100%;
+        }
+
+        [tablet-medium-up] .feature-title {
+          margin-top: 0;
+          margin-bottom: .75em;
+        }
+
+        .feature-content.dorel-product-feature {
+          text-align: center;
+        }
+      </style>
+    </template>
+
 
     <dorel-media-query
       breakpoints="{{breakpoints}}"></dorel-media-query>

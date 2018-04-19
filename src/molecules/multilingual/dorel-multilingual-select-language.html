@@ -38,11 +38,11 @@
       }
 
       section[light] .country, section[light] .language {
-        color: var(--theme-color-white);
+        color: var(--theme-color-black);
       }
 
       section[light] .country {
-        border-right: 1px solid var(--theme-color-white);
+        border-right: 1px solid var(--theme-color-black);
       }
 
       section:hover .country, section:hover .language {
@@ -53,6 +53,15 @@
         border-right: 1px solid var(--theme-color-text-link-active);
       }
     </style>
+
+    <template is="dom-if" if="{{ isBrand('Quinny') }}">
+      <style>
+        .country, .language {
+          text-transform: uppercase;
+          line-height: 1.3rem;
+        }
+      </style>
+    </template>
 
     <dorel-media-query breakpoints="{{ breakpoints }}"></dorel-media-query>
 
@@ -74,7 +83,7 @@
   <script>
     Polymer({
       is: 'dorel-multilingual-select-language',
-
+      behaviors: [ConditionalBehaviors],
       properties: {
         /**
          * @name light
