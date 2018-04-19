@@ -211,22 +211,17 @@
           },
 
           /**
-           * array contains paths/urls of the menu item which enables carFitting
+           * array contains category ids which enables carFitting
            */
-          carfittingUrls: {
+          carfittingCategories: {
             type: Array,
             statePath: function(state) {
-              if (!this.carfittingUrls || this.carfittingUrls.length === 0) {
-                const carfittingUrls = state.menu.items.reduce((result, item) => {
-                  if (item.carfitting_enabled) {
-                    result.push(item.link);
-                  }
-                  return result;
-                }, []);
-                this._enableCarfitting(this.carfittingUrls);
-                return carfittingUrls;
+              if (!this.carfittingCategories || this.carfittingCategories.length === 0) {
+                const carfittingCategories = state.menu.carfittingEnabledCategories;
+                this._enableCarfitting(carfittingCategories);
+                return carfittingCategories;
               }
-              return this.carfittingUrls;
+              return this.carfittingCategories;
             }
           },
 
@@ -279,17 +274,17 @@
       }
 
       _productChanged() {
-        this._enableCarfitting(this.carfittingUrls);
+        this._enableCarfitting(this.carfittingCategories);
       }
 
       /**
-       * check if the current route prefix match with any of the carfitting urls
+       * check if the current product belongs to a category which displays the carfitting CTA
        *
-       * @param {carfittingUrls}
+       * @param {carfittingCategories}
        */
-      _enableCarfitting(carfittingUrls) {
-        if (carfittingUrls && carfittingUrls.length > 0) {
-          const carfittingEnabled = carfittingUrls.some(url => url.match(this.route.prefix));
+      _enableCarfitting(carfittingCategories) {
+        if (carfittingCategories && carfittingCategories.length > 0 && this.product.categories) {
+          const carfittingEnabled = carfittingCategories.some(categoryId => this.product.categories.includes(categoryId));
           this.set('carfittingEnabled', carfittingEnabled);
         }
       }
