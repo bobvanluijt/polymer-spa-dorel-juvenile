@@ -150,6 +150,16 @@
       async _getSubCategoryItems(page) {
         let allChildPages = await this.$.collectPageEl.getChildrenByParentId(page.id);
 
+        /* create the list of categories Id which displays the carfitting CTA*/
+        let carfittingEnabledCategories = allChildPages.reduce((list, page) => {
+          if (page.acf.carfitting_enabled) {
+            list = [...list, ...page.acf.magento_category_picker];
+          }
+          return list;
+        }, []);
+        carfittingEnabledCategories = carfittingEnabledCategories.map(id => parseInt(id));
+        this.dispatch('createCarfittingEnabledCategories', carfittingEnabledCategories);
+
         return allChildPages.map(page => {
           return (!page)
           ? {}
