@@ -1,5 +1,6 @@
 <link rel="import" href="../molecules/product/reviews/dorel-product-review-stars.html">
 <link rel="import" href="../organisms/dorel-section-submit-review-tips.html">
+<link rel="import" href="../organisms/product/dorel-section-review-thank-you.html">
 <link rel="import" href="../atoms/dorel-input.html">
 <link rel="import" href="../atoms/dorel-input-textarea.html">
 <link rel="import" href="../atoms/dorel-radio-group.html">
@@ -111,7 +112,7 @@
         width: 50%;
       }
 
-      .errors {
+      .checkbox.invalid, .errors {
         @apply(--theme-color-error-box);
         border-radius: 1rem;
         box-sizing: border-box;
@@ -124,6 +125,19 @@
 
       .form-buttons {
         margin-top: 1.2rem;
+      }
+
+      .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        background-color: rgba(0, 0, 0, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100vw;
+        height: 100vh;
+        z-index: 10000;
       }
 
     </style>
@@ -140,152 +154,173 @@
     <dorel-section-page-nav
       breadcrumbs-toggle="true"></dorel-section-page-nav>
 
-    <dorel-layout-container class="header">
-      <h1 class="title">Submit your review</h1>
-      <h2 class="subtitle">[[product.name.value]]</h2>
-    </dorel-layout-container>
+    <template
+      is="dom-if"
+      if="[[submitReviewState.success]]">
+      <dorel-layout-container class="header">
+        <h1 class="title">Submit your review</h1>
+        <h2 class="subtitle">[[product.name.value]]</h2>
+      </dorel-layout-container>
 
-    <dorel-layout-container class="form-container" tablet-medium-up$="[[breakpoints.tabletMediumUp]]">
-      <dorel-layout-row>
-        <dorel-layout-column
-          desktop-column-span="9"
-          tablet-column-span="9"
-          mobile-column-span="12">
-          <section on-click="_onRatingClicked">
-            <h3 class="question">1. How would you rate the following regarding the [[product.name.value]]?</h3>
-            <section>
-              <p class="property">Product Quality</p>
-              <p class="property-description">Descriptive explanatory text to help the user.</p>
-              <dorel-product-review-stars
-                class="stars"
-                class-addition="interactive"
-                rating="{{productquality}}"
-                number-of-stars="5"
-                interactive-enabled
-                data-key="productquality"
-                large-mode></dorel-product-review-stars>
-            </section>
-            <section>
-              <p class="property">Ease of use</p>
-              <p class="property-description">Descriptive explanatory text to help the user.</p>
-              <dorel-product-review-stars
-                class="stars"
-                class-addition="interactive"
-                rating="{{easeofuse}}"
-                number-of-stars="5"
-                interactive-enabled
-                data-key="easeofuse"
-                large-mode></dorel-product-review-stars>
-            </section>
-            <section>
-              <p class="property">Maintenance</p>
-              <p class="property-description">Descriptive explanatory text to help the user.</p>
-              <dorel-product-review-stars
-                class="stars"
-                class-addition="interactive"
-                rating="{{maintenance}}"
-                number-of-stars="5"
-                interactive-enabled
-                data-key="maintenance"
-                large-mode></dorel-product-review-stars>
-            </section>
-            <section>
-              <p class="property">Comfort</p>
-              <p class="property-description">Descriptive explanatory text to help the user.</p>
-              <dorel-product-review-stars
-                class="stars"
-                class-addition="interactive"
-                rating="{{comfort}}"
-                number-of-stars="5"
-                interactive-enabled
-                data-key="comfort"
-                large-mode></dorel-product-review-stars>
-            </section>
-          </section>
-          <section>
-            <h3 class="question">2. How would you describe your experience with the [[product.name.value]]?</h3>
-            <section class="details-container">
-              <section class="details-container--form">
-                <p class="property">In one sentence <span>(optional)</span></p>
-                <dorel-input
-                  class="input"
-                  id="headline"
-                  value="{{headline}}"
-                  on-input="_textInputChanged"
-                  data-key="headline"
-                  ></dorel-input>
-
-                <div class="flex-two">
-                  <p class="property">Write more details</p>
-                  <iron-icon class="help-button" on-click="_showTips" icon="dorel-icons:help-outline"></iron-icon>
-                </div>
-                <dorel-section-submit-review-tips class$="details-container--tips-mobile [[tipsOpenClassName]]"></dorel-section-submit-review-tips>
-                <dorel-input-textarea
-                  class="input"
-                  id="comments"
-                  value="{{comments}}"
-                  on-input="_textInputChanged"
-                  data-key="comments"></dorel-input-textarea>
-                <div class="details-bonus">
-                  <span class="limit-text">0/120 characters</span>
-                  <span class="link-text">Add attachment</span>
-                </div>
+      <dorel-layout-container class="form-container" tablet-medium-up$="[[breakpoints.tabletMediumUp]]">
+        <dorel-layout-row>
+          <dorel-layout-column
+            desktop-column-span="9"
+            tablet-column-span="9"
+            mobile-column-span="12">
+            <section on-click="_onRatingClicked">
+              <h3 class="question">1. How would you rate the following regarding the [[product.name.value]]?</h3>
+              <section>
+                <p class="property">Product Quality</p>
+                <dorel-product-review-stars
+                  id="productquality"
+                  class="stars"
+                  class-addition="interactive"
+                  rating="{{productquality}}"
+                  number-of-stars="5"
+                  interactive-enabled
+                  data-key="productquality"
+                  large-mode></dorel-product-review-stars>
               </section>
-              <dorel-section-submit-review-tips class="details-container--tips"></dorel-section-submit-review-tips>
+              <section>
+                <p class="property">Ease of use</p>
+                <dorel-product-review-stars
+                  id="easeofuse"
+                  class="stars"
+                  class-addition="interactive"
+                  rating="{{easeofuse}}"
+                  number-of-stars="5"
+                  interactive-enabled
+                  data-key="easeofuse"
+                  large-mode></dorel-product-review-stars>
+              </section>
+              <section>
+                <p class="property">Maintenance</p>
+                <dorel-product-review-stars
+                  id="maintenance"
+                  class="stars"
+                  class-addition="interactive"
+                  rating="{{maintenance}}"
+                  number-of-stars="5"
+                  interactive-enabled
+                  data-key="maintenance"
+                  large-mode></dorel-product-review-stars>
+              </section>
+              <section>
+                <p class="property">Comfort</p>
+                <dorel-product-review-stars
+                  id="comfort"
+                  class="stars"
+                  class-addition="interactive"
+                  rating="{{comfort}}"
+                  number-of-stars="5"
+                  interactive-enabled
+                  data-key="comfort"
+                  large-mode></dorel-product-review-stars>
+              </section>
             </section>
             <section>
-              <p>Would you recommend this product?</p>
-              <dorel-radio-group options="[[ radioOptions ]]"
-                                 selected="{{ recommended }}">
-              </dorel-radio-group>
+              <h3 class="question">2. How would you describe your experience with the [[product.name.value]]?</h3>
+              <section class="details-container">
+                <section class="details-container--form">
+                  <p class="property">In one sentence</p>
+                  <dorel-input
+                    class="input"
+                    id="headline"
+                    value="{{headline}}"
+                    on-input="_textInputChanged"
+                    data-key="headline"
+                    ></dorel-input>
+
+                  <div class="flex-two">
+                    <p class="property">Write more details</p>
+                    <iron-icon class="help-button" on-click="_showTips" icon="dorel-icons:help-outline"></iron-icon>
+                  </div>
+                  <dorel-section-submit-review-tips class$="details-container--tips-mobile [[tipsOpenClassName]]"></dorel-section-submit-review-tips>
+                  <dorel-input-textarea
+                    class="input"
+                    id="comments"
+                    value="{{comments}}"
+                    on-input="_textInputChanged"
+                    data-key="comments"></dorel-input-textarea>
+                  <div class="details-bonus">
+                    <span class="limit-text">0/120 characters</span>
+                    <span class="link-text">Add attachment</span>
+                  </div>
+                </section>
+                <dorel-section-submit-review-tips class="details-container--tips"></dorel-section-submit-review-tips>
+              </section>
+              <section>
+                <p>Would you recommend this product?</p>
+                <dorel-radio-group id="bottomline"
+                                   options="[[ radioOptions ]]"
+                                   selected="{{ bottomline }}">
+                </dorel-radio-group>
+              </section>
             </section>
-          </section>
 
-         <section class="info-container">
-           <h3 class="question">Your information</h3>
-           <p class="property">Name/ Nickname</p>
-           <p class="property-description">This name will appear under your review</p>
-           <dorel-input
-             class="info-input"
-             id="customer-name"
-             value="{{customerName}}"
-             on-input="_textInputChanged"
-             data-key="customerName"></dorel-input>
+           <section class="info-container">
+             <h3 class="question">Your information</h3>
+             <p class="property">Name/ Nickname</p>
+             <p class="property-description">This name will appear under your review</p>
+             <dorel-input
+               class="info-input"
+               id="name"
+               value="{{customerName}}"
+               on-input="_textInputChanged"
+               data-key="customerName"></dorel-input>
 
-           <p class="property">Email</p>
-           <p class="property-description">This email will not be publicly shared</p>
-           <dorel-input
-             class="info-input"
-             id="email"
-             value="{{email}}"
-             on-input="_textInputChanged"
-             data-key="email"></dorel-input>
+             <p class="property">Email</p>
+             <p class="property-description">This email will not be publicly shared</p>
+             <dorel-input
+               class="info-input"
+               id="email_collection"
+               value="{{email_collection}}"
+               on-input="_textInputChanged"
+               data-key="email_collection"></dorel-input>
 
-           <p class="property">Location</p>
-           <p class="property-description">City, Country</p>
-           <dorel-input
-             class="info-input"
-             id="location"
-             value="{{location}}"
-             on-input="_textInputChanged"
-             data-key="location"></dorel-input>
-         </section>
+             <p class="property">Location</p>
+             <p class="property-description">Your Residence [City, Country]</p>
+             <dorel-input
+               class="info-input"
+               id="location"
+               value="{{location}}"
+               on-input="_textInputChanged"
+               data-key="location"></dorel-input>
+           </section>
 
-         <dorel-checkbox class="checkbox" label="I agree with the Terms of Use and the Privacy Policy" color-code="#0096C3"></dorel-checkbox>
+           <dorel-checkbox
+             id="agreed"
+             class="checkbox"
+             label="I agree with the Terms of Use and the Privacy Policy"
+             color-code="#0096C3"
+             checked="{{agreed}}"></dorel-checkbox>
 
-         <template
-           is="dom-if"
-           if="[[showError]]">
-           <p class="errors">[[errorMessage]]</p>
-         </template>
+           <template
+             is="dom-if"
+             if="[[showError]]">
+             <p class="errors">[[errorMessage]]</p>
+           </template>
 
-         <section class="flex-two form-buttons">
-            <dorel-cta type="secondary" size="large" icon="dorel-icons:close">Cancel</dorel-cta>
-            <dorel-cta type="primary" size="large" icon="dorel-icons:chevron-right" on-click="_submitReview">Submit</dorel-cta>
-         </section>
-        </dorel-layout-column>
-      </dorel-layout-row>
-    </dorel-layout-container>
+           <section class="flex-two form-buttons">
+              <dorel-cta type="secondary" size="large" icon="dorel-icons:close" link="[[productUrl]]">Cancel</dorel-cta>
+              <dorel-cta type="primary" size="large" icon="dorel-icons:chevron-right" on-click="_submitReview">Submit</dorel-cta>
+           </section>
+          </dorel-layout-column>
+        </dorel-layout-row>
+      </dorel-layout-container>
+    </template>
+
+    <template is="dom-if" if="[[!submitReviewState.success]]">
+      <dorel-section-review-thank-you product-url="[[productUrl]]"></dorel-section-review-thank-you>
+    </template>
+
+    <template is="dom-if" if="[[submitReviewState.isLoading]]">
+      <div class="overlay">
+        <dorel-loader loading></dorel-loader>
+      </div>
+    </template>
+
   </template>
 
   <script>
@@ -336,55 +371,50 @@
             },
             observer: '_productChanged'
           },
-
           productquality: {
             type: Number,
             value: 0
           },
-
           easeofuse: {
             type: Number,
             value: 0
           },
-
           maintenance: {
             type: Number,
             value: 0
           },
-
           comfort: {
             type: Number,
             value: 0
           },
-
           headline: {
             type: String,
             value: '',
           },
-
           comments: {
             type: String,
             value: ''
           },
-
-          recommended: {
+          bottomline: {
             type: Boolean,
-            observer: '_recommendedChanged'
+            observer: '_bottomlineChanged'
           },
-
           customerName: {
             type: String,
             value: ''
           },
-
-          email: {
+          email_collection: {
             type: String,
             value: ''
           },
-
           location: {
             type: String,
             value: ''
+          },
+          agreed: {
+            type: String,
+            value: false,
+            observer: '_agreedChanged'
           },
 
           /**
@@ -426,6 +456,10 @@
        */
       _productNameChanged(productName) {
         if(productName) {
+          const origin = window.location.origin;
+          const url = `${origin}${this.route.prefix}/${this.route.path.split('/')[1]}`;
+          this.set('productUrl', url);
+
           this.dispatch('getReviewTemplate');
           this.dispatch('requestProduct', productName);
           this.dispatch('setCurrentProduct', productName);
@@ -438,14 +472,16 @@
         }
       }
 
-      _recommendedChanged(value) {
+      _bottomlineChanged(value) {
         if (value) {
-          this._setFieldValue('recommended', value);
+          this.$$('#bottomline').removeAttribute('invalid');
+          this._setFieldValue('bottomline', value);
         }
       }
 
       _onRatingClicked(e) {
         const key = e.target.getAttribute('data-key');
+        e.target.removeAttribute('invalid');
         if (this.get(key) > 0) {
           this._setFieldValue(key, this.get(key));
         }
@@ -453,12 +489,19 @@
 
       _textInputChanged(e) {
         let key = e.target.getAttribute('data-key');
+        e.target.removeAttribute('invalid');
         const value = this.get(key);
         if (key === 'customerName') {
           key = 'name';
         }
-        if (e.data.length > 0) {
+        if (e.data && e.data.length > 0) {
           this._setFieldValue(key, value);
+        }
+      }
+
+      _agreedChanged() {
+        if (this.$$('#agreed')) {
+          this.$$('#agreed').className = 'checkbox';
         }
       }
 
@@ -476,16 +519,40 @@
       }
 
       _submitReview() {
-        this._setFieldValue('rating', 4);
-        const mediaImage = this._getFieldItem('media_image');
-        this.reviewTemplate.form.fields = this.reviewTemplate.form.fields.slice(0, 14);
-        // console.log(this.reviewTemplate.form.fields);
-        this.dispatch('submitReview', this.product.sku, this.reviewTemplate.form);
+        if (this.agreed) {
+          this._setAverageRating();
+          // this._setFieldValue("bottomline", "choices[0]");
+          this.reviewTemplate.form.fields = this.reviewTemplate.form.fields.reduce((result, field) => {
+            if (field.key !== 'media_image' && field.key !== 'media_videourl') {
+              result.push(field);
+            }
+            return result;
+          }, []);
+
+          this.dispatch('submitReview', this.product.sku, this.reviewTemplate.form);
+        } else {
+          this.$$('#agreed').className = 'checkbox invalid';
+        }
       }
 
       _submitReviewStateChanged(state) {
         const showError = this.submitReviewState ? (!this.submitReviewState.success && this.submitReviewState.error) : false;
         this.set('showError', showError);
+        if (state.error && state.error.length > 0) {
+          for (let error of state.error) {
+            console.log(error);
+            if (this.$$(`#${error.key}`)) {
+              this.$$(`#${error.key}`).setAttribute('invalid', true);
+            }
+          }
+        }
+      }
+
+      _setAverageRating() {
+        if (this.productquality > 0 && this.easeofuse && this.maintenance && this.comfort) {
+          const rating = Math.ceil((this.productquality + this.easeofuse + this.maintenance + this.comfort) / 4);
+          this._setFieldValue('rating', rating);
+        }
       }
 
       /**

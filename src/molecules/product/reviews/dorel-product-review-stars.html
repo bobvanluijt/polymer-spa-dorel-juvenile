@@ -26,15 +26,24 @@
         font-weight: var(--theme-font-weight-light);
         color: var(--theme-color-black);
       }
+
+      :host([invalid]) .container {
+        @apply(--theme-color-error-box);
+        border-radius: 1rem;
+        box-sizing: border-box;
+        padding: 1rem;
+      }
     </style>
-    <template
-      is="dom-repeat"
-      items="[[stars]]"
-      as="star">
-      <div class$="star [[classAddition]]" large-mode$="[[ largeMode ]]">
-        <iron-icon icon="dorel-icons:star-[[star.type]]" on-click="_setRating"></iron-icon>
-      </div>
-    </template>
+    <div class="container" invalid$="{{invalid}}">
+      <template
+        is="dom-repeat"
+        items="[[stars]]"
+        as="star">
+        <div class$="star [[classAddition]]" large-mode$="[[ largeMode ]]" invalid$="{{invalid}}">
+          <iron-icon icon="dorel-icons:star-[[star.type]]" on-click="_setRating"></iron-icon>
+        </div>
+      </template>
+    </div>
 
     <template
       is="dom-if"
@@ -105,6 +114,11 @@
           classAddition: {
             type: String,
             value: ''
+          },
+
+          invalid: {
+            type: Boolean,
+            reflectToAttribute: true
           }
 
         }

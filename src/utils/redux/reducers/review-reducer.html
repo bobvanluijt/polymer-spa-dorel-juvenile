@@ -9,7 +9,8 @@
       },
       submitReview: {
         success: false,
-        error: null
+        error: null,
+        isLoading: false
       }
     };
 
@@ -97,18 +98,28 @@
         /**
          * change the submitReview state
          */
+       case 'SUBMIT_REVIEW':
+         return Object.assign({}, state, {
+           submitReview: {
+             success: false,
+             error: null,
+             isLoading: true
+           }
+         });
         case 'SUBMIT_REVIEW_SUCCESS':
           return Object.assign({}, state, {
             submitReview: {
               success: true,
-              error: null
+              error: null,
+              isLoading: false
             }
           });
         case 'SUBMIT_REVIEW_FAILED':
           return Object.assign({}, state, {
             submitReview: {
               success: false,
-              error: action.payload
+              error: action.payload,
+              isLoading: false
             }
           });
 
