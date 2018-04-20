@@ -156,7 +156,7 @@
 
     <template
       is="dom-if"
-      if="[[submitReviewState.success]]">
+      if="[[!submitReviewState.success]]">
       <dorel-layout-container class="header">
         <h1 class="title">Submit your review</h1>
         <h2 class="subtitle">[[product.name.value]]</h2>
@@ -311,7 +311,7 @@
       </dorel-layout-container>
     </template>
 
-    <template is="dom-if" if="[[!submitReviewState.success]]">
+    <template is="dom-if" if="[[submitReviewState.success]]">
       <dorel-section-review-thank-you product-url="[[productUrl]]"></dorel-section-review-thank-you>
     </template>
 
@@ -396,7 +396,7 @@
             value: ''
           },
           bottomline: {
-            type: Boolean,
+            type: String,
             observer: '_bottomlineChanged'
           },
           customerName: {
@@ -426,8 +426,8 @@
             notify: true,
             readOnly: false,
             value: [
-              {'name': 'yes', 'label': 'Yes'},
-              {'name': 'no', 'label': 'No'}
+              {'name': 'Yes, I would recommend this to a friend', 'label': 'Yes'},
+              {'name': 'No, I would not recommend this to a friend', 'label': 'No'}
             ]
           },
           /**
@@ -475,7 +475,10 @@
       _bottomlineChanged(value) {
         if (value) {
           this.$$('#bottomline').removeAttribute('invalid');
-          this._setFieldValue('bottomline', value);
+          const field = this._getFieldItem('bottomline');
+          if (field) {
+            field.values = [{"value": value}];
+          }
         }
       }
 
@@ -507,9 +510,9 @@
 
       _setFieldValue(key, value) {
         if (this.reviewTemplate) {
-          const productQualityField = this._getFieldItem(key);
-          if (productQualityField) {
-            productQualityField.value = value;
+          const field = this._getFieldItem(key);
+          if (field) {
+            field.value = value;
           }
         }
       }
@@ -521,7 +524,8 @@
       _submitReview() {
         if (this.agreed) {
           this._setAverageRating();
-          // this._setFieldValue("bottomline", "choices[0]");
+
+          // remove the form image and video fields
           this.reviewTemplate.form.fields = this.reviewTemplate.form.fields.reduce((result, field) => {
             if (field.key !== 'media_image' && field.key !== 'media_videourl') {
               result.push(field);
@@ -540,11 +544,13 @@
         this.set('showError', showError);
         if (state.error && state.error.length > 0) {
           for (let error of state.error) {
-            console.log(error);
             if (this.$$(`#${error.key}`)) {
               this.$$(`#${error.key}`).setAttribute('invalid', true);
             }
           }
+        }
+        if (state.success) {
+          window.scrollTo(0, 0);
         }
       }
 
