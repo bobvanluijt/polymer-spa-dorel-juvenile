@@ -14,6 +14,7 @@
 <script src="mocks/product-detail/videos.js"></script>
 <script src="mocks/product-detail/accordion.js"></script>
 <script src="mocks/product-detail/slideshow.js"></script>
+<script src="mocks/hero-header/hero-header.js"></script>
 
 <dom-module id="dorel-component-guide-product-detail">
   <template>
@@ -25,7 +26,7 @@
 
     </style>
 
-    <dorel-section-slideshow slideshow-data="[[ slideshowData ]]"></dorel-section-slideshow>
+    <dorel-section-hero-header hero-header-data="[[ heroHeaderData ]]"></dorel-section-hero-header>
     <dorel-layout-container>
       <h1 class="class-for-h1">Product Detail Components</h1>
       <p>
@@ -93,6 +94,10 @@
         brand: {
           type: String
         },
+        heroHeaderData: {
+          type: Object,
+          value: heroHeaderVideoLightboxMock
+        },
         featuresData: {
           type: Object,
           value: featuresMock
@@ -125,9 +130,6 @@
           type: Object,
           value: slideshowMock
         }
-      },
-      created: function() {
-        console.log('sasas', this.featuresData);
       }
     });
   </script>

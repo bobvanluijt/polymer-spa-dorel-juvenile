@@ -24,6 +24,7 @@
       max-width: 100%;
       transition: opacity .2s;
       color: var(--theme-color-monochrome-1);
+      align-items: center;
     }
 
     .content[hide] {
@@ -58,6 +59,7 @@
     [tablet-medium-up] .content__text {
       display: block;
       margin-left: 1.5rem;
+      max-width: 60%;
     }
 
     .content__play-btn {
@@ -112,32 +114,22 @@
       thumbnail$="[[ slide.bynder_image_id ]]"></dorel-youtube-video>
 
     <div class="content" hide$="[[ hideButton ]]"
-      video-apect-ratio
       desktop-small-up$="{{ breakpoints.desktopSmallUp }}"
       tablet-medium-up$="{{ breakpoints.tabletMediumUp }}">
-      <dorel-layout-container>
-        <div class="content__align-center">
-
-          <div class="content__video">
-            <div on-click="_togglePlay" class="content__play-btn">
-              <span class="content__play-icon" playing$="[[ playing ]]"></span>
-            </div>
-          </div>
-
-          <div class="content__text">
-            <template is="dom-if" if="[[ slide.content.title ]]">
-              <h3 class="content__title">[[ slide.content.title ]]</h3>
-            </template>
-            <template is="dom-if" if="[[ slide.content.description ]]">
-              <p class="content__description">[[ slide.content.description ]]</p>
-            </template>
-          </div>
-
+      <div class="content__video">
+        <div on-click="_togglePlay" class="content__play-btn">
+          <span class="content__play-icon" playing$="[[ playing ]]"></span>
         </div>
-      </dorel-layout-container>
+      </div>
+      <div class="content__text">
+        <template is="dom-if" if="[[ slide.content.title ]]">
+          <h3 class="content__title">[[ slide.content.title ]]</h3>
+        </template>
+        <template is="dom-if" if="[[ slide.content.description ]]">
+          <h4 class="content__description">[[ slide.content.description ]]</h4>
+        </template>
+      </div>
     </div>
-
-
   </template>
 
   <script>
