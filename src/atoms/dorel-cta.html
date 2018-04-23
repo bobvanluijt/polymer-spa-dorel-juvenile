@@ -1,4 +1,5 @@
 <link rel="import" href="../utils/behaviors/single/dorel-gtm-behavior.html">
+<link rel="import" href="../utils/behaviors/bundled/dorel-conditional-behaviors.html">
 
 <dom-module id="dorel-cta">
   <template>
@@ -12,7 +13,6 @@
         @apply(--theme-button);
         @apply(--theme-button-primary);
         @apply(--theme-button-medium);
-        width: 100%;
       }
 
       .theme-cta--primary {
@@ -209,6 +209,25 @@
       }
     </style>
 
+    <template is="dom-if" if="{{ isBrand('Maxi-Cosi') }}">
+      <style>
+        .theme-cta {
+          width: 100%;
+        }
+      </style>
+    </template>
+
+    <template is="dom-if" if="{{ isBrand('Quinny') }}">
+      <style>
+        .theme-cta, .theme-cta.dorel-cta {
+          width: -moz-fit-content; 
+          width: -webkit-fit-content;
+          float: none;
+          margin: auto;
+        }
+      </style>
+    </template>
+
     <dorel-media-query breakpoints="{{ breakpoints }}"></dorel-media-query>
 
     <a href$="[[ link ]]"
@@ -241,7 +260,7 @@
   </template>
 
   <script>
-    class DorelCta extends ReduxMixin(Polymer.mixinBehaviors([GtmBehavior], Polymer.Element)) {
+    class DorelCta extends ReduxMixin(Polymer.mixinBehaviors([GtmBehavior, ConditionalBehaviors], Polymer.Element)) {
 
       static get is() { return 'dorel-cta'; }
 

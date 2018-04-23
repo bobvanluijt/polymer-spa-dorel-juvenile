@@ -27,6 +27,23 @@
 
     </style>
 
+    <template is="dom-if" if="{{ isBrand('Quinny') }}">
+        <style>
+        .title, .title.dorel-titling {
+          font-weight: var(--theme-font-weight-bold);
+          background-image: url('/assets/images/quinny/underline.svg');
+          background-position: center 120%;
+          background-repeat: no-repeat;
+        }
+
+        [tablet-medium-up] .title,
+        [tablet-medium-up] .title.dorel-titling {
+          font-weight: var(--theme-font-weight-bold);
+          background-position: center 90%;
+        }
+      </style>
+    </template>
+
     <dorel-media-query breakpoints="{{ breakpoints }}"></dorel-media-query>
 
     <section tablet-medium-up$="[[ breakpoints.tabletMediumUp ]]">
@@ -55,7 +72,7 @@
   <script>
     Polymer({
       is: 'dorel-titling',
-
+      behaviors: [ ConditionalBehaviors ],
       properties: {
         /**
          * @name title
@@ -71,7 +88,7 @@
         description: {
           type: String
         }
-      },
+      }
     });
 
   </script>

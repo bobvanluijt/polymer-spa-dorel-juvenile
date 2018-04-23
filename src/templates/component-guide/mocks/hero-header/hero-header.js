@@ -26,7 +26,7 @@ var heroHeaderVideoLightboxMock = {
   "sub_title": "Dolor sit amet",
   "cta_toggle": true,
   "cta_type": "video-cta",
-  "cta_text": "Test",
+  "cta_text": "Watch the Video",
   "cta_href": null,
   "cta_video_id": "pB0z4RCVKEA"
 };

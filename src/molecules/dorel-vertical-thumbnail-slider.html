@@ -54,7 +54,6 @@
         transition: transform 0.22s ease-in-out;
       }
       .btn {
-        border-radius: 50%;
         background-color: var(--theme-color-monochrome-2);
         position: relative;
         width: 2rem;
@@ -86,6 +85,21 @@
         transform: translate(-50%, -50%) rotate(90deg);
       }
     </style>
+
+    <template is="dom-if" if="{{ isBrand('Maxi-Cosi') }}">
+      <style>
+        .btn {
+          border-radius: 50%;
+        }
+      </style>
+    </template>
+    <template is="dom-if" if="{{ isBrand('Quinny') }}">
+      <style>
+        .icon {
+          fill: var(--theme-brand-color-1);
+        }
+      </style>
+    </template>
 
     <div class="controls"
       tablet-medium-up$="[[breakpoints.tabletMediumUp]]">
@@ -144,7 +158,7 @@
   </template>
 
   <script>
-    class DorelVerticalThumbnailSlider extends Polymer.Element {
+    class DorelVerticalThumbnailSlider extends Polymer.mixinBehaviors([ConditionalBehaviors], Polymer.Element) {
 
       static get is() { return 'dorel-vertical-thumbnail-slider'; }
 
