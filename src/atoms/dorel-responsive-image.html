@@ -66,12 +66,17 @@
         height: calc((100vw / 3) * 1);
       }
 
+      [youtube-thumbnail][image-type='full-screen'][portrait-medium],
+      [youtube-thumbnail][image-type='full-screen'][portrait-retina] {
+        height: calc((100vw / 16) * 9);
+      }
+
     </style>
     <dorel-media-query breakpoints="{{ breakpoints }}"></dorel-media-query>
     <div class="image-wrapper">
 
     </div>
-    <iron-image sizing="cover"
+    <iron-image sizing="[[sizing]]"
                 fade="true"
                 pre-load
                 title$="[[ alt ]]"
@@ -86,7 +91,8 @@
                 landscape-small$="[[ breakpoints.landscapeSmall ]]"
                 landscape-medium$="[[ breakpoints.landscapeMedium ]]"
                 landscape-large$="[[ breakpoints.landscapeLarge ]]"
-                landscape-extra-large$="[[ breakpoints.landscapeExtraLarge]]">
+                landscape-extra-large$="[[ breakpoints.landscapeExtraLarge]]"
+                youtube-thumbnail$="[[youtubeThumbnail]]">
     </iron-image>
   </template>
   <script>
@@ -171,6 +177,16 @@
         alt: {
           type: String,
           value: ''
+        },
+        sizing: {
+          type: String,
+          value: 'cover',
+          reflectToAttribute: true
+        },
+        youtubeThumbnail: {
+          type: Boolean,
+          value: false,
+          reflectToAttribute: true
         }
       },
       /**
