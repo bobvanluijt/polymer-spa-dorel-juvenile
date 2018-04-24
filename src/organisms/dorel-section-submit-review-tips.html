@@ -24,15 +24,15 @@
 
     <section>
       <div class="tips">
-        <h3 class="title">Writing Tips</h3>
-        <p>When writing your review, please consider the following guidelines:</p>
+        <h3 class="title">[[localize('reviews#tips_title')]]</h3>
+        <p>[[localize('reviews#tips_subtitle')]]</p>
         <ul>
-          <li>Focus on the product and your individual experience using it</li>
-          <li>Provide details about why you liked or disliked a product</li>
-          <li>Help others decide if the product will meet their needs</li>
-          <li>All submitted reviews are subject to the terms set forth in our Privacy Policy, Terms of Use, and the Terms of Service for this site feature.</li>
+          <li>[[localize('reviews#tips_1')]]</li>
+          <li>[[localize('reviews#tips_2')]]</li>
+          <li>[[localize('reviews#tips_3')]]</li>
+          <li>[[localize('reviews#tips_4')]]</li>
         </ul>
-        <p class="link-text">Learn more</p>
+        <p class="link-text">[[localize('reviews#learn_more')]]</p>
       </div>
     </section>
 
@@ -41,7 +41,7 @@
 
 
   <script>
-  class DorelSectionSubmitReviewTips extends Polymer.Element {
+  class DorelSectionSubmitReviewTips extends Polymer.mixinBehaviors([DorelMultilingualBehavior], Polymer.Element) {
 
     static get is() { return 'dorel-section-submit-review-tips'; }
 

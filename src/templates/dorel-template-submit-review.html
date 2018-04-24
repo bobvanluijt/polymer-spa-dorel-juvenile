@@ -1,3 +1,4 @@
+<link rel="import" href="../../node_modules/paper-input/paper-input.html">
 <link rel="import" href="../molecules/product/reviews/dorel-product-review-stars.html">
 <link rel="import" href="../organisms/dorel-section-submit-review-tips.html">
 <link rel="import" href="../organisms/product/dorel-section-review-thank-you.html">
@@ -144,6 +145,13 @@
         z-index: 10000;
       }
 
+      .file-input {
+        position: absolute;
+        left: -100vw;
+        top: -100vh;
+        visibility: hidden;
+      }
+
     </style>
 
     <app-route
@@ -168,7 +176,7 @@
         <dorel-layout-row>
           <dorel-layout-column desktop-column-span="9" tablet-column-span="9" mobile-column-span="12">
             <section on-click="_onRatingClicked">
-              <h3 class="question">1. How would you rate the following regarding the [[product.name.value]]?</h3>
+              <h3 class="question">[[localize('reviews#question_2')]] [[product.name.value]]?</h3>
               <section>
                 <p class="property">[[localize('reviews#product_quality')]]</p>
                 <dorel-product-review-stars
@@ -219,10 +227,10 @@
               </section>
             </section>
             <section>
-              <h3 class="question">2. How would you describe your experience with the [[product.name.value]]?</h3>
+              <h3 class="question">[[localize('reviews#question_2')]] [[product.name.value]]?</h3>
               <section class="details-container">
                 <section class="details-container--form">
-                  <p class="property">In one sentence</p>
+                  <p class="property">[[localize('reviews#in_one_sentence')]]</p>
                   <dorel-input
                     class="input"
                     id="headline"
@@ -231,7 +239,7 @@
                     data-key="headline"></dorel-input>
 
                   <div class="flex-two">
-                    <p class="property">Write more details</p>
+                    <p class="property">[[localize('reviews#write_more_details')]]</p>
                     <iron-icon class="help-button" on-click="_showTips" icon="dorel-icons:help-outline"></iron-icon>
                   </div>
                   <dorel-section-submit-review-tips class$="details-container--tips-mobile [[tipsOpenClassName]]"></dorel-section-submit-review-tips>
@@ -243,21 +251,22 @@
                     data-key="comments"></dorel-input-textarea>
                   <div class="details-bonus">
                     <span class="limit-text">0/120 characters</span>
-                    <span class="link-text">Add attachment</span>
+                    <span class="link-text" on-click="_openFileDialog">[[localize('reviews#add_attachment')]]</span>
+                    <input id="attachment" class="file-input" type="file" value="{{fileUrl}}"></input>
                   </div>
                 </section>
                 <dorel-section-submit-review-tips class="details-container--tips"></dorel-section-submit-review-tips>
               </section>
               <section>
-                <p>Would you recommend this product?</p>
+                <p>[[localize('reviews#would_you_recommend')]]</p>
                 <dorel-radio-group id="bottomline" options="[[ radioOptions ]]" selected="{{ bottomline }}"></dorel-radio-group>
               </section>
             </section>
 
            <section class="info-container">
-             <h3 class="question">Your information</h3>
-             <p class="property">Name/ Nickname</p>
-             <p class="property-description">This name will appear under your review</p>
+             <h3 class="question">[[localize('reviews#your_information')]]</h3>
+             <p class="property">[[localize('reviews#name_nickname')]]</p>
+             <p class="property-description">[[localize('reviews#name_helper')]]</p>
              <dorel-input
                class="info-input"
                id="name"
@@ -265,8 +274,8 @@
                on-input="_textInputChanged"
                data-key="customerName"></dorel-input>
 
-             <p class="property">Email</p>
-             <p class="property-description">This email will not be publicly shared</p>
+             <p class="property">[[localize('reviews#email')]]</p>
+             <p class="property-description">[[localize('reviews#email_helper')]]</p>
              <dorel-input
                class="info-input"
                id="email_collection"
@@ -274,8 +283,8 @@
                on-input="_textInputChanged"
                data-key="email_collection"></dorel-input>
 
-             <p class="property">Location</p>
-             <p class="property-description">Your Residence [City, Country]</p>
+             <p class="property">[[localize('reviews#location')]]</p>
+             <p class="property-description">[[localize('reviews#location_helper')]]</p>
              <dorel-input
                class="info-input"
                id="location"
@@ -287,17 +296,17 @@
            <dorel-checkbox
              id="agreed"
              class="checkbox"
-             label="I agree with the Terms of Use and the Privacy Policy"
+             label="[[localize('reviews#tou_privacy_agreement')]]"
              color-code="#0096C3"
              checked="{{agreed}}"></dorel-checkbox>
 
            <template is="dom-if" if="[[showError]]">
-             <p class="errors">[[errorMessage]]</p>
+             <p class="errors">[[localize('reviews#error_message')]]</p>
            </template>
 
            <section class="flex-two form-buttons">
-              <dorel-cta type="secondary" size="large" icon="dorel-icons:close" link="[[productUrl]]">Cancel</dorel-cta>
-              <dorel-cta type="primary" size="large" icon="dorel-icons:chevron-right" on-click="_submitReview">Submit</dorel-cta>
+              <dorel-cta type="secondary" size="large" icon="dorel-icons:close" link="[[productUrl]]">[[localize('cancel')]]</dorel-cta>
+              <dorel-cta type="primary" size="large" icon="dorel-icons:chevron-right" on-click="_submitReview">[[localize('submit')]]</dorel-cta>
            </section>
           </dorel-layout-column>
         </dorel-layout-row>
@@ -341,10 +350,6 @@
             statePath: 'review.submitReview',
             observer: '_submitReviewStateChanged'
           },
-          errorMessage: {
-            type: String,
-            value: 'Please fill in or correct the highlighted fields above!'
-          },
           showError: {
             type: Boolean,
             value: false
@@ -364,11 +369,7 @@
           radioOptions: {
             type: Array,
             notify: true,
-            readOnly: false,
-            value: [
-              {'name': 'Yes, I would recommend this to a friend', 'label': 'Yes'},
-              {'name': 'No, I would not recommend this to a friend', 'label': 'No'}
-            ]
+            readOnly: false
           },
           /**
            * @name tipsOpenClassName
@@ -397,6 +398,14 @@
           agreed: {
             type: String,
             observer: '_agreedChanged'
+          },
+          multimedia: {
+            type: Array,
+            value: []
+          },
+          fileUrl: {
+            type: String,
+            observer: '_fileUrlChanged'
           }
         }
       }
@@ -406,6 +415,17 @@
           '_productNameChanged(routeData.productName)',
           '_submitReviewState()'
         ]
+      }
+
+      connectedCallback() {
+        super.connectedCallback();
+        setTimeout(() => {
+          const options = [
+            {'name': 'Yes, I would recommend this to a friend', 'label': this.localize('reviews#yes')},
+            {'name': 'No, I would not recommend this to a friend', 'label': this.localize('reviews#no')}
+          ];
+          this.set('radioOptions', options);
+        }, 1000);
       }
 
       /**
@@ -481,6 +501,8 @@
         }
       }
 
+      _fileUrlChanged(value) {}
+
       _setFieldValue(key, value) {
         if (this.reviewTemplate) {
           const field = this._getFieldItem(key);
@@ -540,6 +562,10 @@
        */
       _showTips() {
         this.tipsOpenClassName = this.tipsOpenClassName === '' ? 'details-container--tips-mobile_open' : '';
+      }
+
+      _openFileDialog() {
+        this.$$('#attachment').click();
       }
     }
     customElements.define(DorelTemplateSubmitReview.is, DorelTemplateSubmitReview);

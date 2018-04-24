@@ -29,7 +29,7 @@
       breakpoints="{{breakpoints}}"></dorel-media-query>
 
     <dorel-layout-container class="header">
-      <h1 class="title">Thank you for your review</h1>
+      <h1 class="title">[[localize('reviews#thank_you')]]</h1>
     </dorel-layout-container>
     <dorel-layout-container tablet-medium-up$="[[breakpoints.tabletMediumUp]]">
       <dorel-layout-row>
@@ -38,9 +38,9 @@
           desktop-column-span="6"
           tablet-column-span="9"
           mobile-column-span="12">
-          <p>You're helping to make our products even better.  Please note that your review may take up to 72 hours to appear.</p>
+          <p>[[localize('reviews#thank_you_message')]]</p>
           <div class="cta">
-            <dorel-cta size="medium" type="primary" link="[[productUrl]]" on-click="_resetForm">Back to product page</dorel-cta>
+            <dorel-cta size="medium" type="primary" link="[[productUrl]]" on-click="_resetForm">[[localize('reviews#back_to_product')]]</dorel-cta>
           </div>
         </dorel-layout-column>
       </dorel-layout-row>
