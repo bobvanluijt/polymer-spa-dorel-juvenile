@@ -20,7 +20,7 @@
         const state = getState();
         const prConfig = state.config.third_party[0].power_reviews;
         const init = { method: 'GET', mode: 'cors', cache: 'default' };
-        let fullUrl = state.config.reviewsUrl.replace('/m', '') + url + `&apikey=${prConfig.api_key}`;
+        let fullUrl = state.config.reviewsUrl.replace('/m', '') + url + `&apikey=${prConfig.read_api_key}`;
         return fetch(fullUrl, init)
           .then(handleErrors)
           .then(response => response.json())
@@ -57,8 +57,8 @@
          * example request for power reviews (url defined at app-config level):
          * https://readservices-b2c.powerreviews.com/m/64172/l/en_GB/product/2d7c2112-7cc1-47cc-8b6f-2cc7cd0a9d95/reviews?apikey=38f8abea-6154-4785-9c17-fe7d24b4148c
          */
-        // let url = `${state.config.reviewsUrl}/${prConfig.merchant_id}/l/${locale}_${countryCode.toUpperCase()}/product/${product_sku}/reviews?apikey=${prConfig.api_key}&paging.size=10`;
-        let url = `${state.config.reviewsUrl}/294888/l/${locale}_${countryCode.toUpperCase()}/product/${product_sku}/reviews?apikey=f1aa397d-7297-4602-82fb-550f50fa5f08&paging.size=10`;
+
+        let url = `${state.config.reviewsUrl}/${prConfig.merchant_id}/l/${locale}_${countryCode.toUpperCase()}/product/${product_sku}/reviews?apikey=${prConfig.read_api_key}&paging.size=10`;
         // let url = 'https://readservices-b2c.powerreviews.com/m/64172/l/en_GB/product/2d7c2112-7cc1-47cc-8b6f-2cc7cd0a9d95/reviews?apikey=38f8abea-6154-4785-9c17-fe7d24b4148c'
 
         // when sorting is defined extend the api request url
@@ -90,7 +90,7 @@
       // if power reviews is disabled or one of the needed api criteria are empty, skip retrieval
       if (!state.config.third_party[0].power_reviews.toggle
         || !state.config.third_party[0].power_reviews.merchant_id
-        || !state.config.third_party[0].power_reviews.api_key) return;
+        || !state.config.third_party[0].power_reviews.read_api_key) return;
 
       const review = state.review.reviews.find(review => review.sku === product_sku);
 
@@ -154,12 +154,8 @@
         const countryCode = state.route.currentLanguage.countryCode;
         const prConfig = state.config.third_party[0].power_reviews;
         const init = { method: 'GET', mode: 'cors', cache: 'default' };
-        /**
-         * example request for power reviews (url defined at app-config level):
-         * https://readservices-b2c.powerreviews.com/m/64172/l/en_GB/product/2d7c2112-7cc1-47cc-8b6f-2cc7cd0a9d95/reviews?apikey=38f8abea-6154-4785-9c17-fe7d24b4148c
-         */
-        // let url = `${state.config.reviewsUrl}/${prConfig.merchant_id}/l/${locale}_${countryCode.toUpperCase()}/product/${product_sku}/reviews?apikey=${prConfig.api_key}&paging.size=10`;
-        let url = `http://writeservices.powerreviews.com/api/b2b/writereview/review_template?merchant_id=294888&apikey=8b1afb6f-e693-4244-b16d-bfc327bc509f&page_id=${product_sku}`
+        let url = `${state.config.writeReviewUrl}/review_template?merchant_id=${prConfig.merchant_id}&apikey=${prConfig.write_api_key}&page_id=${product_sku}/`;
+        // let url = `http://writeservices.powerreviews.com/api/b2b/writereview/review_template?merchant_id=294888&apikey=8b1afb6f-e693-4244-b16d-bfc327bc509f&page_id=${product_sku}`
 
         // retrieve the reviews object for this sku and dispatch accordingly
         return fetch(url, init)
@@ -199,12 +195,8 @@
           mode: 'cors',
           body: JSON.stringify(data)
         };
-        /**
-         * example request for power reviews (url defined at app-config level):
-         * https://readservices-b2c.powerreviews.com/m/64172/l/en_GB/product/2d7c2112-7cc1-47cc-8b6f-2cc7cd0a9d95/reviews?apikey=38f8abea-6154-4785-9c17-fe7d24b4148c
-         */
-        // let url = `${state.config.reviewsUrl}/${prConfig.merchant_id}/l/${locale}_${countryCode.toUpperCase()}/product/${product_sku}/reviews?apikey=${prConfig.api_key}&paging.size=10`;
-        let url = `http://writeservices.powerreviews.com/api/b2b/writereview/submit_review?merchant_id=294888&apikey=8b1afb6f-e693-4244-b16d-bfc327bc509f&page_id=${product_sku}`;
+        let url = `${state.config.writeReviewUrl}/submit_review?merchant_id=${prConfig.merchant_id}&apikey=${prConfig.write_api_key}&page_id=${product_sku}/`;
+        // let url = `http://writeservices.powerreviews.com/api/b2b/writereview/submit_review?merchant_id=294888&apikey=8b1afb6f-e693-4244-b16d-bfc327bc509f&page_id=${product_sku}`;
 
         // retrieve the reviews object for this sku and dispatch accordingly
         return fetch(url, init)
@@ -264,7 +256,8 @@
       requestReviews,
       requestMoreReviews,
       getReviewTemplate,
-      submitReview
+      submitReview,
+      submitReviewFailed
     };
   }());
 </script>

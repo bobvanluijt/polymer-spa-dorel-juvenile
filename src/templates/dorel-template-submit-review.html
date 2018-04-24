@@ -47,11 +47,13 @@
         flex-wrap: wrap;
       }
 
-      [tablet-medium-up] .details-container--form, [tablet-medium-up] .details-container--tips {
+      [tablet-medium-up] .details-container--form,
+      [tablet-medium-up] .details-container--tips {
         flex: 1
       }
 
-      .details-container--tips, .details-container--tips-mobile {
+      .details-container--tips,
+      .details-container--tips-mobile {
         display: none;
       }
 
@@ -108,11 +110,13 @@
         align-items: baseline;
       }
 
-      [tablet-medium-up] .info-input, [tablet-medium-up] .flex-two {
+      [tablet-medium-up] .info-input,
+      [tablet-medium-up] .flex-two {
         width: 50%;
       }
 
-      .checkbox.invalid, .errors {
+      .checkbox.invalid,
+      .errors {
         @apply(--theme-color-error-box);
         border-radius: 1rem;
         box-sizing: border-box;
@@ -154,24 +158,19 @@
     <dorel-section-page-nav
       breadcrumbs-toggle="true"></dorel-section-page-nav>
 
-    <template
-      is="dom-if"
-      if="[[!submitReviewState.success]]">
+    <template is="dom-if" if="[[!submitReviewState.success]]" restamp>
       <dorel-layout-container class="header">
-        <h1 class="title">Submit your review</h1>
+        <h1 class="title">[[localize('reviews#submit_your_review')]]</h1>
         <h2 class="subtitle">[[product.name.value]]</h2>
       </dorel-layout-container>
 
       <dorel-layout-container class="form-container" tablet-medium-up$="[[breakpoints.tabletMediumUp]]">
         <dorel-layout-row>
-          <dorel-layout-column
-            desktop-column-span="9"
-            tablet-column-span="9"
-            mobile-column-span="12">
+          <dorel-layout-column desktop-column-span="9" tablet-column-span="9" mobile-column-span="12">
             <section on-click="_onRatingClicked">
               <h3 class="question">1. How would you rate the following regarding the [[product.name.value]]?</h3>
               <section>
-                <p class="property">Product Quality</p>
+                <p class="property">[[localize('reviews#product_quality')]]</p>
                 <dorel-product-review-stars
                   id="productquality"
                   class="stars"
@@ -183,7 +182,7 @@
                   large-mode></dorel-product-review-stars>
               </section>
               <section>
-                <p class="property">Ease of use</p>
+                <p class="property">[[localize('reviews#ease_of_use')]]</p>
                 <dorel-product-review-stars
                   id="easeofuse"
                   class="stars"
@@ -195,7 +194,7 @@
                   large-mode></dorel-product-review-stars>
               </section>
               <section>
-                <p class="property">Maintenance</p>
+                <p class="property">[[localize('reviews#maintenance')]]</p>
                 <dorel-product-review-stars
                   id="maintenance"
                   class="stars"
@@ -207,7 +206,7 @@
                   large-mode></dorel-product-review-stars>
               </section>
               <section>
-                <p class="property">Comfort</p>
+                <p class="property">[[localize('reviews#comfort')]]</p>
                 <dorel-product-review-stars
                   id="comfort"
                   class="stars"
@@ -229,8 +228,7 @@
                     id="headline"
                     value="{{headline}}"
                     on-input="_textInputChanged"
-                    data-key="headline"
-                    ></dorel-input>
+                    data-key="headline"></dorel-input>
 
                   <div class="flex-two">
                     <p class="property">Write more details</p>
@@ -252,10 +250,7 @@
               </section>
               <section>
                 <p>Would you recommend this product?</p>
-                <dorel-radio-group id="bottomline"
-                                   options="[[ radioOptions ]]"
-                                   selected="{{ bottomline }}">
-                </dorel-radio-group>
+                <dorel-radio-group id="bottomline" options="[[ radioOptions ]]" selected="{{ bottomline }}"></dorel-radio-group>
               </section>
             </section>
 
@@ -296,9 +291,7 @@
              color-code="#0096C3"
              checked="{{agreed}}"></dorel-checkbox>
 
-           <template
-             is="dom-if"
-             if="[[showError]]">
+           <template is="dom-if" if="[[showError]]">
              <p class="errors">[[errorMessage]]</p>
            </template>
 
@@ -325,7 +318,6 @@
 
   <script>
     class DorelTemplateSubmitReview extends ReduxMixin(Polymer.mixinBehaviors([TemplateBehaviors, DorelMultilingualBehavior], Polymer.Element)) {
-
       static get is() { return 'dorel-template-submit-review'; }
 
       static get properties() {
@@ -339,30 +331,24 @@
             type: Object,
             statePath: 'page.currentPage',
           },
-
           routeData: Object,
-
           reviewTemplate: {
             type: Object,
             statePath: 'review.reviewTemplate'
           },
-
           submitReviewState: {
             type: Object,
             statePath: 'review.submitReview',
             observer: '_submitReviewStateChanged'
           },
-
           errorMessage: {
             type: String,
             value: 'Please fill in or correct the highlighted fields above!'
           },
-
           showError: {
             type: Boolean,
             value: false
           },
-
           product: {
             type: Object,
             statePath: function(state) {
@@ -371,52 +357,6 @@
             },
             observer: '_productChanged'
           },
-          productquality: {
-            type: Number,
-            value: 0
-          },
-          easeofuse: {
-            type: Number,
-            value: 0
-          },
-          maintenance: {
-            type: Number,
-            value: 0
-          },
-          comfort: {
-            type: Number,
-            value: 0
-          },
-          headline: {
-            type: String,
-            value: '',
-          },
-          comments: {
-            type: String,
-            value: ''
-          },
-          bottomline: {
-            type: String,
-            observer: '_bottomlineChanged'
-          },
-          customerName: {
-            type: String,
-            value: ''
-          },
-          email_collection: {
-            type: String,
-            value: ''
-          },
-          location: {
-            type: String,
-            value: ''
-          },
-          agreed: {
-            type: String,
-            value: false,
-            observer: '_agreedChanged'
-          },
-
           /**
            * @name radioOptions
            * @description recommend options
@@ -437,6 +377,26 @@
           tipsOpenClassName: {
             type: String,
             value: ''
+          },
+          /**
+           * @description form inputs
+           */
+          productquality: Number,
+          easeofuse: Number,
+          maintenance: Number,
+          comfort: Number,
+          headline: String,
+          comments: String,
+          customerName: String,
+          email_collection: String,
+          location: String,
+          bottomline: {
+            type: String,
+            observer: '_bottomlineChanged'
+          },
+          agreed: {
+            type: String,
+            observer: '_agreedChanged'
           }
         }
       }
@@ -450,17 +410,30 @@
 
       /**
        * @name _productNameChanged
-       * @description if the productName changes dispatch an action to retrieve product
-       * @param product - Object
+       * @description if the productName changes reset the form and dispatch an action to retrieve product
+       * @param productName - Object
        * @returns Boolean
        */
       _productNameChanged(productName) {
         if(productName) {
+          /** reset the form */
+          this.dispatch('submitReviewFailed', null);
+          this.set('productquality', 0);
+          this.set('easeofuse', 0);
+          this.set('maintenance', 0);
+          this.set('comfort', 0);
+          this.set('headline', '');
+          this.set('comments', '');
+          this.set('customerName', '');
+          this.set('email_collection', '');
+          this.set('location', '');
+          this.set('bottomline', '');
+          this.set('agreed', false);
+
           const origin = window.location.origin;
           const url = `${origin}${this.route.prefix}/${this.route.path.split('/')[1]}`;
           this.set('productUrl', url);
 
-          this.dispatch('getReviewTemplate');
           this.dispatch('requestProduct', productName);
           this.dispatch('setCurrentProduct', productName);
         }
@@ -485,7 +458,7 @@
       _onRatingClicked(e) {
         const key = e.target.getAttribute('data-key');
         e.target.removeAttribute('invalid');
-        if (this.get(key) > 0) {
+        if (key && this.get(key) > 0) {
           this._setFieldValue(key, this.get(key));
         }
       }
@@ -568,9 +541,7 @@
       _showTips() {
         this.tipsOpenClassName = this.tipsOpenClassName === '' ? 'details-container--tips-mobile_open' : '';
       }
-
     }
-
     customElements.define(DorelTemplateSubmitReview.is, DorelTemplateSubmitReview);
   </script>
 </dom-module>

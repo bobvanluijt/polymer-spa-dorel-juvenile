@@ -40,7 +40,7 @@
           mobile-column-span="12">
           <p>You're helping to make our products even better.  Please note that your review may take up to 72 hours to appear.</p>
           <div class="cta">
-            <dorel-cta size="medium" type="primary" link="[[productUrl]]">Back to product page</dorel-cta>
+            <dorel-cta size="medium" type="primary" link="[[productUrl]]" on-click="_resetForm">Back to product page</dorel-cta>
           </div>
         </dorel-layout-column>
       </dorel-layout-row>
@@ -49,7 +49,7 @@
   </template>
 
   <script>
-    class DorelSectionReviewThankYou extends Polymer.mixinBehaviors([DorelMultilingualBehavior], Polymer.Element) {
+    class DorelSectionReviewThankYou extends ReduxMixin(Polymer.mixinBehaviors([DorelMultilingualBehavior], Polymer.Element)) {
 
       static get is() { return 'dorel-section-review-thank-you'; }
 
@@ -65,6 +65,11 @@
              reflectToAttribute: true
            }
         }
+      }
+
+      _resetForm() {
+        // reset the state of the submit review form
+        setTimeout(() => this.dispatch('submitReviewFailed', null), 1000);
       }
 
     }
