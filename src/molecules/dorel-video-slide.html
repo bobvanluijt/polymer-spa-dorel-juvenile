@@ -42,29 +42,41 @@
       padding: 1.5rem;
       box-sizing: border-box;
     }
+
     .content__title {
+      @apply(--theme-typography-5);
       margin: 0;
-      @apply(--theme-typography-8);
-      font-size: 3.0000em !important;
       text-shadow: 1px 1px 2px rgba(0,0,0,.5);
     }
+
+    [tablet-medium-up] .content__title {
+      @apply(--theme-typography-8);
+      font-size: 3.0000em !important;
+    }
+
     .content__description {
+      display: none;
+    }
+
+    [tablet-medium-up] .content__description {
+      display: block;
       @apply(--theme-typography-4);
       font-size: 1.5000em !important;
       text-shadow: 1px 1px 2px rgba(0,0,0,.5);
     }
+
     .content__text {
-      display: none;
+      margin-left: 1rem;
     }
+
     [tablet-medium-up] .content__text {
-      display: block;
       margin-left: 1.5rem;
       max-width: 60%;
     }
 
     .content__play-btn {
-      width: 6rem;
-      height: 6rem;
+      width: 3rem;
+      height: 3rem;
       border-radius: 50%;
       border-radius: 50%;
       position: relative;
@@ -72,6 +84,11 @@
       -webkit-box-shadow: 1px 1px 2px 0px rgba(0,0,0,0.5);
       -moz-box-shadow: 1px 1px 2px 0px rgba(0,0,0,0.5);
       box-shadow: 1px 1px 2px 0px rgba(0,0,0,0.5);
+    }
+
+    [tablet-medium-up] .content__play-btn {
+      width: 6rem;
+      height: 6rem;
     }
 
     .content__play-icon {
@@ -86,15 +103,24 @@
     .content__play-icon::before {
       display:block;
       margin-left: 0.3rem;
-      font-size: 4rem !important;
+      font-size: 2rem !important;
       content: '\25BA'
     }
 
     /* pause icon */
     .content__play-icon[playing]::before {
       display:block;
-      margin: 0 0 0.2rem 0.8rem;
+      margin: 0 0 0.3rem 0.45rem;
       content: '\258C \258C';
+      font-size: 1.2rem !important;
+    }
+
+    [tablet-medium-up] .content__play-icon::before {
+      font-size: 4rem !important;
+    }
+
+    [tablet-medium-up] .content__play-icon[playing]::before {
+      margin: 0 0 0.2rem 0.8rem;
       font-size: 2.5rem !important;
     }
 
@@ -148,10 +174,7 @@
            * @description Array of slides to show
            */
           slide: {
-            type: Object,
-            // value: function () {
-            //   return {};
-            // }
+            type: Object
           },
 
           /**
