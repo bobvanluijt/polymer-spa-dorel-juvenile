@@ -97,9 +97,9 @@
        * @return {object} the newly created menu item object with sub/dropdown items
        */
       async _createMenuItem(item, page) {
-        if (item.is_external) {
+        if (item.is_external && item.external_link.url) {
           item.id = null;
-          item.link = item.external_link;
+          item.link = item.external_link.url;
         } else {
           item.id = page.id;
           item.link = this.cleanUrlToPath(page.link);
