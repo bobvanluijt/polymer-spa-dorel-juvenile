@@ -5,12 +5,127 @@
 
 <dom-module id="dorel-section-product-showcase">
   <template>
+    <template is="dom-if" if="{{ isBrand('Maxi-Cosi') }}">
+      <style>
+        .showcase-product-specs {
+          @apply(--theme-typography-1);
+          margin-top: 0;
+          list-style: none;
+          float: left;
+          padding: 0;
+          width: initial;
+        }
+
+        .showcase-product-specs li {
+          margin-right: 1em;
+          float: left;
+          width: auto;
+        }
+
+        .actions, .award-section, .color-container {
+          -ms-flex-preferred-size: 100%;
+          flex-basis: 100%;
+          max-width: 100%;
+          float: left;
+          width: 100%;
+          display: flex;
+          justify-content: flex-start;
+          text-align: left;
+        }
+
+        .actions dorel-cta {
+          margin: 1.5em 1em 0 0;
+          float: left;
+        }
+
+        dorel-color-switcher {
+          text-align: left;
+        }
+
+        .showcase-title, .showcase-product-specs, dorel-expandable-content {
+          float: left;
+          text-align: left;
+        }
+
+        dorel-expandable-content {
+          margin-top: 1em;
+        }
+
+        .actions dorel-cta:first-child {
+          margin-left: 0;
+        }
+      </style>
+    </template>
+
+    <template is="dom-if" if="{{ isBrand('Quinny') }}">
+      <style>
+        .showcase-column {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+        }
+
+        .showcase-product-specs {
+          @apply(--theme-typography-1);
+          margin-top: 0;
+          list-style: none;
+          display: flex;
+          flex-direction: row;
+          justify-content: center;
+          padding: 0;
+          width: initial;
+        }
+
+        .showcase-product-specs li {
+          margin-right: 1em;
+          width: auto;
+        }
+
+        .actions, .award-section, .color-container {
+          -ms-flex-preferred-size: 100%;
+          max-width: 100%;
+          float: left;
+          width: 100%;
+          display: flex;
+          justify-content: center;
+          text-align: left;
+        }
+
+        .actions dorel-cta {
+          margin: 1.5rem .5rem 0 0;
+        }
+
+        dorel-color-switcher {
+          text-align: center;
+        }
+
+        .showcase-title, .showcase-product-specs, dorel-expandable-content {
+          float: left;
+          text-align: center;
+        }
+
+        dorel-expandable-content {
+          margin-top: 1em;
+          padding: 0 5vw;
+        }
+
+        .cta-related-products {
+          display: none;
+        }
+
+        .award-section,
+        .award-section.dorel-section-product-showcase {
+          display: none;
+        }
+      </style>
+    </template>
+
     <style>
       h1, h2, h3, h4 {
         @apply(--theme-header-text-transform);
       }
 
-     dorel-layout-column {
+      dorel-layout-column {
         margin-top: 0;
       }
 
@@ -21,62 +136,13 @@
         width: 100%;
       }
 
-      .showcase-product-specs {
-        @apply(--theme-typography-1);
-        margin-top: 0;
-        list-style: none;
-        float: left;
-        padding: 0;
-        width: initial;
-      }
-
-      .showcase-product-specs li {
-        margin-right: 1em;
-        float: left;
-        width: auto;
-      }
-
       .label {
         display: block;
         font-weight: var(--theme-font-weight-bold);
       }
 
-      .actions, .award-section, .color-container {
-        -ms-flex-preferred-size: 100%;
-        flex-basis: 100%;
-        max-width: 100%;
-        float: left;
-        width: 100%;
-        display: flex;
-        justify-content: flex-start;
-        text-align: left;
-      }
-
-      dorel-color-switcher {
-        text-align: left;
-      }
-
-      .showcase-title, .showcase-product-specs, dorel-expandable-content {
-        float: left;
-        text-align: left;
-
-      }
-
       .showcase-product-specs {
         margin-top: 1.5em;
-      }
-
-      dorel-expandable-content {
-        margin-top: 1em;
-      }
-
-      .actions dorel-cta {
-        margin: 1.5em 1em 0 0;
-        float: left;
-      }
-
-      .actions dorel-cta:first-child {
-        margin-left: 0;
       }
 
       .actions dorel-cta:last-child {
@@ -187,7 +253,8 @@
           <dorel-layout-column
             desktop-column-span="6"
             tablet-column-span="6"
-            mobile-column-span="12">
+            mobile-column-span="12"
+            class="showcase-column">
 
             <template
               is="dom-if"
@@ -301,7 +368,8 @@
                   on-click="_viewAccessories"
                   link="#"
                   size="medium"
-                  icon="dorel-icons:expand-more">
+                  icon="dorel-icons:expand-more"
+                  class="cta-related-products">
                   [[localize('View_Related_Products')]]
                 </dorel-cta>
               </template>

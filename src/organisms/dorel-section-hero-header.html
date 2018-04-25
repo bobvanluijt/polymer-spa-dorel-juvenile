@@ -34,8 +34,7 @@
       }
 
       .subtitle {
-        @apply(--theme-typography-4);
-        font-weight: var(--theme-font-weight-light);
+        @apply(--theme-typography-3);
         margin-top: 0;
         color: var(--theme-color-white);
         text-shadow: var(--theme-text-shadow);
@@ -81,7 +80,6 @@
 
       [tablet-small] .subtitle {
         @apply(--theme-typography-5);
-        font-weight: var(--theme-font-weight-light);
         margin-top: 0;
       }
 
@@ -98,17 +96,52 @@
 
       [tablet-medium-up] .subtitle {
         @apply(--theme-typography-6);
-        font-weight: var(--theme-font-weight-light);
         margin-top: .375em;
       }
     </style>
+
+    <template is="dom-if" if="{{ isBrand('Maxi-Cosi') }}">
+      <style>
+        dorel-layout-column {
+        }
+      </style>
+    </template>
+
+    <template is="dom-if" if="{{ isBrand('Quinny') }}">
+      <style>
+        dorel-layout-column, dorel-layout-column.dorel-section-hero-header {
+          position: static;
+          text-align: left;
+        }
+
+        .bynder-image {
+          z-index: -2;
+        }
+
+        .skew-overlay {
+          background-color: var(--theme-color-monochrome-1);
+          position: absolute;
+          top: -20%;
+          left: -23%;
+          width: 60%;
+          height: 200%;
+          z-index: -1;
+          transform: rotateZ(-15deg);
+        }
+
+        [cta-video] .title, [cta-video] .subtitle {
+          color: var(--theme-color-black);
+        }
+      </style>
+    </template>
 
     <dorel-media-query
       breakpoints="{{breakpoints}}"></dorel-media-query>
 
     <section class="hero-header"
       tablet-small$="[[breakpoints.tabletSmall]]"
-      tablet-medium-up$="[[breakpoints.tabletMediumUp]]">
+      tablet-medium-up$="[[breakpoints.tabletMediumUp]]"
+      cta-video$="[[_hasVideoCTA(heroHeaderData)]]">
       <!-- Show video on larger screens -->
       <template
         is="dom-if"
@@ -128,6 +161,7 @@
           is="dom-if"
           if="[[!_hasVideoLoop(heroHeaderData)]]">
           <dorel-bynder-responsive-image
+            class="bynder-image"
             media-id="[[heroHeaderData.bynder_background_image]]"
             image-alt="[[heroHeaderData.bynder_image_alt_text]]"></dorel-bynder-responsive-image>
         </template>
@@ -181,7 +215,7 @@
                   <dorel-cta
                     title="[[heroHeaderData.cta_text]]"
                     icon="dorel-icons:play-circle-outline"
-                    inverted
+                    inverted="[[ !isBrand('Quinny') ]]"
                     link="#"
                     on-click="openYouTubeLightbox">[[heroHeaderData.cta_text]]</dorel-cta>
                 </template>
@@ -196,9 +230,15 @@
                     link="#"
                     on-click="openYouTubeLightbox">[[localize('hero_header#watch_video')]]</dorel-cta>
                 </template>
-
               </template>
             </header>
+
+            <template
+              is="dom-if"
+              if="[[_hasVideoCTA(heroHeaderData)]]">
+              <div class="skew-overlay"></div>
+            </template>
+
           </dorel-layout-column>
         </dorel-layout-row>
       </dorel-layout-container>
