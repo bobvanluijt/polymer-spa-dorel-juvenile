@@ -292,16 +292,26 @@
                     tablet-column-span="12"
                     mobile-column-span="12">
                     <h3 class="lightbox-title">{{localize('Find_a_Store')}}</h3>
-                    <form id="search-location" class="search-form"
+                    <iron-a11y-keys
+                      id="a11y"
+                      target="[[_form]]"
+                      keys="enter"
+                      on-keys-pressed="_submitForm">
+                    </iron-a11y-keys>
+                    <form
+                      is="iron-form"
+                      id="search-location"
+                      class="search-form"
                       on-submit="_submitForm">
+
                       <dorel-input id="address-input"
                         name="address"
                         class="search-form__input"
                         value="{{addressInput}}"
                         placeholder="[[localize('product_lead_lightbox#address-placeholder')]]"
                         invalid$="[[!addressInput.length]]">
-                       </dorel-input>
-                       <button role="submit" class="search-form__submit"
+                      </dorel-input>
+                      <button role="submit" type="submit" class="search-form__submit"
                         enabled$="{{ addressInput.length }}">
                          <iron-icon
                           icon="dorel-icons:location"></iron-icon>
@@ -405,7 +415,12 @@
 
           addressInput: {
             type: String
-          }
+          },
+
+          _form: {
+            type: Object,
+            value: () => document.querySelector('#search-location')
+          },
         }
       }
 
