@@ -122,13 +122,6 @@
         <dorel-section-product-topics
           product-id="[[ product.id ]]"></dorel-section-product-topics>
 
-        <template
-          is="dom-if"
-          if="[[ product.slideshow.length ]]">
-          <dorel-section-slideshow
-            slideshow-data="[[ product.slideshow ]]"></dorel-section-slideshow>
-        </template>
-
         <dorel-section-product-accessories
           accessory-scroll-handler="{{ accessoryScrollHandler }}"
           category="[[ category ]]"
@@ -146,6 +139,13 @@
             product-name="[[product.name.value]]"
             reviews-sorting="[[reviewsConfig.sorting]]"
             image-only="[[reviewsConfig.image_only]]"></dorel-section-product-reviews>
+        </template>
+
+        <template
+          is="dom-if"
+          if="[[ product.slideshow.length ]]">
+          <dorel-section-slideshow
+            slideshow-data="[[ product.slideshow ]]"></dorel-section-slideshow>
         </template>
 
       </template>

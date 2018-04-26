@@ -99,7 +99,9 @@
           <dorel-responsive-image
             image-type="[[imageType]]"
             image-sources="[[youtubeImageSources]]"
-            is-loading="[[playing]]"></dorel-responsive-image>
+            is-loading="[[playing]]"
+            sizing="contain"
+            youtube-thumbnail></dorel-responsive-image>
         </template>
       </div>
   </template>
@@ -182,7 +184,7 @@
           this.set('youtubeImageSources', {
             "large-landscape": `https://img.youtube.com/vi/${this.videoId}/maxresdefault.jpg`,
             "large-portrait": `https://img.youtube.com/vi/${this.videoId}/maxresdefault.jpg`,
-            "placeholder": `https://img.youtube.com/vi/${this.videoId}/default.jpg`,
+            "placeholder": `https://img.youtube.com/vi/${this.videoId}/hqdefault.jpg`,
             "small-landscape": `https://img.youtube.com/vi/${this.videoId}/maxresdefault.jpg`,
             "small-portrait": `https://img.youtube.com/vi/${this.videoId}/maxresdefault.jpg`
           });
@@ -210,7 +212,6 @@
        * when an error occurs set the `videoError` variable to true
        */
       handleYouTubeError() {
-        // console.error('YouTube playback error', ev.detail);
         this.set('videoError', true);
       }
 
