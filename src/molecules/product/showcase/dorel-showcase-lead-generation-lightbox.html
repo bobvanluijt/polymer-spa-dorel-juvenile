@@ -292,19 +292,14 @@
                     tablet-column-span="12"
                     mobile-column-span="12">
                     <h3 class="lightbox-title">{{localize('Find_a_Store')}}</h3>
-                    <iron-a11y-keys
-                      id="a11y"
-                      target="[[_form]]"
-                      keys="enter"
-                      on-keys-pressed="_submitForm">
-                    </iron-a11y-keys>
                     <form
                       is="iron-form"
                       id="search-location"
                       class="search-form"
                       on-submit="_submitForm">
 
-                      <dorel-input id="address-input"
+                      <dorel-input
+                        id="address-input"
                         name="address"
                         class="search-form__input"
                         value="{{addressInput}}"
@@ -315,7 +310,7 @@
                         enabled$="{{ addressInput.length }}">
                          <iron-icon
                           icon="dorel-icons:location"></iron-icon>
-                       </button>
+                      </button>
                     </form>
                   </dorel-layout-column>
                 </dorel-layout-row>
@@ -427,6 +422,19 @@
       ready() {
         super.ready();
         this._defineOptionModels(this.getState().config);
+      }
+
+      connectedCallback() {
+        super.connectedCallback();
+        Polymer.RenderStatus.afterNextRender(this, () => {
+          const addressInput = this.shadowRoot.querySelector('#address-input');
+          const ironInput = addressInput.shadowRoot.querySelector('iron-input');
+          ironInput.children[0].addEventListener('keyup', (event) => {
+            if (event.which === 13 || event.keyCode === 13) {
+              this._submitForm(event);
+            }
+          });
+        });
       }
 
       _submitForm(event) {
