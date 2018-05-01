@@ -210,6 +210,7 @@
                         </template>
                       </ul>
                       <dorel-cta
+                        if="[[ mainItem.dropdown_all_button ]]"
                         gtm-parent="dorel-navigation-main"
                         gtm-parent-index="1"
                         size="medium"
@@ -218,11 +219,10 @@
                         no-margin
                         class="cta"
                         link="[[ mainItem.link ]]"
-                        title="[[ mainItem.title ]]">
-                        <dorel-safe-html html="All [[ mainItem.title ]]"></dorel-safe-html>
+                        title="[[ mainItem.dropdown_all_button ]]">
+                        <dorel-safe-html html="[[ mainItem.dropdown_all_button ]]"></dorel-safe-html>
                       </dorel-cta>
                     </template>
-
                     <ul class="sub-menu">
                       <template is="dom-repeat" items="[[ getDeepArrayItems(mainItem, 'dropdown_items') ]]" as="dropdownItem">
                         <li class="sub-menu__item">
