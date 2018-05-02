@@ -293,8 +293,6 @@
                     mobile-column-span="12">
                     <h3 class="lightbox-title">{{localize('Find_a_Store')}}</h3>
                     <form
-                      is="iron-form"
-                      id="search-location"
                       class="search-form"
                       on-submit="_submitForm">
 
@@ -410,12 +408,7 @@
 
           addressInput: {
             type: String
-          },
-
-          _form: {
-            type: Object,
-            value: () => document.querySelector('#search-location')
-          },
+          }
         }
       }
 
