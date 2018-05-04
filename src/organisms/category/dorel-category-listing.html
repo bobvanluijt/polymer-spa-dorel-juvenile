@@ -163,9 +163,18 @@
 
         const type = this.get('sort.type');
 
-        if (type && (type === 'date' || type === 'none' || type.includes('standard'))) {
+        items = items.map(item => {
+          item.position = 100;
+          if (item.id === "5749") item.position = 20;
+          if (item.id === "5756") item.position = 30;
+          return item;
+        });
+
+        if (type && (type === 'date' || type.includes('standard'))) {
           this.set('sort.type', 'created_at');
         }
+
+        if (type === 'position') return this._sortPosition(items);
 
         return this._sortString(items, this.get('sort'));
       }
@@ -210,6 +219,20 @@
           }
 
           // names must be equal
+          return 0;
+        });
+      }
+
+      _sortPosition(items) {
+        return items.sort((a, b) => {
+          if (!a.position || !b.position) {
+            return 0;
+          }
+          if (a.position < b.position) {
+            return 1;
+          } else if (a.position > b.position) {
+            return -1;
+          }
           return 0;
         });
       }

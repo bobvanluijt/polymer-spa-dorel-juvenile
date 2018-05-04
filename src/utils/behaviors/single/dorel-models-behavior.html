@@ -67,14 +67,20 @@
           this.set('leftSidebar', leftSidebar);
         }
 
-        // PRODUCT LISTING SORTING
-        if(typeof templateData.acf.product_listing_sorting !== 'undefined') {
-          this.set('sort.type', templateData.acf.product_listing_sorting);
-        }
-
+        let sort = {};
         // PRODUCT LISTING ORDERING
         if(typeof templateData.acf.product_listing_order !== 'undefined') {
-          this.set('sort.order', templateData.acf.product_listing_order);
+          sort.order = templateData.acf.product_listing_order;
+        }
+
+        // PRODUCT LISTING SORTING
+        if(typeof templateData.acf.product_listing_sorting !== 'undefined') {
+          if (templateData.acf.product_listing_sorting === 'none') {
+            sort.type = 'position';
+          } else {
+            sort.type = templateData.acf.product_listing_sorting;
+          }
+          this.set('sort', sort);
         }
 
         // FAQ PROMO
