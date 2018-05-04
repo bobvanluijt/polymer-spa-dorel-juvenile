@@ -24,11 +24,16 @@
           <!-- section-hero-header -->
           <template
             is="dom-if"
-            if="[[templateData.acf.hero_header.length]]">
-            <dorel-section-hero-header
-              hero-header-data="[[heroHeader]]"></dorel-section-hero-header>
+            if="[[selected]]"
+            restamp>
+            <template
+              is="dom-if"
+              if="[[templateData.acf.hero_header.length]]">
+              <dorel-section-hero-header
+                hero-header-data="[[heroHeader]]"></dorel-section-hero-header>
+            </template>
           </template>
-          <!--// section-hero-header -->
+          <!--// section-hero-header
 
           <!-- section-cta -->
           <template
@@ -101,7 +106,8 @@
          * @name sectionCards
          * @description the data model used for the cards component
          */
-        sectionCards: Object
+        sectionCards: Object,
+        selected: Boolean
       },
       behaviors: [TemplateBehaviors]
     });
