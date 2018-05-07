@@ -104,7 +104,9 @@
           accessory-scroll-handler="{{ accessoryScrollHandler }}"
           showcase-data="[[ product ]]"
           carfitting-enabled="[[carfittingEnabled]]"
-          ></dorel-section-product-showcase>
+          reviews-scroll-handler="{{ reviewsScrollHandler }}"
+          showcase-data="[[ product ]]"
+          product-sku="[[ product.sku ]]"></dorel-section-product-showcase>
 
         <dorel-section-product-usps
           product-id="[[ product.id ]]"></dorel-section-product-usps>
@@ -138,7 +140,9 @@
             product-sku="[[product.sku]]"
             product-name="[[product.name.value]]"
             reviews-sorting="[[reviewsConfig.sorting]]"
-            image-only="[[reviewsConfig.image_only]]"></dorel-section-product-reviews>
+            image-only="[[reviewsConfig.image_only]]"
+            reviews-scroll-handler="[[reviewsScrollHandler]]"
+            ></dorel-section-product-reviews>
         </template>
 
         <template
@@ -179,6 +183,11 @@
           accessoryScrollHandler: {
             type: Boolean,
             notify: true,
+            value: false,
+          },
+
+          reviewsScrollHandler: {
+            type: Boolean,
             value: false,
           },
 

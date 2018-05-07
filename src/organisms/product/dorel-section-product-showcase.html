@@ -212,6 +212,19 @@
         content: '';
         clear: both;
       }
+
+      .link {
+        color: var(--theme-button-link_-_color);
+      }
+
+      .link:hover {
+        cursor: pointer;
+        color: var(--theme-brand-color-1);
+      }
+
+      .rating-container {
+        line-height: 2.5rem;
+      }
     </style>
 
     <dorel-wp-collect-templates
@@ -260,6 +273,17 @@
               is="dom-if"
               if="[[_hasValue(showcaseData.name.value)]]">
               <h1 class="showcase-title">[[showcaseData.name.value]]</h1>
+            </template>
+
+            <template
+              is="dom-if"
+              if="[[reviewsRollup.average_rating]]">
+              <div class="rating-container">
+                <dorel-product-review-stars
+                  number-of-stars="[[reviewsRollup.rating_histogram.length]]"
+                  rating="[[reviewsRollup.average_rating]]"></dorel-product-review-stars>
+                <span class="link" on-click="_reviewsCountClicked">[[reviewsRollup.review_count]] [[localize('reviews_rating-overview#reviews')]]</span>
+              </div>
             </template>
 
             <!-- Product Specs -->
@@ -423,6 +447,11 @@
             notify: true
           },
 
+          reviewsScrollHandler: {
+            type: Boolean,
+            notify: true
+          },
+
           /**
            * @attribute
            * @name showcaseData
@@ -464,7 +493,19 @@
             observer: '_carFittingToolPageChanged'
           },
 
-          carfittingShown: Boolean
+          carfittingShown: Boolean,
+          productSku: String,
+
+          /**
+           * the rating and count of reviews
+           */
+          reviewsRollup: {
+            type: Array,
+            statePath: function(state) {
+              const review = state.review.reviews.find(review => review.sku === this.get('productSku'));
+              return review ? review.rollup : {};
+            }
+          }
         };
       }
 
@@ -606,6 +647,13 @@
       _createCarFittingListLink(pageObject, productData) {
         const urlArr = window.location.href.split('/');
         return `${urlArr[0]}//${urlArr[2]}/${urlArr[3]}/${pageObject.post_name}?product=${productData.url}` ;
+      }
+
+      /**
+       * handler when clicking on the review count
+       */
+      _reviewsCountClicked() {
+        this.reviewsScrollHandler = !this.reviewsScrollHandler;
       }
     }
     customElements.define(DorelSectionProductShowcase.is, DorelSectionProductShowcase);
