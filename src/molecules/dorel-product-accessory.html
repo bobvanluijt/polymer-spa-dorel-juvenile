@@ -148,7 +148,6 @@
             type="[[ ctaType ]]"
             title="View Accessories"
             on-click="_openLightbox"
-            link="#"
             size="medium"
             icon="dorel-icons:chevron-right"
             gtm-action="[[ gtmAction ]]"
@@ -202,7 +201,7 @@
        * @name _openLightbox
        * @description handle of the click on the details links
        */
-      _openLightbox: function (event) {
+      _openLightbox: function () {
         var lightbox = this.$$('dorel-product-accessory-lightbox');
         lightbox.open();
       },
@@ -210,8 +209,6 @@
       getCtaType: function() {
         return CONFIG.SELECTED_BRAND === 2 ? 'secondary' : 'link';
       }
-
-
     });
 
   </script>

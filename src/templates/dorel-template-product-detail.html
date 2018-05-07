@@ -205,7 +205,10 @@
           product: {
             type: Object,
             statePath: function(state) {
-              const product = state.product.products.find(product => product.url === this.routeData.productName);
+              let product;
+              if (this.routeData) {
+                product = state.product.products.find(product => product.url === this.routeData.productName);
+              }
               return product ? product : { isLoading: true };
             },
             observer: '_productChanged'

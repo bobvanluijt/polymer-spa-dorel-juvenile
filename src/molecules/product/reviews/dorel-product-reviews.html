@@ -54,6 +54,8 @@
   </template>
 
   <script>
+    import '../../../utils/behaviors/bundled/dorel-date-behaviors.html';
+    import '../../../utils/behaviors/single/dorel-merge-arrays-behavior.html';
 
     class DorelProductReviews extends ReduxMixin(Polymer.mixinBehaviors([MergeArraysBehavior, DateBehaviors], Polymer.Element)) {
 

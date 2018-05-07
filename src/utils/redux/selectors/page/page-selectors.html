@@ -1,16 +1,17 @@
 <script>
-(function() {
+import { createSelector } from 'reselect';
 
+(function() {
 const getPage = state => state.page.currentPage;
 const getPages = state => state.page.pages;
 
-const selectedPage = Reselect.createSelector([getPage, getPages],
+const selectedPage = createSelector([getPage, getPages],
     (currentPage, pages) => {
       return pages.find(page => page.id === currentPage.id);
     }
   );
 
-pageSelectors = {
+window.pageSelectors = {
   selectedPage
 }
 
