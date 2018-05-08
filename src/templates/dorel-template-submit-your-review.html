@@ -7,7 +7,7 @@
 <link rel="import" href="../atoms/dorel-radio-group.html">
 <link rel="import" href="../atoms/dorel-checkbox.html">
 
-<dom-module id="dorel-template-submit-review">
+<dom-module id="dorel-template-submit-your-review">
   <template>
     <style>
       .header {
@@ -157,7 +157,7 @@
 
     <app-route
       route="{{ route }}"
-      pattern="/:productName/submit-review"
+      pattern="/:productName/submit-your-review"
       data="{{ routeData }}"
       tail="{{ subroute }}"></app-route>
 
@@ -328,7 +328,7 @@
 
   <script>
     class DorelTemplateSubmitReview extends ReduxMixin(Polymer.mixinBehaviors([TemplateBehaviors, DorelMultilingualBehavior], Polymer.Element)) {
-      static get is() { return 'dorel-template-submit-review'; }
+      static get is() { return 'dorel-template-submit-your-review'; }
 
       static get properties() {
         return {
@@ -358,8 +358,10 @@
           product: {
             type: Object,
             statePath: function(state) {
-              const product = state.product.products.find(product => product.url === this.routeData.productName);
-              return product;
+              if (this.routeData) {
+                return state.product.products.find(product => product.url === this.routeData.productName);
+              }
+              return {};
             },
             observer: '_productChanged'
           },

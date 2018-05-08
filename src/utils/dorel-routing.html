@@ -154,10 +154,10 @@
         const parentSlug = fullParentUrl.match(/([^\/]*)\/*$/).pop();
         const parent = await await this.$.collectPageEl.getPageBySlug(parentSlug);
 
-        if (route.path.indexOf('submit-review') !== -1) {
+        if (route.path.indexOf('submit-your-review') !== -1) {
           const productName = route.path.split('/')[2];
           this.currentPage = {
-            template: 'submit-review',
+            template: 'submit-your-review',
             productName: productName
           };
           return this.dispatch('setCurrentPage', this.currentPage);

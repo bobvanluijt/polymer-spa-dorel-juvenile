@@ -73,7 +73,7 @@
         </div>
 
         <div class="submit-review-btn">
-          <dorel-cta title="Submit your review" type="link" link="[[submitReviewUrl]]" size="medium">Submit your review</dorel-cta>
+          <dorel-cta title="[[localize('reviews#submit_your_review')]]" type="link" link="[[submitReviewUrl]]" size="medium">[[localize('reviews#submit_your_review')]]</dorel-cta>
         </div>
 
         <template
@@ -116,10 +116,6 @@
           rating: Number,
           ratingDistribution: Array,
           totalReviews: Number,
-          productSku: {
-            type: String,
-            observer: "_productSkuChanged"
-          },
           submitReviewUrl: String
         }
       }
@@ -145,13 +141,6 @@
        */
       _getStarCount(ratingDistribution, index) {
         return ratingDistribution.length - index;
-      }
-
-      /**
-       * set a value for the submitReviewUrl
-       */
-      _productSkuChanged() {
-        this.set('submitReviewUrl', `${window.location.origin}${window.location.pathname}/submit-review`);
       }
     };
 

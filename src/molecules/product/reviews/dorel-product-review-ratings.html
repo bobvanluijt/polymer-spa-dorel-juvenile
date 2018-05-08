@@ -75,12 +75,15 @@
        * @param {string} the property key
        */
       _getRating(key) {
-        const property = this.rollup.properties.find(prop => prop.key === key);
-        if (!property) {
-          this.set('showRatings', false);
-          return;
+        if (this.rollup) {
+          const property = this.rollup.properties.find(prop => prop.key === key);
+          if (!property) {
+            this.set('showRatings', false);
+            return;
+          }
+          return property.value;
         }
-        return property.value;
+        return 0;
       }
     }
 
