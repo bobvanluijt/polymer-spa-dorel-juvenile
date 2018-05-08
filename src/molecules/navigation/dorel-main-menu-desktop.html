@@ -1,8 +1,3 @@
-<link rel="import" href="../../../node_modules/app-route/app-location.html">
-<link rel="import" href="../../../node_modules/app-route/app-route.html">
-<link rel="import" href="../../utils/behaviors/bundled/dorel-main-menu-behaviors.html">
-<link rel="import" href="dorel-main-menu-item.html">
-
 <dom-module id="dorel-main-menu-desktop">
   <template>
     <style>
@@ -53,6 +48,7 @@
   </template>
 
   <script>
+    import '../../utils/behaviors/bundled/dorel-main-menu-behaviors.html';
     class DorelMainMenuDesktop extends Polymer.mixinBehaviors([MainMenuBehavior, MatchUrlBehavior], Polymer.Element) {
 
       static get is() { return 'dorel-main-menu-desktop'; }

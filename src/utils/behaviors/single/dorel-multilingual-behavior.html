@@ -4,7 +4,7 @@
 /**
  * @polymerBehavior
  */
-  BehaviorImplementation = {
+  const BehaviorImplementation = {
     properties: {
       /**
        * @name language
@@ -26,5 +26,5 @@
 /**
  * @polymerBehavior
  */
-  DorelMultilingualBehavior = [Polymer.AppLocalizeBehavior, BehaviorImplementation]
+  window.DorelMultilingualBehavior = [Polymer.AppLocalizeBehavior, BehaviorImplementation]
 </script>

@@ -1,7 +1,3 @@
-<link rel="import" href="../../../node_modules/polymer/lib/mixins/gesture-event-listeners.html">
-<link rel="import" href="../../../node_modules/app-layout/app-drawer/app-drawer.html">
-<link rel="import" href="../../utils/behaviors/bundled/dorel-main-menu-behaviors.html">
-
 <dom-module id="dorel-main-menu-mobile">
   <template>
     <style>
@@ -258,6 +254,8 @@
   </template>
 
   <script>
+    import '../../utils/behaviors/bundled/dorel-main-menu-behaviors.html';
+    
     class DorelMainMenuMobile extends Polymer.mixinBehaviors([MainMenuBehavior, MatchUrlBehavior], Polymer.GestureEventListeners(Polymer.Element)) {
       static get is() { return 'dorel-main-menu-mobile'; }
 

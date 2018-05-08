@@ -87,14 +87,19 @@
 
         <template
           is="dom-if"
-          if="[[ product.header_section ]]">
-          <dorel-section-header
-            section-header-data="[[ product.header_section ]]"
-            gtm-parent="dorel-section-header"
-            gtm-parent-index="0"></dorel-section-header>
+          if="[[selected]]"
+          restamp>
+          <template
+            is="dom-if"
+            if="[[ product.header_section ]]">
+            <dorel-section-header
+              section-header-data="[[ product.header_section ]]"
+              gtm-parent="dorel-section-header"
+              gtm-parent-index="0"></dorel-section-header>
 
-          <dorel-section-page-nav
-            breadcrumbs-toggle="true"></dorel-section-page-nav>
+            <dorel-section-page-nav
+              breadcrumbs-toggle="true"></dorel-section-page-nav>
+          </template>
         </template>
 
         <dorel-section-product-showcase
@@ -141,7 +146,8 @@
           slideshowData: {
             type: Object,
             computed: '_getSlideshowData(product)'
-          }
+          },
+          selected: Boolean
 
         };
       }

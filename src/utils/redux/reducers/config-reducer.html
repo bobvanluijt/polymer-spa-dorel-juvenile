@@ -28,7 +28,7 @@
       }
     };
 
-    configReducer = (state = initial, action) => {
+    window.configReducer = (state = initial, action) => {
       switch (action.type) {
         case 'ADD_OPTIONS_SUCCESS':
           return Object.assign({}, state, action.payload);
