@@ -614,13 +614,15 @@
         this.set('address', this.get('addressInput'));
 
         // track event
-        this.prepareGtmEvent('dorel-cta', event, {
-          action: 'store-locator_search-input',
-          component: 'dorel-section-store-locator',
-          things: {
-            currentAddressQuery: query
-          }
-        });
+        if (event) {
+          this.prepareGtmEvent('dorel-cta', event, {
+            action: 'store-locator_search-input',
+            component: 'dorel-section-store-locator',
+            things: {
+              currentAddressQuery: query
+            }
+          });
+        }
 
         // retrieve the suggestions by query
         this.set('predictions', this._retrieveSuggestions(query).then((response) => {
