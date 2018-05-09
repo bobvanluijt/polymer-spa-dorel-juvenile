@@ -5,7 +5,7 @@
       carfittingEnabledCategories: []
     };
 
-    menuReducer = (state = initial, action) => {
+    window.menuReducer = (state = initial, action) => {
       switch (action.type) {
         case 'ADD_MENU':
           return Object.assign({}, state, {items: action.payload});

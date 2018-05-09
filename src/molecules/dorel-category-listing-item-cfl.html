@@ -154,6 +154,7 @@
   </template>
 
   <script>
+    import '../utils/behaviors/bundled/dorel-template-behaviors.html';
     class DorelCategoryListingItemCfl extends ReduxMixin(Polymer.mixinBehaviors([DorelMultilingualBehavior, ConditionalBehaviors, TemplateBehaviors], Polymer.Element)) {
 
       static get is() {

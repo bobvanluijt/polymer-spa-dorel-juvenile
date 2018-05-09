@@ -72,9 +72,10 @@
       async _retrieveFullPageObject(menuItems) {
         // for each menu item retrieve its full wordpress page object *not the menu page_object
         const promises = menuItems.map((item) => {
+
           return new Promise((resolve, reject) => {
-            if (item.is_external) {
-              resolve(null);
+            if (item.is_external || !item.page_object) {
+              return resolve(null);
             }
             resolve(this.$.collectPageEl.getPageById(item.page_object.ID));
           }).then((page) => {
@@ -96,9 +97,12 @@
        * @return {object} the newly created menu item object with sub/dropdown items
        */
       async _createMenuItem(item, page) {
-        if (item.is_external) {
+        if (item.is_external && item.external_link.url) {
           item.id = null;
-          item.link = item.external_link;
+          item.link = item.external_link.url;
+        } else if (!page) {
+          item.id = null;
+          item.link = '#';
         } else {
           item.id = page.id;
           item.link = this.cleanUrlToPath(page.link);
@@ -111,6 +115,9 @@
           // retrieve all full page objects of the dropdown items
           const promises = item.dropdown_items.map((_item) => {
             return new Promise((resolve, reject) => {
+              if (_item.is_external || !_item.page_object) {
+                return resolve(null);
+              }
               resolve(this.$.collectPageEl.getPageById(_item.page_object.ID));
             }).then((page) => {
               return this._createMenuItem(_item, page);

@@ -1,6 +1,7 @@
-<script src="../../../../node_modules/redux-thunk/dist/redux-thunk.min.js"></script>
-
 <script>
+
+import ReduxThunk from 'redux-thunk';
+
 (function() {
 
 const callAPIMiddleware = ({ dispatch, getState }) => {
@@ -60,8 +61,8 @@ const callAPIMiddleware = ({ dispatch, getState }) => {
   }
 }
 
-middleware = [
-  ReduxThunk.default,
+window.middleware = [
+  ReduxThunk,
   callAPIMiddleware,
 ]
 

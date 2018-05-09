@@ -28,8 +28,13 @@
     <dorel-media-query breakpoints="{{ breakpoints }}"></dorel-media-query>
 
     <!-- section-header -->
-    <template is="dom-if" if="[[templateData.acf.hero_header.length]]">
-      <dorel-section-header section-header-data="[[heroHeader]]"></dorel-section-header>
+    <template
+      is="dom-if"
+      if="[[selected]]"
+      restamp>
+      <template is="dom-if" if="[[templateData.acf.hero_header.length]]">
+        <dorel-section-header section-header-data="[[heroHeader]]"></dorel-section-header>
+      </template>
     </template>
     <!--// section-header -->
 
@@ -179,7 +184,8 @@
           /**
            * false/true depending on mobile/desktop
            */
-          filterOpened: Boolean
+          filterOpened: Boolean,
+          selected: Boolean
         };
       }
 
