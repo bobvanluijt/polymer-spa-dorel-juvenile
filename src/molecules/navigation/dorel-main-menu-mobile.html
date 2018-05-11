@@ -1,7 +1,3 @@
-<link rel="import" href="../../../node_modules/polymer/lib/mixins/gesture-event-listeners.html">
-<link rel="import" href="../../../node_modules/app-layout/app-drawer/app-drawer.html">
-<link rel="import" href="../../utils/behaviors/bundled/dorel-main-menu-behaviors.html">
-
 <dom-module id="dorel-main-menu-mobile">
   <template>
     <style>
@@ -209,20 +205,21 @@
                           </li>
                         </template>
                       </ul>
-                      <dorel-cta
-                        gtm-parent="dorel-navigation-main"
-                        gtm-parent-index="1"
-                        size="medium"
-                        type="tertiary"
-                        on-click="clickMenuItem"
-                        no-margin
-                        class="cta"
-                        link="[[ mainItem.link ]]"
-                        title="[[ mainItem.title ]]">
-                        <dorel-safe-html html="All [[ mainItem.title ]]"></dorel-safe-html>
-                      </dorel-cta>
+                      <template is="dom-if" if="[[ mainItem.dropdown_all_button ]]">
+                        <dorel-cta
+                          gtm-parent="dorel-navigation-main"
+                          gtm-parent-index="1"
+                          size="medium"
+                          type="tertiary"
+                          on-click="clickMenuItem"
+                          no-margin
+                          class="cta"
+                          link="[[ mainItem.link ]]"
+                          title="[[ mainItem.dropdown_all_button ]]">
+                          <dorel-safe-html html="[[ mainItem.dropdown_all_button ]]"></dorel-safe-html>
+                        </dorel-cta>
+                      </template>
                     </template>
-
                     <ul class="sub-menu">
                       <template is="dom-repeat" items="[[ getDeepArrayItems(mainItem, 'dropdown_items') ]]" as="dropdownItem">
                         <li class="sub-menu__item">
@@ -258,6 +255,8 @@
   </template>
 
   <script>
+    import '../../utils/behaviors/bundled/dorel-main-menu-behaviors.html';
+    
     class DorelMainMenuMobile extends Polymer.mixinBehaviors([MainMenuBehavior, MatchUrlBehavior], Polymer.GestureEventListeners(Polymer.Element)) {
       static get is() { return 'dorel-main-menu-mobile'; }
 

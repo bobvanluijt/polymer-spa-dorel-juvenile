@@ -5,13 +5,18 @@
 
     <template
       is="dom-if"
-      if="[[templateData.acf.hero_header.length]]">
-      <dorel-section-header
-        section-header-data="[[heroHeader]]"
-        text-header="true"></dorel-section-header>
+      if="[[selected]]"
+      restamp>
+      <template
+        is="dom-if"
+        if="[[templateData.acf.hero_header.length]]">
+        <dorel-section-header
+          section-header-data="[[heroHeader]]"
+          text-header="true"></dorel-section-header>
 
-      <dorel-section-page-nav
-        breadcrumbs-toggle="true"></dorel-section-page-nav>
+        <dorel-section-page-nav
+          breadcrumbs-toggle="true"></dorel-section-page-nav>
+      </template>
     </template>
 
     <dorel-section-store-locator
@@ -43,7 +48,8 @@
          * @name homeHeaderData
          * @description the data model used for the hero header component
          */
-        heroHeaderData: Object
+        heroHeaderData: Object,
+        selected: Boolean
       },
 
       behaviors: [TemplateBehaviors, DorelMultilingualBehavior]

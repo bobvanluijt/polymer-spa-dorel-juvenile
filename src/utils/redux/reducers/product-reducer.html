@@ -7,7 +7,7 @@
       currentProduct: 'none',
     };
 
-    productReducer = (state = initial, action) => {
+    window.productReducer = (state = initial, action) => {
       let products = [];
       switch (action.type) {
         case 'REQUEST_PRODUCT':

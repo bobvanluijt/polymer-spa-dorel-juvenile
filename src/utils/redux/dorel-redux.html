@@ -1,8 +1,3 @@
-<link rel="import" href="../../../node_modules/polymer-redux/polymer-redux.html">
-<script src="../../../node_modules/redux/dist/redux.js"></script>
-<script src="../../../node_modules/reselect/dist/reselect.js"></script>
-
-
 <link rel="import" href="./actions/actions-combiner.html">
 <link rel="import" href="./middleware/thunk.html">
 
@@ -21,9 +16,12 @@
 <link rel="import" href="./selectors/selector-combiner.html">
 
 <script>
+  import { combineReducers, compose, createStore, applyMiddleware } from 'redux';
+  import PolymerRedux from '../../../node_modules/polymer-redux/lib/index.js';
+
   (function() {
     // Combine all the reducers
-    const rootReducer = Redux.combineReducers({
+    const rootReducer = combineReducers({
       config: configReducer,
       gmt: gmtReducer,
       image: imageReducer,
@@ -37,13 +35,13 @@
 
     const composeEnhancers = typeof window === 'object' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
       ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({})
-      : Redux.compose;
+      : compose;
 
     const enhancer = composeEnhancers(
-      Redux.applyMiddleware(...middleware)
+      applyMiddleware(...middleware)
     );
 
-    const store = Redux.createStore(rootReducer, enhancer);
+    const store = createStore(rootReducer, enhancer);
 
     const reduxMixin = PolymerRedux(store);
 
@@ -55,7 +53,8 @@
         }
       }
     }
-      /* @mixinFunction */
-    ReduxMixin = Polymer.dedupingMixin(actionsMixin);
+
+    /* @mixinFunction */
+    window.ReduxMixin = Polymer.dedupingMixin(actionsMixin);
 }());
 </script>

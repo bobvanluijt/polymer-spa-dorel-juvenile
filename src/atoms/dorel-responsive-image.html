@@ -95,115 +95,124 @@
                 youtube-thumbnail$="[[youtubeThumbnail]]">
     </iron-image>
   </template>
+
   <script>
-    Polymer({
-      is: 'dorel-responsive-image',
-      observers: [
-        '_breakpointsChanged(breakpoints.*)'
-      ],
-      properties: {
-        /**
-         * @attribute
-         * @name imageSources
-         * @description a dictionary containing the image sources for each derivative
-         */
-        imageSources: {
-          type: Object,
-          observer: '_imageSourcesChanged',
-          notify: true,
-          value: function(){ return {}; }
-        },
-        /**
-         * @attribute
-         * @name currentImageDerivative
-         * @description a string containing the source of the currently shown image
-         */
-        currentImageSource: {
-          type: String
-        },
-        /**
-         * @attribute
-         * @name currentImagePlaceholder
-         * @description a string containing the source of the placeholder
-         */
-        currentImagePlaceholder: {
-          type: String,
-          notify: true
-        },
-        /**
-         * @attribute
-         * @name currentImageDerivative
-         * @description a string containing the label of the currently shown image derivative
-         */
-        currentImageDerivative: {
-          type: String,
-          notify: true
-        },
-        /**
-         * @attribute
-         * @name breakpoints
-         * @description Breakpoints for devices and screen orientations, set by dorel-media-query
-         */
-        breakpoints: {
-          type: Object,
-          value: function() {
-            return {};
+    class DorelResponsiveImage extends Polymer.Element {
+
+      static get is() { return 'dorel-responsive-image'; }
+
+      static get properties() {
+        return {
+          /**
+           * @attribute
+           * @name imageSources
+           * @description a dictionary containing the image sources for each derivative
+           */
+          imageSources: {
+            type: Object,
+            observer: '_imageSourcesChanged',
+            notify: true,
+            value: function(){ return {}; }
+          },
+          /**
+           * @attribute
+           * @name currentImageDerivative
+           * @description a string containing the source of the currently shown image
+           */
+          currentImageSource: {
+            type: String,
+            value: ''
+          },
+          /**
+           * @attribute
+           * @name currentImagePlaceholder
+           * @description a string containing the source of the placeholder
+           */
+          currentImagePlaceholder: {
+            type: String,
+            notify: true
+          },
+          /**
+           * @attribute
+           * @name currentImageDerivative
+           * @description a string containing the label of the currently shown image derivative
+           */
+          currentImageDerivative: {
+            type: String,
+            notify: true
+          },
+          /**
+           * @attribute
+           * @name breakpoints
+           * @description Breakpoints for devices and screen orientations, set by dorel-media-query
+           */
+          breakpoints: {
+            type: Object,
+            value: function() {
+              return {};
+            }
+          },
+          /**
+           * @attribute
+           * @name imageType
+           * @description Image types, defaults to wide-screen and can be set to full-screen
+           */
+          imageType: {
+            type: String,
+            value: 'wide-screen',
+            reflectToAttribute: true
+          },
+          /**
+           * @attribute
+           * @name isLoading
+           * @description Indicator that image is loading
+           */
+          isLoading: {
+            type: Boolean,
+            value: false,
+            reflectToAttribute: true
+          },
+          /**
+           * @name alt
+           * @description Alt attribute for SEO
+           */
+          alt: {
+            type: String,
+            value: ''
+          },
+          sizing: {
+            type: String,
+            value: 'cover',
+            reflectToAttribute: true
+          },
+          youtubeThumbnail: {
+            type: Boolean,
+            value: false,
+            reflectToAttribute: true
           }
-        },
-        /**
-         * @attribute
-         * @name imageType
-         * @description Image types, defaults to wide-screen and can be set to full-screen
-         */
-        imageType: {
-          type: String,
-          value: 'wide-screen',
-          reflectToAttribute: true
-        },
-        /**
-         * @attribute
-         * @name isLoading
-         * @description Indicator that image is loading
-         */
-        isLoading: {
-          type: Boolean,
-          value: false,
-          reflectToAttribute: true
-        },
-        /**
-         * @name alt
-         * @description Alt attribute for SEO
-         */
-        alt: {
-          type: String,
-          value: ''
-        },
-        sizing: {
-          type: String,
-          value: 'cover',
-          reflectToAttribute: true
-        },
-        youtubeThumbnail: {
-          type: Boolean,
-          value: false,
-          reflectToAttribute: true
-        }
-      },
+        };
+      }
+
+      static get observers() {
+        return [
+          '_breakpointsChanged(breakpoints.*)'
+        ];
+      }
       /**
        * @name _setImagePlaceholder
        * @description Sets the image placeholder if it's available
        */
-      _setImagePlaceholder: function () {
+      _setImagePlaceholder() {
         // Set the image placeholder
         if (this.imageSources.hasOwnProperty('placeholder')) {
           this.currentImagePlaceholder = this.imageSources['placeholder'];
         }
-      },
+      }
       /**
        * @name _setImage
        * @description Determines the screen size and orientation and changes the shown image accordingly
        */
-      _setImage: function () {
+      _setImage() {
         // First determine the orientation of the device
         var orientationLabel = (this.breakpoints.portrait) ? 'portrait' : 'landscape';
         // Next, retrieve the right breakpoint according to the orientation
@@ -217,13 +226,15 @@
         // And retrieve its source
         if (this.imageSources.hasOwnProperty(this.currentImageDerivative)) {
           this.currentImageSource = this.imageSources[this.currentImageDerivative];
+          this._checkYoutubeThumbnail();
         }
-      },
+      }
+
       /**
        * @name _imageSourcesChanged
        * @description Observes the image sources, and sets the right image
        */
-      _imageSourcesChanged: function () {
+      _imageSourcesChanged() {
         this.currentImageSource = '';
         this.currentImagePlaceholder = '';
 
@@ -231,16 +242,34 @@
           this._setImagePlaceholder();
           this._setImage();
         }
-      },
+      }
+
       /**
        * @name _breakpointsChanged
        * @description Observes the breakpoints, and sets the right image
        */
-      _breakpointsChanged: function () {
+      _breakpointsChanged() {
         if (this.imageSources !== undefined && this.imageSources !== null) {
           this._setImage();
         }
-      },
-    });
+      }
+      /**
+       * @name _checkYoutubeThumbnail
+       * @description check if the highest quality (maxres) image exists, if not use the high quality (hq) one
+       */
+      _checkYoutubeThumbnail() {
+        if (this.youtubeThumbnail) {
+          let img = new Image();
+          img.onload = () => {
+            if (img.naturalHeight < 120) {
+              this.currentImageSource = this.imageSources['placeholder'];
+              this.sizing = 'cover';
+            }
+          }
+          img.src = this.currentImageSource;
+        }
+      }
+    }
+    customElements.define(DorelResponsiveImage.is, DorelResponsiveImage);
   </script>
 </dom-module>
