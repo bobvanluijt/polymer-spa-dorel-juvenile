@@ -87,6 +87,10 @@
         padding-right: 1.5rem;
       }
 
+      [mobile-small] .hatch-column:first-child {
+        padding-right: 0.2rem;
+      }
+
       .cta {
         color: var(--theme-brand-color-2);
         border-radius: 50%;
@@ -254,6 +258,7 @@
       tier="[[thirdPartyOptions.hatch.tier]]"></dorel-hatch-collect>
 
     <section class="section-product-lead-lightbox"
+      mobile-small$="{{breakpoints.mobileSmall}}"
       tablet-medium-up$="{{breakpoints.tabletMediumUp}}"
       desktop-small$="{{breakpoints.desktopSmall}}"
       desktop-large$="{{breakpoints.desktopLarge}}">
