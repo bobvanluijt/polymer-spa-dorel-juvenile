@@ -133,16 +133,16 @@
       .control-item:hover .control-item__icon {
         color: var(--theme-color-monochrome-5);
       }
-      
+
       dorel-layout-container section {
-        padding: 0;  
+        padding: 0;
       }
-      
+
       .swiper-container {
         width: 100%;
         height: 33rem;
       }
-      
+
       .swiper-pagination-fraction, .swiper-pagination-custom, .swiper-container-horizontal > .swiper-pagination-bullets {
         bottom: initial;
         height: 1.5rem
@@ -181,7 +181,7 @@
         <div class="swiper-wrapper" id="swiperWrapper">
           <template is="dom-repeat" items="[[ slides ]]">
             <div class="swiper-slide slide" selected$="[[ item.selected ]]">
-              <dorel-small-product-slide product="[[ item ]]" selected="[[ item.selected ]]" scroll-data="{{ scrollData }}"></dorel-small-product-slide>
+              <dorel-small-product-slide product="[[ item ]]" selected="[[ item.selected ]]" scroll-data="{{ scrollData }}" on-click="_onProductClicked"></dorel-small-product-slide>
             </div>
           </template>
         </div>
@@ -246,7 +246,7 @@
         const pagination = this.shadowRoot.querySelector('.swiper-pagination');
         const next = this.shadowRoot.querySelector('.control-item-next');
         const previous = this.shadowRoot.querySelector('.control-item-previous');
-        
+
         this.swiper = new Swiper(container, {
           observer: true,
           observeParents: true,
@@ -285,7 +285,7 @@
             }
           }
         });
-        
+
         this.swiper.on('slideChange', function() {
           this.set('selectedIndexGlobal.index', this.swiper.activeIndex);
           this.set('slides.' + this.swiper.previousIndex + '.selected', false);
@@ -314,13 +314,11 @@
         }
       }
 
-      // handleClick(event) {
-      //   if(event.model.index) {
-      //     console.log('click')
-      //     debugger;
-      //     this.swiper.slideTo(event.model.index);
-      //   }
-      // }
+      _onProductClicked(event) {
+        if(event.model.index) {
+          this.swiper.slideTo(event.model.index);
+        }
+      }
 
     }
 
