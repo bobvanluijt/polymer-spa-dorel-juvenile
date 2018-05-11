@@ -18,6 +18,14 @@
         --paper-font-common-base: var(--theme-font);
       }
 
+      .color-filter {
+        text-transform: lowercase;
+        --paper-checkbox-label-color: var(--theme-color-text-link);
+        --paper-checkbox-label-checked-color: var(--theme-brand-color-1);
+      }
+
+      .color-filter:hover { --paper-checkbox-label-color: var(--theme-brand-color-1); }
+
       .checkbox-image {
         /* pixel based because paper-checkbox is pixel based */
         width: 18px;
@@ -28,9 +36,9 @@
         z-index: 0;
       }
     </style>
-
     <paper-checkbox checked="{{ checked }}"
                     id="checkbox"
+                    class$="{{checkboxClasses}}"
                     disabled="[[ disabled ]]"
                     on-change="_onChangeHandler"
                     noink>
@@ -77,6 +85,15 @@
         colorCode: {
           type: String,
           value: 'transparent'
+        },
+
+        /**
+         * @attribute
+         * @name checkboxClasses
+         * @description The classes you want to give to the checkboxes.
+         */
+        checkboxClasses: {
+          type: String,
         },
 
         image: {
