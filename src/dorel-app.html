@@ -159,6 +159,11 @@
           name="form-success"
           template-data="[[currentPage]]"></dorel-template-form-success>
 
+        <dorel-template-submit-your-review
+          name="submit-your-review"
+          route="[[subroute]]"
+          template-data="[[currentPage]]"></dorel-template-submit-your-review>
+
         <dorel-template-component-guide
           name="component-guide"
           grid="[[grid]]"
@@ -343,6 +348,9 @@
               },
               'view-store-locator': function() {
                 import(/* webpackChunkName: "dorel-template-store-locator.html" */ './templates/dorel-template-store-locator.html');
+              },
+              'view-submit-your-review': function() {
+                import(/* webpackChunkName: "dorel-template-submit-your-review.html" */ './templates/dorel-template-submit-your-review.html');
               }
             }
           }

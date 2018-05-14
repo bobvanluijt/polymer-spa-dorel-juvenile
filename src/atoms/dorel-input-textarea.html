@@ -25,10 +25,13 @@
 
       textarea {
         @apply(--theme-form-textarea);
+        height: 10rem;
+        margin-bottom: 0;
       }
 
       :host([invalid]) textarea {
         @apply(--theme-form-input-error);
+        background-color: var(--theme-color-error-background);
       }
 
       :host([invalid]) label {
@@ -63,7 +66,7 @@
               aria-describedby$="[[_ariaDescribedBy]]"
               disabled$="[[disabled]]"
               title$="[[title]]"
-              bind-value="{{ value }}"
+              value="{{ value::input }}"
               invalid="{{ invalid }}"
               prevent-invalid-input="[[preventInvalidInput]]"
               allowed-pattern="[[allowedPattern]]"
