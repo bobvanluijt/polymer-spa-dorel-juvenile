@@ -256,7 +256,7 @@
 
   <script>
     import '../../utils/behaviors/bundled/dorel-main-menu-behaviors.html';
-    
+
     class DorelMainMenuMobile extends Polymer.mixinBehaviors([MainMenuBehavior, MatchUrlBehavior], Polymer.GestureEventListeners(Polymer.Element)) {
       static get is() { return 'dorel-main-menu-mobile'; }
 
@@ -376,7 +376,9 @@
       _onLanguageClicked(e) {
         if (!this.languageDialogOpened) {
           this.languageDialogOpened = true;
-        } else if (e.path[0].className === 'close') {
+        }
+        const path = e.path || (e.composedPath && e.composedPath());
+        if (path[0].className === 'close') {
           this.languageDialogOpened = false;
         }
         this.$.drawer.style.zIndex = this.languageDialogOpened ? 10000 : 10;
