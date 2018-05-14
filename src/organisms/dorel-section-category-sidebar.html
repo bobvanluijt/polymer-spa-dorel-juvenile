@@ -1,0 +1,109 @@
+<dom-module id="dorel-section-category-sidebar">
+  <template>
+    <style>
+      .title {
+        @apply(--theme-typography-4);
+        float: left;
+        width: 100%;
+      }
+
+    </style>
+
+    <template
+      is="dom-if"
+      if="[[ _hasSidebar(categorySidebarData.sidebar) ]]">
+      <aside class="category-sidebar">
+
+        <template
+          is="dom-repeat"
+          items="[[ contentWrappers ]]"
+          as="contentWrap">
+
+          <div class="content-wrapper">
+            <div class="content">
+              <template is="dom-if" if="{{ _hasValue(contentWrap.title) }}">
+                <template is="dom-if" if="{{ _isMainHeader(index) }}">
+                  <h1 class="title">[[ contentWrap.title ]]</h1>
+                </template>
+
+                <template is="dom-if" if="{{ !_isMainHeader(index) }}">
+                  <h2 class="title">[[ contentWrap.title ]]</h2>
+                </template>
+              </template>
+
+              <template is="dom-if" if="{{ _hasValue(contentWrap.title) }}">
+                <div class="text">
+                  <dorel-safe-html html="[[ contentWrap.text ]]"></dorel-safe-html>
+                </div>
+              </template>
+            </div>
+          </div>
+
+        </template>
+      </aside>
+    </template>
+  </template>
+  <script>
+    Polymer({
+      is: 'dorel-section-category-sidebar',
+
+      properties: {
+
+        /**
+         * @attribute
+         * @name categorySidebarData
+         * @description all data defined by ACF/Wordpress to build this component
+         */
+        categorySidebarData: {
+          type: Object,
+          value: function () {
+            return {};
+          },
+          observer: '_onCategorySidebarDataChanged'
+        }
+      },
+      /**
+       * @name _onCategorySidebarDataChanged
+       * @description Observer to the sidebardata, sets the right content when changed.
+       */
+      _onCategorySidebarDataChanged: function () {
+        if (this.categorySidebarData.hasOwnProperty('sidebar')) {
+          this.contentWrappers = this.categorySidebarData.sidebar[0].content_wrappers;
+        }
+      },
+      /**
+       * @name _hasSidebar
+       * @description checks to see if the sidebar and the content_wrap has items
+       *
+       * @returns Boolean
+       */
+      _hasSidebar: function (sidebar) {
+        if (typeof sidebar !== 'undefined' && sidebar.length > 0) {
+          return sidebar[0].content_wrappers.length;
+        }
+
+        return false;
+      },
+
+      /**
+       * @name _hasValue
+       * @description checks to see if a value is set
+       *
+       * @returns Boolean
+       */
+      _hasValue: function (val) {
+        return (typeof val !== 'undefined' && val !== '');
+      },
+
+      /**
+       * @name _isMainHeader
+       * @description check if this is the first content wrapper which should be an h1
+       *
+       * @returns Boolean
+       */
+      _isMainHeader: function (index) {
+        return (typeof index !== 'undefined' && index < 1);
+      }
+    });
+  </script>
+</dom-module>
