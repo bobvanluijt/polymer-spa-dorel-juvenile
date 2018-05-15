@@ -76,7 +76,10 @@
 
       .link-text {
         color: var(--theme-brand-color-3);
-        visibility: hidden;
+      }
+
+      .link-text.uploading, .link-text.uploaded {
+        display: none;
       }
 
       .limit-text {
@@ -94,7 +97,7 @@
         margin-top: 11rem;
       }
 
-      [tablet-medium-up] .details-bonus {
+      [tablet-medium-up] .details-bonus, [tablet-medium-up] .attachment-list {
         width: 90%;
       }
 
@@ -110,7 +113,7 @@
         margin-top: 1rem;
       }
 
-      .flex-two {
+      .flex-two, .attachment-list {
         display: flex;
         justify-content: space-between;
         align-items: baseline;
@@ -155,6 +158,10 @@
         left: -100vw;
         top: -100vh;
         visibility: hidden;
+      }
+
+      .attachment-name {
+        width: 50%;
       }
 
     </style>
@@ -256,9 +263,37 @@
                     data-key="comments"></dorel-input-textarea>
                   <div class="details-bonus">
                     <span class="limit-text">0/120 characters</span>
-                    <span class="link-text" on-click="_openFileDialog">[[localize('reviews#add_attachment')]]</span>
-                    <input id="attachment" class="file-input" type="file" value="{{fileUrl}}"></input>
+                    <span class="link-text" on-click="_openFileDialog">Add</span>
+                    <input
+                      id="attachment"
+                      name="file"
+                      class="file-input"
+                      type="file"
+                      value="{{fileUrl}}"
+                      multiple
+                      accept="image/* video/*"
+                      on-change="_onFileInputChanged"></input>
                   </div>
+                  <template
+                    is="dom-if"
+                    if="[[attachments]]">
+                    <template
+                      id="attachmentsList"
+                      is="dom-repeat"
+                      items="[[attachments]]"
+                      as="attachment"
+                      observe="uploading">
+                      <div class="attachment-list">
+                        <span class="attachment-name">[[attachment.name]]</span>
+                        <dorel-loader class$="link-text [[attachment.uploaded]]" loading="true"></dorel-loader>
+                        <div>
+
+                          <span class$="link-text [[attachment.uploaded]]" on-click="_cancelUploading">cancel</span>
+                          <span class$="link-text [[attachment.uploading]]" on-click="_removeAttachment">remove</span>
+                        </div>
+                      </div>
+                    </template>
+                  </template>
                 </section>
                 <dorel-section-submit-review-tips class="details-container--tips"></dorel-section-submit-review-tips>
               </section>
@@ -410,9 +445,9 @@
             type: Array,
             value: []
           },
-          fileUrl: {
-            type: String,
-            observer: '_fileUrlChanged'
+          attachments: {
+            type: Array,
+            value: []
           }
         }
       }
@@ -433,6 +468,8 @@
           ];
           this.set('radioOptions', options);
         }, 1000);
+
+
       }
 
       /**
@@ -508,7 +545,60 @@
         }
       }
 
-      _fileUrlChanged(value) {}
+      _onFileInputChanged(value) {
+        if (value) {
+          const files = this.$$('#attachment').files;
+          for (const file of files) {
+            let request;
+            if (file.type.match('image')) {
+              request = this.uploadFile(file, '_48013', res => this.uploadDone(res, file.name));
+            } else if (file.type.match('video')) {
+              request = this.uploadFile(file, '_48013_video', res => this.uploadDone(res, file.name));
+            }
+            this.push('attachments', {name: file.name, request: request, uploading: 'uploading', uploaded: '', response: null});
+          }
+        }
+      }
+
+      uploadDone(res, fileName) {
+        const index = this.get('attachments').findIndex(att => att.name === fileName);
+        this.set(`attachments.${index}.uploading`, '');
+        this.set(`attachments.${index}.uploaded`, 'uploaded');
+        let attachments = this.get('attachments').slice();
+        let attachment = attachments[index];
+        attachment.response = res;
+        console.log(res);
+        this.set('attachments', attachments);
+      }
+
+      _cancelUploading(e) {
+        e.model.attachment.request.abort();
+        this._removeAttachment(e);
+      }
+
+      _removeAttachment(e) {
+        const index = this.get('attachments').findIndex(att => att.name === e.model.attachment.name);
+        const attachments = this.get('attachments').slice();
+        attachments.splice(index, 1);
+        this.set('attachments', attachments);
+      }
+
+      uploadFile(file, preset_name, callback) {
+        const CLOUDINARY_ENDPOINT = 'https://api.cloudinary.com/v1_1/powerreviews/auto/upload';
+        let request = new XMLHttpRequest();
+        request.open('POST', CLOUDINARY_ENDPOINT, true);
+        request.onreadystatechange = () => {
+          if (request.readyState != 4 || !request.responseText) return;
+          if (typeof callback === 'function') {
+            callback(JSON.parse(request.responseText));
+          }
+        };
+        let formData = new FormData();
+        formData.append('upload_preset', preset_name);
+        formData.append('file', file);
+        request.send(formData);
+        return request;
+      }
 
       _setFieldValue(key, value) {
         if (this.reviewTemplate) {
@@ -532,6 +622,7 @@
             if (field.key !== 'media_image' && field.key !== 'media_videourl') {
               result.push(field);
             }
+            this._getUploadedMedia().forEach(media => result.push(media));
             return result;
           }, []);
 
@@ -542,6 +633,7 @@
       }
 
       _submitReviewStateChanged(state) {
+
         const showError = this.submitReviewState ? (!this.submitReviewState.success && this.submitReviewState.error) : false;
         this.set('showError', showError);
         if (state.error && state.error.length > 0) {
@@ -554,6 +646,47 @@
         if (state.success) {
           window.scrollTo(0, 0);
         }
+      }
+
+      _getUploadedMedia() {
+        let result = [];
+        if (this.attachments.length > 0) {
+          this.attachments.forEach((attachment, index) => {
+            const res = attachment.response;
+            if (res) {
+              let media;
+              if (res.resource_type === 'image') {
+                media = {
+                  "field_type": "composite",
+                  "key": `media_image_${index}`,
+                  "composite_type": 'Image',
+                  "composite_data": {
+                    "raw": {
+                      "size": res.bytes,
+                      "width": res.width,
+                      "url": res.url,
+                      "height": res.height,
+                      "publicId": res.public_id
+                    }
+                  }
+                }
+              } else {
+                media = {
+                  "id": `media_videourl_${index}`,
+                  "field_type": 'composite',
+                  "key": `media_videourl_${index}`,
+                  "composite_type": 'Video',
+                  "composite_data": {
+                    "video_url": res.url,
+                    "video_thumbnail_url": ""
+                  }
+                }
+              }
+              result.push(media);
+            }
+          })
+        }
+        return result;
       }
 
       _setAverageRating() {
