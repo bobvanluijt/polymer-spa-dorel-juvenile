@@ -31,7 +31,7 @@
       [mobile-medium] .layout-column-timeline {
         padding: 0;
       }
-      
+
       [tablet-medium-up] .title {
         @apply(--theme-typography-7);
       }
@@ -45,9 +45,14 @@
       mobile-medium$="{{ breakpoints.mobileMedium }}">
 
       <!-- HERO HEADER -->
-      <dorel-section-hero-header
-        align="left"
-        hero-header-data="[[heroHeader]]"></dorel-section-hero-header>
+      <template
+        is="dom-if"
+        if="[[selected]]"
+        restamp>
+        <dorel-section-hero-header
+          align="left"
+          hero-header-data="[[heroHeader]]"></dorel-section-hero-header>
+      </template>
       <!--// HERO HEADER -->
 
       <template
@@ -87,7 +92,7 @@
           is="dom-if"
           if="[[ _isPageComponent(component.acf_fc_layout, 'carousel_block') ]]">
           <dorel-section-slideshow
-            slideshow-data="[[component]]"
+            slideshow-data="[[component.slides]]"
             gtm-parent="dorel-section-product-video"
             gtm-parent-index="3"></dorel-section-slideshow>
         </template>
@@ -147,7 +152,8 @@
         componentCount: {
           type: Number,
           value: 0
-        }
+        },
+        selected: Boolean
       },
 
       behaviors: [TemplateBehaviors],

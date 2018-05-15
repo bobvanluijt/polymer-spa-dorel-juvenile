@@ -1,0 +1,287 @@
+<link rel="import" href="../organisms/dorel-section-product-accessories.html">
+<link rel="import" href="../organisms/dorel-section-product-accordions.html">
+<link rel="import" href="../organisms/dorel-section-product-features.html">
+<link rel="import" href="../organisms/dorel-section-header.html">
+<link rel="import" href="../organisms/dorel-section-product-showcase.html">
+<link rel="import" href="../organisms/dorel-section-product-video.html">
+<link rel="import" href="../organisms/dorel-section-product-usps.html">
+
+<dom-module id="dorel-template-products">
+  <template>
+    <style>
+      :root {
+        /* Override the default background-color for the multi sections */
+        --theme-multi-background-color: var(--theme-color-background-tertiary);
+        --theme-multi-no-background-color: transparent;
+        --theme-multi-bottom-padding: var(--theme-component-space-inner-xlarge);
+        float: left;
+        width: 100%;
+      }
+
+      .wrapper {
+        opacity: 0; /* make things invisible upon start */
+        -webkit-animation: fadeIn ease 1; /* call our keyframe named fadeIn, use animattion ease-in and repeat it only 1 time */
+        -moz-animation: fadeIn ease 1;
+        animation: fadeIn ease 1;
+        -webkit-animation-duration: 1s;
+        -moz-animation-duration: .1s;
+        animation-duration: 1s;
+        -webkit-animation-fill-mode: forwards; /* this makes sure that after animation is done we remain at the last keyframe value (opacity: 1)*/
+        -moz-animation-fill-mode: forwards;
+        animation-fill-mode: forwards;
+      }
+
+      @-webkit-keyframes fadeIn {
+        from {
+          opacity: 0;
+          opacity: 1 \9; /* IE9 only */
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      @-moz-keyframes fadeIn {
+        from {
+          opacity: 0;
+          opacity: 1 \9; /* IE9 only */
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          opacity: 1 \9; /* IE9 only */
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      dorel-layout-section dorel-page-builder {
+        width: 100%;
+        display: flex;
+      }
+    </style>
+
+    <!-- define routing for products -->
+    <app-route
+      route="{{ route }}"
+      pattern="/:productName"
+      data="{{ routeData }}"
+      tail="{{ subroute }}"></app-route>
+
+    <div class="wrapper">
+
+      <!-- show when acf.page_builder has components -->
+      <template
+        is="dom-if"
+        if="{{ builderData.acf.page_builder.length }}">
+
+        <!-- iterate over page_builder components -->
+        <template
+          is="dom-repeat"
+          items="[[ builderData.acf.page_builder ]]"
+          as="component"
+          targetFramerate="1000">
+
+          <!-- section-product-header -->
+          <template
+            is="dom-if"
+            if="{{ isPageComponent(component.acf_fc_layout, 'section_product_header') }}">
+
+            <dorel-section-header
+              section-header-data="[[ component ]]"
+              gtm-parent="dorel-section-header"
+              gtm-parent-index="[[ index ]]"></dorel-section-header>
+
+          </template>
+          <!--// section-product-header -->
+
+          <!-- section-product-showcase -->
+          <template
+            is="dom-if"
+            if="{{ isPageComponent(component.acf_fc_layout, 'section_product_showcase') }}">
+
+            <dorel-section-product-showcase
+              accessory-scroll-handler="{{ accessoryScrollHandler }}"
+              showcase-data="[[ component ]]"
+              gtm-parent="dorel-section-product-showcase"
+              gtm-parent-index="[[ index ]]"></dorel-section-product-showcase>
+
+          </template>
+          <!--// section-product-showcase -->
+
+          <!-- section-product-usps -->
+          <template
+            is="dom-if"
+            if="{{ isPageComponent(component.acf_fc_layout, 'section_product_usps') }}">
+
+            <dorel-section-product-usps
+              usps-data="[[ component ]]"
+              gtm-parent="dorel-section-product-usps"
+              gtm-parent-index="[[ index ]]"></dorel-section-product-usps>
+
+          </template>
+          <!--// section-product-usps -->
+
+          <!-- section-product-features -->
+          <template
+            is="dom-if"
+            if="{{ isPageComponent(component.acf_fc_layout, 'section_product_features') }}">
+
+            <dorel-section-product-features
+              features-data="[[ component ]]"
+              gtm-parent="dorel-section-product-features"
+              gtm-parent-index="[[ index ]]"></dorel-section-product-features>
+
+          </template>
+          <!--// section-product-features -->
+
+          <!-- section-product-accessories -->
+          <template
+            is="dom-if"
+            if="{{ isPageComponent(component.acf_fc_layout, 'section_product_accessories') }}">
+
+            <dorel-section-product-accessories
+              accessory-scroll-handler="{{ accessoryScrollHandler }}"
+              accessories-data="[[ component ]]"
+              gtm-parent="dorel-section-product-accessories"
+              gtm-parent-index="[[ index ]]"></dorel-section-product-accessories>
+
+          </template>
+          <!--// section-product-accessories -->
+
+          <!-- section-product-accordions -->
+          <template
+            is="dom-if"
+            if="{{ isPageComponent(component.acf_fc_layout, 'section_product_accordions') }}">
+
+            <dorel-section-product-accordions
+              accordions-data="[[ component ]]"
+              gtm-parent="dorel-section-product-accordions"
+              gtm-parent-index="[[ index ]]"></dorel-section-product-accordions>
+
+          </template>
+          <!--// section-product-accordions -->
+
+          <!-- section-product-video -->
+          <template
+            is="dom-if"
+            if="{{ isPageComponent(component.acf_fc_layout, 'section_product_video') }}">
+
+            <dorel-section-product-video
+              video-data="[[ component ]]"
+              gtm-parent="dorel-section-product-video"
+              gtm-parent-index="[[ index ]]"></dorel-section-product-video>
+
+          </template>
+          <!--// section-product-video -->
+
+          <!-- section-slideshow -->
+          <template
+            is="dom-if"
+            if="{{ isPageComponent(component.acf_fc_layout, 'section_slideshow') }}">
+
+            <dorel-section-slideshow
+              slideshow-data="[[ component ]]"
+              gtm-parent="dorel-section-slideshow"
+              gtm-parent-index="[[ index ]]"></dorel-section-slideshow>
+
+          </template>
+          <!--// section-slideshow -->
+
+        </template>
+
+      </template>
+
+    </div>
+
+  </template>
+
+  <script>
+    Polymer({
+      is: 'dorel-template-products',
+
+      properties: {
+
+        /**
+         * @attribute
+         * @name templateData
+         * @description the data coming from ACF/Wordpress which is delegated to the page builder
+         */
+        templateData: {
+          type: String,
+        },
+
+        /**
+         * @name routeData
+         * @description the route data contains the last segment under productName
+         */
+        routeData: {
+          type: Object
+        },
+
+        /**
+         * @name accessoryScrollHandler
+         * @description the offset to the accessory section
+         **/
+        accessoryScrollHandler: {
+          type: Boolean,
+          notify: true,
+          value: false,
+        },
+      },
+      observers: [
+        '_dataChanged(routeData, templateData)',
+      ],
+      /**
+       * @name _dataChanged
+       * @description When the routeData and templateData are changed and not undefined, this will be called.
+       * Sets the right builderData for the templating.
+       */
+      _dataChanged: function (routeData, templateData) {
+        var productName = this.routeData.productName;
+
+        if (typeof productName === 'undefined' || typeof this.templateData.products === 'undefined' || !this.templateData.products.length) return;
+
+        this.builderData = this.templateData.products.find(function (product) {
+          return product.slug === productName;
+        });
+      },
+      /**
+       * @name isPageComponent
+       * @description compares to values to see if they match, for some
+       * components they can be doubled. They will always be suffixed with
+       * their number like section_multi and section_multi_2. In those
+       * cases we need to treat them as section_multi's.
+       *
+       * @returns Boolean if the two values match or not (true/false)
+       */
+      isPageComponent: function (response, cname) {
+
+        // get last char
+        var lastChar = response.substr(response.length - 1);
+
+        // find out if it is a number
+        var isNumber = !isNaN(Number(lastChar));
+
+        // if it is a number treat it accordingly
+        if (isNumber) {
+          var keyArr = response.split('_');
+          keyArr.pop();
+          strippedResponse = keyArr.join('_');
+
+          return strippedResponse === cname;
+        }
+
+        // all other cases just compare them
+        return response === cname;
+      }
+
+    });
+  </script>
+</dom-module>

@@ -1,5 +1,6 @@
 <link rel="import" href="dorel-product-review-stars.html">
 <link rel="import" href="dorel-product-review-bar.html">
+<link rel="import" href="dorel-product-review-ratings.html">
 
 <dom-module id="dorel-product-review-total-summary">
   <template>
@@ -20,6 +21,7 @@
         border: 1px solid var(--theme-brand-complementary-color-1);
         border-radius: var(--theme-border-radius-0);
         padding: 1.5em;
+        margin-bottom: 2rem;
       }
 
       #distribution-histogram {
@@ -47,6 +49,15 @@
         padding: 0 .5em;
         flex: 2 1 auto;
       }
+
+      .submit-review-btn {
+        margin-bottom: 6rem;
+        width: fit-content;
+      }
+
+      .review-ratings {
+        margin-top: 2rem;
+      }
     </style>
 
     <div id="rating-overview">
@@ -59,6 +70,10 @@
         <div id="overview-short-summary">
           <span itemprop="ratingValue">[[rating]]</span>
           <span itemprop="reviewCount">([[localize('reviews_rating-overview#review-count')]] [[totalReviews]] [[localize('reviews_rating-overview#reviews')]])</span>
+        </div>
+
+        <div class="submit-review-btn">
+          <dorel-cta title="[[localize('reviews#submit_your_review')]]" type="link" link="[[submitReviewUrl]]" size="medium">[[localize('reviews#submit_your_review')]]</dorel-cta>
         </div>
 
         <template
@@ -83,6 +98,7 @@
 
           </div>
         </template>
+        <dorel-product-review-ratings class="review-ratings" rollup="[[rollup]]"></dorel-product-review-ratings>
       </div>
     </div>
   </template>
@@ -99,7 +115,8 @@
           numberOfStars: Number,
           rating: Number,
           ratingDistribution: Array,
-          totalReviews: Number
+          totalReviews: Number,
+          submitReviewUrl: String
         }
       }
 

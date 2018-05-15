@@ -1,6 +1,3 @@
-<!-- hubspot needs this for the onFormReady handler -->
-<script src="/node_modules/jquery/dist/jquery.slim.min.js"></script>
-
 <dom-module id="dorel-hubspot">
   <template>
     <!-- The HTML for the Hubspot forms should be created consistently, or the layouts for these might not work -->
@@ -9,7 +6,6 @@
       h1, h2, h3, h4 {
         @apply(--theme-header-text-transform);
       }
-
       :host {
         width: 100%;
         padding-bottom: 1.5em;
@@ -131,6 +127,65 @@
 
       [tablet-medium-up] #form {
         margin: auto;
+      }
+
+      /* Hotfix for checkbox */
+      .hs_agree_terms, .hs_agree_terms .input {
+        float: left;
+        width: 100%;
+      }
+
+      .hs_agree_terms {
+        margin-bottom: 1.5em;
+      }
+
+      .hs_agree_terms .inputs-list {
+        float: left;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        width: 100%;
+      }
+
+      .hs_agree_terms input {
+        float: left;
+        width: auto;
+        pointer-events: all;
+        margin: 0 .75em 0 0;
+      }
+
+      .hs_agree_terms span {
+        line-height: 52.5px;
+      }
+
+      .hs_agree_terms label {
+        pointer-events: all;
+      }
+
+      .hs-form-field {
+        width: 100% !important;
+      }
+
+      .hs-error-msgs {
+        display: block;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        float: left;
+        margin-bottom: 1.5em;
+      }
+
+      .hs-error-msgs.inputs-list {
+        float: left;
+        width: 100%;
+      }
+
+      .dorel-hubspot {
+        max-width: 100%;
+      }
+
+      .dorel-hubspot select {
+        width: 100%;
       }
 
     </style>

@@ -1,8 +1,3 @@
-<link rel="import" href="../atoms/dorel-bynder-image.html">
-<link rel="import" href="../atoms/dorel-bynder-responsive-image.html">
-<link rel="import" href="../molecules/dorel-youtube-video.html">
-<link rel="import" href="../molecules/dorel-youtube-lightbox.html">
-
 <dom-module id="dorel-section-hero-header">
   <template>
     <style>
@@ -216,7 +211,6 @@
                     title="[[heroHeaderData.cta_text]]"
                     icon="dorel-icons:play-circle-outline"
                     inverted="[[ !isBrand('Quinny') ]]"
-                    link="#"
                     on-click="openYouTubeLightbox">[[heroHeaderData.cta_text]]</dorel-cta>
                 </template>
 
@@ -227,7 +221,6 @@
                     title="[[localize('hero_header#watch_video')]]"
                     icon="dorel-icons:play-circle-outline"
                     inverted
-                    link="#"
                     on-click="openYouTubeLightbox">[[localize('hero_header#watch_video')]]</dorel-cta>
                 </template>
               </template>

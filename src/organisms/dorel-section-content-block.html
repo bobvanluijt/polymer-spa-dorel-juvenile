@@ -1,6 +1,3 @@
-<link rel="import" href="../atoms/dorel-cta.html">
-<link rel="import" href="../atoms/dorel-safe-html.html">
-
 <dom-module id="dorel-section-content-block">
   <template>
     <style>
@@ -92,7 +89,8 @@
                   <dorel-cta
                     type="secondary"
                     size="medium"
-                    link="[[blockData.cta_href]]">[[blockData.cta_text]]</dorel-cta>
+                    link="[[blockData.cta_href.url]]"
+                    target="[[blockData.cta_href.target]]">[[blockData.cta_text]]</dorel-cta>
                 </template>
               </div>
             </div>

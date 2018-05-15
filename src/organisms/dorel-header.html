@@ -1,11 +1,3 @@
-<link rel="import" href="../../node_modules/iron-scroll-target-behavior/iron-scroll-target-behavior.html">
-<link rel="import" href="../molecules/multilingual/dorel-multilingual-select-language.html">
-<link rel="import" href="../molecules/dorel-logo.html">
-<link rel="import" href="../molecules/navigation/dorel-main-menu-mobile.html">
-<link rel="import" href="../molecules/navigation/dorel-main-menu-desktop.html">
-<link rel="import" href="../utils/behaviors/single/dorel-gtm-behavior.html">
-
-
 <dom-module id="dorel-header"
   mobile-menu-opened$="{{mobileMenuOpened}}">
   <template>
@@ -202,6 +194,7 @@
     </div>
   </template>
   <script>
+    import '../utils/behaviors/single/dorel-gtm-behavior.html';
     class DorelHeader extends ReduxMixin(Polymer.mixinBehaviors([Polymer.IronScrollTargetBehavior, GtmBehavior], Polymer.Element)) {
       static get is() {
         return 'dorel-header'

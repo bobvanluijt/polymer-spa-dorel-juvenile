@@ -1,5 +1,3 @@
-<link rel="import" href="../../node_modules/iron-collapse/iron-collapse.html">
-
 <dom-module id="dorel-expandable-content">
   <template>
     <template is="dom-if" if="{{ isBrand('Maxi-Cosi') }}">
@@ -10,7 +8,7 @@
         }
       </style>
     </template>
-    
+
     <template is="dom-if" if="{{ isBrand('Quinny') }}">
       <style>
         dorel-cta {
@@ -56,7 +54,6 @@
             <dorel-cta title="Read more"
                        on-click="_toggle"
                        type="link"
-                       link="#"
                        size="medium"
                        icon="dorel-icons:expand-more">
               {{ localize('Read_More') }}
@@ -67,7 +64,6 @@
             <dorel-cta title="Read less"
                        on-click="_toggle"
                        type="link"
-                       link="#"
                        size="medium"
                        icon="dorel-icons:expand-less">
               {{ localize('Read_Less') }}
