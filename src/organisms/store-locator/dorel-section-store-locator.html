@@ -595,6 +595,7 @@
        */
       callLocator(event) {
         if (typeof this.get('addressInput') === 'undefined') return;
+        if (this.get('addressInput') === this.get('address')) return;
 
         // handle the validation of the input and errors when the input is empty
         if (this.get('addressInput') === '') {
