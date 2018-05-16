@@ -194,8 +194,11 @@
        * @param {array} old colors
        */
       _setColors(newColorsData, oldColorsData) {
-        if (!newColorsData || JSON.stringify(newColorsData) === JSON.stringify(oldColorsData)) return;
-        this._setCurrentColor(newColorsData[0]);
+        if (!newColorsData || JSON.stringify(newColorsData) === JSON.stringify(oldColorsData) || !this.filters || !this.filters[0]) return;
+        const color = newColorsData.find(color => color.color.name === this.filters[0].values[0].value);
+        if (color) {
+          this._setCurrentColor(color);
+        }
       }
 
       /**
