@@ -25,15 +25,20 @@
       <!-- category-about-header -->
       <template
         is="dom-if"
-        if="[[templateData.acf.hero_header.length]]">
-        <dorel-section-category-about-header
-          template-data="[[heroHeader]]"></dorel-section-category-about-header>
+        if="[[selected]]"
+        restamp>
+        <template
+          is="dom-if"
+          if="[[templateData.acf.hero_header.length]]">
+          <dorel-section-category-about-header
+            template-data="[[heroHeader]]"></dorel-section-category-about-header>
 
-          <!-- page-nav -->
-          <dorel-section-page-nav
-            breadcrumbs-toggle="true"></dorel-section-page-nav>
-          <!--// page-nav -->
+            <!-- page-nav -->
+            <dorel-section-page-nav
+              breadcrumbs-toggle="true"></dorel-section-page-nav>
+            <!--// page-nav -->
 
+        </template>
       </template>
       <!--// category-about-header -->
 
@@ -94,7 +99,8 @@
          * @name sectionCards
          * @description the data model used for the cards component
          */
-        sectionCards: Object
+        sectionCards: Object,
+        selected: Boolean
       },
 
       behaviors: [TemplateBehaviors],

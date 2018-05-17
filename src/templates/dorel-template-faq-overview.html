@@ -48,11 +48,16 @@
       <!-- section-hero-header -->
       <template
         is="dom-if"
-        if="[[ templateData.acf.hero_header.length ]]">
-        <dorel-section-header
-          section-header-data="[[heroHeader]]"
-          gtm-parent="dorel-template-faq-overview"
-          gtm-parent-index="[[ index ]]"></dorel-section-header>
+        if="[[selected]]"
+        restamp>
+        <template
+          is="dom-if"
+          if="[[ templateData.acf.hero_header.length ]]">
+          <dorel-section-header
+            section-header-data="[[heroHeader]]"
+            gtm-parent="dorel-template-faq-overview"
+            gtm-parent-index="[[ index ]]"></dorel-section-header>
+        </template>
       </template>
       <!--// section-hero-header -->
 
@@ -178,7 +183,8 @@
            * @name customerSupportOptions
            * @description the data model used for the customer support component
            */
-          customerSupportOptions: Object
+          customerSupportOptions: Object,
+          selected: Boolean
         };
       }
 
