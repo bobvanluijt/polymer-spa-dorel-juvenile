@@ -5,9 +5,28 @@
         @apply(--theme-header-text-transform);
       }
 
+      .dorel-section-store-locator-result {
+        display: flex;
+      }
+
+      .icon {
+        flex: 1;
+        height: 2rem;
+      }
+
+      .dropdown-icon {
+        flex: 1;
+        height: 1rem;
+        background: rgba(255,255,255,0.1) url('../../../assets/icons/chevron-down.svg') no-repeat 98% 50%;
+      }
+
+      .details {
+        flex: 4;
+      }
+
       .location-title {
-        @apply(--theme-typography-5);
-        width: 100%;
+        @apply(--theme-typography-3);
+        color: var(--theme-brand-color-1);
         text-align: left;
         margin-top: 0;
       }
@@ -18,75 +37,122 @@
         text-align: left;
       }
 
-      dorel-cta {
-        float: left;
-        margin-right: 1.5em;
+      .store-contact {
+        @apply(--theme-typography-1);
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+      }
+
+      [expanded] .dropdown-icon {
+        transform: rotateX(180deg);
+      }
+
+      div([expanded]) {
+        background-color: var(--theme-color-monochrome-2);
+      }
+
+      .label-section {
+        margin-top: 1rem;
+      }
+
+      .label {
+        background-color: var(--theme-brand-color-1);
+        color: var(--theme-color-white);
+        border-radius: var(--theme-border-radius-1);
+        padding: .25rem .5rem;
       }
     </style>
+    <template
+      is="dom-if"
+      if="[[ !store.address ]]">
+      <p class="location-content">[[ localize('No_Address_Available') ]]</p>
+    </template>
+    <template is="dom-if"
+              if="[[ store.address ]]">
+      <div expanded$="[[expanded]]" on-click="_expandCard">
+        <div class$="dorel-section-store-locator-result [[ _isVip(store.is_vip) ]]">
+          <img class="icon" src="/assets/images/markers/[[ _iconName(store.is_vip) ]].svg" alt="Specialist Store">
+          <div class="details">
+            <h3 class="location-title">[[ store.name ]]</h3>
+            <p class="location-content">
+              <template is="dom-if" if="[[ expanded ]]">
+                <template is="dom-if" if="[[ store.city ]]">[[ store.city ]]<br></template>
+              </template>
+              <template is="dom-if" if="[[ store.address ]]"><span>[[ store.address ]]</span><br></template>
+              <template is="dom-if" if="[[ expanded ]]">
+                <template is="dom-if" if="[[ store.postal_code ]]">[[ store.postal_code ]]</span><br></template>
+              </template>
+              <template is="dom-if"
+                        if="[[ _isVip(store.is_vip) ]]">
+                <div class="label-section">
+                  <span class="label">Specialist</span>
+                </div>
+              </template>
+            </p>
+          </div>
+          <div class="dropdown-icon"></div>
+        </div>
 
-    <div class$="dorel-section-store-locator-result [[ _isVip(store.is_vip) ]]">
-      <template
-        is="dom-if"
-        if="[[ !store.address ]]">
-        <p class="location-content">{{ localize('No_Address_Available') }}</p>
-      </template>
-      <template is="dom-if"
-                if="[[ store.address ]]">
-        <h3 class="location-title">[[ store.name ]]</h3>
-        <p class="location-content">
-          <template is="dom-if" if="[[ store.city ]]">[[ store.city ]]<br></template>
-          <template is="dom-if" if="[[ store.address ]]">[[ store.address ]]<br></template>
-          <template is="dom-if" if="[[ store.postal_code ]]">[[ store.postal_code ]]<br></template>
-        </p>
-        <template is="dom-if" if="[[ store.address ]]">
-          <dorel-cta title="Plan route"
-                     type="link"
-                     target="_blank"
-                     link="http://maps.google.com/maps?z=16&daddr=[[ store.address ]],+[[ store.city ]],+[[ store.country ]],+[[ store.postal_code ]]"
-                     size="medium"
-                     icon="dorel-icons:location"
-                     gtm-action="plan-route-retailer"              
-                     gtm-parent="[[ gtmParent ]]"
-                     gtm-parent-index="[[ gtmParentIndex ]]"
-                     gtm-child="[[ gtmChild ]]"
-                     gtm-child-index="[[ gtmChildIndex ]]"
-                     gtm-cta-index="0">{{ localize('Plan_route') }}</dorel-cta>
-        </template>
-        <template
-          is="dom-if"
-          if="[[ store.phone_number ]]">
-          <dorel-cta title="Call"
-                     type="link"
-                     link="tel:[[ store.phone_number ]]"
-                     size="medium"
-                     icon="dorel-icons:call"
-                     gtm-action="call-retailer"              
-                     gtm-parent="[[ gtmParent ]]"
-                     gtm-parent-index="[[ gtmParentIndex ]]"
-                     gtm-child="[[ gtmChild ]]"
-                     gtm-child-index="[[ gtmChildIndex ]]"
-                     gtm-cta-index="1">[[ store.phone_number ]]</dorel-cta>
-        </template>
-        <template
-          is="dom-if"
-          if="[[ store.online_shop.url ]]">
+        <template is="dom-if" if="[[ expanded ]]">
+          <div class="store-contact">
+            <template
+              is="dom-if"
+              if="[[ store.phone_number ]]">
+              <dorel-cta title="Call"
+                         type="link"
+                         link="tel:[[ store.phone_number ]]"
+                         size="medium"
+                         icon="dorel-icons:local-phone"
+                         left-align-icon
+                         gtm-action="call-retailer"
+                         gtm-parent="[[ gtmParent ]]"
+                         gtm-parent-index="[[ gtmParentIndex ]]"
+                         gtm-child="[[ gtmChild ]]"
+                         gtm-child-index="[[ gtmChildIndex ]]"
+                         gtm-cta-index="1">[[ store.phone_number ]]</dorel-cta>
+            </template>
 
-          <dorel-cta title="Visit website"
-                     type="link"
-                     target="_blank"
-                     link="[[ store.online_shop.url ]]"
-                     size="medium"
-                     icon="dorel-icons:external-link"
-                     gtm-action="visit-website-retailer"              
-                     gtm-parent="[[ gtmParent ]]"
-                     gtm-parent-index="[[ gtmParentIndex ]]"
-                     gtm-child="[[ gtmChild ]]"
-                     gtm-child-index="[[ gtmChildIndex ]]"
-                     gtm-cta-index="2">{{ localize('Visit_website') }}</dorel-cta>
+            <template
+              is="dom-if"
+              if="[[ store.online_shop.url ]]">
+              <dorel-cta title="Visit website"
+                         type="link"
+                         target="_blank"
+                         link="[[ store.online_shop.url ]]"
+                         size="medium"
+                         icon="dorel-icons:globe"
+                         left-align-icon
+                         gtm-action="visit-website-retailer"
+                         gtm-parent="[[ gtmParent ]]"
+                         gtm-parent-index="[[ gtmParentIndex ]]"
+                         gtm-child="[[ gtmChild ]]"
+                         gtm-child-index="[[ gtmChildIndex ]]"
+                         gtm-cta-index="2">[[ localize('Visit_website') ]]</dorel-cta>
+            </template>
+
+            <template is="dom-if" if="[[ store.address ]]">
+              <dorel-cta title="Plan route"
+                         type="link"
+                         target="_blank"
+                         link="http://maps.google.com/maps?z=16&daddr=[[ store.address ]],+[[ store.city ]],+[[ store.country ]],+[[ store.postal_code ]]"
+                         size="medium"
+                         icon="dorel-icons:direction"
+                         left-align-icon
+                         gtm-action="plan-route-retailer"
+                         gtm-parent="[[ gtmParent ]]"
+                         gtm-parent-index="[[ gtmParentIndex ]]"
+                         gtm-child="[[ gtmChild ]]"
+                         gtm-child-index="[[ gtmChildIndex ]]"
+                         gtm-cta-index="0">[[ localize('Plan_route') ]]</dorel-cta>
+            </template>
+          </div>
         </template>
-      </template>
-    </div>
+
+      </div>
+    </template>
   </template>
+
 
   <script>
     Polymer({
@@ -108,6 +174,12 @@
           value: function () {
             return {};
           }
+        },
+
+        expanded: {
+          type: Boolean,
+          reflectToAttribute: true,
+          value: false
         }
       },
 
@@ -121,7 +193,17 @@
        */
       _isVip: function (vip) {
         return (typeof vip !== 'undefined' && vip) ? 'vip' : '';
+      },
+
+      _iconName: function (vip) {
+        return (typeof vip !== 'undefined' && vip) ? 'specialist-store' : 'other-store';
+      },
+
+      _expandCard: function() {
+        this.set('expanded', !this.expanded);
       }
+
+
     });
   </script>
 </dom-module>

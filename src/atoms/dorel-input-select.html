@@ -7,7 +7,6 @@
 
       :host {
         display: block;
-        /*float: left;*/
         width: 100%;
       }
 
@@ -29,6 +28,10 @@
 
       select {
         @apply(--theme-form-select);
+      }
+
+      :host([white-background]) select {
+        background-color: white;
       }
 
       :host([invalid]) select {
@@ -96,7 +99,8 @@
             autosave$="[[autosave]]"
             results$="[[results]]"
             accept$="[[accept]]"
-            multiple$="[[multiple]]">
+            multiple$="[[multiple]]"
+            white-background$="[[whiteBackground]]">
     </select>
 
     <slot id="content" select="[suffix]"></slot>
@@ -167,7 +171,8 @@
 
       disabled: {
         type: Boolean
-      }
+      },
+      whiteBackground: Boolean
     },
 
     /**
@@ -245,12 +250,13 @@
         if (!option || !option.label) {
           return;
         }
-        var newOption = document.createElement('option');
+        let newOption = document.createElement('option');
         newOption.textContent = option.label;
         // Use the option value, or default to the list index
         newOption.value = option.value;
-        if (newOption.textContent && this.selected && this.selected.label) {
-          newOption.selected = this._isSelected(newOption.textContent, this.selected.label);
+
+        if (option.label && this.selected && this.selected.label) {
+          newOption.selected = this._isSelected(option.label, this.selected.label);
         } else {
           if (i === 0) {
             newOption.selected = true;

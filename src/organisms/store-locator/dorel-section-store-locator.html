@@ -11,21 +11,55 @@
         display: block;
       }
 
-      .section-store-locator,
-      .store-locator-map {
-        position: relative;
-        width: 100%;
+      .store-locator-container {
+        display: flex;
+        height: 90vh;
+        width: 100vw;
       }
+
+      [tablet-medium-up] .store-locator-container {
+        height: 30.5rem;
+      }
+
+      .section-store-locator {
+        flex: 1;
+      }
+
+      [tablet-medium-up] .section-store-locator {
+        height: 30.5rem;
+      }
+
+      /* .section-store-locator,
+      .store-locator-map {
+        width: 34vw;
+      } */
 
       .store-title {
         @apply(--theme-typography-4);
-        color: var(--theme-brand-color-1);
+        color: var(--theme-color-white);
         width: 100%;
         margin-top: 0;
       }
 
-      .store-locator-map {
+      /* .store-locator-map {
         float: left;
+      } */
+      .store-locator-search {
+        background-color: var(--theme-brand-complementary-color-1);
+        padding: 1.5rem;
+      }
+
+      .input-selectors {
+        display: flex;
+      }
+
+      .store-type-select {
+        flex: 2;
+        margin-right: 1.5rem;
+      }
+
+      .distance-select {
+        flex: 1
       }
 
       .store-overlay {
@@ -52,21 +86,58 @@
       }
 
       google-map {
-        width: 100%;
+        flex: 2;
         height: 90vh;
-        position: relative;
-        float: left;
       }
 
-      form {
-        float: left;
-        margin-top: 1.5em;
+      #store-locator-form {
+        /* float: left; */
+        margin-top: .5rem;
+        /* width: 100%; */
+      }
+
+      .dorel-section-store-locator-result {
+        display: flex;
+      }
+
+      .icon {
+        flex: 1;
+        height: 2rem;
+      }
+
+      .details {
+        flex: 4;
+      }
+
+      .location-title {
+        @apply(--theme-typography-3);
+        color: var(--theme-brand-color-1);
+        text-align: left;
+        margin-top: 0;
+      }
+
+      .location-content {
+        @apply(--theme-paragraph-text);
+        margin-top: 0;
+        text-align: left;
+      }
+
+      .store-contact {
+        @apply(--theme-typography-1);
+        display: flex;
+        justify-content: space-between;
         width: 100%;
       }
 
-      dorel-cta {
-        float: left;
-        width: 100%;
+      .label-section {
+        margin-top: 1rem;
+      }
+
+      .label {
+        background-color: var(--theme-brand-color-1);
+        color: var(--theme-color-white);
+        border-radius: var(--theme-border-radius-1);
+        padding: .25rem .5rem;
       }
 
       /* Responsive Behaviour */
@@ -83,7 +154,7 @@
       }
 
       [tablet-medium-up] google-map {
-        height: 37.5em;
+        height: 30.5rem;
       }
     </style>
 
@@ -122,38 +193,55 @@
     <dorel-media-query
       breakpoints="{{breakpoints}}"></dorel-media-query>
 
-    <section class="section-store-locator"
-      tablet-medium-up$="{{breakpoints.tabletMediumUp}}">
-      <div class="store-locator-map">
-        <div class="store-overlay">
-          <h3 class="heading store-title">[[localize('store_locator#store-title')]]</h3>
-
-          <form
-            is="iron-form"
-            method="get"
-            action="/"
-            id="store-locator-form">
-            <h3>
+    <div tablet-medium-up$="{{breakpoints.tabletMediumUp}}">
+      <section class="store-locator-container">
+        <section class="section-store-locator">
+          <div class="store-locator-search">
+            <h3 class="heading store-title">[[localize('store_locator#store-title')]]</h3>
+            <form
+              is="iron-form"
+              method="get"
+              action="/"
+              id="store-locator-form">
               <dorel-input
                 id="address-input"
-                label="[[localize('store_locator#address-from-label')]]"
+                placeholder="[[localize('store_locator#address-from-label')]]"
                 value="{{addressInput}}"
                 error-message="{{addressError}}"
                 invalid$="{{addressInvalid}}"
                 disabled$="[[!selectedCountry]]"
-                required></dorel-input>
-            </h3>
-            <h2>
-              <dorel-cta
-                id="submit-button"
-                on-click="_submitLocator"
-                disabled$="{{_isDisabled(addressInput)}}"
-                type="primary"
-                size="medium"
-                icon="dorel-icons:chevron-right">[[localize('store_locator#find-stores-cta')]]</dorel-cta>
-            </h2>
-          </form>
-        </div>
+                search>
+
+              </dorel-input>
+              <div class="input-selectors">
+                <dorel-input-select
+                  label=""
+                  selected="{{ storeType }}"
+                  options="[[ storeTypeOptions ]]"
+                  disabled$="[[ _hasOptions(storeTypeOptions) ]]"
+                  class="store-type-select"
+                  white-background>
+                </dorel-input-select>
+                <dorel-input-select
+                  label=""
+                  selected="{{ searchRadius }}"
+                  options="[[ searchRadiusOptions ]]"
+                  disabled$="[[ _hasOptions(searchRadiusOptions) ]]"
+                  class="distance-select"
+                  white-background>
+                </dorel-input-select>
+              </div>
+            </form>
+
+          </div>
+
+          <template
+            is="dom-if"
+            if="[[storesResponse.results]]">
+            <dorel-section-store-locator-results
+              results="[[storesResponse.results]]"></dorel-section-store-locator-results>
+          </template>
+        </section>
 
         <template
           is="dom-if"
@@ -194,76 +282,68 @@
                   click-events="true">
 
                   <!-- IMPORTANT! inline styling is required -->
-                  <template
-                    is="dom-if"
-                    if="[[store.name]]">
-                    <h3 class="location-title"
-                        style="font-size: 1.7500em;line-height: 1.7143em;margin:0;font-weight: 400;">[[store.name]]</h3>
-                  </template>
+                  <div style="display:flex;">
+                    <img style="flex:1;height:2rem;" src="[[_defineStoreType(store.is_vip)]]">
+                    <div style="flex:3;">
+                      <h3 style="@apply(--theme-typography-3);color:var(--theme-brand-color-1);text-align:left;margin-top:0;">[[ store.name ]]</h3>
+                      <p style="@apply(--theme-paragraph-text);margin-top:0;text-align:left;">
+                        <template is="dom-if" if="[[ store.city ]]">[[ store.city ]]<br></template>
+                        <template is="dom-if" if="[[ store.address ]]">[[ store.address ]]<br></template>
+                        <template is="dom-if" if="[[ store.postal_code ]]">[[ store.postal_code ]]</span><br></template>
+                        <template is="dom-if" if="[[ store.is_vip ]]">
+                          <div style="margin-top:1rem;">
+                            <span style="background-color:var(--theme-brand-color-1);color:var(--theme-color-white);border-radius:var(--theme-border-radius-1);padding:.25rem .5rem;">Specialist</span>
+                          </div>
+                        </template>
+                      </p>
+                    </div>
+                  </div>
 
-                  <p class="location-content" style="margin:0;">
+                  <div style="@apply(--theme-typography-1);display:flex;justify-content:space-between;width:100%;">
                     <template
                       is="dom-if"
-                      if="[[store.city]]">[[store.city]]<br></template>
+                      if="[[ store.phone_number ]]">
+                      <a
+                        style="margin-right:1.5em;color: #004178;fill: #004178;text-decoration: none; margin-top: 1.5em"
+                        href="tel:[[store.phone_number]]"
+                        title="Call"
+                        target="_blank">
+                        <iron-icon class="theme-cta__icon" icon="dorel-icons:local-phone"></iron-icon>
+                        [[store.phone_number]]
+                      </a>
+                    </template>
+
                     <template
                       is="dom-if"
-                      if="[[store.address]]">[[store.address]]<br></template>
-                    <template
-                      is="dom-if"
-                      if="[[store.postal_code]]">[[store.postal_code]]<br></template>
-                  </p>
+                      if="[[ store.online_shop.url ]]">
+                      <a style="margin-right:1.5em;color: #004178;fill: #004178;text-decoration: none; margin-top: 1.5em"
+                         href="[[store.online_shop.url]]"
+                         title="Visit website"
+                         target="_blank">
+                         <iron-icon class="theme-cta__icon" icon="dorel-icons:globe"></iron-icon>
+                         [[ localize('Visit_website') ]]
+                      </a>
+                    </template>
 
-                  <template
-                    is="dom-if"
-                    if="[[store.address]]">
-                    <a
-                      style="margin-right:1.5em;color: #004178;fill: #004178;text-decoration: none; margin-top: 1.5em"
-                      class="marker-anchor"
-                      href="http://maps.google.com/maps?z=16&daddr=[[store.address]],+[[store.city]],+[[store.country]],+[[store.postal_code]]"
-                      title="Plan route"
-                      target="_blank">Plan route
-                      <iron-icon class="theme-cta__icon" icon="dorel-icons:location"></iron-icon>
-                    </a>
-                  </template>
-
-                  <template
-                    is="dom-if"
-                    if="[[store.phone_number]]">
-                    <a
-                      style="margin-right:1.5em;color: #004178;fill: #004178;text-decoration: none; margin-top: 1.5em"
-                      href="tel:[[store.phone_number]]"
-                      title="Call"
-                      target="_blank">
-                      [[store.phone_number]]
-                      <iron-icon class="theme-cta__icon" icon="dorel-icons:call"></iron-icon>
-                    </a>
-                  </template>
-
-                  <template
-                    is="dom-if"
-                    if="[[store.online_shop.url]]">
-                    <a style="margin-right:1.5em;color: #004178;fill: #004178;text-decoration: none; margin-top: 1.5em"
-                       href="[[store.online_shop.url]]"
-                       title="Visit website"
-                       target="_blank">
-                      Visit website
-                      <iron-icon class="theme-cta__icon" icon="dorel-icons:external-link"></iron-icon>
-                    </a>
-                  </template>
+                    <template is="dom-if" if="[[ store.address ]]">
+                      <a
+                        style="margin-right:1.5em;color: #004178;fill: #004178;text-decoration: none; margin-top: 1.5em"
+                        class="marker-anchor"
+                        href="http://maps.google.com/maps?z=16&daddr=[[store.address]],+[[store.city]],+[[store.country]],+[[store.postal_code]]"
+                        title="Plan route"
+                        target="_blank">
+                        <iron-icon class="theme-cta__icon" icon="dorel-icons:direction"></iron-icon>
+                        [[ localize('Plan_route') ]]
+                      </a>
+                    </template>
+                  </div>
                 </google-map-marker>
               </template>
             </google-map>
           </template>
         </template>
-      </div>
-
-      <template
-        is="dom-if"
-        if="[[storesResponse.results]]">
-        <dorel-section-store-locator-results
-          results="[[storesResponse.results]]"></dorel-section-store-locator-results>
-      </template>
-    </section>
+      </section>
+    </div>
   </template>
 
   <script>
@@ -419,12 +499,77 @@
             ]
           },
 
+          storeType: {
+            type: Object,
+            value: {
+              value: 'all',
+              label: 'All Stores'
+            },
+            observer: "_onStoreTypeChanged"
+          },
+
           /**
-           * default search radius
+           *  search radius
            */
           searchRadius: {
-            type: String,
-            value: '5'
+            type: Object,
+            value: {
+              value: '5',
+              label: '5 km'
+            },
+            observer: "_onSearchRadiusChanged"
+          },
+
+          storeTypeOptions: {
+            type: Array,
+            value: [
+              {
+                value: 'all',
+                label: 'All Stores'
+              },
+              {
+                value: '1',
+                label: 'Specialist stores: with trained staff & extended product offering'
+              },
+              {
+                value: '0',
+                label: 'Other stores',
+              }
+            ]
+          },
+
+          searchRadiusOptions: {
+            type: Array,
+            value: [
+              {
+                value: '5',
+                label: '5 km'
+              },
+              {
+                value: '10',
+                label: '10 km'
+              },
+              {
+                value: '20',
+                label: '20 km'
+              },
+              {
+                value: '30',
+                label: '30 km'
+              },
+              {
+                value: '40',
+                label: '40 km'
+              },
+              {
+                value: '50',
+                label: '50 km'
+              },
+              {
+                value: '100',
+                label: '100 km'
+              }
+            ]
           }
         };
       }
@@ -632,8 +777,13 @@
             let storeParams = geometry.location.lat() ? `&lat=${geometry.location.lat()}` : '';
             storeParams += geometry.location.lng() ? `&lng=${geometry.location.lng()}` : '';
             storeParams += this.get('selectedCountry.value') ? `&country=${this.get('selectedCountry.value')}` : '';
-            storeParams += this.get('searchRadius') ? `&radius=${Number(this.get('searchRadius'))}` : '';
+            storeParams += this.get('searchRadius.value') ? `&radius=${Number(this.get('searchRadius.value'))}` : '';
 
+            if (this.get('storeType.value') !== 'all') {
+              storeParams += `&is_vip=${Number(this.get('storeType.value'))}`;
+            }
+
+            console.log(storeParams);
             // set the endpoint, when set the api call will automatically commence
             this.set('storesEndPoint',
               `${this.get('dioApiUrl')}/retailers?brandName=maxi_cosi${storeParams}`
@@ -703,7 +853,7 @@
       _defineStoreType(vip) {
         const markerUrl = '/assets/images/markers/';
 
-        return (typeof vip === 'undefined' || !vip) ? `${markerUrl}shop-marker.png` : `${markerUrl}vip-marker.png`;
+        return (typeof vip === 'undefined' || !vip) ? `${markerUrl}other-store.svg` : `${markerUrl}specialist-store.svg`;
       }
 
       /**
@@ -757,6 +907,18 @@
             selectedStore: storeInfo.store
           }
         });
+      }
+
+      _onSearchRadiusChanged(searchRadius) {
+        if (this.get('addressInput').length > 0) {
+          this.callLocator(null);
+        }
+      }
+
+      _onStoreTypeChanged(storeType) {
+        if (this.get('addressInput').length > 0) {
+          this.callLocator(null);
+        }
       }
 
     };
