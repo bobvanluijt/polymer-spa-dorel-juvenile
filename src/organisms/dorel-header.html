@@ -1,26 +1,7 @@
-<link rel="import" href="../../node_modules/iron-scroll-target-behavior/iron-scroll-target-behavior.html">
-<link rel="import" href="../molecules/multilingual/dorel-multilingual-select-language.html">
-<link rel="import" href="../molecules/dorel-logo.html">
-<link rel="import" href="../molecules/navigation/dorel-main-menu-mobile.html">
-<link rel="import" href="../molecules/navigation/dorel-main-menu-desktop.html">
-<link rel="import" href="../utils/behaviors/single/dorel-gtm-behavior.html">
-
-
 <dom-module id="dorel-header"
   mobile-menu-opened$="{{mobileMenuOpened}}">
   <template>
     <style>
-      :host::after {
-        background: linear-gradient(to bottom, rgba(0, 0, 0, 0.13) 0%, rgba(0, 0, 0, 0) 100%);
-        bottom: -.75em;
-        content: "";
-        height: .75em;
-        left: 0;
-        position: absolute;
-        transition: transform 0.20s ease;
-        width: 100%;
-        z-index: 2;
-      }
       .header-wrapper {
         height: var(--theme-header-wrapper);
         float: left;
@@ -80,7 +61,7 @@
       .header-toolbar {
         float: left;
         width: 100%;
-        height: 3em;
+        height: 3rem;
         background-color: var(--theme-color-monochrome-2);
       }
 
@@ -110,7 +91,7 @@
       #hamburger[is-open] .icon-toggle-menu.hamburger-icon,
       #hamburger .icon-toggle-menu.close-icon
       {display:none;}
-      
+
       .icon-toggle-menu {
         width: 1.25em;
         height: 1.25em;
@@ -213,6 +194,7 @@
     </div>
   </template>
   <script>
+    import '../utils/behaviors/single/dorel-gtm-behavior.html';
     class DorelHeader extends ReduxMixin(Polymer.mixinBehaviors([Polymer.IronScrollTargetBehavior, GtmBehavior], Polymer.Element)) {
       static get is() {
         return 'dorel-header'

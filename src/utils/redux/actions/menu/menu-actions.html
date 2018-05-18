@@ -8,9 +8,16 @@ function addMenu(menu) {
   }
 }
 
+function createCarfittingEnabledCategories(list) {
+  return {
+    type: 'CREATE_CARFITTING_ENABLED_CATEGORIES',
+    payload: list
+  }
+}
 
-menuActions = {
-  addMenu
+window.menuActions = {
+  addMenu,
+  createCarfittingEnabledCategories
 }
 
 }());

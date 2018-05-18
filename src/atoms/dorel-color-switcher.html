@@ -1,5 +1,3 @@
-<link rel="import" href="../utils/managers/dorel-category-filter-manager.html">
-
 <dom-module id="dorel-color-switcher">
   <template>
     <style>
@@ -20,27 +18,8 @@
         margin: 0.1875em 0;
       }
 
-      .list-group-item {
-        float: left;
-        border: 2px solid transparent;
-        border-radius: 2em;
-        padding: 2px;
-        transition: border .3s ease;
-        margin-right: .5em;
-      }
-
       .list-group-item.active {
         border: 2px solid var(--theme-brand-color-1);
-      }
-
-      .list-group-item span {
-        display: block;
-        border-radius: 1em;
-        width: 1.75em;
-        height: 1.75em;
-        border: 1px solid var(--theme-color-monochrome-3);
-        cursor: pointer;
-        transition: opacity .3s ease;
       }
 
       .list-group-item span:focus, .list-group-item span:hover {
@@ -52,14 +31,68 @@
         float: left;
         width: 100%;
       }
-
-      .image-color {
-        width: 1.75em;
-        height: 1.75em;
-        border-radius: 2em;
-        pointer-events: none;
-      }
     </style>
+
+    <template is="dom-if" if="{{ isBrand('Maxi-Cosi') }}">
+      <style>
+        .list-group-item {
+          float: left;
+          border: 2px solid transparent;
+          border-radius: 2em;
+          padding: 2px;
+          transition: border .3s ease;
+          margin-right: .5em;
+        }
+
+        .list-group-item span {
+          display: block;
+          border-radius: 1em;
+          width: 1.75em;
+          height: 1.75em;
+          border: 1px solid var(--theme-color-monochrome-3);
+          cursor: pointer;
+          transition: opacity .3s ease;
+        }
+
+        .image-color {
+          width: 1.75em;
+          height: 1.75em;
+          border-radius: 2em;
+          pointer-events: none;
+        }
+     </style>
+    </template>
+
+    <template is="dom-if" if="{{ isBrand('Quinny') }}">
+      <style>
+        .list-group-item {
+          display: inline-block;
+          border: 2px solid transparent;
+          padding: 2px;
+          transition: border .3s ease;
+          margin-right: .5em;
+        }
+
+        .list-group-item span {
+          display: block;
+          width: 1.75em;
+          height: 1.75em;
+          border: 1px solid var(--theme-color-monochrome-3);
+          cursor: pointer;
+          transition: opacity .3s ease;
+        }
+
+        .color-name {
+          display: none;
+        }
+
+        .image-color {
+          width: 1.75em;
+          height: 1.75em;
+          pointer-events: none;
+        }
+      </style>
+    </template>
 
     <dorel-category-filter-manager
       id="categoryManager"
@@ -122,7 +155,8 @@
   </template>
 
   <script>
-    class DorelColorSwitcher extends ReduxMixin(Polymer.mixinBehaviors([DorelMultilingualBehavior, GtmBehavior], Polymer.Element)){
+    import '../utils/behaviors/single/dorel-multilingual-behavior.html';
+    class DorelColorSwitcher extends ReduxMixin(Polymer.mixinBehaviors([DorelMultilingualBehavior, GtmBehavior, ConditionalBehaviors], Polymer.Element)){
 
       static get is() { return 'dorel-color-switcher'; }
 
@@ -160,8 +194,11 @@
        * @param {array} old colors
        */
       _setColors(newColorsData, oldColorsData) {
-        if (!newColorsData || JSON.stringify(newColorsData) === JSON.stringify(oldColorsData)) return;
-        this._setCurrentColor(newColorsData[0]);
+        if (!newColorsData || JSON.stringify(newColorsData) === JSON.stringify(oldColorsData) || !this.filters || !this.filters[0]) return;
+        const color = newColorsData.find(color => color.color.name === this.filters[0].values[0].value);
+        if (color) {
+          this._setCurrentColor(color);
+        }
       }
 
       /**

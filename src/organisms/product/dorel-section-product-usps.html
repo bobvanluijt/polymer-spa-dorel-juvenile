@@ -1,5 +1,39 @@
 <dom-module id="dorel-section-product-usps">
   <template>
+    <template is="dom-if" if="{{ isBrand('Maxi-Cosi') }}">
+      <style>
+        .usp-title {
+          @apply(--theme-typography-3);
+          float: left;
+          width: 100%;
+        }
+
+        .usp-description {
+          float: left;
+          margin: .75em 0;
+        }
+      </style>
+    </template>
+
+    <template is="dom-if" if="{{ isBrand('Quinny') }}">
+      <style>
+        .usp-content {
+          text-align: center;
+        }
+
+        .usp-title {
+          @apply(--theme-typography-3);
+          float: left;
+          margin-bottom: .75em;
+          width: 100%;
+        }
+
+        .usp-description {
+          margin: .75em 0;
+        }
+      </style>
+    </template>
+
     <style>
       h1, h2, h3, h4 {
         @apply(--theme-header-text-transform);
@@ -13,17 +47,6 @@
 
       dorel-layout-row {
         margin-top: 0
-      }
-
-      .usp-title {
-        @apply(--theme-typography-3);
-        float: left;
-        width: 100%;
-      }
-
-      .usp-description {
-        float: left;
-        margin: .75em 0;
       }
 
       .usp-image {
@@ -44,11 +67,10 @@
 
     <dorel-layout-container
       tablet-medium-up$="{{breakpoints.tabletMediumUp}}">
-      <dorel-titling
-        title="[[localize('product_usps#title')]]"></dorel-titling>
       <template
         is="dom-if"
         if="[[uspsData.usps.length]]">
+        <dorel-titling title="[[localize('product_usps#title')]]"></dorel-titling>
         <dorel-layout-row>
           <template
             is="dom-repeat"

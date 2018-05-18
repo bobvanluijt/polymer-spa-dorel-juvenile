@@ -102,7 +102,11 @@
 
         <dorel-section-product-showcase
           accessory-scroll-handler="{{ accessoryScrollHandler }}"
-          showcase-data="[[ product ]]"></dorel-section-product-showcase>
+          showcase-data="[[ product ]]"
+          carfitting-enabled="[[carfittingEnabled]]"
+          reviews-scroll-handler="{{ reviewsScrollHandler }}"
+          showcase-data="[[ product ]]"
+          product-sku="[[ product.sku ]]"></dorel-section-product-showcase>
 
         <dorel-section-product-usps
           product-id="[[ product.id ]]"></dorel-section-product-usps>
@@ -120,13 +124,6 @@
         <dorel-section-product-topics
           product-id="[[ product.id ]]"></dorel-section-product-topics>
 
-        <template
-          is="dom-if"
-          if="[[ slideshowData.slides.length ]]">
-          <dorel-section-slideshow
-            slideshow-data="[[ slideshowData ]]"></dorel-section-slideshow>
-        </template>
-
         <dorel-section-product-accessories
           accessory-scroll-handler="{{ accessoryScrollHandler }}"
           category="[[ category ]]"
@@ -138,11 +135,21 @@
 
         <template
           is="dom-if"
-          if="[[_shouldShowReviews(reviewsConfig.toggle, reviewsConfig.merchant_id, reviewsConfig.api_key)]]">
+          if="[[_shouldShowReviews(reviewsConfig.toggle, reviewsConfig.merchant_id, reviewsConfig.read_api_key)]]">
           <dorel-section-product-reviews
             product-sku="[[product.sku]]"
+            product-name="[[product.name.value]]"
             reviews-sorting="[[reviewsConfig.sorting]]"
-            image-only="[[reviewsConfig.image_only]]"></dorel-section-product-reviews>
+            image-only="[[reviewsConfig.image_only]]"
+            reviews-scroll-handler="[[reviewsScrollHandler]]"
+            ></dorel-section-product-reviews>
+        </template>
+
+        <template
+          is="dom-if"
+          if="[[ product.slideshow.length ]]">
+          <dorel-section-slideshow
+            slideshow-data="[[ product.slideshow ]]"></dorel-section-slideshow>
         </template>
 
       </template>
@@ -179,6 +186,11 @@
             value: false,
           },
 
+          reviewsScrollHandler: {
+            type: Boolean,
+            value: false,
+          },
+
           /**
            * the category that will be used by product-collect
            */
@@ -193,9 +205,13 @@
           product: {
             type: Object,
             statePath: function(state) {
-              const product = state.product.products.find(product => product.url === this.routeData.productName);
+              let product;
+              if (this.routeData) {
+                product = state.product.products.find(product => product.url === this.routeData.productName);
+              }
               return product ? product : { isLoading: true };
-            }
+            },
+            observer: '_productChanged'
           },
 
           reviewsConfig: {
@@ -204,7 +220,24 @@
               if (!state.config.third_party || !state.config.third_party.length || !state.config.third_party[0].power_reviews) return;
               return state.config.third_party[0].power_reviews;
             }
-          }
+          },
+
+          /**
+           * array contains category ids which enables carFitting
+           */
+          carfittingCategories: {
+            type: Array,
+            statePath: function(state) {
+              if (!this.carfittingCategories || this.carfittingCategories.length === 0) {
+                const carfittingCategories = state.menu.carfittingEnabledCategories;
+                this._enableCarfitting(carfittingCategories);
+                return carfittingCategories;
+              }
+              return this.carfittingCategories;
+            }
+          },
+
+          carfittingEnabled: Boolean
         }
       }
 
@@ -250,6 +283,22 @@
 
       _shouldShowReviews(toggle, merchantId, apiKey) {
         return toggle && merchantId && apiKey;
+      }
+
+      _productChanged() {
+        this._enableCarfitting(this.carfittingCategories);
+      }
+
+      /**
+       * check if the current product belongs to a category which displays the carfitting CTA
+       *
+       * @param {carfittingCategories}
+       */
+      _enableCarfitting(carfittingCategories) {
+        if (carfittingCategories && carfittingCategories.length > 0 && this.product.categories) {
+          const carfittingEnabled = carfittingCategories.some(categoryId => this.product.categories.includes(categoryId));
+          this.set('carfittingEnabled', carfittingEnabled);
+        }
       }
     }
 

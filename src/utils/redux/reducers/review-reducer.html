@@ -3,9 +3,18 @@
     const initial = {
       reviews: [],
       currentReview: 'none',
+      reviewTemplate: {
+        form: null,
+        error: false
+      },
+      submitReview: {
+        success: false,
+        error: null,
+        isLoading: false
+      }
     };
 
-    reviewReducer = (state = initial, action) => {
+    window.reviewReducer = (state = initial, action) => {
       switch (action.type) {
 
         /**
@@ -39,21 +48,83 @@
                 }) : review;
             })
           });
+        /**
+         * adds more reviews to the current reviews appropiatly for this sku
+         */
+        case 'REQUEST_MORE_REVIEWS_SUCCESS':
+          return Object.assign({}, state, {
+            reviews: state.reviews.map(review => {
+              let newResults = [...review.results, ...action.payload.results[0].reviews];
+              return review.sku === action.payload.results[0].page_id ?
+                Object.assign({}, {
+                  paging: action.payload.paging,
+                  sku: action.payload.results[0].page_id,
+                  rollup: review.rollup,
+                  results: newResults,
+                  isLoading: false,
+                  isNotAvailable: false,
+                }) : review;
+            })
+          });
 
         /**
          * when the request fails set the object in the reviews for the designated sku
          */
         case 'REQUEST_REVIEW_FAILED':
-          console.log('REQUEST_REVIEW_FAILED');
           return Object.assign({}, state, {
             products: state.reviews.map(product => {
               return review.sku === action.payload.page_id ?
                 Object.assign({}, review, { isLoading: false, notAvailable: true }) : review;
             })
           });
+        /**
+         * add the form fetched from PowerReview write API
+         */
+        case 'GET_REVIEW_TEMPLATE_SUCCESS':
+          return Object.assign({}, state, {
+            reviewTemplate: {
+              form: action.payload,
+              error: false
+            }
+          });
+        case 'GET_REVIEW_TEMPLATE_FAILED':
+          return Object.assign({}, state, {
+            reviewTemplate: {
+              form: state.reviewTemplate.form,
+              error: true
+            }
+          });
 
-      default:
-        return state;
+        /**
+         * change the submitReview state
+         */
+       case 'SUBMIT_REVIEW':
+         return Object.assign({}, state, {
+           submitReview: {
+             success: false,
+             error: null,
+             isLoading: true
+           }
+         });
+        case 'SUBMIT_REVIEW_SUCCESS':
+          return Object.assign({}, state, {
+            submitReview: {
+              success: true,
+              error: null,
+              isLoading: false
+            }
+          });
+        case 'SUBMIT_REVIEW_FAILED':
+          return Object.assign({}, state, {
+            submitReview: {
+              success: false,
+              error: action.payload,
+              isLoading: false
+            }
+          });
+
+        default:
+          return state;
       }
     };
 }());

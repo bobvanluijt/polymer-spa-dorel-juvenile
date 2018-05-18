@@ -1,0 +1,173 @@
+<dom-module id="dorel-overlay-modal">
+  <template>
+    <style>
+      h1, h2, h3, h4 {
+        @apply(--theme-header-text-transform);
+      }
+
+      :host {
+        --paper-dialog-scrollable: {
+          padding: 0;
+        };
+      }
+
+      /* NOTE: All the !important use in this component is because paper-dialog
+      spacings can't be overwritten using the the shared styles.
+      Using the !important is ugly, but necessary in this case. */
+
+      paper-dialog {
+        top: 0;
+        left: 0;
+        height: 100vh;
+        width: 100vw;
+        margin: 0;
+        max-width: none !important;
+        max-height: none !important;
+        z-index: 10000 !important;
+        position: fixed;
+        font-size: var(--theme-base-font-size);
+      }
+
+      .container {
+        position: relative;
+        margin: 0 !important;
+        float: left;
+        width: 100%;
+        height: calc(100vh - 8rem);
+        padding: 0 !important;
+        box-sizing: border-box;
+      }
+
+      .header {
+        @apply(--layout-horizontal);
+        background-color: var(--theme-brand-color-1);
+        color: var(--theme-color-white);
+        margin: 0 !important;
+        float: left;
+        width: 100%;
+        padding-bottom: .8rem;
+        height: 8rem;
+      }
+
+      .title {
+        font-weight: var(--theme-typography-8_-_font-weight);
+        font-family: var(--theme-typography-8_-_font-family);
+        font-size: 2.1rem;
+      }
+
+      [mobile-small] .title {
+        font-size: 1.8rem;
+      }
+
+      [tablet-medium-up] .title {
+        font-size: 2.5rem;
+      }
+
+      .subtitle {
+        font-size: var(--theme-typography-4_-_font-size);
+        font-weight: var(--theme-typography-6_-_font-weight);
+        font-family: var(--theme-typography-6_-_font-family);
+      }
+
+      dorel-logo {
+        margin: 2.25em 0 2.25em 0;
+      }
+
+      p {
+        @apply(--theme-paragraph-text);
+        font-size: 16px;
+        max-width: 450px;
+      }
+
+      .close {
+        color: var(--theme-color-white);
+        position: absolute;
+        top: 1.25em;
+        right: .75em;
+        z-index: 99999;
+        cursor: pointer;
+        width: 2em;
+        height: 2em;
+      }
+
+      paper-dialog-scrollable {
+        float: left;
+        width: 100%;
+        height: 100%;
+      }
+
+      dorel-layout-container {
+        height: 100%;
+      }
+
+      [tablet-medium-up] .container {
+        height: calc(100vh - 9em);
+      }
+    </style>
+
+    <dorel-media-query breakpoints="{{ breakpoints }}"></dorel-media-query>
+
+    <section class="section-example-component"
+             tablet-medium-up$="{{ breakpoints.tabletMediumUp }}"
+             mobile-small$="{{ breakpoints.mobileSmall }}">
+
+      <paper-dialog id="dialog"
+                    always-on-top="true"
+                    dynamic-align="false"
+                    exit-animation="fade-out-animation"
+                    entry-animation="fade-in-animation"
+                    on-iron-overlay-opened="_disableDocumentScrolling"
+                    on-iron-overlay-closed="_restoreDocumentScrolling">
+        <div class="header">
+          <section>
+            <h1 class="title">[[title]]</h1>
+            <h2 class="subtitle">[[subtitle]]</h2>
+          </section>
+          <iron-icon dialog-dismiss
+                     class="close"
+                     role="button"
+                     icon="dorel-icons:close"></iron-icon>
+        </div>
+        <div class="container">
+          <dorel-layout-container>
+            <paper-dialog-scrollable>
+              <slot></slot>
+            </paper-dialog-scrollable>
+          </dorel-layout-container>
+        </div>
+      </paper-dialog>
+
+    </section>
+  </template>
+  <script>
+    import '../utils/behaviors/single/dorel-overlay-behavior.html';
+    class DorelOverlayModal extends ReduxMixin(Polymer.mixinBehaviors([OverlayBehavior, DorelMultilingualBehavior], Polymer.Element)) {
+      static get is() {
+        return 'dorel-overlay-modal';
+      }
+
+      static get properties() {
+        return {
+          title: {
+            type: String,
+            value: ''
+          },
+          subtitle: {
+            type: String,
+            value: ''
+          }
+        }
+      }
+
+      /**
+       * @name open
+       * @description Opens the multilingual dialog
+       */
+      open() {
+        this.$.dialog.open();
+      }
+    };
+
+    customElements.define(DorelOverlayModal.is, DorelOverlayModal);
+  </script>
+</dom-module>

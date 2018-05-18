@@ -5,12 +5,127 @@
 
 <dom-module id="dorel-section-product-showcase">
   <template>
+    <template is="dom-if" if="{{ isBrand('Maxi-Cosi') }}">
+      <style>
+        .showcase-product-specs {
+          @apply(--theme-typography-1);
+          margin-top: 0;
+          list-style: none;
+          float: left;
+          padding: 0;
+          width: initial;
+        }
+
+        .showcase-product-specs li {
+          margin-right: 1em;
+          float: left;
+          width: auto;
+        }
+
+        .actions, .award-section, .color-container {
+          -ms-flex-preferred-size: 100%;
+          flex-basis: 100%;
+          max-width: 100%;
+          float: left;
+          width: 100%;
+          display: flex;
+          justify-content: flex-start;
+          text-align: left;
+        }
+
+        .actions dorel-cta {
+          margin: 1.5em 1em 0 0;
+          float: left;
+        }
+
+        dorel-color-switcher {
+          text-align: left;
+        }
+
+        .showcase-title, .showcase-product-specs, dorel-expandable-content {
+          float: left;
+          text-align: left;
+        }
+
+        dorel-expandable-content {
+          margin-top: 1em;
+        }
+
+        .actions dorel-cta:first-child {
+          margin-left: 0;
+        }
+      </style>
+    </template>
+
+    <template is="dom-if" if="{{ isBrand('Quinny') }}">
+      <style>
+        .showcase-column {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+        }
+
+        .showcase-product-specs {
+          @apply(--theme-typography-1);
+          margin-top: 0;
+          list-style: none;
+          display: flex;
+          flex-direction: row;
+          justify-content: center;
+          padding: 0;
+          width: initial;
+        }
+
+        .showcase-product-specs li {
+          margin-right: 1em;
+          width: auto;
+        }
+
+        .actions, .award-section, .color-container {
+          -ms-flex-preferred-size: 100%;
+          max-width: 100%;
+          float: left;
+          width: 100%;
+          display: flex;
+          justify-content: center;
+          text-align: left;
+        }
+
+        .actions dorel-cta {
+          margin: 1.5rem .5rem 0 0;
+        }
+
+        dorel-color-switcher {
+          text-align: center;
+        }
+
+        .showcase-title, .showcase-product-specs, dorel-expandable-content {
+          float: left;
+          text-align: center;
+        }
+
+        dorel-expandable-content {
+          margin-top: 1em;
+          padding: 0 5vw;
+        }
+
+        .cta-related-products {
+          display: none;
+        }
+
+        .award-section,
+        .award-section.dorel-section-product-showcase {
+          display: none;
+        }
+      </style>
+    </template>
+
     <style>
       h1, h2, h3, h4 {
         @apply(--theme-header-text-transform);
       }
 
-     dorel-layout-column {
+      dorel-layout-column {
         margin-top: 0;
       }
 
@@ -21,62 +136,13 @@
         width: 100%;
       }
 
-      .showcase-product-specs {
-        @apply(--theme-typography-1);
-        margin-top: 0;
-        list-style: none;
-        float: left;
-        padding: 0;
-        width: initial;
-      }
-
-      .showcase-product-specs li {
-        margin-right: 1em;
-        float: left;
-        width: auto;
-      }
-
       .label {
         display: block;
         font-weight: var(--theme-font-weight-bold);
       }
 
-      .actions, .award-section, .color-container {
-        -ms-flex-preferred-size: 100%;
-        flex-basis: 100%;
-        max-width: 100%;
-        float: left;
-        width: 100%;
-        display: flex;
-        justify-content: flex-start;
-        text-align: left;
-      }
-
-      dorel-color-switcher {
-        text-align: left;
-      }
-
-      .showcase-title, .showcase-product-specs, dorel-expandable-content {
-        float: left;
-        text-align: left;
-
-      }
-
       .showcase-product-specs {
         margin-top: 1.5em;
-      }
-
-      dorel-expandable-content {
-        margin-top: 1em;
-      }
-
-      .actions dorel-cta {
-        margin: 1.5em 1em 0 0;
-        float: left;
-      }
-
-      .actions dorel-cta:first-child {
-        margin-left: 0;
       }
 
       .actions dorel-cta:last-child {
@@ -146,6 +212,19 @@
         content: '';
         clear: both;
       }
+
+      .link {
+        color: var(--theme-button-link_-_color);
+      }
+
+      .link:hover {
+        cursor: pointer;
+        color: var(--theme-brand-color-1);
+      }
+
+      .rating-container {
+        line-height: 2.5rem;
+      }
     </style>
 
     <dorel-wp-collect-templates
@@ -187,12 +266,24 @@
           <dorel-layout-column
             desktop-column-span="6"
             tablet-column-span="6"
-            mobile-column-span="12">
+            mobile-column-span="12"
+            class="showcase-column">
 
             <template
               is="dom-if"
               if="[[_hasValue(showcaseData.name.value)]]">
               <h1 class="showcase-title">[[showcaseData.name.value]]</h1>
+            </template>
+
+            <template
+              is="dom-if"
+              if="[[reviewsRollup.average_rating]]">
+              <div class="rating-container">
+                <dorel-product-review-stars
+                  number-of-stars="[[reviewsRollup.rating_histogram.length]]"
+                  rating="[[reviewsRollup.average_rating]]"></dorel-product-review-stars>
+                <span class="link" on-click="_reviewsCountClicked">[[reviewsRollup.review_count]] [[localize('reviews_rating-overview#reviews')]]</span>
+              </div>
             </template>
 
             <!-- Product Specs -->
@@ -257,7 +348,6 @@
                   type="primary"
                   title="[[localize('cta#find_a_store')]]"
                   on-click="_openLightbox"
-                  link=""
                   size="medium"
                   icon="dorel-icons:chevron-right">[[localize('cta#find_a_store')]]</dorel-cta>
                 <dorel-showcase-lead-generation-lightbox
@@ -281,7 +371,7 @@
 
               <template
                 is="dom-if"
-                if="[[_showCflCta(carFittingToolPage)]]">
+                if="[[carfittingShown]]">
                 <!-- CFL CTA -->
                 <dorel-cta
                   type="secondary"
@@ -300,7 +390,8 @@
                   title="[[localize('View_Accessories')]]"
                   on-click="_viewAccessories"
                   size="medium"
-                  icon="dorel-icons:expand-more">
+                  icon="dorel-icons:expand-more"
+                  class="cta-related-products">
                   [[localize('View_Related_Products')]]
                 </dorel-cta>
               </template>
@@ -354,6 +445,11 @@
             notify: true
           },
 
+          reviewsScrollHandler: {
+            type: Boolean,
+            notify: true
+          },
+
           /**
            * @attribute
            * @name showcaseData
@@ -380,6 +476,33 @@
           slides: {
             type: Array,
             value: []
+          },
+
+          /**
+           * enable the carfitting button
+           */
+          carfittingEnabled: {
+            type: Boolean,
+            observer: '_carfittingEnabledChanged'
+          },
+
+          carFittingToolPage: {
+            type: String,
+            observer: '_carFittingToolPageChanged'
+          },
+
+          carfittingShown: Boolean,
+          productSku: String,
+
+          /**
+           * the rating and count of reviews
+           */
+          reviewsRollup: {
+            type: Array,
+            statePath: function(state) {
+              const review = state.review.reviews.find(review => review.sku === this.get('productSku'));
+              return review ? review.rollup : {};
+            }
           }
         };
       }
@@ -454,14 +577,23 @@
         return (typeof pageObject !== 'undefined' && pageObject !== '' && this._hasProperties(pageObject) && !hatchToggle);
       }
 
+      _carfittingEnabledChanged(carfittingEnabled) {
+        this.set('carfittingShown', this._showCfl(this.carFittingToolPage, carfittingEnabled));
+      }
+
+      _carFittingToolPageChanged(carFittingToolPage) {
+        this.set('carfittingShown', this._showCfl(carFittingToolPage, this.carfittingEnabled));
+      }
+
       /**
        * check to see if a cfl page is set and returns a boolean
        *
-       * @param {object} the page object containing the cfl page
+       * @param {carFittingToolPage} the page object containing the cfl page
+       * @param {carfittingEnabled} boolean enable carfitting
        * @return Boolean
        */
-      _showCflCta(pageObject) {
-        return (typeof pageObject !== 'undefined' && pageObject !== '' && this._hasProperties(pageObject));
+      _showCfl(carFittingToolPage, carfittingEnabled) {
+        return (typeof carFittingToolPage !== 'undefined' && carFittingToolPage !== '' && this._hasProperties(carFittingToolPage) && carfittingEnabled);
       }
 
       /**
@@ -500,7 +632,9 @@
        */
       _createStoreLocatorLink(pageObject) {
         const urlArr = window.location.href.split('/');
-        return `${urlArr[0]}//${urlArr[2]}/${urlArr[3]}/${pageObject.post_name}`;
+        const temp = `${urlArr[0]}//${urlArr[2]}/${urlArr[3]}/${pageObject.post_name}`;
+        console.log(temp);
+        return temp;
       }
 
       /**
@@ -511,6 +645,13 @@
       _createCarFittingListLink(pageObject, productData) {
         const urlArr = window.location.href.split('/');
         return `${urlArr[0]}//${urlArr[2]}/${urlArr[3]}/${pageObject.post_name}?product=${productData.url}` ;
+      }
+
+      /**
+       * handler when clicking on the review count
+       */
+      _reviewsCountClicked() {
+        this.reviewsScrollHandler = !this.reviewsScrollHandler;
       }
     }
     customElements.define(DorelSectionProductShowcase.is, DorelSectionProductShowcase);

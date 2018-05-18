@@ -3,18 +3,29 @@
     <style>
       time {
         float: right;
+        opacity: .4;
+      }
+
+      .article {
+        margin-bottom: 2rem;
       }
 
       .article-body {
         margin-bottom: 1.5em;
+        margin-top: -.5rem;
       }
 
-      footer {
+      .footer {
         margin-bottom: 1.5em;
+        @apply(--theme-typography-1);
+      }
+
+      .brand-label {
+        font-weight: var(--theme-font-weight-bold);
       }
     </style>
 
-    <article>
+    <article class="article">
       <header>
         <dorel-product-review-stars
           rating="[[rating]]"
@@ -31,13 +42,20 @@
         <div>[[description]]</div>
       </div>
 
-      <footer>
+      <footer class="footer">
         <span>[[author]], [[location]]</span>
       </footer>
+
+      <template is="dom-if" if="[[merchantResponse]]">
+        <p><span class="brand-label">[[brand]]: </span>[[merchantResponse]]</p>
+      </template>
+
     </article>
   </template>
 
   <script>
+    import '../../../utils/behaviors/bundled/dorel-date-behaviors.html';
+    import '../../../utils/behaviors/single/dorel-merge-arrays-behavior.html';
 
     class DorelProductReviews extends ReduxMixin(Polymer.mixinBehaviors([MergeArraysBehavior, DateBehaviors], Polymer.Element)) {
 
@@ -56,7 +74,12 @@
           helpfulVotes: Number,
           notHelpfulVotes: Number,
           ratingPercentage: Number,
-          numberOfStars: Number
+          numberOfStars: Number,
+          brand: {
+            type: String,
+            statePath: 'config.brand.label'
+          },
+          merchantResponse: String
         }
       }
     };

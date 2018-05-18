@@ -30,8 +30,12 @@
     if (!categories && !categories.length) return;
 
     return (dispatch, getState) => {
-      const categoryIds = categories.map(category => shouldFetchCategory(getState(), category) ? category : '');
-
+      const categoryIds = categories.reduce((arr, category) => {
+        if (shouldFetchCategory(getState(), category)) {
+          arr.push(category);
+        }
+        return arr;
+      }, []);
       if (categoryIds && categoryIds.length) {
         dispatch(makeProductsRequestByCategories(categoryIds));
         return dispatch(fetchProductsByCategories(getState(), categories));
@@ -178,7 +182,7 @@
       return response;
   }
 
-  productByCategoryActions = {
+ window. productByCategoryActions = {
     requestProductsByCategory,
     requestProductsByCategories
   }

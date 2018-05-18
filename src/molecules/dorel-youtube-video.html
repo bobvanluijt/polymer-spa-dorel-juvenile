@@ -1,6 +1,3 @@
-<link rel="import" href="../../node_modules/google-youtube/google-youtube.html">
-<link rel="import" href="../atoms/dorel-bynder-responsive-image.html">
-
 <dom-module id="dorel-youtube-video">
   <template>
     <style is="custom-style">
@@ -42,7 +39,7 @@
         opacity: 1;
       }
 
-      dorel-bynder-responsive-image {
+      dorel-responsive-image, dorel-bynder-responsive-image {
         width: 100%;
         height: 100%;
         position: absolute;
@@ -88,10 +85,21 @@
           An error occurred while playing your video. Check the video id or try again.
         </template>
 
-        <dorel-bynder-responsive-image
-          sizing="contain"
-          media-id="[[thumbnail]]"
-          image-type="[[imageType]]"></dorel-bynder-responsive-image>
+        <template is="dom-if" if="[[!showYoutubeImage]]">
+          <dorel-bynder-responsive-image
+            sizing="contain"
+            media-id="[[thumbnail]]"
+            image-type="[[imageType]]"></dorel-bynder-responsive-image>
+        </template>
+
+        <template is="dom-if" if="[[showYoutubeImage]]">
+          <dorel-responsive-image
+            image-type="[[imageType]]"
+            image-sources="[[youtubeImageSources]]"
+            is-loading="[[playing]]"
+            sizing="contain"
+            youtube-thumbnail></dorel-responsive-image>
+        </template>
       </div>
   </template>
 
@@ -103,8 +111,15 @@
       static get properties() {
         return {
           autoplay: Number,
-          thumbnail: String,
-          videoId: String,
+          thumbnail: {
+            type: String,
+            observer: "_thumbnailChanged"
+          },
+          videoId: {
+            type:String,
+            reflectToAttribute: true,
+            observer: '_videoIdChanged'
+          },
           playSupported: Boolean,
           state: Number,
           currentTime: Number,
@@ -132,6 +147,13 @@
             type: Boolean,
             value: false,
             notify: true
+          },
+          showYoutubeImage: {
+            type: Boolean,
+            value: true
+          },
+          youtubeImageSources: {
+            type: Object
           }
         }
       }
@@ -154,6 +176,24 @@
         }
       }
 
+      _videoIdChanged(value) {
+        if(value) {
+          this.set('youtubeImageSources', {
+            "large-landscape": `https://img.youtube.com/vi/${this.videoId}/maxresdefault.jpg`,
+            "large-portrait": `https://img.youtube.com/vi/${this.videoId}/maxresdefault.jpg`,
+            "placeholder": `https://img.youtube.com/vi/${this.videoId}/hqdefault.jpg`,
+            "small-landscape": `https://img.youtube.com/vi/${this.videoId}/maxresdefault.jpg`,
+            "small-portrait": `https://img.youtube.com/vi/${this.videoId}/maxresdefault.jpg`
+          });
+        }
+      }
+
+      _thumbnailChanged(thumbnail) {
+        if (thumbnail.length > 0) {
+          this.set('showYoutubeImage', false);
+        }
+      }
+
       /**
        * loop video the video when the state ends
        */
@@ -169,7 +209,6 @@
        * when an error occurs set the `videoError` variable to true
        */
       handleYouTubeError() {
-        // console.error('YouTube playback error', ev.detail);
         this.set('videoError', true);
       }
 

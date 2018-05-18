@@ -1,5 +1,3 @@
-<script src="https://cdnjs.cloudflare.com/ajax/libs/iframe-resizer/3.5.15/iframeResizer.min.js"></script>
-
 <dom-module id="dorel-iframe">
   <template>
     <style>
@@ -73,7 +71,10 @@
           /**
            * the url of the iframe
            */
-          url: String,
+          url: {
+            type: String,
+            observer: '_urlChanged'
+          },
 
           /**
            * the page to redirect to on form success
@@ -115,12 +116,20 @@
       }
 
       /**
-       * @description when the component is ready it will create
-       * the iframe with the given parameters as attributes
+       * @description remove the old iframe form and add the new one
+       * when the url is changed
        */
-      ready() {
-        super.ready();
+      _urlChanged(newUrl) {
+        if (this.$$('#iframe-id')) {
+          this.$$('#iframe-wrap').removeChild(this.$$('#iframe-id'));
+        }
+        this._addIframe();
+      }
 
+      /**
+       * @description create the iframe with the given parameters as attributes
+       */
+      _addIframe() {
         this.set('iframe', document.createElement('iframe'));
 
         const iframe = this.get('iframe');
@@ -147,6 +156,7 @@
 
         wrap.appendChild(iframe);
       }
+
     }
     customElements.define(DorelIframe.is, DorelIframe);
   </script>

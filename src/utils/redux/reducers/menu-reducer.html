@@ -1,12 +1,18 @@
 <script>
   (function() {
-    const initial = { items: [] };
+    const initial = {
+      items: [],
+      carfittingEnabledCategories: []
+    };
 
-    menuReducer = (state = initial, action) => {
+    window.menuReducer = (state = initial, action) => {
       switch (action.type) {
         case 'ADD_MENU':
           return Object.assign({}, state, {items: action.payload});
-
+        case 'CREATE_CARFITTING_ENABLED_CATEGORIES':
+          return Object.assign({}, state, {
+            carfittingEnabledCategories: [...state.carfittingEnabledCategories, ...action.payload]
+          });
       default:
         return state;
       }

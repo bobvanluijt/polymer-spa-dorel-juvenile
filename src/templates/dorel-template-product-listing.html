@@ -25,16 +25,22 @@
       }
 
     </style>
+    <dorel-media-query breakpoints="{{ breakpoints }}"></dorel-media-query>
 
     <!-- section-header -->
-    <template is="dom-if" if="[[templateData.acf.hero_header.length]]">
-      <dorel-section-header section-header-data="[[heroHeader]]"></dorel-section-header>
+    <template
+      is="dom-if"
+      if="[[selected]]"
+      restamp>
+      <template is="dom-if" if="[[templateData.acf.hero_header.length]]">
+        <dorel-section-header section-header-data="[[heroHeader]]"></dorel-section-header>
+      </template>
     </template>
     <!--// section-header -->
 
     <dorel-section-page-nav breadcrumbs-toggle="true" rendered-count="{{renderedCount}}"></dorel-section-page-nav>
 
-    <dorel-layout-container>
+    <dorel-layout-container tablet-medium-up$="[[ breakpoints.tabletMediumUp ]]">
       <dorel-layout-row align="left">
 
         <!-- Sidebar -->
@@ -42,14 +48,17 @@
           <dorel-layout-column desktop-column-span="3" tablet-column-span="5" mobile-column-span="12">
 
             <template is="dom-if" if="[[leftSidebar.productSubCategories.toggle]]">
-              <dorel-accordion-item heading="[[localize('Subcategories')]]" opened small>
+              <dorel-accordion-item heading="[[localize('Subcategories')]]" opened="[[ filterOpened ]]" small>
                 <dorel-category-submenu items="[[leftSidebar.productSubCategories.sub_categories]]">
                 </dorel-category-submenu>
               </dorel-accordion-item>
             </template>
 
             <template is="dom-if" if="[[leftSidebar.filters.toggle]]">
-              <dorel-accordion-item heading="[[localize('Filters')]]" opened small>
+              <dorel-accordion-item
+                small
+                opened="[[ filterOpened ]]"
+                heading="[[localize('Filters')]]">
                 <dorel-category-filter filter-data="[[leftSidebar.filters.filter_groups]]" retrieving-products="[[retrievingProducts]]" product-data="[[products]]">
                 </dorel-category-filter>
               </dorel-accordion-item>
@@ -94,14 +103,15 @@
            */
           products: {
             type: Array,
-            statePath: function (state) {
-              if (!this.get('categories') ||
-                !this.get('categories').length ||
+            statePath(state) {
+              const categories = this.get('categories');
+              if (!categories ||
+                !categories.length ||
                 !state.product ||
                 !state.product.products.length) return;
 
               // (TODO) the wp category ids array items are strings, convert them to integers to compare with the magento product category ids
-              const wpCatIdsToInt = this.get('categories').map(category => parseInt(category));
+              const wpCatIdsToInt = categories.map(category => parseInt(category));
 
               // filter the products and get only the products that comply to the wp categories defined for this page
               const filteredProds = state.product.products.filter(product => {
@@ -169,8 +179,19 @@
           /**
            * the left sidebar data coming from Wordpress
            */
-          leftSidebar: Object
+          leftSidebar: Object,
+
+          /**
+           * false/true depending on mobile/desktop
+           */
+          filterOpened: Boolean,
+          selected: Boolean
         };
+      }
+
+      ready() {
+        super.ready();
+        this.set('filterOpened', this.breakpoints.tabletMediumUp ? true : false);
       }
 
       /**

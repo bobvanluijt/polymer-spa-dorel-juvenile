@@ -1,5 +1,3 @@
-<link rel="import" href="../../node_modules/polymer-cookie/polymer-cookie.html">
-
 <dom-module id="dorel-cookie-notification">
   <template>
     <style is="custom-style">
@@ -72,8 +70,8 @@
                 if="[[cookieInformationLink]]">
                 <a class="dorel-cookie-notification__more-info"
                   href="[[cookieInformationLink]]"
-                  target="_blank"
-                >[[localize('cookie_notification#link')]]</a>
+                  target="[[cookieInformationLinkTarget]]"
+                >[[cookieInformationLinkTitle]]</a>
               </template>
             </p>
 
@@ -141,7 +139,31 @@
           cookieInformationLink: {
             type: String,
             statePath: function(state) {
-              return state.config.cookie.information_link;
+              return state.config.cookie.information_link ? state.config.cookie.information_link.url : '';
+            }
+          },
+
+          /**
+           * @attribute
+           * @name cookieInformationLinkTitle
+           * @description holds the link text
+           */
+          cookieInformationLinkTitle: {
+            type: String,
+            statePath: function(state) {
+              return state.config.cookie.information_link ? state.config.cookie.information_link.title : '';
+            }
+          },
+
+          /**
+           * @attribute
+           * @name cookieInformationLinkTarget
+           * @description holds the target for more information defined in Wordpress
+           */
+          cookieInformationLinkTarget: {
+            type: String,
+            statePath: function(state) {
+              return state.config.cookie.information_link ? state.config.cookie.information_link.target : '';
             }
           },
 

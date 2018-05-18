@@ -7,24 +7,44 @@
       .star {
         display: inline-block;
       }
+
+      .star.interactive:hover {
+        cursor: pointer;
+      }
+
       .star iron-icon {
         height: 1.2rem;
         width: 1.2rem;
-        color: var(--theme-brand-color-1);
+        color: var(--theme-button-primary_-_background-color);
+        vertical-align: sub;
       }
       .star[large-mode] iron-icon {
         height: 2rem;
         width: 2rem;
       }
+
+      .star.interactive iron-icon {
+        font-weight: var(--theme-font-weight-light);
+        color: var(--theme-color-black);
+      }
+
+      :host([invalid]) .container {
+        @apply(--theme-color-error-box);
+        border-radius: 1rem;
+        box-sizing: border-box;
+        padding: 1rem;
+      }
     </style>
-    <template
-      is="dom-repeat"
-      items="[[stars]]"
-      as="star">
-      <div class="star" large-mode$="[[ largeMode ]]">
-        <iron-icon icon="dorel-icons:star-[[star.type]]"></iron-icon>
-      </div>
-    </template>
+    <div class="container" invalid$="{{invalid}}">
+      <template
+        is="dom-repeat"
+        items="[[stars]]"
+        as="star">
+        <div class$="star [[classAddition]]" large-mode$="[[ largeMode ]]" invalid$="{{invalid}}">
+          <iron-icon icon="dorel-icons:star-[[star.type]]" on-click="_setRating"></iron-icon>
+        </div>
+      </template>
+    </div>
 
     <template
       is="dom-if"
@@ -67,6 +87,7 @@
           rating: {
             type: Number,
             value: 5,
+            notify: true,
             observer: '_ratingChanged'
           },
 
@@ -84,6 +105,21 @@
           showRating: {
             type: Boolean,
             value: false
+          },
+
+          interactiveEnabled: {
+            type: Boolean,
+            value: false
+          },
+
+          classAddition: {
+            type: String,
+            value: ''
+          },
+
+          invalid: {
+            type: Boolean,
+            reflectToAttribute: true
           }
 
         }
@@ -127,6 +163,12 @@
           return 'half'
         } else {
           return 'empty';
+        }
+      }
+
+      _setRating(e) {
+        if (this.interactiveEnabled) {
+          this.set('rating', e.model.__data.index + 1);
         }
       }
     };

@@ -1,15 +1,25 @@
-<link rel="import" href="../../node_modules/iron-collapse/iron-collapse.html">
-
 <dom-module id="dorel-expandable-content">
   <template>
+    <template is="dom-if" if="{{ isBrand('Maxi-Cosi') }}">
+      <style>
+        dorel-cta {
+          float: left;
+          clear: both;
+        }
+      </style>
+    </template>
+
+    <template is="dom-if" if="{{ isBrand('Quinny') }}">
+      <style>
+        dorel-cta {
+          clear: both;
+        }
+      </style>
+    </template>
+
     <style>
       h1, h2, h3, h4 {
         @apply(--theme-header-text-transform);
-      }
-
-      dorel-cta {
-        float: left;
-        clear: both;
       }
 
       dorel-safe-html {
@@ -44,7 +54,6 @@
             <dorel-cta title="Read more"
                        on-click="_toggle"
                        type="link"
-                       link=""
                        size="medium"
                        icon="dorel-icons:expand-more">
               {{ localize('Read_More') }}
@@ -55,7 +64,6 @@
             <dorel-cta title="Read less"
                        on-click="_toggle"
                        type="link"
-                       link=""
                        size="medium"
                        icon="dorel-icons:expand-less">
               {{ localize('Read_Less') }}
@@ -75,7 +83,8 @@
       is: 'dorel-expandable-content',
 
       behaviors: [
-        DorelMultilingualBehavior
+        DorelMultilingualBehavior,
+        ConditionalBehaviors
       ],
 
       properties: {
@@ -122,4 +131,3 @@
 
   </script>
 </dom-module>
-

@@ -40,6 +40,12 @@
         --theme-color-error: red;
         --theme-color-active: var(--theme-brand-complementary-color-1);
 
+        --theme-color-error-box: {
+          background-color: #f2dede;
+          border-color: #ebccd1;
+          color: var(--theme-color-error);
+        }
+
         /* ------------------------------------------------
          * Header, Menu
          */
@@ -535,12 +541,12 @@
           -webkit-appearance: none;
           -moz-appearance: none;
           padding-right: 20px;
-          background: rgba(255,255,255,1) url('/assets/icons/chevron-down.svg') no-repeat 98% 50%;
+          background: rgba(255,255,255,1) url('../../../assets/icons/chevron-down.svg') no-repeat 98% 50%;
           transition: color .3s ease, border-color .3s ease;
         };
 
         --theme-form-select-disabled: {
-          background: rgba(255,255,255,1) url('/assets/icons/chevron-down-disabled.svg') no-repeat 98% 50%;
+          background: rgba(255,255,255,1) url('../../../assets/icons/chevron-down-disabled.svg') no-repeat 98% 50%;
         };
 
         --theme-form-select-active: {
@@ -579,8 +585,8 @@
         --theme-logo-height: 4.5em;
         --theme-logo-mobile-width: 14em;
         --theme-logo-mobile-height: 3em;
-        --theme-logo: url('/assets/images/logos/logo-dorel.svg') no-repeat center center;
-        --theme-logo-alternative: url('/assets/images/logos/logo-dorel.svg') no-repeat center center;
+        --theme-logo: url('../../../assets/images/logos/logo-dorel.svg') no-repeat center center;
+        --theme-logo-alternative: url('../../../assets/images/logos/logo-dorel.svg') no-repeat center center;
 
         --max-width-limit: 1280px;
 

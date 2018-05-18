@@ -1,0 +1,17 @@
+<script>
+/**
+* @polymerBehavior
+*/
+window.IsBrandBehavior = {
+  /**
+   * @name isBrand
+   * @description checks if the current website brand selection is equal to the brand argument
+   * @param brand - String
+   */
+  isBrand: function(brand) {
+    const label = window.CONFIG.AVAILABLE_BRANDS[window.CONFIG.SELECTED_BRAND].label;
+    if (brand === 'Maxi-Cosi' && label === 'Bebe-Confort') return true;
+    return (label === brand);
+  }
+};
+</script>

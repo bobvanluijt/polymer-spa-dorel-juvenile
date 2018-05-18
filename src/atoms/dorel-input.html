@@ -1,7 +1,3 @@
-<link rel="import" href="dorel-input-error.html">
-<link rel="import" href="../../node_modules/iron-form-element-behavior/iron-form-element-behavior.html">
-<link rel="import" href="../../node_modules/iron-input/iron-input.html">
-
 <dom-module id="dorel-input">
   <template>
     <style>
@@ -29,6 +25,7 @@
       }
       :host([invalid]) input {
         @apply(--theme-form-input-error);
+        background-color: var(--theme-color-error-background);
       }
       :host([invalid]) label {
         @apply(--theme-form-input-error-label);

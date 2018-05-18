@@ -1,52 +1,7 @@
 <link rel="import" href="../node_modules/polymer/polymer.html">
-<link rel="import" href="../node_modules/app-route/app-location.html">
-<link rel="import" href="../node_modules/app-route/app-route.html">
-<link rel="import" href="../node_modules/iron-ajax/iron-ajax.html">
-<link rel="import" href="../node_modules/iron-flex-layout/iron-flex-layout.html">
-<link rel="import" href="../node_modules/iron-flex-layout/iron-flex-layout-classes.html">
-<link rel="import" href="../node_modules/iron-media-query/iron-media-query.html">
-<link rel="import" href="../node_modules/iron-pages/iron-pages.html">
-
-<!-- !!! IMPORTANT - don't move !!!! -->
 <link rel="import" href="utils/redux/dorel-redux.html">
-<link rel="import" href="organisms/dorel-header.html">
-<!-- UTILS - BEHAVIORS -->
-<link rel="import" href="utils/behaviors/bundled/dorel-conditional-behaviors.html">
-<link rel="import" href="utils/behaviors/bundled/dorel-date-behaviors.html">
-<link rel="import" href="utils/behaviors/bundled/dorel-template-behaviors.html">
-<link rel="import" href="utils/behaviors/single/dorel-gtm-behavior.html">
-<link rel="import" href="utils/behaviors/single/dorel-multilingual-behavior.html">
-<link rel="import" href="utils/behaviors/single/dorel-social-behavior.html">
-<!-- UTILS - COLLECTS -->
-<link rel="import" href="utils/collects/dorel-wp-collect-templates.html">
-<!-- UTILS - MANAGERS -->
-<link rel="import" href="utils/managers/dorel-brand-manager.html">
-<link rel="import" href="utils/managers/dorel-meta-manager.html">
-<link rel="import" href="utils/managers/dorel-multilingual-manager.html">
-<!-- UTILS - GENERIC -->
-<link rel="import" href="utils/dorel-main-menu-creator.html">
-<link rel="import" href="utils/dorel-routing.html">
-<!--// !!! IMPORTANT - don't move !!!! -->
-
-<!-- ATOMS -->
-<link rel="import" href="atoms/dorel-grid-overlay.html">
-<link rel="import" href="atoms/dorel-media-query.html">
-<link rel="import" href="atoms/dorel-safe-html.html">
-<link rel="import" href="atoms/layout/dorel-layout-column.html">
-<link rel="import" href="atoms/layout/dorel-layout-container.html">
-<link rel="import" href="atoms/layout/dorel-layout-row.html">
-
-<!-- MOLECULES -->
-<link rel="import" href="molecules/dorel-cookie-notification.html">
-
-<!-- ORGANISMS -->
-<link rel="import" href="organisms/dorel-header.html">
-<link rel="import" href="organisms/dorel-section-cards.html">
-<link rel="import" href="organisms/dorel-section-cta.html">
-<link rel="import" href="organisms/dorel-section-hero-header.html">
-<link rel="import" href="organisms/dorel-section-heroes.html">
-
-<!-- TEMPLATES -->
+<link rel="import" href="dorel-app-resources.html">
+<link rel="import" href="./themes/maxi-cosi.html">
 <link rel="import" href="templates/dorel-template-home.html">
 
 <!-- DOREL-APP -->
@@ -96,8 +51,8 @@
 
     <dorel-main-menu-creator></dorel-main-menu-creator>
 
-    <google-tag-manager
-      cid="GTM-TW3TM86"></google-tag-manager>
+    <!--<google-tag-manager-->
+    <!--  cid="GTM-TW3TM86"></google-tag-manager>-->
 
     <dorel-third-party></dorel-third-party>
 
@@ -136,7 +91,8 @@
 
       <iron-pages
         selected="[[currentPage.template]]"
-        attr-for-selected="name">
+        attr-for-selected="name"
+        selected-attribute="selected">
 
         <dorel-template-product-about
           name="product-about"
@@ -203,6 +159,11 @@
           name="form-success"
           template-data="[[currentPage]]"></dorel-template-form-success>
 
+        <dorel-template-submit-your-review
+          name="submit-your-review"
+          route="[[subroute]]"
+          template-data="[[currentPage]]"></dorel-template-submit-your-review>
+
         <dorel-template-component-guide
           name="component-guide"
           grid="[[grid]]"
@@ -242,6 +203,8 @@
   </template>
 
   <script>
+    __webpack_public_path__ = "/";
+
     // performance logging
     window.performance && performance.mark && performance.mark('dorel-app - before register');
 
@@ -336,6 +299,60 @@
           wpUrl: {
             type: String,
             statePath: 'config.wpUrl'
+          },
+
+          lazyPages: {
+            type: Object,
+            value: {
+              'view-404': function() {
+                import(/* webpackChunkName: "dorel-template-404" */ './templates/dorel-template-404.html');
+              },
+              'view-accessory-detail': function() {
+                import(/* webpackChunkName: "dorel-template-accessory-detail" */ './templates/dorel-template-accessory-detail.html');
+              },
+              'view-component-guide': function() {
+                import(/* webpackChunkName: "dorel-template-component-guide" */ './templates/dorel-template-component-guide.html');
+              },
+              'view-faq-detail': function() {
+                import(/* webpackChunkName: "dorel-template-faq-detail" */ './templates/dorel-template-faq-detail.html');
+              },
+              'view-faq-overview': function() {
+                import(/* webpackChunkName: "dorel-template-faq-overview.html" */ './templates/dorel-template-faq-overview.html');
+              },
+              'view-form-success': function() {
+                import(/* webpackChunkName: "dorel-template-form-success.html" */ './templates/dorel-template-form-success.html');
+              },
+              'view-home': function() {
+                import(/* webpackChunkName: "dorel-template-home.html" */ './templates/dorel-template-home.html');
+              },
+              'view-info-overview': function() {
+                import(/* webpackChunkName: "dorel-template-info-overview.html" */ './templates/dorel-template-info-overview.html');
+              },
+              'view-info': function() {
+                import(/* webpackChunkName: "dorel-template-info.html" */ './templates/dorel-template-info.html');
+              },
+              'view-marketing-campaign': function() {
+                import(/* webpackChunkName: "dorel-template-marketing-campaign.html" */ './templates/dorel-template-marketing-campaign.html');
+              },
+              'view-product-about': function() {
+                import(/* webpackChunkName: "dorel-template-product-about.html" */ './templates/dorel-template-product-about.html');
+              },
+              'view-product-advisory-tool': function() {
+                import(/* webpackChunkName: "dorel-template-product-advisory-tool.html" */ './templates/dorel-template-product-advisory-tool.html');
+              },
+              'view-product-detail': function() {
+                import(/* webpackChunkName: "dorel-template-product-detail.html" */ './templates/dorel-template-product-detail.html');
+              },
+              'view-product-listing': function() {
+                import(/* webpackChunkName: "dorel-template-product-listing.html" */ './templates/dorel-template-product-listing.html');
+              },
+              'view-store-locator': function() {
+                import(/* webpackChunkName: "dorel-template-store-locator.html" */ './templates/dorel-template-store-locator.html');
+              },
+              'view-submit-your-review': function() {
+                import(/* webpackChunkName: "dorel-template-submit-your-review.html" */ './templates/dorel-template-submit-your-review.html');
+              }
+            }
           }
         };
       }
@@ -354,15 +371,13 @@
         super.connectedCallback();
         window.performance && performance.mark && performance.mark('dorel-app.created');
 
-        // Custom elements polyfill safe way to indicate an element has been upgraded.
-        this.removeAttribute('unresolved');
         //get the initial options from wordpress
         this.dispatch('fetchOptions');
       }
 
       ready() {
         super.ready();
-        window.app = this;
+        //window.app = this;
       }
 
       /**
@@ -375,18 +390,13 @@
       _pageChanged(currentPage) {
         if (!currentPage || !currentPage.template) return;
 
-        if (currentPage.template === 'home') {
-          this._ensureLazyLoaded();
+        if(this.lazyPages[`view-${currentPage.template}`]){
+          this.lazyPages[`view-${currentPage.template}`]();
         } else {
-          this.importHref(
-            this.resolveUrl(`templates/dorel-template-${currentPage.template}.html`),
-            () => {
-              this._ensureLazyLoaded();
-            },
-            null,
-            false
-          );
+          //this._showPage404();
         }
+
+        window.scrollTo(0, 0);
 
         /**
          * Tracking on pageload
@@ -401,47 +411,6 @@
             globals: this.getState()
           }
         });
-      }
-
-      /**
-       * if the load is completed we will add the resources the service worker will kick in after that.
-       */
-      _ensureLazyLoaded() {
-        // scroll up when a page is changed
-        window.scrollTo(0, 0);
-
-        // load lazy resources after render and set `loadComplete` when done.
-        if (!this.loadComplete) {
-          Polymer.RenderStatus.afterNextRender(this, () => {
-            this.importHref(this.resolveUrl('dorel-app-resources.html'), () => {
-
-              // Register service worker if supported.
-              if ('serviceWorker' in navigator) {
-                // navigator.serviceWorker.register('/service-worker.js');
-              }
-
-              this.loadComplete = true;
-              this._removeLoadPlaceholder();
-
-              // import the footer after the pages are loaded
-              this.importHref(
-                this.resolveUrl('organisms/dorel-footer.html'),
-                null,
-                null,
-                false
-              );
-            });
-          });
-        }
-      }
-
-      /**
-       * TODO: commented out for IE11 bugfixing
-       * removes loading spinner and placeholders before the page is loaded
-       */
-      _removeLoadPlaceholder() {
-        // var placeholder = document.getElementById('load-placeholder');
-        // placeholder.remove();
       }
 
       /**
