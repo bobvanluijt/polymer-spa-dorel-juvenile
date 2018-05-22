@@ -42,11 +42,13 @@
         cursor: default;
       }
       .overlay-close {
-        width: 20px;
-        height: 20px;
-        background-color: purple;
         float: right;
         cursor: pointer;
+        transition: color 0.2s;
+        color: var(--theme-brand-color-2);
+      }
+      .overlay-close:hover {
+        color: var(--theme-brand-color-1);
       }
     </style>
     <div
@@ -70,8 +72,10 @@
           <div
             id="overlay-close"
             class="overlay-close"
-            on-click="_closeLightbox"
-          ></div>
+            on-click="_closeLightbox">
+            <iron-icon class="dorel-cookie-notification__proceed-icon"
+              icon="dorel-icons:close"></iron-icon>
+          </div>
         </div>
         [[_setImageWidth(productImageUrl)]]
       </template>
