@@ -18,7 +18,6 @@
         padding: 1.5rem;
         box-sizing: border-box;
         transition: 0.35s;
-        cursor: pointer;
         cursor: zoom-out;
       }
       .overlay[active] {
@@ -31,6 +30,23 @@
         margin: auto;
         float: none;
         display: block;
+      }
+      .overlay-close-wrapper {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate( -50%, -50% );
+        height: calc(100vh - 3rem);
+        width: inherit;
+        z-index: 1;
+        cursor: default;
+      }
+      .overlay-close {
+        width: 20px;
+        height: 20px;
+        background-color: purple;
+        float: right;
+        cursor: pointer;
       }
     </style>
     <div
@@ -47,6 +63,17 @@
           height="[[windowHeight]]"
           image-url="{{productImageUrl}}">
         </dorel-product-image>
+        <div
+          id="overlayCloseWrapper"
+          class="overlay-close-wrapper"
+          on-click="imageClick">
+          <div
+            id="overlay-close"
+            class="overlay-close"
+            on-click="_closeLightbox"
+          ></div>
+        </div>
+        [[_setImageWidth(productImageUrl)]]
       </template>
     </div>
   </template>
@@ -108,17 +135,41 @@
 
       ready() {
         super.ready();
-        this.addEventListener('click', this._onClick);
+        this.addEventListener('click', this._closeLightbox);
+      }
+
+      /**
+       * Dont close the lightbox when clicked on image.
+       */
+      imageClick(event) {
+        event.stopPropagation();
       }
 
       /**
        * when there is a click hide the lightbox
        */
-      _onClick() {
+      _closeLightbox() {
         this.dispatch('resetImageLightbox');
       }
 
-    };
+      /**
+       * Set the image width to the overlay in order to position the close icon.
+       *
+       * @param {String} url
+       *   The url of the image you want to set the width of.
+       */
+      _setImageWidth(url) {
+        Polymer.RenderStatus.afterNextRender(this, () => {
+        var img = new Image();
+        var element = this.shadowRoot.querySelector("#overlayCloseWrapper");
+        img.addEventListener("load", function() {
+          element.style.width = "calc(" + 100 * (this.naturalWidth / this.naturalHeight) + "vh - 3em)";
+        });
+        img.src = url;
+        });
+      }
+
+    }
 
     customElements.define(DorelShowcaseZoomLightbox.is, DorelShowcaseZoomLightbox);
   </script>
