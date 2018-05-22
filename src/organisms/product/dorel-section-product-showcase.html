@@ -346,10 +346,10 @@
                 <!-- HATCH CTA -->
                 <dorel-cta
                   type="primary"
-                  title="[[localize('cta#find_a_store')]]"
+                  title="[[localize('cta#buy_now')]]"
                   on-click="_openLightbox"
                   size="medium"
-                  icon="dorel-icons:chevron-right">[[localize('cta#find_a_store')]]</dorel-cta>
+                  icon="dorel-icons:chevron-right">[[localize('cta#buy_now')]]</dorel-cta>
                 <dorel-showcase-lead-generation-lightbox
                   product-sku="[[currentChildSku]]"
                   store-locator-page="[[storeLocatorPage]]"></dorel-showcase-lead-generation-lightbox>
@@ -503,7 +503,12 @@
               const review = state.review.reviews.find(review => review.sku === this.get('productSku'));
               return review ? review.rollup : {};
             }
-          }
+          },
+
+          /**
+           * webFlag to show Hatch options
+           */
+          webFlags: Object
         };
       }
 
@@ -574,7 +579,7 @@
        * @return Boolean
        */
       _showStoreLocatorCta(pageObject, hatchToggle) {
-        return (typeof pageObject !== 'undefined' && pageObject !== '' && this._hasProperties(pageObject) && !hatchToggle);
+        return (typeof pageObject !== 'undefined' && pageObject !== '' && this._hasProperties(pageObject) && (!hatchToggle || !this.webFlags || this.webFlags.indexOf('button_lead_generation') === -1));
       }
 
       _carfittingEnabledChanged(carfittingEnabled) {
@@ -606,7 +611,7 @@
        * @return Boolean
        */
       _showStoreLocatorLightbox(pageObject, hatchToggle) {
-        return Boolean(typeof pageObject !== 'undefined' && pageObject !== '' && hatchToggle);
+        return Boolean(typeof pageObject !== 'undefined' && pageObject !== '' && hatchToggle && this.webFlags && this.webFlags.indexOf('button_lead_generation') >= 0);
       }
 
       /**
