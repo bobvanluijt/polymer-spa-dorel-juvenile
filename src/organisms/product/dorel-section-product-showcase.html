@@ -466,7 +466,8 @@
           hatchOptions: {
             type: Object,
             statePath: function(state) {
-              return state.config.third_party[0].hatch;
+              if(state.config.third_party) return state.config.third_party[0].hatch;
+              return false;
             }
           },
 
