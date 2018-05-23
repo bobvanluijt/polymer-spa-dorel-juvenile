@@ -104,15 +104,12 @@
     <section class="category-listing-item"
       fade$="[[fade]]"
       tablet-medium-up$="[[breakpoints.tabletMediumUp]]">
-
-      <a class="image-wrapper"
-        href$="[[_setDynamicProductUrl(linkUrl)]]">
+      <dorel-link link="[[_setDynamicProductUrl(linkUrl)]]" image gtm-action="open-product-detail-page">
         <dorel-product-image
           class="image"
           sizing="contain"
           image-url="{{currentProductImage}}"></dorel-product-image>
-      </a>
-
+      </dorel-link>
       <div class="content-wrapper">
         <dorel-color-switcher
           current-image="{{currentProductImage}}"

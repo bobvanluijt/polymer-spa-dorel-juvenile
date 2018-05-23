@@ -97,7 +97,8 @@
         border: 2px solid var(--theme-brand-color-2);
         width: 1.5rem;
         height: 1.5rem;
-        display: inline-block;
+        display: flex;
+        justify-content: flex-end;
         margin-left: auto;
         transition: color 0.2s, background-color 0.2s;
       }
@@ -355,10 +356,8 @@
                           </template><!--// dom-if thirdPartyOptions.hatch.show_stock -->
 
                           <div class="hatch-column">
-                            <a class="cta" href="[[retailer.purchase_link]]" target="_blank">
-                              <iron-icon class="cta__icon"
-                                icon="dorel-icons:chevron-right"></iron-icon>
-                            </a>
+                            <dorel-cta type="link" class="cta" icon="dorel-icons:chevron-right" link="[[retailer.purchase_link]]" target="_blank"></dorel-cta>
+
                           </div>
                         </div>
                       </template><!--// dom-repeat retailers -->
