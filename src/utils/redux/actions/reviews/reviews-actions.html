@@ -154,7 +154,7 @@
         const countryCode = state.route.currentLanguage.countryCode;
         const prConfig = state.config.third_party[0].power_reviews;
         const init = { method: 'GET', mode: 'cors', cache: 'default' };
-        let url = `${state.config.writeReviewUrl}/review_template?merchant_id=${prConfig.merchant_id}&apikey=${prConfig.write_api_key}&page_id=${product_sku}/`;
+        let url = `${state.config.writeReviewUrl}/review_template?merchant_id=${prConfig.merchant_id}&apikey=${prConfig.write_api_key}&page_id=${product_sku}`;
         // let url = `http://writeservices.powerreviews.com/api/b2b/writereview/review_template?merchant_id=294888&apikey=8b1afb6f-e693-4244-b16d-bfc327bc509f&page_id=${product_sku}`
 
         // retrieve the reviews object for this sku and dispatch accordingly
@@ -195,7 +195,7 @@
           mode: 'cors',
           body: JSON.stringify(data)
         };
-        let url = `${state.config.writeReviewUrl}/submit_review?merchant_id=${prConfig.merchant_id}&apikey=${prConfig.write_api_key}&page_id=${product_sku}/`;
+        let url = `${state.config.writeReviewUrl}/submit_review?merchant_id=${prConfig.merchant_id}&apikey=${prConfig.write_api_key}&page_id=${product_sku}`;
         // let url = `http://writeservices.powerreviews.com/api/b2b/writereview/submit_review?merchant_id=294888&apikey=8b1afb6f-e693-4244-b16d-bfc327bc509f&page_id=${product_sku}`;
 
         // retrieve the reviews object for this sku and dispatch accordingly
