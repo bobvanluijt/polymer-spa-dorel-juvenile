@@ -41,27 +41,26 @@
       }
 
     </style>
-
-    <template is="dom-if" if="[[ results.length ]]">
       <div class="results-container">
         <h2 class="title">[[results.length]] [[localize('Results')]]</h2>
-        <ul>
-          <template
-            is="dom-repeat"
-            items="[[ results ]]"
-            as="store">
-            <li>
-              <dorel-section-store-locator-result
-                store="[[ store ]]"
-                gtm-parent="[[ gtmParent ]]"
-                gtm-parent-index="[[ gtmParentIndex ]]"
-                gtm-child="[[ gtmChild ]]"
-                gtm-child-index="[[ index ]]"></dorel-section-store-locator-result>
-            </li>
-          </template>
-        </ul>
+        <template is="dom-if" if="[[ results.length ]]">
+          <ul>
+            <template
+              is="dom-repeat"
+              items="[[ results ]]"
+              as="store">
+              <li>
+                <dorel-section-store-locator-result
+                  store="[[ store ]]"
+                  gtm-parent="[[ gtmParent ]]"
+                  gtm-parent-index="[[ gtmParentIndex ]]"
+                  gtm-child="[[ gtmChild ]]"
+                  gtm-child-index="[[ index ]]"></dorel-section-store-locator-result>
+              </li>
+            </template>
+          </ul>
+        </template>
       </div>
-    </template>
   </template>
 
   <script>
@@ -82,7 +81,7 @@
         results: {
           type: Object,
           value: function () {
-            return {};
+            return [];
           }
         }
 
