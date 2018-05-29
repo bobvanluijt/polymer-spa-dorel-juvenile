@@ -214,7 +214,7 @@
             </div>
 
             <div class="header-item header-item-close">
-              <a href="[[ productUrl ]]">
+              <a href="[[getLastVisitedUrl()]]">
                 <iron-icon class="header-icon icon-close-page"
                            icon="dorel-icons:close"></iron-icon>
               </a>
@@ -240,7 +240,7 @@
               </div>
 
               <div class="header-item header-item-close">
-                <a href="[[ productUrl ]]">
+                <a href="[[getLastVisitedUrl()]]">
                 <iron-icon class="header-icon icon-close-page"
                            icon="dorel-icons:close"></iron-icon>
                 </a>
@@ -256,7 +256,7 @@
     /* global Polymer */
     /* global customElements */
     /* global DorelMultilingualBehavior */
-    class DorelCarFittingNav extends Polymer.mixinBehaviors([DorelMultilingualBehavior], Polymer.Element) {
+    class DorelCarFittingNav extends ReduxMixin(Polymer.mixinBehaviors([DorelMultilingualBehavior], Polymer.Element)) {
       static get is() {
         return 'dorel-car-fitting-nav';
       }
@@ -271,6 +271,14 @@
           productUrl: {
             type: String,
             computed: 'getProductUrl(productName)'
+          },
+          /**
+           * @name pages
+           * @description the pages
+           */
+          pages: {
+            type: Array,
+            statePath: 'page.pages'
           }
         };
       }
@@ -299,11 +307,22 @@
         }
       }
 
-      getProductUrl(productName) {
-        var origin = window.location.origin;
-        var locale = window.location.href.split('/')[3];
-        //console.log(`${origin}/${locale}/car-seats/${productName}`);
-        return `${origin}/${locale}/car-seats/${productName}`;
+      getLastVisitedUrl() {
+        var pages = this.get('pages');
+        var url = pages[0].link;
+        var success = false;
+        var index = 1;
+        while (!success) {
+          success = true;
+          if (window.location.href == url && pages[index] != null) {
+            url = pages[index].link;
+            success = false;
+          } else if (pages[index] == null) {
+            url = "/";
+          }
+          index++;
+        }
+        return url;
       }
     }
 
