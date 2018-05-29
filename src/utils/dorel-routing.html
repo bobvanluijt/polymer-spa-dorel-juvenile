@@ -132,9 +132,9 @@
 
           var refactoredSearch = "";
 
-          search.split("&").map((e, i, arr) => {
-            if(!e.includes("=")) e = e + "=" + e;
-            refactoredSearch += e + (arr.length - 1 === i ? "" : "&");
+          search.split("&").map((parameter, index, arr) => {
+            if(!parameter.includes("=")) parameter = parameter + "=" + parameter;
+            refactoredSearch += parameter + (arr.length - 1 === index ? "" : "&");
           });
 
           const newParams = JSON.parse(`{"${decodeURI(`${refactoredSearch}`.replace(/&/g, "\",\"").replace(/=/g,"\":\""))}"}`);
