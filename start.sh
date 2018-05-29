@@ -3,6 +3,8 @@ if [[ -f /etc/nginx/conf.d/default.conf ]]; then
 	rm /etc/nginx/conf.d/default.conf;
 fi;
 
+dos2unix /etc/nginx/conf.d/default.conf
+
 if [[ "${GOOGLE_VERIFICATION_CODE}" != "" ]]; then
 	cat /opt/nginx/default.conf | \
 		sed 's|'{{GOOGLE_VERIFICATION_CODE}}'|location = /'${GOOGLE_VERIFICATION_CODE}'.html { rewrite ^/(.*) $1; return 200 "google-site-verification: $uri"; }|g' | \

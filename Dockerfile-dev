@@ -13,4 +13,5 @@ WORKDIR /code
 #RUN yarn install
 #RUN yarn build
 COPY start.sh /start.sh
+RUN apt-get install -y dos2unix
 CMD ["/bin/bash", "/start.sh"]
