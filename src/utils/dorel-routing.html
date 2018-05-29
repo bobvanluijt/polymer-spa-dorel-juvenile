@@ -129,7 +129,15 @@
           newRoute.__queryParams = {};
         } else {
           const search = window.location.search.substring(1);
-          const newParams = JSON.parse(`{"${decodeURI(`${search}`.replace(/&/g, "\",\"").replace(/=/g,"\":\""))}"}`);
+
+          var refactoredSearch = "";
+
+          search.split("&").map((e, i, arr) => {
+            if(!e.includes("=")) e = e + "=" + e;
+            refactoredSearch += e + (arr.length - 1 === i ? "" : "&");
+          });
+
+          const newParams = JSON.parse(`{"${decodeURI(`${refactoredSearch}`.replace(/&/g, "\",\"").replace(/=/g,"\":\""))}"}`);
           //make sure the search is applied to the querParams
           newRoute.__queryParams = Object.assign({}, newParams, newRoute.__queryParams);
         }
