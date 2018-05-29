@@ -73,7 +73,7 @@
         </div>
 
         <div class="submit-review-btn">
-          <dorel-cta title="[[localize('reviews#submit_your_review')]]" type="link" link="[[submitReviewUrl]]" size="medium">[[localize('reviews#submit_your_review')]]</dorel-cta>
+          <dorel-cta title="[[localize('reviews#submit_your_review')]]" type="link" link="[[submitReviewUrl]]" size="medium" disabled="[[submitReviewUrlDisabled]]">[[localize('reviews#submit_your_review')]]</dorel-cta>
         </div>
 
         <template
@@ -116,7 +116,8 @@
           rating: Number,
           ratingDistribution: Array,
           totalReviews: Number,
-          submitReviewUrl: String
+          submitReviewUrl: String,
+          submitReviewUrlDisabled: Boolean
         }
       }
 
