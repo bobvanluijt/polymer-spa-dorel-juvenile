@@ -130,14 +130,13 @@
         } else {
           const search = window.location.search.substring(1);
 
-          var refactoredSearch = "";
+          //Search string to JavaScript object
+          const newParams = search.split("&").reduce((result, value) => {
+            const valSplitted = value.split('=');
+            result[valSplitted[0]] = decodeURIComponent(valSplitted[1] || '');
+            return result;
+          }, {});
 
-          search.split("&").map((parameter, index, arr) => {
-            if(!parameter.includes("=")) parameter = parameter + "=" + parameter;
-            refactoredSearch += parameter + (arr.length - 1 === index ? "" : "&");
-          });
-
-          const newParams = JSON.parse(`{"${decodeURI(`${refactoredSearch}`.replace(/&/g, "\",\"").replace(/=/g,"\":\""))}"}`);
           //make sure the search is applied to the querParams
           newRoute.__queryParams = Object.assign({}, newParams, newRoute.__queryParams);
         }
