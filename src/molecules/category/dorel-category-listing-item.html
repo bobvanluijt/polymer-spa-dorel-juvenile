@@ -119,7 +119,9 @@
           colors-data="[[colorsData]]"
           filters="[[filters]]"></dorel-color-switcher>
 
-        <h2 class="title">[[productName]]</h2>
+        <template is="dom-if" if="[[selected]]" restamp>
+          <h2 class="title">[[productName]]</h2>
+        </template>
 
         <dorel-cta
           type="link"
@@ -189,6 +191,10 @@
           currentProductImage: {
             type: String,
             value: ''
+          },
+          
+          selected: {
+            type: Boolean
           }
         }
       }

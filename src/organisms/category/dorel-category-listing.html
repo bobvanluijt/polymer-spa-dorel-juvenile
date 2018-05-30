@@ -42,7 +42,9 @@
             colors-data="[[product.child_products]]"
             link-url="[[product.url]]"
             product-name="[[product.name.value]]"
-            filters="[[filters]]"></dorel-category-listing-item>
+            filters="[[filters]]"
+            selected="[[selected]]"
+            ></dorel-category-listing-item>
         </dorel-layout-column>
       </template>
 
@@ -125,6 +127,9 @@
           mobileColSpan: {
             type: Number,
             value: 12
+          },
+          selected: {
+            type: Boolean
           }
         }
       }

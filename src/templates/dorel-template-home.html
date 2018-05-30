@@ -17,58 +17,58 @@
     </style>
 
     <div class="wrapper">
-
       <div class="container layout horizontal center center-justified wrap">
-        <div class="row">
+        <template
+          is="dom-if"
+          if="[[selected]]"
+          restamp>
+          <div class="row">
 
-          <!-- section-hero-header -->
-          <template
-            is="dom-if"
-            if="[[selected]]"
-            restamp>
+            <!-- section-hero-header -->
+
             <template
               is="dom-if"
               if="[[templateData.acf.hero_header.length]]">
               <dorel-section-hero-header
                 hero-header-data="[[heroHeader]]"></dorel-section-hero-header>
             </template>
-          </template>
-          <!--// section-hero-header
+            <!--// section-hero-header
 
-          <!-- section-cta -->
-          <template
-            is="dom-if"
-            if="[[templateData.acf.ctas.length]]">
+            <!-- section-cta -->
+            <template
+              is="dom-if"
+              if="[[templateData.acf.ctas.length]]">
 
-            <dorel-section-cta
-              cta-data="[[templateData.acf.ctas]]"></dorel-section-cta>
+              <dorel-section-cta
+                cta-data="[[templateData.acf.ctas]]"></dorel-section-cta>
 
-          </template>
-          <!--// section-cta -->
+            </template>
+            <!--// section-cta -->
 
-          <!-- dorel-section-heroes -->
-          <template
-            is="dom-if"
-            if="[[templateData.acf.heroes.length]]">
+            <!-- dorel-section-heroes -->
+            <template
+              is="dom-if"
+              if="[[templateData.acf.heroes.length]]">
 
-            <dorel-section-heroes
-              heroes-data="[[templateData.acf.heroes]]"></dorel-section-heroes>
+              <dorel-section-heroes
+                heroes-data="[[templateData.acf.heroes]]"></dorel-section-heroes>
 
-          </template>
-          <!--// dorel-section-heroes -->
+            </template>
+            <!--// dorel-section-heroes -->
 
-          <!-- section-cards -->
-          <template
-            is="dom-if"
-            if="[[sectionCards.cards.length]]">
+            <!-- section-cards -->
+            <template
+              is="dom-if"
+              if="[[sectionCards.cards.length]]">
 
-            <dorel-section-cards
-              cards-data="[[sectionCards]]"></dorel-section-cards>
+              <dorel-section-cards
+                cards-data="[[sectionCards]]"></dorel-section-cards>
 
-          </template>
-          <!--// section-cards -->
+            </template>
+            <!--// section-cards -->
 
-        </div>
+          </div>
+        </template>
       </div>
       <!--// container -->
 

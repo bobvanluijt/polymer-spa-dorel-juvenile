@@ -47,21 +47,26 @@
         <template is="dom-if" if="[[_shouldShowSidebar(leftSidebar)]]">
           <dorel-layout-column desktop-column-span="3" tablet-column-span="5" mobile-column-span="12">
 
-            <template is="dom-if" if="[[leftSidebar.productSubCategories.toggle]]">
-              <dorel-accordion-item heading="[[localize('Subcategories')]]" opened="[[ filterOpened ]]" small>
-                <dorel-category-submenu items="[[leftSidebar.productSubCategories.sub_categories]]">
-                </dorel-category-submenu>
-              </dorel-accordion-item>
-            </template>
+            <template
+              is="dom-if"
+              if="[[selected]]"
+              restamp>
+              <template is="dom-if" if="[[leftSidebar.productSubCategories.toggle]]">
+                <dorel-accordion-item heading="[[localize('Subcategories')]]" opened="[[ filterOpened ]]" small>
+                  <dorel-category-submenu items="[[leftSidebar.productSubCategories.sub_categories]]">
+                  </dorel-category-submenu>
+                </dorel-accordion-item>
+              </template>
 
-            <template is="dom-if" if="[[leftSidebar.filters.toggle]]">
-              <dorel-accordion-item
-                small
-                opened="[[ filterOpened ]]"
-                heading="[[localize('Filters')]]">
-                <dorel-category-filter filter-data="[[leftSidebar.filters.filter_groups]]" retrieving-products="[[retrievingProducts]]" product-data="[[products]]">
-                </dorel-category-filter>
-              </dorel-accordion-item>
+              <template is="dom-if" if="[[leftSidebar.filters.toggle]]">
+                <dorel-accordion-item
+                  small
+                  opened="[[ filterOpened ]]"
+                  heading="[[localize('Filters')]]">
+                  <dorel-category-filter filter-data="[[leftSidebar.filters.filter_groups]]" retrieving-products="[[retrievingProducts]]" product-data="[[products]]">
+                  </dorel-category-filter>
+                </dorel-accordion-item>
+              </template>
             </template>
           </dorel-layout-column>
         </template>
@@ -71,7 +76,7 @@
           mobile-column-span="12">
           <dorel-category-listing desktop-col-span="[[_colSpan(leftSidebar, 'item', 'desktop')]]" tablet-col-span="[[_colSpan(leftSidebar, 'item', 'tablet')]]"
             mobile-col-span="[[_colSpan(leftSidebar, 'item', 'mobile')]]" products-data="[[products]]" retrieving-products="[[retrievingProducts]]"
-            sort="[[sort]]" rendered-count="{{renderedCount}}"></dorel-category-listing>
+            sort="[[sort]]" rendered-count="{{renderedCount}}" selected="[[selected]]"></dorel-category-listing>
         </dorel-layout-column>
       </dorel-layout-row>
     </dorel-layout-container>
