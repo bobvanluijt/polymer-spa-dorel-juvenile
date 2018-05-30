@@ -495,21 +495,7 @@
           },
 
           storeTypeOptions: {
-            type: Array,
-            value: [
-              {
-                value: 'all',
-                label: 'All Stores'
-              },
-              {
-                value: '1',
-                label: 'Specialist stores: with trained staff & extended product offering'
-              },
-              {
-                value: '2',
-                label: 'Other stores',
-              }
-            ]
+            type: Array
           },
 
           searchRadiusOptions: {
@@ -554,14 +540,7 @@
           currentInfoWindow: Object,
 
           tabs: {
-            type: Array,
-            value: [
-              {
-                name: 'List'
-              }, {
-                name: 'Map'
-              }
-            ]
+            type: Array
           },
 
           selected: {
@@ -570,7 +549,12 @@
             observer: "_selectedTabChanged"
           },
 
-          selectedStore: Object
+          selectedStore: Object,
+
+          resources: {
+            type: Object,
+            observer: '_resourcesChanged'
+          }
         };
       }
 
@@ -580,12 +564,40 @@
         this.addEventListener('google-map-marker-open', this._trackMarkerClick);
       }
 
-
       static get observers() {
         return [
           '_setMapZoom(mapLoaded, geometry)',
           '_setMapFocus(mapLoaded)'
         ]
+      }
+
+      /**
+       * set the localized texts when resources are loaded
+       */
+      _resourcesChanged(resources) {
+        if (resources) {
+          const tabs = [
+            { name: this.localize('store_locator#tab_list') },
+            { name: this.localize('store_locator#tab_map') }
+          ];
+          this.set('tabs', tabs);
+
+          const storeTypeOptions = [
+            {
+              value: 'all',
+              label: this.localize('store_locator#store_type_all')
+            },
+            {
+              value: '1',
+              label: this.localize('store_locator#store_type_specialist')
+            },
+            {
+              value: '2',
+              label: this.localize('store_locator#store_type_other')
+            }
+          ];
+          this.set('storeTypeOptions', storeTypeOptions);
+        }
       }
 
       /**
