@@ -51,8 +51,7 @@
 
     <dorel-main-menu-creator></dorel-main-menu-creator>
 
-    <!--<google-tag-manager-->
-    <!--  cid="GTM-TW3TM86"></google-tag-manager>-->
+    <google-tag-manager cid="GTM-TW3TM86"></google-tag-manager>
 
     <dorel-third-party></dorel-third-party>
 
@@ -158,6 +157,11 @@
         <dorel-template-form-success
           name="form-success"
           template-data="[[currentPage]]"></dorel-template-form-success>
+
+        <dorel-template-submit-your-review
+          name="submit-your-review"
+          route="[[subroute]]"
+          template-data="[[currentPage]]"></dorel-template-submit-your-review>
 
         <dorel-template-component-guide
           name="component-guide"
@@ -343,6 +347,9 @@
               },
               'view-store-locator': function() {
                 import(/* webpackChunkName: "dorel-template-store-locator.html" */ './templates/dorel-template-store-locator.html');
+              },
+              'view-submit-your-review': function() {
+                import(/* webpackChunkName: "dorel-template-submit-your-review.html" */ './templates/dorel-template-submit-your-review.html');
               }
             }
           }

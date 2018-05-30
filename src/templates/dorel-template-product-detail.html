@@ -135,7 +135,7 @@
 
         <template
           is="dom-if"
-          if="[[_shouldShowReviews(reviewsConfig.toggle, reviewsConfig.merchant_id, reviewsConfig.api_key)]]">
+          if="[[_shouldShowReviews(reviewsConfig.toggle, reviewsConfig.merchant_id, reviewsConfig.read_api_key)]]">
           <dorel-section-product-reviews
             product-sku="[[product.sku]]"
             product-name="[[product.name.value]]"

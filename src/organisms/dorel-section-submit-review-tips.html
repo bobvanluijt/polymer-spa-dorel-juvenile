@@ -1,0 +1,75 @@
+<dom-module id="dorel-section-submit-review-tips">
+  <template>
+    <style>
+      h3 {
+        @apply(--theme-header-text-transform);
+      }
+
+      .title {
+        @apply(--theme-typography-4);
+        line-height: 2.5rem;
+      }
+
+      .link-text {
+        color: var(--theme-brand-color-3);
+      }
+
+      .tips {
+        background-color: var(--theme-color-monochrome-2);
+        border-radius: 5px;
+        height: auto;
+        padding: .2rem 1rem;
+      }
+    </style>
+
+    <section>
+      <div class="tips">
+        <h3 class="title">[[localize('reviews#tips_title')]]</h3>
+        <p>[[localize('reviews#tips_subtitle')]]</p>
+        <ul>
+          <li>[[localize('reviews#tips_1')]]</li>
+          <li>[[localize('reviews#tips_2')]]</li>
+          <li>[[localize('reviews#tips_3')]]</li>
+          <li>[[localize('reviews#tips_4')]]</li>
+        </ul>
+        <p class="link-text">[[localize('reviews#learn_more')]]</p>
+      </div>
+    </section>
+
+
+  </template>
+
+
+  <script>
+  class DorelSectionSubmitReviewTips extends Polymer.mixinBehaviors([DorelMultilingualBehavior], Polymer.Element) {
+
+    static get is() { return 'dorel-section-submit-review-tips'; }
+
+    static get properties() {
+      return {
+        /**
+         * @attribute
+         * @name lightBackground
+         * @description Light background for the section
+         */
+        lightBackground: {
+          type: Boolean,
+          value: false
+        }
+      }
+    }
+
+    /**
+     * Returns a column span depending on the compactness of the section
+     *
+     * @param {boolean} show the compact version of the cards (2 or 3 cards)
+     * @return {number} returns the column span
+     */
+
+  }
+
+  customElements.define(DorelSectionSubmitReviewTips.is, DorelSectionSubmitReviewTips);
+
+  </script>
+
+</dom-module>

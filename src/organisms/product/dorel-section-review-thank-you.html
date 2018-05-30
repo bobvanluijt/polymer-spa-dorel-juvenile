@@ -1,0 +1,79 @@
+<dom-module id="dorel-section-review-thank-you">
+  <template>
+    <style>
+      h1, h2, h3, h4 {
+        @apply(--theme-header-text-transform);
+      }
+
+      .header {
+        background-color: var(--theme-brand-color-1);
+        color: var(--theme-color-white);
+        text-align: center;
+      }
+
+      .content {
+        text-align: center;
+      }
+
+      .cta {
+        margin: 2rem auto;
+        width: 60%;
+      }
+
+      [tablet-medium-up] .cta {
+        width: 40%;
+      }
+    </style>
+
+    <dorel-media-query
+      breakpoints="{{breakpoints}}"></dorel-media-query>
+
+    <dorel-layout-container class="header">
+      <h1 class="title">[[localize('reviews#thank_you')]]</h1>
+    </dorel-layout-container>
+    <dorel-layout-container tablet-medium-up$="[[breakpoints.tabletMediumUp]]">
+      <dorel-layout-row>
+        <dorel-layout-column
+          class="content"
+          desktop-column-span="6"
+          tablet-column-span="9"
+          mobile-column-span="12">
+          <p>[[localize('reviews#thank_you_message')]]</p>
+          <div class="cta">
+            <dorel-cta size="medium" type="primary" link="[[productUrl]]" on-click="_resetForm">[[localize('reviews#back_to_product')]]</dorel-cta>
+          </div>
+        </dorel-layout-column>
+      </dorel-layout-row>
+    </dorel-layout-container>
+
+  </template>
+
+  <script>
+    class DorelSectionReviewThankYou extends ReduxMixin(Polymer.mixinBehaviors([DorelMultilingualBehavior], Polymer.Element)) {
+
+      static get is() { return 'dorel-section-review-thank-you'; }
+
+      static get properties() {
+        return {
+          /**
+           * @attribute
+           * @name productUrl
+           * @description coming from the submit review form
+           */
+           productUrl: {
+             type: String,
+             reflectToAttribute: true
+           }
+        }
+      }
+
+      _resetForm() {
+        // reset the state of the submit review form
+        setTimeout(() => this.dispatch('submitReviewFailed', null), 1000);
+      }
+
+    }
+
+    customElements.define(DorelSectionReviewThankYou.is, DorelSectionReviewThankYou);
+  </script>
+</dom-module>

@@ -7,6 +7,10 @@
       nav {
         width: 100%;
       }
+      nav paper-radio-button {
+        width: 100%;
+        padding: .25em 0;
+      }
     </style>
 
     <dorel-media-query breakpoints="{{breakpoints}}"></dorel-media-query>
@@ -19,17 +23,15 @@
         is="dom-repeat"
         items="[[items]]"
         as="menuItem">
-        <h2>
-          <dorel-cta
-            title="[[menuItem.post_title]]"
-            on-click="_menuItemTap"
-            no-margin
-            type="link"
-            left-align-icon
-            link="[[getUrl(menuItem)]]"
-            size="medium"
-            icon="dorel-icons:chevron-right">[[menuItem.post_title]]</dorel-cta>
-        </h2>
+
+        <paper-radio-button
+          on-click="_menuItemTap"
+          data-url$="[[getUrl(menuItem)]]"
+          checked="[[_getActiveMenuItem(menuItem)]]"
+          _menuItemTapname="{{menuItem.post_title}}"
+          noink>
+            {{ menuItem.post_title }}
+        </paper-radio-button>
       </template>
     </nav>
   </template>
@@ -72,6 +74,7 @@
        */
       _menuItemTap: function (event) {
         var element = Polymer.dom(event).localTarget;
+        url = element.getAttribute('data-url');
 
         var event = {
           action: 'click',
@@ -88,7 +91,23 @@
           }
         };
         this._dispatchGtmEvent(event);
+        window.location.href = url;
+      },
+
+      /**
+       * @name _getActiveMenuitem
+       * @description gets the active option of the categories filter.
+       *
+       * @param {Object} menuItem
+       *   The menu item you want to get the active state of.
+       *
+       * @returns {Boolean}
+       *   Is the menu link active.
+       */
+      _getActiveMenuItem(menuItem) {
+        return this.getUrl(menuItem) == window.location.href;
       }
+
     });
   </script>
 </dom-module>

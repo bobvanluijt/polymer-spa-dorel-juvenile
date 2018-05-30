@@ -314,10 +314,17 @@
       }
 
       previousStep() {
-        this.deleteCar({model: {index: 0}});
-        this.set('stepData.isCurrent', false);
-        this.set('stepController.currentStep', this.stepData.previousStep);
-        this.set(`carData.0.result`, null);
+        if (!window.location.search || !window.location.search.length) {
+          this.deleteCar({model: {index: 0}});
+          this.set('stepData.isCurrent', false);
+          this.set('stepController.currentStep', this.stepData.previousStep);
+          this.set(`carData.0.result`, null);
+        } else {
+          const queryString = window.location.search.substring(1);
+          if (queryString.indexOf('product=') > -1) {
+            window.history.back();
+          }
+        }
       }
 
       updateStep() {

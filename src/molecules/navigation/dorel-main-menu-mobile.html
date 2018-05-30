@@ -40,9 +40,9 @@
 
       .mobile-nav {
         background-color: var(--theme-color-monochrome-2);
-        overflow: auto;
         height: calc(100vh - 6.5rem);
-        overflow: auto;
+        overflow-x: hidden;
+        overflow-y: scroll;
         flex: 1;
         display: flex;
         width: 100%;
@@ -164,7 +164,7 @@
 
     <app-drawer id="drawer" opened="{{ mobileMenuOpened }}" align="right" swipe-open tabindex="0" tablet-medium-up$="[[ breakpoints.tabletMediumUp ]]">
       <div class="menu-spacer-top"></div>
-      <div class="mobile-nav" id="mobileNav">
+      <div class="mobile-nav">
         <ul class="main-menu">
             <template is="dom-repeat" items="[[ menuItems ]]" as="mainItem">
 
@@ -256,7 +256,7 @@
 
   <script>
     import '../../utils/behaviors/bundled/dorel-main-menu-behaviors.html';
-    
+
     class DorelMainMenuMobile extends Polymer.mixinBehaviors([MainMenuBehavior, MatchUrlBehavior], Polymer.GestureEventListeners(Polymer.Element)) {
       static get is() { return 'dorel-main-menu-mobile'; }
 
@@ -297,13 +297,6 @@
 
       connectedCallback() {
         super.connectedCallback();
-        // disable default scrolling the background on iOS Safari
-        const mobileNav = this.$$('#mobileNav');
-        if (mobileNav) {
-          mobileNav.addEventListener('touchmove', e => {
-            e.preventDefault();
-          }, false);
-        }
         this.$$('.mobile-multi-language-container--selector').addEventListener('click', this._onLanguageClicked.bind(this));
         Polymer.Gestures.addListener(this.$.drawer.$$('#scrim'), 'down', this._overlayDownHandler.bind(this));
       }
@@ -376,7 +369,9 @@
       _onLanguageClicked(e) {
         if (!this.languageDialogOpened) {
           this.languageDialogOpened = true;
-        } else if (e.path[0].className === 'close') {
+        }
+        const path = e.path || (e.composedPath && e.composedPath());
+        if (path[0].className === 'close') {
           this.languageDialogOpened = false;
         }
         this.$.drawer.style.zIndex = this.languageDialogOpened ? 10000 : 10;

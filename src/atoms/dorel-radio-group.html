@@ -21,9 +21,16 @@
         line-height: 1.5em;
         display: block;
       }
+
+      :host([invalid]) paper-radio-group {
+        @apply(--theme-color-error-box);
+        border-radius: 1rem;
+        box-sizing: border-box;
+        padding: 1rem;
+      }
     </style>
 
-    <paper-radio-group selected="{{ selected }}">
+    <paper-radio-group selected="{{ selected }}" invalid$="{{invalid}}">
       <template is="dom-repeat" items="[[ options ]]" as="option">
         <paper-radio-button name="[[ option.name ]]" noink>[[ option.label ]]</paper-radio-button>
       </template>
@@ -53,6 +60,10 @@
           notify: true,
           readOnly: false,
           value: []
+        },
+        invalid: {
+          type: Boolean,
+          reflectToAttribute: true
         }
       },
     });

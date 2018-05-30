@@ -87,6 +87,10 @@
         padding-right: 1.5rem;
       }
 
+      [mobile-small] .hatch-column:first-child {
+        padding-right: 0.2rem;
+      }
+
       .cta {
         color: var(--theme-brand-color-2);
         border-radius: 50%;
@@ -251,9 +255,11 @@
       affiliate-id="[[thirdPartyOptions.hatch.affiliate_id]]"
       product-sku="[[productSku]]"
       sort="[[thirdPartyOptions.hatch.sort]]"
+      hide-out-of-stock="[[thirdPartyOptions.hatch.hide_when_no_stock]]"
       tier="[[thirdPartyOptions.hatch.tier]]"></dorel-hatch-collect>
 
     <section class="section-product-lead-lightbox"
+      mobile-small$="{{breakpoints.mobileSmall}}"
       tablet-medium-up$="{{breakpoints.tabletMediumUp}}"
       desktop-small$="{{breakpoints.desktopSmall}}"
       desktop-large$="{{breakpoints.desktopLarge}}">

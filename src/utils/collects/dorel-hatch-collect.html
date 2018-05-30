@@ -59,6 +59,14 @@
           },
 
           /**
+           * Hides the retailers when there is no stock
+           */
+          hideOutOfStock: {
+            type: Boolean,
+            value: false
+          },
+
+          /**
            * filters the requested offers based on the retailer tier
            */
           tier: {
@@ -87,7 +95,7 @@
       static get observers() {
         return [
           // Observer method name, followed by a list of dependencies, in parenthesis
-          'init(endpointUrl, affiliateId, productSku, region, sort)'
+          'init(endpointUrl, affiliateId, productSku, region, sort, hideOutOfStock)'
         ]
       }
 
@@ -100,8 +108,9 @@
        * @param {number} the sku of the product matching both the Dorel db and Hatch db
        * @param {string} iso code of a country in uppercase
        * @param {sort} sorting of the response retailers (see documentation for more info)
+       * @param {hideOutOfStock} hides out of stock retailers
        */
-      init(endpointUrl, affiliateId, productSku, region, sort) {
+      init(endpointUrl, affiliateId, productSku, region, sort, hideOutOfStock) {
         // check if all parameters are set
         if(typeof endpointUrl === 'undefined' || typeof affiliateId === 'undefined' ||
           typeof productSku === 'undefined' || typeof region === 'undefined' ||
@@ -114,7 +123,8 @@
         this.set('params', {
           mpn: productSku,
           region,
-          sort
+          sort,
+          hideOutOfStock
         });
 
         if(typeof this.get('tier') !== 'undefined' && this.get('tier') !== 'none') {
