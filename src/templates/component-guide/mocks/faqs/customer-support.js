@@ -9,6 +9,7 @@ var customerSupportMock = {
   "bynder_image_id": CONFIG.BYNDER_DEFAULT_IMAGE,
   "email_support": [{
     "email_address": "support@test.nl",
+    "contact_page": "/en-gb/service-and-support/",
     "sub_title": "Reply in 2 days",
     "title": "Email us",
     "email_toggle": true,

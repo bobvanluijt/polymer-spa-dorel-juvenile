@@ -203,14 +203,14 @@
           <li>
             <span class="contact-method">
               <iron-icon class="contact-icon" icon="dorel-icons:mail"></iron-icon>
-              <a href="mailto:[[ emailSupport.email_address ]]" class="contact-method-title">[[ emailSupport.title ]]</a>
+              <a href="[[ contactLink(emailSupport) ]]" class="contact-method-title">[[ emailSupport.title ]]</a>
               <span class="contact-method-description">[[ emailSupport.sub_title ]]</span>
             </span>
           </li>
         </template>
         <!--// support email -->
 
-        <!-- support email -->
+        <!-- support callcenter -->
         <template
           is="dom-if"
           if="[[ callCenterSupport.phone_toggle ]]">
@@ -222,7 +222,7 @@
             </span>
           </li>
         </template>
-        <!--// support email -->
+        <!--// support callcenter -->
 
       </ul>
     </section>
@@ -233,6 +233,15 @@
   <script>
     Polymer({
       is: 'dorel-customer-support',
+
+      /**
+       * @name contactLink
+       * @description get the contact link for the contact us block
+       * @return string (mailto/page)
+       */
+      contactLink: function(support) {
+        return (support.contact_type === 'email_address') ? 'mailto:' + support.email_address : support.contact_page;
+      },
 
       properties: {
 
