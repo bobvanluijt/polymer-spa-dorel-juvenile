@@ -97,14 +97,16 @@
         <div class="control-item control-item--previous" on-click="movePrevious" enabled$="{{ previousEnabled }}">
           <iron-icon class="control-item__icon" icon="dorel-icons:chevron-left"></iron-icon>
         </div>
-        <dorel-content-carousel
-          id="slider"
-          slides="[[ slideshowData ]]"
-          sizing="cover"
-          type="fullWidth"
-          hide-bullet-points="[[ hideBulletPoints ]]"
-          position="{{ position }}">
-        </dorel-content-carousel>
+        <template is="dom-if" if="[[selected]]" restamp>
+          <dorel-content-carousel
+            id="slider"
+            slides="[[ slideshowData ]]"
+            sizing="cover"
+            type="fullWidth"
+            hide-bullet-points="[[ hideBulletPoints ]]"
+            position="{{ position }}">
+          </dorel-content-carousel>
+        </template>
       </section>
     </template>
   </template>
@@ -157,7 +159,7 @@
           type: Boolean,
           value: true
         },
-
+        selected: Boolean
       },
 
       listeners: {

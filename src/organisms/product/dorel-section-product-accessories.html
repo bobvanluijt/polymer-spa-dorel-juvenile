@@ -32,8 +32,10 @@
     <dorel-media-query breakpoints="{{ breakpoints }}"></dorel-media-query>
     <template is="dom-if" if="[[ _hasRelatedProducts(relatedProducts) ]]">
       <dorel-layout-container tablet-medium-up$="[[ breakpoints.tabletMediumUp ]]">
-        <dorel-titling title="[[ localize('section_product_accessories#title') ]]"
+        <template is="dom-if" if="[[selected]]" restamp>
+          <dorel-titling title="[[ localize('section_product_accessories#title') ]]"
                        description="[[ localize('section_product_accessories#subtitle') ]]"></dorel-titling>
+        </template>
 
         <dorel-layout-row>
           <!-- mobile -->
@@ -215,7 +217,8 @@
           value: function () {
             return [];
           }
-        }
+        },
+        selected: Boolean
       },
 
       behaviors: [ConditionalBehaviors, DorelMultilingualBehavior],

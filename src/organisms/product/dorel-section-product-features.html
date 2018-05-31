@@ -22,8 +22,10 @@
               if="[[featuresData.features.length]]">
 
       <dorel-layout-container>
-        <dorel-titling
-          title="[[localize('product_features#title')]]"></dorel-titling>
+        <template is="dom-if" if="[[selected]]" restamp>
+          <dorel-titling
+            title="[[localize('product_features#title')]]"></dorel-titling>
+        </template>
 
         <dorel-layout-row>
           <template
@@ -181,7 +183,8 @@
           restContent: {
             type: String,
             computed: '_computeRestContent(featuresData)'
-          }
+          },
+          selected: Boolean
         };
       }
 

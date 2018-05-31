@@ -269,10 +269,12 @@
             mobile-column-span="12"
             class="showcase-column">
 
-            <template
-              is="dom-if"
-              if="[[_hasValue(showcaseData.name.value)]]">
-              <h1 class="showcase-title">[[showcaseData.name.value]]</h1>
+            <template is="dom-if" if="[[selected]]" restamp>
+              <template
+                is="dom-if"
+                if="[[_hasValue(showcaseData.name.value)]]">
+                <h1 class="showcase-title">[[showcaseData.name.value]]</h1>
+              </template>
             </template>
 
             <template
@@ -504,7 +506,9 @@
               const review = state.review.reviews.find(review => review.sku === this.get('productSku'));
               return review ? review.rollup : {};
             }
-          }
+          },
+
+          selected: Boolean
         };
       }
 

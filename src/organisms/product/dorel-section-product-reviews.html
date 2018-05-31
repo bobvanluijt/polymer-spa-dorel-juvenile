@@ -39,7 +39,9 @@
     <dorel-media-query breakpoints="{{ breakpoints }}"></dorel-media-query>
 
     <dorel-layout-container>
-      <dorel-titling title="[[localize('product_reviews#title')]]"></dorel-titling>
+      <template is="dom-if" if="[[selected]]" restamp>
+        <dorel-titling title="[[localize('product_reviews#title')]]"></dorel-titling>
+      </template>
       <template
         is="dom-if"
         if="[[!reviews.rollup]]">
@@ -105,49 +107,51 @@
       </dorel-layout-container>
     </template>
 
-    <dorel-overlay-modal id="overlay" title="[[localize('ratings_and_reviews')]]" subtitle="[[productName]]">
-      <dorel-layout-container>
-        <dorel-layout-row>
-        <dorel-layout-column desktop-column-span="3" mobile-column-span="12">
-          <dorel-product-review-total-summary
-            number-of-stars="[[reviews.rollup.rating_histogram.length]]"
-            rating="[[reviews.rollup.average_rating]]"
-            rating-distribution="[[reviews.rollup.rating_histogram]]"
-            total-reviews="[[reviews.rollup.review_count]]"
-            rollup="[[reviews.rollup]]"
-            submit-review-url="[[submitReviewUrl]]"></dorel-product-review-total-summary>
-        </dorel-layout-column>
-        <dorel-layout-column desktop-column-span="9" mobile-column-span="12" class="reviews-container">
-          <template
-            is="dom-repeat"
-            items="[[reviews.results]]"
-            as="review">
-            <dorel-product-reviews
-              heading="[[review.details.headline]]"
-              description="[[review.details.comments]]"
-              date="[[review.details.created_date]]"
-              location="[[review.details.location]]"
-              author="[[review.details.nickname]]"
-              helpful-score="[[review.metrics.helpful_score]]"
-              helpful-votes="[[review.metrics.helpful_votes]]"
-              not-helpful-votes="[[review.metrics.not_helpful_votes]]"
-              rating="[[review.metrics.rating]]"
-              number-of-stars="[[reviews.rollup.rating_histogram.length]]"
-              merchant-response="[[review.details.merchant_response]]"
-              submit-review-url-disable="[[submitReviewUrlDisabled]]"></dorel-product-reviews>
-          </template>
-          <template
-            is="dom-if"
-            if="[[loadMoreReviews]]">
-            <div class="link" on-click="_loadMoreReviews">
-              <span>[[localize('more_reviews')]]</span>
-              <iron-icon class="menu-item__icon" icon="dorel-icons:plus"></iron-icon>
-            </div>
-          </template>
-        </dorel-layout-column>
-      </dorel-layout-row>
-    </dorel-layout-container>
-    </dorel-overlay-modal>
+    <template is="dom-if" if="[[selected]]" restamp>
+      <dorel-overlay-modal id="overlay" title="[[localize('ratings_and_reviews')]]" subtitle="[[productName]]">
+          <dorel-layout-container>
+            <dorel-layout-row>
+            <dorel-layout-column desktop-column-span="3" mobile-column-span="12">
+              <dorel-product-review-total-summary
+                number-of-stars="[[reviews.rollup.rating_histogram.length]]"
+                rating="[[reviews.rollup.average_rating]]"
+                rating-distribution="[[reviews.rollup.rating_histogram]]"
+                total-reviews="[[reviews.rollup.review_count]]"
+                rollup="[[reviews.rollup]]"
+                submit-review-url="[[submitReviewUrl]]"></dorel-product-review-total-summary>
+            </dorel-layout-column>
+            <dorel-layout-column desktop-column-span="9" mobile-column-span="12" class="reviews-container">
+              <template
+                is="dom-repeat"
+                items="[[reviews.results]]"
+                as="review">
+                <dorel-product-reviews
+                  heading="[[review.details.headline]]"
+                  description="[[review.details.comments]]"
+                  date="[[review.details.created_date]]"
+                  location="[[review.details.location]]"
+                  author="[[review.details.nickname]]"
+                  helpful-score="[[review.metrics.helpful_score]]"
+                  helpful-votes="[[review.metrics.helpful_votes]]"
+                  not-helpful-votes="[[review.metrics.not_helpful_votes]]"
+                  rating="[[review.metrics.rating]]"
+                  number-of-stars="[[reviews.rollup.rating_histogram.length]]"
+                  merchant-response="[[review.details.merchant_response]]"
+                  submit-review-url-disable="[[submitReviewUrlDisabled]]"></dorel-product-reviews>
+              </template>
+              <template
+                is="dom-if"
+                if="[[loadMoreReviews]]">
+                <div class="link" on-click="_loadMoreReviews">
+                  <span>[[localize('more_reviews')]]</span>
+                  <iron-icon class="menu-item__icon" icon="dorel-icons:plus"></iron-icon>
+                </div>
+              </template>
+            </dorel-layout-column>
+          </dorel-layout-row>
+        </dorel-layout-container>
+      </dorel-overlay-modal>
+    </template>
   </template>
   <script>
     class DorelSectionProductReviews extends ReduxMixin(Polymer.mixinBehaviors([ConditionalBehaviors, DorelMultilingualBehavior], Polymer.Element)) {
@@ -225,7 +229,8 @@
           submitReviewUrlDisabled: {
             type: Boolean,
             value: true
-          }
+          },
+          selected: Boolean
         };
       }
 

@@ -32,60 +32,62 @@
             tablet-column-span="12"
             mobile-column-span="12">
             <div class="accordion">
+              <template is="dom-if" if="[[selected]]" restamp>
 
-              <template
-                is="dom-repeat"
-                items="[[accordionsData.accordions]]">
+                <template
+                  is="dom-repeat"
+                  items="[[accordionsData.accordions]]">
 
-                <dorel-accordion-item
-                  heading="[[_defineHeading(item.accordion_type)]]">
+                  <dorel-accordion-item
+                    heading="[[_defineHeading(item.accordion_type)]]">
 
-                  <!-- TOPIC -->
-                  <template
-                    is="dom-if"
-                    if="[[_isPageComponent(item.accordion_type, 'topic')]]">
-                    <dorel-product-accordion-topic
-                      data="[[item]]"></dorel-product-accordion-topic>
-                  </template>
-                  <!--// TOPIC -->
+                    <!-- TOPIC -->
+                    <template
+                      is="dom-if"
+                      if="[[_isPageComponent(item.accordion_type, 'topic')]]">
+                      <dorel-product-accordion-topic
+                        data="[[item]]"></dorel-product-accordion-topic>
+                    </template>
+                    <!--// TOPIC -->
 
-                  <!-- FAQ -->
-                  <template
-                    is="dom-if"
-                    if="[[_isPageComponent(item.accordion_type, 'faq')]]">
-                    <dorel-product-accordion-faq
-                      data="[[item]]"></dorel-product-accordion-faq>
-                  </template>
-                  <!--// FAQ -->
+                    <!-- FAQ -->
+                    <template
+                      is="dom-if"
+                      if="[[_isPageComponent(item.accordion_type, 'faq')]]">
+                      <dorel-product-accordion-faq
+                        data="[[item]]"></dorel-product-accordion-faq>
+                    </template>
+                    <!--// FAQ -->
 
-                  <!-- MANUALS -->
-                  <template
-                    is="dom-if"
-                    if="[[_isPageComponent(item.accordion_type, 'manuals')]]">
-                    <dorel-product-accordion-manuals
-                      data="[[item]]"></dorel-product-accordion-manuals>
-                  </template>
-                  <!--// MANUALS -->
+                    <!-- MANUALS -->
+                    <template
+                      is="dom-if"
+                      if="[[_isPageComponent(item.accordion_type, 'manuals')]]">
+                      <dorel-product-accordion-manuals
+                        data="[[item]]"></dorel-product-accordion-manuals>
+                    </template>
+                    <!--// MANUALS -->
 
-                  <!-- SPECS -->
-                  <template
-                    is="dom-if"
-                    if="[[_isPageComponent(item.accordion_type, 'specifications')]]">
-                    <dorel-product-accordion-specs
-                      data="[[item]]"></dorel-product-accordion-specs>
-                  </template>
-                  <!--// SPECS -->
+                    <!-- SPECS -->
+                    <template
+                      is="dom-if"
+                      if="[[_isPageComponent(item.accordion_type, 'specifications')]]">
+                      <dorel-product-accordion-specs
+                        data="[[item]]"></dorel-product-accordion-specs>
+                    </template>
+                    <!--// SPECS -->
 
-                  <!-- FEATURES -->
-                  <template
-                    is="dom-if"
-                    if="[[_isPageComponent(item.accordion_type, 'features')]]">
-                    <dorel-product-accordion-features
-                      data="[[item]]"></dorel-product-accordion-features>
-                  </template>
-                  <!--// FEATURES -->
+                    <!-- FEATURES -->
+                    <template
+                      is="dom-if"
+                      if="[[_isPageComponent(item.accordion_type, 'features')]]">
+                      <dorel-product-accordion-features
+                        data="[[item]]"></dorel-product-accordion-features>
+                    </template>
+                    <!--// FEATURES -->
 
-                </dorel-accordion-item>
+                  </dorel-accordion-item>
+                </template>
               </template>
             </div>
           </dorel-layout-column>
@@ -129,7 +131,8 @@
               });
             }
           },
-          accordionsMockData: Object
+          accordionsMockData: Object,
+          selected: Boolean
         }
       }
 
