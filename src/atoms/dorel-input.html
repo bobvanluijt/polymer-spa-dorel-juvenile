@@ -14,6 +14,12 @@
       :host([hidden]) {
         display: none !important;
       }
+      :host([search]) #input {
+        background: url('../../assets/icons/search.svg') no-repeat scroll;
+        background-position: right 10px center;
+        padding-right: 30px;
+        background-color: var(--theme-color-white);
+      }
       iron-input {
         width: 100%;
       }
@@ -120,7 +126,8 @@
       },
       placeholder: {
         type: String
-      }
+      },
+      search: Boolean
     }
   });
 </script>

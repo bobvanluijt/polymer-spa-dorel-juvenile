@@ -11,21 +11,51 @@
         display: block;
       }
 
-      .section-store-locator,
-      .store-locator-map {
-        position: relative;
-        width: 100%;
+      [tablet-medium-up] .store-locator-container {
+        display: flex;
+        height: 90vh;
+        width: 100vw;
+      }
+
+      [tablet-medium-up] .store-locator-container {
+        height: 30.5rem;
+      }
+
+      [tablet-medium-up] .section-store-locator {
+        flex: 1;
+      }
+
+      [tablet-medium-up] .section-store-locator {
+        height: 30.5rem;
       }
 
       .store-title {
         @apply(--theme-typography-4);
-        color: var(--theme-brand-color-1);
+        color: var(--theme-color-white);
         width: 100%;
         margin-top: 0;
       }
 
-      .store-locator-map {
-        float: left;
+      .store-locator-search {
+        background-color: var(--theme-brand-complementary-color-1);
+        padding: 1.5rem;
+      }
+
+      .input-selectors {
+        display: flex;
+      }
+
+      [form-invalid] .input-selectors {
+        visibility: hidden;
+      }
+
+      .store-type-select {
+        flex: 2;
+        margin-right: 1.5rem;
+      }
+
+      .distance-select {
+        flex: 1
       }
 
       .store-overlay {
@@ -52,21 +82,65 @@
       }
 
       google-map {
-        width: 100%;
+        height: 30vh;
+      }
+
+      [tablet-medium-up] google-map {
+        flex: 2;
         height: 90vh;
-        position: relative;
-        float: left;
       }
 
-      form {
-        float: left;
-        margin-top: 1.5em;
+      #store-locator-form {
+        margin-top: .5rem;
+      }
+
+      .selected-store {
+        margin-top: 1.5rem;
+        margin-bottom: 1rem;
+      }
+
+      .dorel-section-store-locator-result {
+        display: flex;
+      }
+
+      .icon {
+        flex: 1;
+        height: 2rem;
+      }
+
+      .details {
+        flex: 4;
+      }
+
+      .location-title {
+        @apply(--theme-typography-3);
+        color: var(--theme-brand-color-1);
+        text-align: left;
+        margin-top: 0;
+      }
+
+      .location-content {
+        @apply(--theme-paragraph-text);
+        margin-top: 0;
+        text-align: left;
+      }
+
+      .store-contact {
+        @apply(--theme-typography-1);
+        display: flex;
+        justify-content: space-between;
         width: 100%;
       }
 
-      dorel-cta {
-        float: left;
-        width: 100%;
+      .label-section {
+        margin-top: 1rem;
+      }
+
+      .label {
+        background-color: var(--theme-brand-color-1);
+        color: var(--theme-color-white);
+        border-radius: var(--theme-border-radius-1);
+        padding: .25rem .5rem;
       }
 
       /* Responsive Behaviour */
@@ -83,7 +157,7 @@
       }
 
       [tablet-medium-up] google-map {
-        height: 37.5em;
+        height: 30.5rem;
       }
     </style>
 
@@ -95,7 +169,7 @@
       on-error="_apiFailed"></iron-ajax>
 
     <iron-ajax
-      auto
+      id="ajaxRequest"
       url="[[storesEndPoint]]"
       handle-as="json"
       on-response="_storesLoaded"
@@ -122,38 +196,92 @@
     <dorel-media-query
       breakpoints="{{breakpoints}}"></dorel-media-query>
 
-    <section class="section-store-locator"
-      tablet-medium-up$="{{breakpoints.tabletMediumUp}}">
-      <div class="store-locator-map">
-        <div class="store-overlay">
-          <h3 class="heading store-title">[[localize('store_locator#store-title')]]</h3>
-
-          <form
-            is="iron-form"
-            method="get"
-            action="/"
-            id="store-locator-form">
-            <h3>
+    <div tablet-medium-up$="{{breakpoints.tabletMediumUp}}">
+      <section class="store-locator-container">
+        <section class="section-store-locator">
+          <div class="store-locator-search" form-invalid$={{addressInvalid}}>
+            <h3 class="heading store-title">[[localize('store_locator#store-title')]]</h3>
+            <form
+              is="iron-form"
+              method="get"
+              action="/"
+              id="store-locator-form">
               <dorel-input
                 id="address-input"
-                label="[[localize('store_locator#address-from-label')]]"
+                placeholder="[[localize('store_locator#address-from-label')]]"
                 value="{{addressInput}}"
                 error-message="{{addressError}}"
                 invalid$="{{addressInvalid}}"
                 disabled$="[[!selectedCountry]]"
-                required></dorel-input>
-            </h3>
-            <h2>
-              <dorel-cta
-                id="submit-button"
-                on-click="_submitLocator"
-                disabled$="{{_isDisabled(addressInput)}}"
-                type="primary"
-                size="medium"
-                icon="dorel-icons:chevron-right">[[localize('store_locator#find-stores-cta')]]</dorel-cta>
-            </h2>
-          </form>
-        </div>
+                search>
+              </dorel-input>
+              <div class="input-selectors">
+                <dorel-input-select
+                  label=""
+                  selected="{{ storeType }}"
+                  options="[[ storeTypeOptions ]]"
+                  disabled$="[[ _hasOptions(storeTypeOptions) ]]"
+                  class="store-type-select"
+                  white-background>
+                </dorel-input-select>
+                <dorel-input-select
+                  label=""
+                  selected="{{ searchRadius }}"
+                  options="[[ searchRadiusOptions ]]"
+                  disabled$="[[ _hasOptions(searchRadiusOptions) ]]"
+                  class="distance-select"
+                  white-background>
+                </dorel-input-select>
+              </div>
+            </form>
+
+          </div>
+
+          <template is="dom-if" if="[[breakpoints.tabletMediumUp]]">
+              <dorel-section-store-locator-results
+                results="[[storesResponse.results]]"></dorel-section-store-locator-results>
+
+          </template>
+
+          <template is="dom-if" if="[[!breakpoints.tabletMediumUp]]">
+            <dorel-nav-tabs tabs="[[tabs]]" selected={{selected}}></dorel-nav-tabs>
+            <iron-pages selected="{{selected}}">
+              <dorel-section-store-locator-results
+                results="[[storesResponse.results]]"></dorel-section-store-locator-results>
+              <section>
+                <template
+                  is="dom-if"
+                  if="[[apiLoaded]]">
+                  <google-map
+                    id="googleMap"
+                    language="[[localeCode]]"
+                    map="{{map}}"
+                    api-key="[[apiKey]]"
+                    latitude="{{mapLat}}"
+                    longitude="{{mapLng}}"
+                    zoom="{{mapZoom}}"
+                    fit-to-markers
+                    map-type="roadmap"
+                    styles="[[styles]]"
+                    disable-map-type-control
+                    disable-street-view-control
+                    single-info-window>
+                  </google-map>
+                </template>
+                <div class="selected-store">
+                  <dorel-section-store-locator-result
+                    store="[[ selectedStore ]]"
+                    gtm-parent="[[ gtmParent ]]"
+                    gtm-parent-index="[[ gtmParentIndex ]]"
+                    gtm-child="[[ gtmChild ]]"
+                    gtm-child-index="[[ index ]]"
+                    expanded></dorel-section-store-locator-result>
+                </div>
+              </section>
+            </iron-pages>
+          </template>
+
+        </section>
 
         <template
           is="dom-if"
@@ -176,7 +304,6 @@
               disable-map-type-control
               disable-street-view-control
               single-info-window>
-
               <template
                 is="dom-repeat"
                 items="{{storesResponse.results}}"
@@ -185,85 +312,12 @@
                   latitude="[[storesResponse.originalLat]]"
                   longitude="[[storesResponse.originalLng]]"
                   icon="/assets/images/markers/home-marker.png"></google-map-marker>
-
-                <google-map-marker
-                  latitude="[[store.lat]]"
-                  longitude="[[store.lng]]"
-                  store="[[store]]"
-                  icon="[[_defineStoreType(store.is_vip)]]"
-                  click-events="true">
-
-                  <!-- IMPORTANT! inline styling is required -->
-                  <template
-                    is="dom-if"
-                    if="[[store.name]]">
-                    <h3 class="location-title"
-                        style="font-size: 1.7500em;line-height: 1.7143em;margin:0;font-weight: 400;">[[store.name]]</h3>
-                  </template>
-
-                  <p class="location-content" style="margin:0;">
-                    <template
-                      is="dom-if"
-                      if="[[store.city]]">[[store.city]]<br></template>
-                    <template
-                      is="dom-if"
-                      if="[[store.address]]">[[store.address]]<br></template>
-                    <template
-                      is="dom-if"
-                      if="[[store.postal_code]]">[[store.postal_code]]<br></template>
-                  </p>
-
-                  <template
-                    is="dom-if"
-                    if="[[store.address]]">
-                    <a
-                      style="margin-right:1.5em;color: #004178;fill: #004178;text-decoration: none; margin-top: 1.5em"
-                      class="marker-anchor"
-                      href="http://maps.google.com/maps?z=16&daddr=[[store.address]],+[[store.city]],+[[store.country]],+[[store.postal_code]]"
-                      title="Plan route"
-                      target="_blank">Plan route
-                      <iron-icon class="theme-cta__icon" icon="dorel-icons:location"></iron-icon>
-                    </a>
-                  </template>
-
-                  <template
-                    is="dom-if"
-                    if="[[store.phone_number]]">
-                    <a
-                      style="margin-right:1.5em;color: #004178;fill: #004178;text-decoration: none; margin-top: 1.5em"
-                      href="tel:[[store.phone_number]]"
-                      title="Call"
-                      target="_blank">
-                      [[store.phone_number]]
-                      <iron-icon class="theme-cta__icon" icon="dorel-icons:call"></iron-icon>
-                    </a>
-                  </template>
-
-                  <template
-                    is="dom-if"
-                    if="[[store.online_shop.url]]">
-                    <a style="margin-right:1.5em;color: #004178;fill: #004178;text-decoration: none; margin-top: 1.5em"
-                       href="[[store.online_shop.url]]"
-                       title="Visit website"
-                       target="_blank">
-                      Visit website
-                      <iron-icon class="theme-cta__icon" icon="dorel-icons:external-link"></iron-icon>
-                    </a>
-                  </template>
-                </google-map-marker>
               </template>
             </google-map>
           </template>
         </template>
-      </div>
-
-      <template
-        is="dom-if"
-        if="[[storesResponse.results]]">
-        <dorel-section-store-locator-results
-          results="[[storesResponse.results]]"></dorel-section-store-locator-results>
-      </template>
-    </section>
+      </section>
+    </div>
   </template>
 
   <script>
@@ -419,12 +473,87 @@
             ]
           },
 
+          storeType: {
+            type: Object,
+            value: {
+              value: 'all',
+              label: 'All Stores'
+            },
+            observer: "_onStoreTypeChanged"
+          },
+
           /**
-           * default search radius
+           *  search radius
            */
           searchRadius: {
-            type: String,
-            value: '5'
+            type: Object,
+            value: {
+              value: '5',
+              label: '5 km'
+            },
+            observer: "_onSearchRadiusChanged"
+          },
+
+          storeTypeOptions: {
+            type: Array
+          },
+
+          searchRadiusOptions: {
+            type: Array,
+            value: [
+              {
+                value: '5',
+                label: '5 km'
+              },
+              {
+                value: '10',
+                label: '10 km'
+              },
+              {
+                value: '20',
+                label: '20 km'
+              },
+              {
+                value: '30',
+                label: '30 km'
+              },
+              {
+                value: '40',
+                label: '40 km'
+              },
+              {
+                value: '50',
+                label: '50 km'
+              },
+              {
+                value: '100',
+                label: '100 km'
+              }
+            ]
+          },
+
+          markers: {
+            type: Array,
+            value: []
+          },
+
+          currentInfoWindow: Object,
+
+          tabs: {
+            type: Array
+          },
+
+          selected: {
+            type: Number,
+            value: 0,
+            observer: "_selectedTabChanged"
+          },
+
+          selectedStore: Object,
+
+          resources: {
+            type: Object,
+            observer: '_resourcesChanged'
           }
         };
       }
@@ -435,12 +564,40 @@
         this.addEventListener('google-map-marker-open', this._trackMarkerClick);
       }
 
-
       static get observers() {
         return [
           '_setMapZoom(mapLoaded, geometry)',
           '_setMapFocus(mapLoaded)'
         ]
+      }
+
+      /**
+       * set the localized texts when resources are loaded
+       */
+      _resourcesChanged(resources) {
+        if (resources) {
+          const tabs = [
+            { name: this.localize('store_locator#tab_list') },
+            { name: this.localize('store_locator#tab_map') }
+          ];
+          this.set('tabs', tabs);
+
+          const storeTypeOptions = [
+            {
+              value: 'all',
+              label: this.localize('store_locator#store_type_all')
+            },
+            {
+              value: '1',
+              label: this.localize('store_locator#store_type_specialist')
+            },
+            {
+              value: '2',
+              label: this.localize('store_locator#store_type_other')
+            }
+          ];
+          this.set('storeTypeOptions', storeTypeOptions);
+        }
       }
 
       /**
@@ -466,6 +623,7 @@
         this.set('countriesEndPoint',
           `${this.dioApiUrl}/retailers/countries?brandName=maxi_cosi&localeCode=${this.localeCode}`
         );
+        this.$.ajaxRequest.generateRequest();
       }
 
       /**
@@ -545,12 +703,12 @@
        */
       _storesLoaded(data) {
         // if no results are retrieved, handle error handling
+        if (!data.detail.response) return;
         if (!data.detail.response.results.length) {
           this._handleErrors('ZERO_RESULTS');
           if (data.detail.response.originalLat && data.detail.response.originalLng) {
-
-        this.set('storesResponse', data.detail.response);
-        const storesResponse = this.get('storesResponse');
+            this.set('storesResponse', data.detail.response);
+            const storesResponse = this.get('storesResponse');
             const bounds = new google.maps.LatLngBounds();
             const userLatLng = new google.maps.LatLng(storesResponse.originalLat, storesResponse.originalLng);
             bounds.extend(userLatLng);
@@ -571,10 +729,90 @@
           const result = storesResponse.results[i];
           const resultLatLng = new google.maps.LatLng(result.lat, result.lng);
           bounds.extend(resultLatLng);
+          let marker = new google.maps.Marker({
+            position: {lat: Number(result.lat), lng: Number(result.lng)},
+            map: this.map,
+            icon: this._defineStoreType(result.is_vip)
+          });
+          if (this.breakpoints.tabletMediumUp) {
+            const infoWindow = new google.maps.InfoWindow({
+              content: this.markerInfoWindow(result)
+            });
+            marker.addListener('click', () => {
+              if (this.get('currentInfoWindow')) {
+                this.get('currentInfoWindow').close();
+              }
+              infoWindow.open(this.map, marker);
+              this.set('currentInfoWindow', infoWindow);
+            });
+          } else {
+            marker.addListener('click', () => {
+              this.set('selectedStore', result);
+            });
+          }
+          this.push('markers', marker);
+          this.set(`storesResponse.results.${i}.marker`, marker);
         }
 
         // fit the map to our bounds
-        this.map.fitBounds(bounds);
+        this.map.fitBounds(bounds, 20);
+      }
+
+      resetMarkers() {
+        if (this.get('markers').length > 0) {
+          this.get('markers').forEach(marker => {
+            marker.setMap(null);
+          });
+          this.set('markers', []);
+        }
+      }
+
+      markerInfoWindow(store) {
+        return `
+        <div style="display:flex;">
+          <img style="flex:1;height:2rem;" src="${this._defineStoreType(store.is_vip)}">
+          <div style="flex:3;">
+            <h3 style="@apply(--theme-typography-3);color:var(--theme-brand-color-1);text-align:left;margin-top:0;">${store.name}</h3>
+            <p style="@apply(--theme-paragraph-text);margin-top:0;text-align:left;">`
+            + (store.city ? `${store.city}<br>` : ``)
+            + (store.address ? `${store.address}<br>` : ``)
+            + (store.postal_code ? `${store.postal_code}<br>` : ``)
+            + (store.is_vip ? `<div style="margin-top:1rem;">
+                <span style="background-color:var(--theme-brand-color-1);color:var(--theme-color-white);border-radius:var(--theme-border-radius-1);padding:.25rem .5rem;">Specialist</span>
+               </div>` : ``)
+            + `</p>
+          </div>
+        </div>
+
+        <div style="@apply(--theme-typography-1);display:flex;justify-content:space-between;width:100%;">`
+        + (store.phone_number ? `
+            <a
+              style="margin-right:1.5em;color: #004178;fill: #004178;text-decoration: none; margin-top: 1.5em"
+              href="tel:${store.phone_number}"
+              title="Call"
+              target="_blank">
+              <iron-icon class="theme-cta__icon" icon="dorel-icons:local-phone"></iron-icon>
+              ${store.phone_number}
+            </a>` : ``)
+        + (store.online_shop && store.online_shop.url ? `
+            <a style="margin-right:1.5em;color: #004178;fill: #004178;text-decoration: none; margin-top: 1.5em"
+               href="${store.online_shop.url }
+               title="Visit website"
+               target="_blank">
+               <iron-icon class="theme-cta__icon" icon="dorel-icons:globe"></iron-icon>
+               ${ this.localize('Visit_website') }
+            </a>` : ``)
+        + (store.address ? `
+            <a
+              style="margin-right:1.5em;color: #004178;fill: #004178;text-decoration: none; margin-top: 1.5em"
+              class="marker-anchor"
+              href="http://maps.google.com/maps?z=16&daddr=${store.address},+${store.city},+${store.country},+${store.postal_code}"
+              title="Plan route"
+              target="_blank">
+              <iron-icon class="theme-cta__icon" icon="dorel-icons:direction"></iron-icon>
+              ${ this.localize('Plan_route') }
+            </a>` : ``)
+        + '</div>'
       }
 
       /**
@@ -598,7 +836,9 @@
 
         // handle the validation of the input and errors when the input is empty
         if (this.get('addressInput') === '') {
-          this._handleErrors('ADDRESS_EMPTY');
+          if (event) {
+            this._handleErrors('ADDRESS_EMPTY');
+          }
           return;
         }
 
@@ -608,6 +848,7 @@
 
         // reset the map, remove markers
         this.set('storesResponse', { results: [] });
+        this.resetMarkers();
 
         // merge the address with the country
         const query = `${this.get('addressInput')} ${this.get('selectedCountry.label')}`;
@@ -632,12 +873,16 @@
             let storeParams = geometry.location.lat() ? `&lat=${geometry.location.lat()}` : '';
             storeParams += geometry.location.lng() ? `&lng=${geometry.location.lng()}` : '';
             storeParams += this.get('selectedCountry.value') ? `&country=${this.get('selectedCountry.value')}` : '';
-            storeParams += this.get('searchRadius') ? `&radius=${Number(this.get('searchRadius'))}` : '';
+            storeParams += this.get('searchRadius.value') ? `&radius=${Number(this.get('searchRadius.value'))}` : '';
+            if (this.get('storeType.value') !== 'all') {
+              storeParams += `&is_vip=${Number(this.get('storeType.value'))}`;
+            }
 
             // set the endpoint, when set the api call will automatically commence
             this.set('storesEndPoint',
               `${this.get('dioApiUrl')}/retailers?brandName=maxi_cosi${storeParams}`
             );
+            this.$.ajaxRequest.generateRequest();
 
           }, (error) => {
             // handle off the errors
@@ -703,7 +948,7 @@
       _defineStoreType(vip) {
         const markerUrl = '/assets/images/markers/';
 
-        return (typeof vip === 'undefined' || !vip) ? `${markerUrl}shop-marker.png` : `${markerUrl}vip-marker.png`;
+        return (typeof vip === 'undefined' || !vip) ? `${markerUrl}other-store.svg` : `${markerUrl}specialist-store.svg`;
       }
 
       /**
@@ -757,6 +1002,24 @@
             selectedStore: storeInfo.store
           }
         });
+      }
+
+      _onSearchRadiusChanged(searchRadius) {
+        if (this.get('addressInput').length > 0) {
+          this.callLocator(null);
+        }
+      }
+
+      _onStoreTypeChanged(storeType) {
+        if (this.get('addressInput').length > 0) {
+          this.callLocator(null);
+        }
+      }
+
+      _selectedTabChanged(value) {
+        if (value === 1) {
+          this.callLocator(null);
+        }
       }
 
     };
