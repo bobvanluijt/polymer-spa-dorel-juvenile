@@ -1,4 +1,4 @@
-<dom-module id="dorel-cta">
+<dom-module id="dorel-link">
   <template>
     <style include="iron-flex">
       /*
@@ -6,30 +6,12 @@
        */
 
       /* aplies to all type of cta's (both button and regular link) */
-      .theme-cta {
-        @apply(--theme-button);
-        @apply(--theme-button-primary);
-        @apply(--theme-button-medium);
-      }
+      /* .theme-cta {
 
-      .theme-cta--primary {
-        @apply(--theme-button-primary);
-      }
-
-      .theme-cta--secondary {
-        @apply(--theme-button-secondary);
-      }
-
-      .theme-cta--tertiary {
-        @apply(--theme-button-tertiary);
-      }
+      } */
 
       .theme-cta--link {
         @apply(--theme-button-link);
-      }
-
-      .theme-cta--primary.inverted {
-        @apply(--theme-button-inverted);
       }
 
       .theme-cta--link.inverted {
@@ -41,17 +23,8 @@
         opacity: 0.8;
       }
 
-      .theme-cta--inverted .theme-cta__icon {
-        @apply(--theme-button-link-icon);
-      }
-
       .theme-cta--link .theme-cta__content {
         padding: 0;
-      }
-
-      .theme-cta--link .theme-cta__icon {
-        @apply(--theme-button-link-icon);
-        padding-right: 0;
       }
 
       /*
@@ -62,23 +35,8 @@
         cursor: pointer;
       }
 
-      .theme-cta:hover .theme-cta__icon, .theme-cta:focus .theme-cta__icon {
-        @apply(--theme-button-icon-active);
-      }
-
-      .theme-cta--primary:hover, .theme-cta--primary:focus,
-      .theme-cta--secondary:hover, .theme-cta--secondary:focus,
-      .theme-cta--tertiary:hover, .theme-cta--tertiary:focus {
-        @apply(--theme-button-active);
-      }
-
       .theme-cta--link:hover, .theme-cta--link:focus {
         @apply(--theme-button-link-active);
-      }
-
-      .theme-cta--link:hover .theme-cta__icon,
-      .theme-cta--link:focus .theme-cta__icon {
-        @apply(--theme-button-link-icon-active);
       }
 
       /*
@@ -92,7 +50,6 @@
       .theme-cta--large {
         @apply(--theme-button-large);
         height: 3em;
-        width: 100%;
       }
 
       /*
@@ -108,38 +65,6 @@
         -webkit-flex-grow: 1;
         flex-grow: 1;
         padding: 0 0 0 0.75em;
-      }
-
-      .theme-cta--large .theme-cta__content {
-        padding: 0;
-      }
-
-      /*
-       * CTA - Icon styling
-       */
-
-      .theme-cta__icon {
-        @apply(--theme-button-icon);
-      }
-
-      .theme-cta--primary .theme-cta__icon,
-      .theme-cta--primary.inverted:hover .theme-cta__icon {
-        @apply(--theme-button-primary-icon);
-      }
-
-      .theme-cta--primary.inverted .theme-cta__icon,
-      .theme-cta--secondary .theme-cta__icon {
-        @apply(--theme-button-secondary-icon);
-      }
-
-      .theme-cta--tertiary .theme-cta__icon {
-        @apply(--theme-button-tertiary-icon);
-      }
-
-      .theme-cta__icon--left {
-        width: 3em;
-        height: 2.5em;
-        margin: 0;
       }
 
       :host([rotate]) a {
@@ -160,50 +85,23 @@
         cursor: not-allowed;
       }
 
-      :host([type="link"][active]) a {
+      :host([active]) a {
         @apply(--theme-button-link-active);
       }
 
-      :host([type="primary"][active]) a {
-        @apply(--theme-button-active);
-      }
-
-      :host([type="link"][active]) .theme-cta__icon {
-        @apply(--theme-button-link-icon-active);
-      }
-
-      :host([type="link"]) .theme-cta__icon {
-        border-left: 0;
-        border-right: 0;
-        margin-left: 0;
-        margin-right: 0;
-      }
-
-      /*
-       * Left aligned icons
-       */
-      :host([left-align-icon]) .theme-cta {
-        flex-direction: row-reverse;
-      }
-
-      :host([left-align-icon]) .theme-cta__icon {
-        @apply(--theme-button-icon-left);
-        padding: 0 .5em 0 0.25em;
-      }
-
-      :host([left-align-icon]) .theme-cta__content {
-        padding: 0 .5em 0 0;
+      :host([image]) a {
+        border-radius: var(--theme-border-radius-2);
+        width: 100%;
+        height: 21em;
+        overflow: hidden;
+        display: flex;
+        padding: .25em;
+        box-sizing: border-box;
       }
 
       /*
        * Responsive Behaviour
        */
-
-      [tablet-medium-up] .theme-cta__icon--left {
-        width: 5.125em;
-        height: 3.125em;
-        margin: .475em 0;
-      }
 
       .theme-cta--large[tablet-medium-up] {
         @apply(--theme-button-large);
@@ -227,36 +125,18 @@
     <a href$="[[ link ]]"
       title$="[[ title ]]"
       target$="[[ target ]]"
-      class$="theme-cta theme-cta--[[ type ]] theme-cta--[[ size ]] [[ invertedCssClass ]]"
+      class$="theme-cta theme-cta--link theme-cta--[[ size ]] [[ invertedCssClass ]]"
       tablet-medium-up$="{{ breakpoints.tabletMediumUp }}"
-      target$="[[ _isExternal(linkTarget) ]]"
       gtm-action$="[[ gtmAction ]]"
-      gtm-parent$="[[ gtmParent ]]"
-      gtm-parent-index$="[[ gtmParentIndex ]]"
-      gtm-child$="[[ gtmChild ]]"
-      gtm-child-index$="[[ gtmChildIndex ]]"
-      gtm-cta-index$="[[ gtmCtaIndex ]]"
       on-click="_clickCTA">
-      <template
-        is="dom-if"
-        if="[[ extraIcon ]]">
-        <iron-icon class="theme-cta__icon theme-cta__icon--left" icon="[[ extraIcon ]]"></iron-icon>
-      </template>
-
-      <span class="theme-cta__content"><slot id="content"></slot></span>
-
-      <template
-        is="dom-if"
-        if="[[ icon ]]">
-        <iron-icon class="theme-cta__icon" icon="[[ icon ]]"></iron-icon>
-      </template>
+      <slot id="content"></slot>
     </a>
   </template>
 
   <script>
-    class DorelCta extends ReduxMixin(Polymer.mixinBehaviors([GtmBehavior, ConditionalBehaviors], Polymer.Element)) {
+    class DorelLink extends ReduxMixin(Polymer.mixinBehaviors([GtmBehavior, ConditionalBehaviors], Polymer.Element)) {
 
-      static get is() { return 'dorel-cta'; }
+      static get is() { return 'dorel-link'; }
 
       static get properties() {
         return {
@@ -294,15 +174,6 @@
           title: {
             type: String
           },
-          /**
-           * @attribute
-           * @name linkTarget
-           * @description defines the links target (e.g. _blank for opening in new tab)
-           */
-          linkTarget: {
-            type: String,
-            value: ''
-          },
 
           /**
            * @attribute
@@ -336,39 +207,10 @@
 
           /**
            * @attribute
-           * @name icon
-           * @description The icon for the CTA. Use the dorel-iconset icons here.For example: dorel-icons:chevron-right
-           */
-          icon: {
-            type: String,
-            value: 'dorel-icons:chevron-right'
-          },
-
-          /**
-           * @attribute
-           * @name extraIcon
-           * @description A large extra icon for emphasizing the CTA. Is placed left of the text.
-           * Use the dorel-iconset icons here. For example: dorel-icons:chevron-right
-           */
-          extraIcon: {
-            type: String
-          },
-
-          /**
-           * @attribute
            * @name disabled
            * @description Sets the disabled state of the CTA
            */
           disabled: {
-            type: Boolean
-          },
-
-          /**
-           * @attribute
-           * leftAlignIcon
-           * @description Aligns the main icon to the left of the button label
-           */
-          leftAlignIcon: {
             type: Boolean
           },
 
@@ -392,7 +234,8 @@
        */
       _clickCTA(event) {
         // retarget to the right element to get its attributes
-        const element = (event.target.tagName === 'A') ? event.target : event.composedPath()[1];
+        console.log(event);
+        const element = event.target || event.composedPath()[1];
         const gtmAction = element.getAttribute('gtm-action');
         const path = event.composedPath();
         const pathEl = path.filter(el => el.tagName && el.tagName.includes('DOREL-'));
@@ -416,14 +259,6 @@
       }
 
       /**
-       * define if the _target opens in a new tab or not
-       */
-      _isExternal(linkTarget) {
-        return (typeof linkTarget === 'undefined' || !linkTarget) ?
-          '_self' : '_blank';
-      }
-
-      /**
        * determine if we need to set the inverted css class to
        */
       _getInvertedStyle(inverted) {
@@ -431,6 +266,6 @@
       }
     }
 
-    customElements.define(DorelCta.is, DorelCta);
+    customElements.define(DorelLink.is, DorelLink);
   </script>
 </dom-module>

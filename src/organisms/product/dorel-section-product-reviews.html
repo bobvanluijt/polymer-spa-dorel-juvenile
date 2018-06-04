@@ -49,7 +49,8 @@
             type="link"
             link="[[submitReviewUrl]]"
             size="medium"
-            class="submit-review-btn">[[localize('reviews#submit_your_review')]]</dorel-cta>
+            class="submit-review-btn"
+            disabled="[[submitReviewUrlDisabled]]">[[localize('reviews#submit_your_review')]]</dorel-cta>
         </div>
       </template>
 
@@ -69,7 +70,8 @@
               rating-distribution="[[reviews.rollup.rating_histogram]]"
               total-reviews="[[reviews.rollup.review_count]]"
               rollup="[[reviews.rollup]]"
-              submit-review-url="[[submitReviewUrl]]"></dorel-product-review-total-summary>
+              submit-review-url="[[submitReviewUrl]]"
+              submit-review-url-disable="[[submitReviewUrlDisabled]]"></dorel-product-review-total-summary>
           </dorel-layout-column>
 
           <dorel-layout-column desktop-column-span="9" mobile-column-span="12" class="reviews-container">
@@ -131,7 +133,8 @@
               not-helpful-votes="[[review.metrics.not_helpful_votes]]"
               rating="[[review.metrics.rating]]"
               number-of-stars="[[reviews.rollup.rating_histogram.length]]"
-              merchant-response="[[review.details.merchant_response]]"></dorel-product-reviews>
+              merchant-response="[[review.details.merchant_response]]"
+              submit-review-url-disable="[[submitReviewUrlDisabled]]"></dorel-product-reviews>
           </template>
           <template
             is="dom-if"
@@ -218,7 +221,11 @@
             observer: '_scrollHandler'
           },
 
-          submitReviewUrl: String
+          submitReviewUrl: String,
+          submitReviewUrlDisabled: {
+            type: Boolean,
+            value: true
+          }
         };
       }
 
@@ -229,9 +236,13 @@
        */
       _productChanged(productSku) {
         if (productSku) {
-          this.set('submitReviewUrl', `${window.location.origin}${window.location.pathname}/submit-your-review`);
+          let submitReviewUrl = `${window.location.origin}${window.location.pathname}/submit-your-review`;
+          this.set('submitReviewUrl', submitReviewUrl.replace('//submit-your-review', '/submit-your-review'));
+          this.set('submitReviewUrlDisabled', false);
           this.dispatch('requestReviews', productSku, this.get('reviewsSorting'));
           // this.dispatch('requestReviews', '2d7c2112-7cc1-47cc-8b6f-2cc7cd0a9d95', this.get('reviewsSorting'), this.get('imageOnly'));
+        } else {
+          this.set('submitReviewUrlDisabled', true);
         }
       }
 

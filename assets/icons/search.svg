@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 49.3 (51167) - http://www.bohemiancoding.com/sketch -->
+    <title>molecules/search/large@3x</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <path d="M17.1544223,8.90652335 L16.0649477,8.90652335 L15.6862386,9.28248814 C17.0240695,10.8426048 17.8377451,12.8651306 17.8377451,15.0811274 C17.8377451,20.0070894 13.8448345,24 8.91887256,24 C3.99291064,24 0,20.0070894 0,15.0811274 C0,10.1551655 3.99291064,6.16225487 8.91887256,6.16225487 C11.1348694,6.16225487 13.1560231,6.97455834 14.7161397,8.31101709 L15.0948488,7.93505231 L15.0948488,6.84832199 L21.9527757,0 L23.9986279,2.04585215 L17.1544223,8.90652335 L17.1544223,8.90652335 Z M8.91887256,8.90652335 C5.50774684,8.90652335 2.74426848,11.6700017 2.74426848,15.0811274 C2.74426848,18.490881 5.50774684,21.2557315 8.91887256,21.2557315 C12.3286262,21.2557315 15.0934766,18.490881 15.0934766,15.0811274 C15.0934766,11.6700017 12.3286262,8.90652335 8.91887256,8.90652335 L8.91887256,8.90652335 Z" id="path-1"></path>
+    </defs>
+    <g id="Store-Finder--Desktop--L-1280---MC" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Maxi-Cosi---Store-Finder---Desktop---L---1280x" transform="translate(-358.000000, -252.000000)">
+            <g id="Section--fields-Copy" transform="translate(0.000000, 180.000000)">
+                <g id="Search-field" transform="translate(24.000000, 60.000000)">
+                    <g id="maxi-cosi/molecules/search/large" transform="translate(334.000000, 12.000000)">
+                        <g id="search">
+                            <g id="maxi-cosi/atoms/icons/ui/search">
+                                <mask id="mask-2" fill="white">
+                                    <use xlink:href="#path-1"></use>
+                                </mask>
+                                <use id="Shape" fill="#00386E" fill-rule="evenodd" transform="translate(11.999314, 12.000000) scale(1, -1) translate(-11.999314, -12.000000) " xlink:href="#path-1"></use>
+                            </g>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
