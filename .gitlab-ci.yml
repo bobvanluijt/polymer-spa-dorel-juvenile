@@ -42,9 +42,9 @@ variables:
     paths:
       - build/
 
-#build:frontend: &build-frontend
-#  <<: *build_definition_fe
-#  <<: *except_tags
+build:frontend: &build-frontend
+  <<: *build_definition_fe
+  <<: *except_tags
 
 ##########################################################
 ## START Job - RELEASE                                  ##
@@ -52,8 +52,8 @@ variables:
 .release: &release_definition
   stage: release
   image: marcuswelz/gitlabci-docker-git-gcloud
-#  dependencies:
-#    - build:frontend
+  dependencies:
+    - build:frontend
   before_script:
     - echo $GCLOUD_SERVICE_ACCOUNT > /gcloud.json
     - gcloud auth activate-service-account --key-file=/gcloud.json
