@@ -1,0 +1,69 @@
+stages:
+  - build
+  - release
+
+variables:
+  REGISTRY_NAME: eu.gcr.io
+  GROUP_NAME: dorel-io-dev
+  IMAGE_NAME: dorel-spa
+
+before_script:
+  - echo $GCLOUD_SERVICE_ACCOUNT > ~/gcloud.json
+  - gcloud auth activate-service-account --key-file=gcloud.json
+  - export DOCKER_IMAGE="$REGISTRY_NAME/$GROUP_NAME/$IMAGE_NAME"
+
+##########################################################
+## GLOBAL HELPERS                                       ##
+##########################################################
+.only-envs: &only_envs
+  only:
+    - master
+    - acceptance
+
+.except-tags: &except_tags
+  except:
+    - /^artifact.*$/
+    - /^release.*$/
+
+
+##########################################################
+## START Job - BUILD_FRONTEND                           ##
+##########################################################
+.cache-fe:
+  cache: &cache_definition_fe
+    key: dorel-spa-node_modules
+    paths:
+      - node_modules/
+
+.build-fe: &build_definition_fe
+  stage: build
+  image: node
+  cache: *cache_definition_fe
+  script:
+    - yarn install
+    - yarn build
+  artifacts:
+    paths:
+      - build/
+
+build:frontend: &build-frontend
+  <<: *build_definition_fe
+  <<: *except_tags
+
+##########################################################
+## START Job - RELEASE                                  ##
+##########################################################
+.release: &release_definition
+  stage: release
+  image: marcuswelz/gitlabci-docker-git-gcloud
+  dependencies:
+    - build:frontend
+  script:
+    - docker pull $DOCKER_IMAGE:latest || true
+    - docker build --cache-from $DOCKER_IMAGE:latest --tag $DOCKER_IMAGE:$CI_BUILD_REF --tag $DOCKER_IMAGE:latest .
+    - docker push $DOCKER_IMAGE:$CI_COMMIT_REF_NAME
+    - docker push $DOCKER_IMAGE:latest
+
+release:master:
+  <<: *release_definition
+#  <<: *only-envs
