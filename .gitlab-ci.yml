@@ -33,7 +33,7 @@ variables:
 
 .build-fe: &build_definition_fe
   stage: build
-  image: node
+  image: node:8
   cache: *cache_definition_fe
   script:
     - yarn install
