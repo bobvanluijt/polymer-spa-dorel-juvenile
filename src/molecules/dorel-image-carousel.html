@@ -125,6 +125,9 @@
         this.addEventListener('click', this._onClick, {passive: true})
       }
 
+      /**
+       * Get all the image urls of the images.
+       */
       _getImageUrls() {
         return this.get('slides').map(e => e.image_url);
       }

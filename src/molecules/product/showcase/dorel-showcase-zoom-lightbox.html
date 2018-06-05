@@ -164,26 +164,6 @@
           },
 
           /**
-           * @name imageLeft
-           * @description The left Image Url
-           */
-          imageLeft: {
-            type: String,
-            reflectToAttribute: true,
-            statePath: 'image.imageLightbox.imageLeft'
-          },
-
-          /**
-           * @name imageRight
-           * @description The right Image Url
-           */
-          imageRight: {
-            type: String,
-            reflectToAttribute: true,
-            statePath: 'image.imageLightbox.imageRight'
-          },
-
-          /**
            * determines if the lightbox image a product image if true,
            */
           bynderId: {
@@ -246,7 +226,6 @@
         const imageUrls = this.get('imageUrls');
         return imageUrls ? index < imageUrls.length && index >= 0  : false;
       }
-
 
       /**
        * Set the image width to the overlay in order to position the close icon.
