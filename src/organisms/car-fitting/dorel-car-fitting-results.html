@@ -279,13 +279,13 @@
       img.floor_storage {
         width: 10rem;
       }
-      
+
       .no-result-title {
         @apply(--theme-typography-4);
         color: var(--theme-brand-color-1);
       }
       .no-result-link {
-        
+
       }
       #store-locator-button {
         width: 4rem;
@@ -299,7 +299,7 @@
       template-type="page-store-locator.php"
       response="{{storeLocatorPage}}"></dorel-wp-collect-templates>
     <dorel-media-query breakpoints="{{ breakpoints }}"></dorel-media-query>
-    <dorel-layout-container>      
+    <dorel-layout-container>
       <template is="dom-if" if="[[ breakpoints.desktopSmallUp ]]">
         <template is="dom-if" if="[[ !standalone ]]" restamp="true">
           <dorel-layout-row align="middle">
@@ -310,7 +310,7 @@
             </dorel-layout-column>
           </dorel-layout-row>
         </template>
-      </template>      
+      </template>
       <dorel-layout-row align="middle">
         <dorel-layout-column desktop-column-span="5" tablet-column-span="5" mobile-column-span="12" align="left">
             <dorel-layout-row>
@@ -328,7 +328,7 @@
                         <h1 class="universal_notice">[[localize('car_fitting_results#universal_fitting')]]</h1>
                         <br>
                       </template>
-                      <small class="image-message">[[stepData.main_section.info]]</small>
+                      <small class="image-message">[[ localize(stepData.main_section.info) ]]</small>
                       <br>
                       <br>
                       <template is="dom-if" if='[[ car.result.message ]]' restamp='true'>
@@ -367,7 +367,7 @@
             <dorel-layout-column desktop-column-span="9" tablet-column-span="9" mobile-column-span="12" class="inner-col-left-top">
               <div class="notification-box">
                     <div class="selected-product">
-                      <h2 class="content-title">[[ stepData.selected_product.title ]]</h2>
+                      <h2 class="content-title">[[ localize(stepData.selected_product.title) ]]</h2>
                       <div class="image-wrapper">
                         <dorel-product-image
                           class="image-selected"
@@ -406,7 +406,7 @@
               </div>
             </dorel-layout-column>
           </dorel-layout-row>
-        </dorel-layout-column> 
+        </dorel-layout-column>
       </dorel-layout-row>
       <template is="dom-if" if="[[ breakpoints.tabletMediumUp ]]" restamp="true">
         <template is="dom-if" if="[[ hasBynderImage(stepData.sub_section.background_image_id) ]]">
@@ -510,7 +510,7 @@
           'renderCarGraphics(carData.*)'
         ];
       }
-      
+
       showUniversalMessage(data) {
         let result;
 
@@ -539,7 +539,7 @@
         //debugger;
         return ret;
       }
-      
+
       renderCarGraphics(data) {
         //debugger;
         return true;
@@ -559,7 +559,7 @@
 
       getFloorStorageImage(messageTag) {
         const image = `/assets/images/car-fitting/floor_storage_${messageTag.slice(-1)}.png`;
-        return (messageTag.substring(0, 42)=== 'car_fitting_results#floor_storage_warning_' && messageTag.slice(-1) > 1) ? image : false; 
+        return (messageTag.substring(0, 42)=== 'car_fitting_results#floor_storage_warning_' && messageTag.slice(-1) > 1) ? image : false;
       }
 
       productListFromState(state) {
@@ -582,7 +582,7 @@
           this.currentProductImage = data.value.carseat.child_products[0].images.image;
           this.currentBaseImage = (data.value.base) ? data.value.base.child_products[0].images.image : null;
           //this.productURL = `${window.location.origin}/${window.location.pathname.split('/')[1]}/${window.location.pathname.split('/')[2]}/${data.value.carseat.linkUrl}`;
-          /* @todo read out product template en link there */ 
+          /* @todo read out product template en link there */
           this.productURL = `/gb-en/car-seats/${data.value.carseat.url}`;
         }
       }
@@ -630,7 +630,7 @@
             this.iconsUsed.icon_green.used = false;
             this.iconsUsed.icon_orange.used = false;
             this.iconsUsed.icon_red.used = false;
-            this.iconsUsed.icon_green.used = false; 
+            this.iconsUsed.icon_green.used = false;
             this.iconsUsed.icon_top_tether.used = false;
 
             let self = this;
@@ -718,7 +718,7 @@
                       setTimeout(function(){
                         const top = (offset.top - (height + 30));
                         notice.style.top = `${offset.top - (height - (height / 2))}px`;
-                        notice.style.left = `${(document.documentElement.clientWidth / 2) - (width / 2)}px`; 
+                        notice.style.left = `${(document.documentElement.clientWidth / 2) - (width / 2)}px`;
                       }, 200);
                     } else {
                       notice.style.top = `${offset.top - (height - (height / 3))}px`;
@@ -749,7 +749,7 @@
                       setTimeout(function(){
                         const top = (offset.top - (height + 30));
                         notice.style.top = `${offset.top - (height - (height / 2))}px`;
-                        notice.style.left = `${(document.documentElement.clientWidth / 2) - (width / 2)}px`; 
+                        notice.style.left = `${(document.documentElement.clientWidth / 2) - (width / 2)}px`;
                       }, 200);
                     } else {
                       notice.style.top = `${offset.top - (height - (height / 3))}px`;
@@ -785,7 +785,7 @@
                       setTimeout(function(){
                         const top = (offset.top - (height + 30));
                         notice.style.top = `${offset.top - (height - (height / 2))}px`;
-                        notice.style.left = `${(document.documentElement.clientWidth / 2) - (width / 2)}px`; 
+                        notice.style.left = `${(document.documentElement.clientWidth / 2) - (width / 2)}px`;
                       }, 200);
                     } else {
                       notice.style.top = `${offset.top - (height - (height / 3))}px`;
@@ -815,7 +815,7 @@
                       setTimeout(function(){
                         const top = (offset.top - (height + 30));
                         notice.style.top = `${offset.top - (height - (height / 2))}px`;
-                        notice.style.left = `${(document.documentElement.clientWidth / 2) - (width / 2)}px`; 
+                        notice.style.left = `${(document.documentElement.clientWidth / 2) - (width / 2)}px`;
                       }, 200);
                     } else {
                       notice.style.top = `${offset.top - (height - (height / 3))}px`;
@@ -835,7 +835,7 @@
                 opacity: 100
               });
             }
-              
+
             setTimeout(() => {
               const svgOldCarNode = this.shadowRoot.querySelector(`#car_${carIndex}`);
               if(svgOldCarNode) svgOldCarNode.remove();
@@ -866,5 +866,5 @@
     }
 
     customElements.define(DorelCarFittingResults.is, DorelCarFittingResults);
-  </script>  
+  </script>
 </dom-module>
