@@ -60,8 +60,8 @@ build:frontend: &build-frontend
     - export DOCKER_IMAGE="$REGISTRY_NAME/$GROUP_NAME/$IMAGE_NAME"
   script:
     - docker pull $DOCKER_IMAGE:latest || true
-    - docker build --cache-from $DOCKER_IMAGE:latest --tag $DOCKER_IMAGE:$CI_BUILD_REF --tag $DOCKER_IMAGE:latest .
-    - docker push $DOCKER_IMAGE:$CI_COMMIT_REF_NAME
+    - docker build --cache-from $DOCKER_IMAGE:latest --tag $DOCKER_IMAGE:$CI_COMMIT_REF_SLUG --tag $DOCKER_IMAGE:latest .
+    - docker push $DOCKER_IMAGE:$CI_COMMIT_REF_SLUG
     - docker push $DOCKER_IMAGE:latest
 
 release:master:
