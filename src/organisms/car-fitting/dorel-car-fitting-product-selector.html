@@ -169,7 +169,8 @@
       productsFetched(e) {
         const list = this.get('productList');
         if(list.length > 0) {
-          this.handleSelectionChange({base: {index: 0}});
+          const index = this.get('currentIndex') || 0;
+          this.handleSelectionChange({base: {index: index}});
         }
       }
 
@@ -221,6 +222,7 @@
 
       handleSelectionChange(ev) {
         const index = ev.base.index;
+        this.set('currentIndex', index);
         const list = this.get('productList');
         let product, sku;
         if(list) {
