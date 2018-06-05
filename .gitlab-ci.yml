@@ -6,6 +6,7 @@ variables:
   REGISTRY_NAME: eu.gcr.io
   GROUP_NAME: dorel-io-dev
   IMAGE_NAME: dorel-spa
+  DOCKER_DRIVER: overlay2
 
 ##########################################################
 ## GLOBAL HELPERS                                       ##
