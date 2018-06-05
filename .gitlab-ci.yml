@@ -7,11 +7,6 @@ variables:
   GROUP_NAME: dorel-io-dev
   IMAGE_NAME: dorel-spa
 
-before_script:
-  - echo $GCLOUD_SERVICE_ACCOUNT > ~/gcloud.json
-  - gcloud auth activate-service-account --key-file=gcloud.json
-  - export DOCKER_IMAGE="$REGISTRY_NAME/$GROUP_NAME/$IMAGE_NAME"
-
 ##########################################################
 ## GLOBAL HELPERS                                       ##
 ##########################################################
@@ -58,6 +53,10 @@ build:frontend: &build-frontend
   image: marcuswelz/gitlabci-docker-git-gcloud
   dependencies:
     - build:frontend
+  before_script:
+    - echo $GCLOUD_SERVICE_ACCOUNT > ~/gcloud.json
+    - gcloud auth activate-service-account --key-file=gcloud.json
+    - export DOCKER_IMAGE="$REGISTRY_NAME/$GROUP_NAME/$IMAGE_NAME"
   script:
     - docker pull $DOCKER_IMAGE:latest || true
     - docker build --cache-from $DOCKER_IMAGE:latest --tag $DOCKER_IMAGE:$CI_BUILD_REF --tag $DOCKER_IMAGE:latest .
