@@ -125,6 +125,11 @@
         this.addEventListener('click', this._onClick, {passive: true})
       }
 
+      _getImageUrl(index, dif) {
+        var image = this.get('slides')[index + dif];
+        return image ? image.image_url : null;
+      }
+
       /**
        * observer
        * @name _updatePosition
@@ -152,7 +157,7 @@
           return
         }
         const productImageUrl = this.slides[this.position].image_url;
-        this.dispatch('setImageLightbox', { active: true, productImageUrl })
+        this.dispatch('setImageLightbox', { active: true, productImageUrl, imageLeft: this._getImageUrl(this.position, -1), imageRight: this._getImageUrl(this.position, +1) })
       }
 
     };

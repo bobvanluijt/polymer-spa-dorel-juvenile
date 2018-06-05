@@ -96,7 +96,7 @@
           <div
             id="overlayArrowLeft"
             class="overlay-arrow left"
-            data-image="imageLeft"
+            data-image$="[[ imageLeft ]]"
             on-click="_switchImage">
             <iron-icon class="dorel-cookie-notification__proceed-icon"
                        icon="dorel-icons:chevron-left"></iron-icon>
@@ -104,7 +104,7 @@
           <div
           id="overlayArrowRight"
           class="overlay-arrow right"
-          data-image="imageRight"
+          data-image$="[[ imageRight ]]"
           on-click="_switchImage">
           <iron-icon class="dorel-cookie-notification__proceed-icon" icon="dorel-icons:chevron-right"></iron-icon>
         </div>
@@ -158,6 +158,26 @@
           },
 
           /**
+           * @name imageLeft
+           * @description The left Image Url
+           */
+          imageLeft: {
+            type: String,
+            reflectToAttribute: true,
+            statePath: 'image.imageLightbox.imageLeft'
+          },
+
+          /**
+           * @name imageRight
+           * @description The right Image Url
+           */
+          imageRight: {
+            type: String,
+            reflectToAttribute: true,
+            statePath: 'image.imageLightbox.imageRight'
+          },
+
+          /**
            * determines if the lightbox image a product image if true,
            */
           bynderId: {
@@ -195,9 +215,12 @@
         this.dispatch('resetImageLightbox');
       }
 
+      /**
+       * Switch images after button clicks.
+       */
       _switchImage(event) {
-        this.dispatch('resetImageLightbox');
-          var image = event.currentTarget.dataset.image;
+        event.stopPropagation();
+        var image = event.currentTarget.dataset.image;
         console.log(image);
       }
 
