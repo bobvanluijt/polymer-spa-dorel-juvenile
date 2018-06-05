@@ -120,6 +120,6 @@
     "build:gulp:es5": "gulp build:es5",
     "build:gulp:es6": "gulp build:es6",
     "build:gulp:ie11": "gulp build:ie11",
-    "server": "node server.js"
+    "serve": "node server.js"
   }
 }

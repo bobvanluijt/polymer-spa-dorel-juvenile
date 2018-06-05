@@ -1,14 +1,16 @@
 const send = require('koa-send');
 const Koa = require('koa');
 const { resolve } = require('path');
-const redis = require('redis');
+// const redis = require('redis');
 
 const app = new Koa();
+
+const getLegacyBuild = (ua) => ua.match(/.*MSIE.*/) ? './build/es5' : './build/ie11';
 
 const userAgentParser = async (ctx, next) => {
   const ua = ctx.request.header['user-agent'];
   ctx.state.build = ua.match(/.*(MSIE|Trident|Samsung).*/)
-      ? './build/es5'
+      ? getLegacyBuild(ua)
       : './build/es6';
   await next();
 };
