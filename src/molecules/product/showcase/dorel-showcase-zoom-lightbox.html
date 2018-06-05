@@ -32,7 +32,7 @@
         float: none;
         display: block;
       }
-      .overlay-close-wrapper {
+      .overlay-wrapper {
         position: absolute;
         top: 50%;
         left: 50%;
@@ -40,6 +40,30 @@
         height: calc(100vh - 3rem);
         width: inherit;
         cursor: default;
+      }
+      .overlay-arrow {
+        position: absolute;
+        top: 50%;
+        left: 0;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        background-color: white;
+        line-height: 50px;
+        text-align: center;
+        box-shadow: 0 0 1px 1px rgba( 0, 0, 0, .1);
+        transition: .2s;
+      }
+
+      .overlay-arrow:hover {
+        box-shadow: 0 0 2px 2px rgba( 0, 0, 0, .2);
+      }
+
+      .overlay-arrow.right {
+        right: 0;
+        left: auto;
+        transform: translate(50%, -50%);
       }
       .overlay-close {
         float: right;
@@ -66,11 +90,26 @@
           image-url="{{productImageUrl}}">
         </dorel-product-image>
         <div
-          id="overlayCloseWrapper"
-          class="overlay-close-wrapper"
+          id="overlayWrapper"
+          class="overlay-wrapper"
           on-click="imageClick">
           <div
-            id="overlay-close"
+            id="overlayArrowLeft"
+            class="overlay-arrow left"
+            data-image="imageLeft"
+            on-click="_switchImage">
+            <iron-icon class="dorel-cookie-notification__proceed-icon"
+                       icon="dorel-icons:chevron-left"></iron-icon>
+          </div>
+          <div
+          id="overlayArrowRight"
+          class="overlay-arrow right"
+          data-image="imageRight"
+          on-click="_switchImage">
+          <iron-icon class="dorel-cookie-notification__proceed-icon" icon="dorel-icons:chevron-right"></iron-icon>
+        </div>
+          <div
+            id="overlayClose"
             class="overlay-close"
             on-click="_closeLightbox">
             <iron-icon class="dorel-cookie-notification__proceed-icon"
@@ -156,6 +195,13 @@
         this.dispatch('resetImageLightbox');
       }
 
+      _switchImage(event) {
+        this.dispatch('resetImageLightbox');
+          var image = event.currentTarget.dataset.image;
+        console.log(image);
+      }
+
+
       /**
        * Set the image width to the overlay in order to position the close icon.
        *
@@ -165,7 +211,7 @@
       _setImageWidth(url) {
         Polymer.RenderStatus.afterNextRender(this, () => {
         var img = new Image();
-        var element = this.shadowRoot.querySelector("#overlayCloseWrapper");
+        var element = this.shadowRoot.querySelector("#overlayWrapper");
         img.addEventListener("load", function() {
           element.style.width = "calc(" + 100 * (this.naturalWidth / this.naturalHeight) + "vh - 3em)";
         });
