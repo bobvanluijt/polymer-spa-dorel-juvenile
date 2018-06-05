@@ -371,6 +371,16 @@
           },
 
           /**
+           * current brand name for use in api call
+           */
+          brand: {
+            type: String,
+            statePath: function(state) {
+              return state.config.brand.label.toLowerCase().replace('-', '_');
+            }
+          },
+
+          /**
            * the current locale the visitor is on
            */
           localeCode: {
@@ -621,7 +631,7 @@
 
         // build up the countries arr for the countries dropdown
         this.set('countriesEndPoint',
-          `${this.dioApiUrl}/retailers/countries?brandName=maxi_cosi&localeCode=${this.localeCode}`
+          `${this.dioApiUrl}/retailers/countries?brandName=${this.brand}&localeCode=${this.localeCode}`
         );
         this.$.ajaxRequest.generateRequest();
       }
@@ -880,7 +890,7 @@
 
             // set the endpoint, when set the api call will automatically commence
             this.set('storesEndPoint',
-              `${this.get('dioApiUrl')}/retailers?brandName=maxi_cosi${storeParams}`
+              `${this.get('dioApiUrl')}/retailers?brandName=${this.brand}${storeParams}`
             );
             this.$.ajaxRequest.generateRequest();
 
