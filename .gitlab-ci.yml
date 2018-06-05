@@ -1,5 +1,5 @@
 stages:
-#  - build
+  - build
   - release
 
 variables:
@@ -42,9 +42,9 @@ variables:
     paths:
       - build/
 
-build:frontend: &build-frontend
-  <<: *build_definition_fe
-  <<: *except_tags
+#build:frontend: &build-frontend
+#  <<: *build_definition_fe
+#  <<: *except_tags
 
 ##########################################################
 ## START Job - RELEASE                                  ##
@@ -57,6 +57,7 @@ build:frontend: &build-frontend
   before_script:
     - echo $GCLOUD_SERVICE_ACCOUNT
     - echo $GCLOUD_SERVICE_ACCOUNT > ~/gcloud.json
+    - cat ~/gcloud.json
     - gcloud auth activate-service-account --key-file=~/gcloud.json
     - export DOCKER_IMAGE="$REGISTRY_NAME/$GROUP_NAME/$IMAGE_NAME"
   script:
