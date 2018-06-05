@@ -55,10 +55,8 @@ variables:
 #  dependencies:
 #    - build:frontend
   before_script:
-    - echo $GCLOUD_SERVICE_ACCOUNT
-    - echo $GCLOUD_SERVICE_ACCOUNT > ~/gcloud.json
-    - cat ~/gcloud.json
-    - gcloud auth activate-service-account --key-file=~/gcloud.json
+    - echo $GCLOUD_SERVICE_ACCOUNT > /gcloud.json
+    - gcloud auth activate-service-account --key-file=/gcloud.json
     - export DOCKER_IMAGE="$REGISTRY_NAME/$GROUP_NAME/$IMAGE_NAME"
   script:
     - docker pull $DOCKER_IMAGE:latest || true
