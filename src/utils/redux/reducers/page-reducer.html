@@ -5,7 +5,7 @@
       currentPage: {}
     };
 
-    pageReducer = (state = initial, action) => {
+    window.pageReducer = (state = initial, action) => {
       switch (action.type) {
         case 'ADD_PAGE':
           const pages = state.pages || [];

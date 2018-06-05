@@ -6,6 +6,7 @@
       dioApiUrl: CONFIG.DIO_API_URL,
       eComUrl: CONFIG.ECOM_URL,
       reviewsUrl: CONFIG.REVIEWS_URL,
+      writeReviewUrl: CONFIG.WRITE_REVIEWS_URL,
       brand: CONFIG.AVAILABLE_BRANDS[CONFIG.SELECTED_BRAND],
       brands: CONFIG.AVAILABLE_BRANDS,
       locale: {
@@ -27,7 +28,7 @@
       }
     };
 
-    configReducer = (state = initial, action) => {
+    window.configReducer = (state = initial, action) => {
       switch (action.type) {
         case 'ADD_OPTIONS_SUCCESS':
           return Object.assign({}, state, action.payload);

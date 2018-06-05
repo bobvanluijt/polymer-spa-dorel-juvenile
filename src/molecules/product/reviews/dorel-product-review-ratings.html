@@ -1,0 +1,92 @@
+<dom-module id="dorel-product-review-ratings">
+  <template>
+    <style>
+      .rating-wrapper {
+        display: flex;
+        margin-bottom: .6rem;
+      }
+
+      .label {
+        flex: 1
+      }
+    </style>
+
+    <template is="dom-if" if="[[showRatings]]">
+      <div class="rating-wrapper">
+        <span class="label">[[localize('reviews#product_quality')]]</span>
+        <dorel-product-review-stars rating="[[productQualityRating]]"></dorel-product-review-stars>
+      </div>
+      <div class="rating-wrapper">
+        <span class="label">[[localize('reviews#ease_of_use')]]</span>
+        <dorel-product-review-stars rating="[[easeOfUseRating]]"></dorel-product-review-stars>
+      </div>
+      <div class="rating-wrapper">
+        <span class="label">[[localize('reviews#maintenance')]]</span>
+        <dorel-product-review-stars rating="[[maintenanceRating]]"></dorel-product-review-stars>
+      </div>
+      <div class="rating-wrapper">
+        <span class="label">[[localize('reviews#comfort')]]</span>
+        <dorel-product-review-stars rating="[[comfortRating]]"></dorel-product-review-stars>
+      </div>
+    </template>
+
+  </template>
+
+  <script>
+    class DorelProductReviewRatings extends Polymer.mixinBehaviors([DorelMultilingualBehavior], Polymer.Element) {
+
+      static get is() { return 'dorel-product-review-ratings'; }
+
+      static get properties() {
+        return {
+          rollup: {
+            type: Object,
+            observer: '_rollupChanged'
+          },
+          /**
+           * attributes to show the ratings
+           */
+          showRatings: {
+            type: Boolean,
+            value: true
+          },
+          productQualityRating: Number,
+          easeOfUseRating: Number,
+          maintenanceRating: Number,
+          comfortRating: Number
+        }
+      }
+
+      /**
+       * set the average rating for all properties
+       *
+       * @param {rollup} the object containing reviews metrics
+       */
+      _rollupChanged(rollup) {
+        this.set('productQualityRating', this._getRating('productquality'));
+        this.set('easeOfUseRating', this._getRating('easeofuse'));
+        this.set('maintenanceRating', this._getRating('maintenance'));
+        this.set('comfortRating', this._getRating('comfort'));
+      }
+
+      /**
+       * get the average rating for a property
+       *
+       * @param {string} the property key
+       */
+      _getRating(key) {
+        if (this.rollup) {
+          const property = this.rollup.properties.find(prop => prop.key === key);
+          if (!property) {
+            this.set('showRatings', false);
+            return;
+          }
+          return property.value;
+        }
+        return 0;
+      }
+    }
+
+    customElements.define(DorelProductReviewRatings.is, DorelProductReviewRatings);
+  </script>
+</dom-module>

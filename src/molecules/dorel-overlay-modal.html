@@ -140,6 +140,7 @@
     </section>
   </template>
   <script>
+    import '../utils/behaviors/single/dorel-overlay-behavior.html';
     class DorelOverlayModal extends ReduxMixin(Polymer.mixinBehaviors([OverlayBehavior, DorelMultilingualBehavior], Polymer.Element)) {
       static get is() {
         return 'dorel-overlay-modal';

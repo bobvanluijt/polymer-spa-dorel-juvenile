@@ -1,4 +1,3 @@
-<link rel="import" href="../../node_modules/paper-checkbox/paper-checkbox.html">
 <dom-module id="dorel-checkbox">
   <template>
     <style>
@@ -10,7 +9,7 @@
         display: block;
         width: auto;
         position: relative;
-        float: left;
+        /* float: left; */
 
         --paper-checkbox-checked-color: var(--theme-brand-color-1);
         --paper-checkbox-checkmark-color: var(--theme-monochrome-1);
@@ -18,6 +17,14 @@
         --paper-checkbox-unchecked-color: var(--theme-color-black);
         --paper-font-common-base: var(--theme-font);
       }
+
+      .color-filter {
+        text-transform: lowercase;
+        --paper-checkbox-label-color: var(--theme-color-text-link);
+        --paper-checkbox-label-checked-color: var(--theme-brand-color-1);
+      }
+
+      .color-filter:hover { --paper-checkbox-label-color: var(--theme-brand-color-1); }
 
       .checkbox-image {
         /* pixel based because paper-checkbox is pixel based */
@@ -29,9 +36,9 @@
         z-index: 0;
       }
     </style>
-
     <paper-checkbox checked="{{ checked }}"
                     id="checkbox"
+                    class$="{{checkboxClasses}}"
                     disabled="[[ disabled ]]"
                     on-change="_onChangeHandler"
                     noink>
@@ -80,8 +87,22 @@
           value: 'transparent'
         },
 
+        /**
+         * @attribute
+         * @name checkboxClasses
+         * @description The classes you want to give to the checkboxes.
+         */
+        checkboxClasses: {
+          type: String,
+        },
+
         image: {
           type: 'String'
+        },
+
+        uncheckedColor: {
+          type: String,
+          value: 'black'
         }
       },
 

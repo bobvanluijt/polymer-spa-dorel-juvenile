@@ -212,6 +212,19 @@
         content: '';
         clear: both;
       }
+
+      .link {
+        color: var(--theme-button-link_-_color);
+      }
+
+      .link:hover {
+        cursor: pointer;
+        color: var(--theme-brand-color-1);
+      }
+
+      .rating-container {
+        line-height: 2.5rem;
+      }
     </style>
 
     <dorel-wp-collect-templates
@@ -260,6 +273,17 @@
               is="dom-if"
               if="[[_hasValue(showcaseData.name.value)]]">
               <h1 class="showcase-title">[[showcaseData.name.value]]</h1>
+            </template>
+
+            <template
+              is="dom-if"
+              if="[[reviewsRollup.average_rating]]">
+              <div class="rating-container">
+                <dorel-product-review-stars
+                  number-of-stars="[[reviewsRollup.rating_histogram.length]]"
+                  rating="[[reviewsRollup.average_rating]]"></dorel-product-review-stars>
+                <span class="link" on-click="_reviewsCountClicked">[[reviewsRollup.review_count]] [[localize('reviews_rating-overview#reviews')]]</span>
+              </div>
             </template>
 
             <!-- Product Specs -->
@@ -318,15 +342,14 @@
             <div class="actions">
               <template
                 is="dom-if"
-                if="[[_showStoreLocatorLightbox(storeLocatorPage, hatchOptions.toggle)]]">
+                if="[[ showHatchOptions ]]">
                 <!-- HATCH CTA -->
                 <dorel-cta
                   type="primary"
-                  title="[[localize('cta#find_a_store')]]"
+                  title="[[localize('buy_now')]]"
                   on-click="_openLightbox"
-                  link="#"
                   size="medium"
-                  icon="dorel-icons:chevron-right">[[localize('cta#find_a_store')]]</dorel-cta>
+                  icon="dorel-icons:chevron-right">[[localize('buy_now')]]</dorel-cta>
                 <dorel-showcase-lead-generation-lightbox
                   product-sku="[[currentChildSku]]"
                   store-locator-page="[[storeLocatorPage]]"></dorel-showcase-lead-generation-lightbox>
@@ -335,7 +358,7 @@
 
               <template
                 is="dom-if"
-                if="[[_showStoreLocatorCta(storeLocatorPage, hatchOptions.toggle)]]">
+                if="[[ showStoreLocatorCta ]]">
                 <!-- STORELOCATOR CTA -->
                 <dorel-cta
                   type="primary"
@@ -366,7 +389,6 @@
                   type="link"
                   title="[[localize('View_Accessories')]]"
                   on-click="_viewAccessories"
-                  link="#"
                   size="medium"
                   icon="dorel-icons:expand-more"
                   class="cta-related-products">
@@ -423,6 +445,11 @@
             notify: true
           },
 
+          reviewsScrollHandler: {
+            type: Boolean,
+            notify: true
+          },
+
           /**
            * @attribute
            * @name showcaseData
@@ -439,7 +466,8 @@
           hatchOptions: {
             type: Object,
             statePath: function(state) {
-              return state.config.third_party[0].hatch;
+              if(state.config.third_party) return state.config.third_party[0].hatch;
+              return false;
             }
           },
 
@@ -464,13 +492,42 @@
             observer: '_carFittingToolPageChanged'
           },
 
-          carfittingShown: Boolean
+          carfittingShown: Boolean,
+          productSku: String,
+
+          /**
+           * the rating and count of reviews
+           */
+          reviewsRollup: {
+            type: Array,
+            statePath: function(state) {
+              const review = state.review.reviews.find(review => review.sku === this.get('productSku'));
+              return review ? review.rollup : {};
+            }
+          },
+
+          /**
+           * webFlags to show Hatch options
+           */
+          webFlags: {
+            type: Array
+          },
+
+          showStoreLocatorCta: {
+            type: Boolean
+          },
+
+          showHatchOptions: {
+            type: Boolean
+          }
+
         };
       }
 
       static get observers() {
         return [
-          '_showcaseDataChanged(showcaseData)'
+          '_showcaseDataChanged(showcaseData)',
+          '_setStoreLocatorCta(webFlags, hatchOptions)'
         ];
       }
 
@@ -529,13 +586,17 @@
       }
 
       /**
-       * check to see if a store locator page is set and returns a boolean
-       *
-       * @param {object} the page object containing the store locator page
-       * @return Boolean
+       * check webflags and hatchOptions to show the HtachOptionsCta or StorLocatorCta
        */
-      _showStoreLocatorCta(pageObject, hatchToggle) {
-        return (typeof pageObject !== 'undefined' && pageObject !== '' && this._hasProperties(pageObject) && !hatchToggle);
+      _setStoreLocatorCta(webFlags, hatchOptions) {
+        if (hatchOptions) {
+          const pageObject = this.storeLocatorPage;
+          const pageExist = typeof pageObject !== 'undefined' && pageObject !== '';
+          const showStoreLocatorCta = pageExist && this._hasProperties(pageObject) && (!hatchOptions.toggle || !webFlags || webFlags.indexOf('button_lead_generation') === -1);
+          const showHatchOptions = pageExist && hatchOptions.toggle && webFlags && webFlags.indexOf('button_lead_generation') >= 0;
+          this.set('showStoreLocatorCta', showStoreLocatorCta);
+          this.set('showHatchOptions', showHatchOptions);
+        }
       }
 
       _carfittingEnabledChanged(carfittingEnabled) {
@@ -555,19 +616,6 @@
        */
       _showCfl(carFittingToolPage, carfittingEnabled) {
         return (typeof carFittingToolPage !== 'undefined' && carFittingToolPage !== '' && this._hasProperties(carFittingToolPage) && carfittingEnabled);
-      }
-
-      /**
-       * check if a store-locator page is defined and
-       * if the toggle is enabled in WP
-       *
-       * @param {object} the storeLocator pageObject
-       * @param {boolean} the hatchToggle value
-       *
-       * @return Boolean
-       */
-      _showStoreLocatorLightbox(pageObject, hatchToggle) {
-        return Boolean(typeof pageObject !== 'undefined' && pageObject !== '' && hatchToggle);
       }
 
       /**
@@ -594,7 +642,6 @@
       _createStoreLocatorLink(pageObject) {
         const urlArr = window.location.href.split('/');
         const temp = `${urlArr[0]}//${urlArr[2]}/${urlArr[3]}/${pageObject.post_name}`;
-        console.log(temp);
         return temp;
       }
 
@@ -606,6 +653,13 @@
       _createCarFittingListLink(pageObject, productData) {
         const urlArr = window.location.href.split('/');
         return `${urlArr[0]}//${urlArr[2]}/${urlArr[3]}/${pageObject.post_name}?product=${productData.url}` ;
+      }
+
+      /**
+       * handler when clicking on the review count
+       */
+      _reviewsCountClicked() {
+        this.reviewsScrollHandler = !this.reviewsScrollHandler;
       }
     }
     customElements.define(DorelSectionProductShowcase.is, DorelSectionProductShowcase);

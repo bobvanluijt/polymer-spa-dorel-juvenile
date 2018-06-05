@@ -1,5 +1,3 @@
-<link rel="import" href="../../atoms/dorel-checkbox.html">
-
 <dom-module id="dorel-category-filter-checkbox">
   <template>
     <style>
@@ -43,6 +41,7 @@
             checked="[[ checkbox.checked ]]"
             label="[[ checkbox.label ]]"
             color-code="[[ checkbox.color ]]"
+            checkbox-classes="{{checkboxClasses}}"
             image="[[ checkbox.image ]]">
           </dorel-checkbox>
         </div>
@@ -74,6 +73,15 @@
            */
           queryParams: {
             type: Object
+          },
+
+          /**
+           * @attribute
+           * @name checkboxClasses
+           * @description The classes you want to give to the checkboxes.
+           */
+          checkboxClasses: {
+            type: String
           },
 
           /**

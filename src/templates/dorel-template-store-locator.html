@@ -5,19 +5,34 @@
 
     <template
       is="dom-if"
-      if="[[templateData.acf.hero_header.length]]">
-      <dorel-section-header
-        section-header-data="[[heroHeader]]"
-        text-header="true"></dorel-section-header>
+      if="[[selected]]"
+      restamp>
+      <template
+        is="dom-if"
+        if="[[templateData.acf.hero_header.length]]">
+        <!-- <dorel-section-header
+          section-header-data="[[heroHeader]]"
+          text-header="true"></dorel-section-header> -->
 
-      <dorel-section-page-nav
-        breadcrumbs-toggle="true"></dorel-section-page-nav>
+        <dorel-section-page-nav
+          breadcrumbs-toggle="true"></dorel-section-page-nav>
+      </template>
     </template>
 
     <dorel-section-store-locator
       template-data="[[ templateData ]]"
       gtm-parent="dorel-section-store-locator"
       gtm-parent-index="0"></dorel-section-store-locator>
+
+    <template
+      is="dom-if"
+      if="[[heroHeader]]">
+      <template is="dom-if" if="[[ _hasValue(heroHeader.text) ]]">
+        <div class="info">
+          <dorel-safe-html html="[[ heroHeader.text ]]" full-width></dorel-safe-html>
+        </div>
+      </template>
+    </template>
   </template>
 
   <script>
@@ -43,10 +58,11 @@
          * @name homeHeaderData
          * @description the data model used for the hero header component
          */
-        heroHeaderData: Object
+        heroHeaderData: Object,
+        selected: Boolean
       },
 
-      behaviors: [TemplateBehaviors, DorelMultilingualBehavior]
+      behaviors: [TemplateBehaviors, DorelMultilingualBehavior, ConditionalBehaviors]
     });
   </script>
 </dom-module>

@@ -1,6 +1,3 @@
-<link rel="import" href="../../molecules/dorel-car-details-form.html">
-<link rel="import" href="../../atoms/dorel-checkbox.html">
-<link rel="import" href="../../atoms/dorel-cta-loader.html">
 <dom-module id="dorel-car-fitting-car-selector">
   <template>
     <style>
@@ -118,7 +115,7 @@
       <template is="dom-if" if="[[ breakpoints.desktopSmallUp ]]">
         <dorel-layout-row align="middle">
            <dorel-layout-column desktop-column-span="12" tablet-column-span="12" mobile-column-span="12" align="left">
-            <dorel-cta class="cta-back" title="[[ stepData.options.previous ]]" rotate no-margin type="link" link="#" size="medium" icon="dorel-icons:chevron-right" on-click="previousStep">
+            <dorel-cta class="cta-back" title="[[ stepData.options.previous ]]" rotate no-margin type="link" size="medium" icon="dorel-icons:chevron-right" on-click="previousStep">
                 [[ localize('common#back') ]]
             </dorel-cta>
           </dorel-layout-column>
@@ -165,7 +162,6 @@
                   <!--<dorel-layout-column desktop-column-span="6" tablet-column-span="6" mobile-column-span="7" align="left">
                     <dorel-cta title="primary"
                                 type="secondary"
-                                link="#"
                                 size="medium"
                                 icon="dorel-icons:plus"
                                 on-tap="addCar"
@@ -254,7 +250,7 @@
             computed: 'updateNextButton(next)'
           }
         };
-      }  
+      }
 
       static get observers() {
         return [
@@ -306,7 +302,7 @@
         super.ready();
         if(this.carData.length < 1) this.addCar();
       }
-      
+
       shouldShow(step) {
         let show;
         if(this.stepController.currentStep && this.stepController.currentStep === step) {
@@ -314,14 +310,21 @@
         } else {
           show = false;
         }
-        return show; 
+        return show;
       }
 
       previousStep() {
-        this.deleteCar({model: {index: 0}});
-        this.set('stepData.isCurrent', false);
-        this.set('stepController.currentStep', this.stepData.previousStep);
-        this.set(`carData.0.result`, null);
+        if (!window.location.search || !window.location.search.length) {
+          this.deleteCar({model: {index: 0}});
+          this.set('stepData.isCurrent', false);
+          this.set('stepController.currentStep', this.stepData.previousStep);
+          this.set(`carData.0.result`, null);
+        } else {
+          const queryString = window.location.search.substring(1);
+          if (queryString.indexOf('product=') > -1) {
+            window.history.back();
+          }
+        }
       }
 
       updateStep() {

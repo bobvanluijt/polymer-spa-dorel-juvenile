@@ -4,7 +4,7 @@
 /**
  * @polymerBehavior
  */
-  BehaviorImplementation = {
+  const BehaviorImplementation = {
     properties: {
       /**
        * @name language
@@ -19,12 +19,13 @@
      * @description - Load Polymer.AppLocalizeBehavior translation data
      */
     attached: function() {
-      this.loadResources(this.resolveUrl('https://api.dorel.io/v1/translations'));
+      const countryCode = (window.location.href.split('/')[3]).substring(0, 2);
+      this.loadResources(this.resolveUrl(`https://api.dorel.io/v1/translations/countrycode/${countryCode}`));
     }
   }
-  
+
 /**
  * @polymerBehavior
  */
-  DorelMultilingualBehavior = [Polymer.AppLocalizeBehavior, BehaviorImplementation]
+  window.DorelMultilingualBehavior = [Polymer.AppLocalizeBehavior, BehaviorImplementation]
 </script>

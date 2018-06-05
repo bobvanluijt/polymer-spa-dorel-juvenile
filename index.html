@@ -1,36 +1,20 @@
 <!doctype html>
-<html lang="en" version="$version" datetime="$datetime" commit="$commit" branch="$branch">
+<html lang="">
 <head>
   <meta http-equiv="x-ua-compatible" content="IE=edge">
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
 
-  <!-- todo: app title, description, favicon, appname, webapp -->
   <title></title>
 
-  <!-- Favicon, tiles & touch icons -->
   <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-touch-icon.png">
   <link rel="icon" type="image/png" href="/assets/images/favicons/favicon-32x32.png" sizes="32x32">
   <link rel="icon" type="image/png" href="/assets/images/favicons/favicon-16x16.png" sizes="16x16">
   <link rel="manifest" href="/assets/images/favicons/manifest.json">
   <link rel="mask-icon" href="/assets/images/favicons/safari-pinned-tab.svg" color="#5bbad5">
   <meta name="theme-color" content="#ffffff">
+  <script src="/app-config.js"></script>
 
-  <script type="text/javascript" src="/app-config.js"></script>
-  <script type="text/javascript">
-    if (window.CONFIG.AVAILABLE_BRANDS[CONFIG.SELECTED_BRAND]) {
-      var brandObj = CONFIG.AVAILABLE_BRANDS[CONFIG.SELECTED_BRAND];
-      var brand = brandObj.label.toLowerCase();
-      var themeUrl = '/src/themes/' + brand + '.html';
-      var themeImport = document.createElement('link');
-      themeImport.setAttribute("rel", "import");
-      themeImport.setAttribute("href", themeUrl);
-      document.head.appendChild(themeImport);
-    }
-  </script>
-  <link rel="import" href="/src/dorel-app.html">
-
-  <!-- Main style -->
   <style>
     html {
       position: relative;
@@ -42,14 +26,14 @@
 
     #load-placeholder {
       opacity:0;  /* make things invisible upon start */
-      -webkit-animation:fadeIn ease 1;  /* call our keyframe named fadeIn, use animattion ease-in and repeat it only 1 time */
+      -webkit-animation:fadeIn ease 1;  /* call our keyframe named fadeIn, use animation ease-in and repeat it only 1 time */
       -moz-animation:fadeIn ease 1;
       animation:fadeIn ease 1;
       -webkit-animation-duration: 1s;
       -moz-animation-duration: .1s;
       animation-duration: 1;
 
-      -webkit-animation-fill-mode:forwards;  /* this makes sure that after animation is done we remain at the last keyframe value (opacity: 1)*/
+      -webkit-animation-fill-mode:forwards;  /* this makes sure that after animation is done we remain at the last keyframe value (opacity: 1) */
       -moz-animation-fill-mode:forwards;
       animation-fill-mode:forwards;
     }
@@ -120,21 +104,32 @@
   </style>
 
 </head>
-<body unresolved>
-<!--
-  <div id="load-placeholder">
-    <div class="spinner-wrapper">
-      <div class="spinner">
-        <div class="double-bounce1"></div>
-        <div class="double-bounce2"></div>
-      </div>
-    </div>
-  </div> -->
+<body>
+  <script>
+    document.addEventListener('WebComponentsReady', function webcomponentsready() {
+      var refScript = document.getElementsByTagName('script')[0];
+      var script = document.createElement('script');
+      script.src = '/main.bundle.js';
+      refScript.parentNode.insertBefore(script, refScript);
+      document.removeEventListener('WebComponentsReady', webcomponentsready, false);
+    }, false);
+  </script>
+  <script src="/node_modules/babel-polyfill/dist/polyfill.min.js"></script>
+  <script src="/node_modules/webcomponentsjs/webcomponents-loader.js"></script>
 
-  <script type="text/javascript" src="/node_modules/webcomponentsjs/webcomponents-loader.js"></script>
-  <script type="text/javascript" src="/node_modules/babel-polyfill/dist/polyfill.min.js"></script>
-  <script type="text/javascript" src="/node_modules/dorel/fetch/fetch.js"></script>
+  <!-- @todo begin: move these to webpack imports -->
+  <script src="/node_modules/swiper/dist/js/swiper.min.js"></script>
+  <script src="/node_modules/snapsvg/dist/snap.svg.js"></script>
+  <!-- @todo end: move these to webpack imports -->
 
   <dorel-app></dorel-app>
 </body>
 </html>
+
+<!--
+version:  $version
+datetime: $datetime
+commit:   $commit
+branch:   $branch
+target:   $target
+-->

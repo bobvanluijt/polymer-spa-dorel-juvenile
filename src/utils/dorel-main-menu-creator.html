@@ -74,7 +74,7 @@
         const promises = menuItems.map((item) => {
 
           return new Promise((resolve, reject) => {
-            if (item.is_external) {
+            if (item.is_external || !item.page_object) {
               return resolve(null);
             }
             resolve(this.$.collectPageEl.getPageById(item.page_object.ID));
@@ -100,6 +100,9 @@
         if (item.is_external && item.external_link.url) {
           item.id = null;
           item.link = item.external_link.url;
+        } else if (!page) {
+          item.id = null;
+          item.link = '#';
         } else {
           item.id = page.id;
           item.link = this.cleanUrlToPath(page.link);
@@ -112,7 +115,7 @@
           // retrieve all full page objects of the dropdown items
           const promises = item.dropdown_items.map((_item) => {
             return new Promise((resolve, reject) => {
-              if (_item.is_external) {
+              if (_item.is_external || !_item.page_object) {
                 return resolve(null);
               }
               resolve(this.$.collectPageEl.getPageById(_item.page_object.ID));

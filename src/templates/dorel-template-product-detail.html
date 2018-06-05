@@ -104,6 +104,10 @@
           accessory-scroll-handler="{{ accessoryScrollHandler }}"
           showcase-data="[[ product ]]"
           carfitting-enabled="[[carfittingEnabled]]"
+          reviews-scroll-handler="{{ reviewsScrollHandler }}"
+          showcase-data="[[ product ]]"
+          product-sku="[[ product.sku ]]"
+          web-flags="[[ product.web_flags ]]"
           ></dorel-section-product-showcase>
 
         <dorel-section-product-usps
@@ -133,12 +137,14 @@
 
         <template
           is="dom-if"
-          if="[[_shouldShowReviews(reviewsConfig.toggle, reviewsConfig.merchant_id, reviewsConfig.api_key)]]">
+          if="[[_shouldShowReviews(reviewsConfig.toggle, reviewsConfig.merchant_id, reviewsConfig.read_api_key)]]">
           <dorel-section-product-reviews
             product-sku="[[product.sku]]"
             product-name="[[product.name.value]]"
             reviews-sorting="[[reviewsConfig.sorting]]"
-            image-only="[[reviewsConfig.image_only]]"></dorel-section-product-reviews>
+            image-only="[[reviewsConfig.image_only]]"
+            reviews-scroll-handler="[[reviewsScrollHandler]]"
+            ></dorel-section-product-reviews>
         </template>
 
         <template
@@ -182,6 +188,11 @@
             value: false,
           },
 
+          reviewsScrollHandler: {
+            type: Boolean,
+            value: false,
+          },
+
           /**
            * the category that will be used by product-collect
            */
@@ -196,7 +207,10 @@
           product: {
             type: Object,
             statePath: function(state) {
-              const product = state.product.products.find(product => product.url === this.routeData.productName);
+              let product;
+              if (this.routeData) {
+                product = state.product.products.find(product => product.url === this.routeData.productName);
+              }
               return product ? product : { isLoading: true };
             },
             observer: '_productChanged'

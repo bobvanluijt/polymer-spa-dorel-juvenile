@@ -1,5 +1,3 @@
-<link rel="import" href="../utils/managers/dorel-category-filter-manager.html">
-
 <dom-module id="dorel-color-switcher">
   <template>
     <style>
@@ -157,6 +155,7 @@
   </template>
 
   <script>
+    import '../utils/behaviors/single/dorel-multilingual-behavior.html';
     class DorelColorSwitcher extends ReduxMixin(Polymer.mixinBehaviors([DorelMultilingualBehavior, GtmBehavior, ConditionalBehaviors], Polymer.Element)){
 
       static get is() { return 'dorel-color-switcher'; }
@@ -196,7 +195,17 @@
        */
       _setColors(newColorsData, oldColorsData) {
         if (!newColorsData || JSON.stringify(newColorsData) === JSON.stringify(oldColorsData)) return;
-        this._setCurrentColor(newColorsData[0]);
+
+        if (this.filters && this.filters[0]) {
+          const color = newColorsData.find(color => color.color.name === this.filters[0].values[0].value);
+          if (color) {
+            this._setCurrentColor(color);
+          } else {
+            this._setCurrentColor(newColorsData[0]);
+          }
+        } else {
+          this._setCurrentColor(newColorsData[0]);
+        }
       }
 
       /**

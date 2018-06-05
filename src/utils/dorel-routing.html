@@ -129,7 +129,14 @@
           newRoute.__queryParams = {};
         } else {
           const search = window.location.search.substring(1);
-          const newParams = JSON.parse(`{"${decodeURI(`${search}`.replace(/&/g, "\",\"").replace(/=/g,"\":\""))}"}`);
+
+          //Search string to JavaScript object
+          const newParams = search.split("&").reduce((result, value) => {
+            const valSplitted = value.split('=');
+            result[valSplitted[0]] = decodeURIComponent(valSplitted[1] || '');
+            return result;
+          }, {});
+
           //make sure the search is applied to the querParams
           newRoute.__queryParams = Object.assign({}, newParams, newRoute.__queryParams);
         }
@@ -154,11 +161,21 @@
         const parentSlug = fullParentUrl.match(/([^\/]*)\/*$/).pop();
         const parent = await await this.$.collectPageEl.getPageBySlug(parentSlug);
 
+        if (route.path.indexOf('submit-your-review') !== -1) {
+          const productName = route.path.split('/')[2];
+          this.currentPage = {
+            template: 'submit-your-review',
+            productName: productName
+          };
+          return this.dispatch('setCurrentPage', this.currentPage);
+        }
+
         if (!this.currentPage && route.path && route.path.length) {
           if (!parent) {
             return this._setPageNotFound();
           }
           var productDetailTemplate = parent.acf.detail_template_selector;
+
           if (!productDetailTemplate) {
             return this._setPageNotFound();
           } else {
@@ -166,7 +183,6 @@
               template: productDetailTemplate
             };
           }
-          this.dispatch('setProductCategoryPage', parent);
         } else {
           this.dispatch('setProductCategoryPage', this.currentPage);
         }

@@ -1,0 +1,580 @@
+<link rel="import" href="../../node_modules/paper-input/paper-input.html">
+<link rel="import" href="../molecules/product/reviews/dorel-product-review-stars.html">
+<link rel="import" href="../organisms/dorel-section-submit-review-tips.html">
+<link rel="import" href="../organisms/product/dorel-section-review-thank-you.html">
+<link rel="import" href="../atoms/dorel-input.html">
+<link rel="import" href="../atoms/dorel-input-textarea.html">
+<link rel="import" href="../atoms/dorel-radio-group.html">
+<link rel="import" href="../atoms/dorel-checkbox.html">
+
+<dom-module id="dorel-template-submit-your-review">
+  <template>
+    <style>
+      .header {
+        background-color: var(--theme-brand-color-1);
+        color: var(--theme-color-white);
+        float: left;
+        width: 100%;
+        height: 7rem;
+      }
+
+      .title {
+        font-size: var(--theme-typography-5_-_font-size);
+      }
+
+      .form-container {
+        margin-bottom: 4rem;
+      }
+
+      .question {
+        @apply(--theme-typography-5);
+      }
+
+      .property {
+        @apply(--theme-typography-4);
+        line-height: 2.5rem;
+      }
+
+      .property-description {
+        @apply(--theme-typography-3);
+        font-weight: var(--theme-font-weight-light);
+        line-height: 2.5rem;
+        margin-top: 0;
+      }
+
+      .stars {
+        font-size: var(--theme-typography-8_-_font-size);
+      }
+
+      [tablet-medium-up] .details-container {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+
+      [tablet-medium-up] .details-container--form,
+      [tablet-medium-up] .details-container--tips {
+        flex: 1
+      }
+
+      .details-container--tips,
+      .details-container--tips-mobile {
+        display: none;
+      }
+
+      .details-container--tips-mobile_open {
+        display: block;
+      }
+
+      [tablet-medium-up] .details-container--tips {
+        display: block;
+      }
+
+      [tablet-medium-up] .input {
+        width: 90%;
+      }
+
+      .link-text {
+        color: var(--theme-brand-color-3);
+        visibility: hidden;
+      }
+
+      .limit-text {
+        font-weight: var(--theme-font-weight-light);
+      }
+
+      .link-text:hover {
+        cursor: pointer;
+        color: var(--theme-brand-color-1);
+      }
+
+      .details-bonus {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 11rem;
+      }
+
+      [tablet-medium-up] .details-bonus {
+        width: 90%;
+      }
+
+      [tablet-medium-up] .help-button {
+        display: none
+      }
+
+      .info-container {
+        margin-top: 6rem;
+      }
+
+      .checkbox {
+        margin-top: 1rem;
+      }
+
+      .flex-two {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+      }
+
+      [tablet-medium-up] .info-input,
+      [tablet-medium-up] .flex-two {
+        width: 50%;
+      }
+
+      .checkbox.invalid,
+      .errors {
+        @apply(--theme-color-error-box);
+        border-radius: 1rem;
+        box-sizing: border-box;
+        padding: 1rem;
+      }
+
+      [tablet-medium-up] .errors {
+        width: 50%;
+      }
+
+      .form-buttons {
+        margin-top: 1.2rem;
+      }
+
+      .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        background-color: rgba(0, 0, 0, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100vw;
+        height: 100vh;
+        z-index: 10000;
+      }
+
+      .file-input {
+        position: absolute;
+        left: -100vw;
+        top: -100vh;
+        visibility: hidden;
+      }
+
+    </style>
+
+    <app-route
+      route="{{ route }}"
+      pattern="/:productName/submit-your-review"
+      data="{{ routeData }}"
+      tail="{{ subroute }}"></app-route>
+
+    <dorel-media-query
+      breakpoints="{{breakpoints}}"></dorel-media-query>
+
+    <dorel-section-page-nav
+      breadcrumbs-toggle="true"></dorel-section-page-nav>
+
+    <template is="dom-if" if="[[!submitReviewState.success]]" restamp>
+      <dorel-layout-container class="header">
+        <h1 class="title">[[localize('reviews#submit_your_review')]]</h1>
+        <h2 class="subtitle">[[product.name.value]]</h2>
+      </dorel-layout-container>
+
+      <dorel-layout-container class="form-container" tablet-medium-up$="[[breakpoints.tabletMediumUp]]">
+        <dorel-layout-row>
+          <dorel-layout-column desktop-column-span="9" tablet-column-span="9" mobile-column-span="12">
+            <section on-click="_onRatingClicked">
+              <h3 class="question">[[localize('reviews#question_2')]] [[product.name.value]]?</h3>
+              <section>
+                <p class="property">[[localize('reviews#product_quality')]]</p>
+                <dorel-product-review-stars
+                  id="productquality"
+                  class="stars"
+                  class-addition="interactive"
+                  rating="{{productquality}}"
+                  number-of-stars="5"
+                  interactive-enabled
+                  data-key="productquality"
+                  large-mode></dorel-product-review-stars>
+              </section>
+              <section>
+                <p class="property">[[localize('reviews#ease_of_use')]]</p>
+                <dorel-product-review-stars
+                  id="easeofuse"
+                  class="stars"
+                  class-addition="interactive"
+                  rating="{{easeofuse}}"
+                  number-of-stars="5"
+                  interactive-enabled
+                  data-key="easeofuse"
+                  large-mode></dorel-product-review-stars>
+              </section>
+              <section>
+                <p class="property">[[localize('reviews#maintenance')]]</p>
+                <dorel-product-review-stars
+                  id="maintenance"
+                  class="stars"
+                  class-addition="interactive"
+                  rating="{{maintenance}}"
+                  number-of-stars="5"
+                  interactive-enabled
+                  data-key="maintenance"
+                  large-mode></dorel-product-review-stars>
+              </section>
+              <section>
+                <p class="property">[[localize('reviews#comfort')]]</p>
+                <dorel-product-review-stars
+                  id="comfort"
+                  class="stars"
+                  class-addition="interactive"
+                  rating="{{comfort}}"
+                  number-of-stars="5"
+                  interactive-enabled
+                  data-key="comfort"
+                  large-mode></dorel-product-review-stars>
+              </section>
+            </section>
+            <section>
+              <h3 class="question">[[localize('reviews#question_2')]] [[product.name.value]]?</h3>
+              <section class="details-container">
+                <section class="details-container--form">
+                  <p class="property">[[localize('reviews#in_one_sentence')]]</p>
+                  <dorel-input
+                    class="input"
+                    id="headline"
+                    value="{{headline}}"
+                    on-input="_textInputChanged"
+                    data-key="headline"></dorel-input>
+
+                  <div class="flex-two">
+                    <p class="property">[[localize('reviews#write_more_details')]]</p>
+                    <iron-icon class="help-button" on-click="_showTips" icon="dorel-icons:help-outline"></iron-icon>
+                  </div>
+                  <dorel-section-submit-review-tips class$="details-container--tips-mobile [[tipsOpenClassName]]"></dorel-section-submit-review-tips>
+                  <dorel-input-textarea
+                    class="input"
+                    id="comments"
+                    value="{{comments}}"
+                    on-input="_textInputChanged"
+                    data-key="comments"></dorel-input-textarea>
+                  <div class="details-bonus">
+                    <span class="limit-text">0/120 characters</span>
+                    <span class="link-text" on-click="_openFileDialog">[[localize('reviews#add_attachment')]]</span>
+                    <input id="attachment" class="file-input" type="file" value="{{fileUrl}}"></input>
+                  </div>
+                </section>
+                <dorel-section-submit-review-tips class="details-container--tips"></dorel-section-submit-review-tips>
+              </section>
+              <section>
+                <p>[[localize('reviews#would_you_recommend')]]</p>
+                <dorel-radio-group id="bottomline" options="[[ radioOptions ]]" selected="{{ bottomline }}"></dorel-radio-group>
+              </section>
+            </section>
+
+           <section class="info-container">
+             <h3 class="question">[[localize('reviews#your_information')]]</h3>
+             <p class="property">[[localize('reviews#name_nickname')]]</p>
+             <p class="property-description">[[localize('reviews#name_helper')]]</p>
+             <dorel-input
+               class="info-input"
+               id="name"
+               value="{{customerName}}"
+               on-input="_textInputChanged"
+               data-key="customerName"></dorel-input>
+
+             <p class="property">[[localize('reviews#email')]]</p>
+             <p class="property-description">[[localize('reviews#email_helper')]]</p>
+             <dorel-input
+               class="info-input"
+               id="email_collection"
+               value="{{email_collection}}"
+               on-input="_textInputChanged"
+               data-key="email_collection"></dorel-input>
+
+             <p class="property">[[localize('reviews#location')]]</p>
+             <p class="property-description">[[localize('reviews#location_helper')]]</p>
+             <dorel-input
+               class="info-input"
+               id="location"
+               value="{{location}}"
+               on-input="_textInputChanged"
+               data-key="location"></dorel-input>
+           </section>
+
+           <dorel-checkbox
+             id="agreed"
+             class="checkbox"
+             label="[[localize('reviews#tou_privacy_agreement')]]"
+             color-code="#0096C3"
+             checked="{{agreed}}"></dorel-checkbox>
+
+           <template is="dom-if" if="[[showError]]">
+             <p class="errors">[[localize('reviews#error_message')]]</p>
+           </template>
+
+           <section class="flex-two form-buttons">
+              <dorel-cta type="secondary" size="large" icon="dorel-icons:close" link="[[productUrl]]">[[localize('cancel')]]</dorel-cta>
+              <dorel-cta type="primary" size="large" icon="dorel-icons:chevron-right" on-click="_submitReview">[[localize('submit')]]</dorel-cta>
+           </section>
+          </dorel-layout-column>
+        </dorel-layout-row>
+      </dorel-layout-container>
+    </template>
+
+    <template is="dom-if" if="[[submitReviewState.success]]">
+      <dorel-section-review-thank-you product-url="[[productUrl]]"></dorel-section-review-thank-you>
+    </template>
+
+    <template is="dom-if" if="[[submitReviewState.isLoading]]">
+      <div class="overlay">
+        <dorel-loader loading></dorel-loader>
+      </div>
+    </template>
+
+  </template>
+
+  <script>
+    class DorelTemplateSubmitReview extends ReduxMixin(Polymer.mixinBehaviors([TemplateBehaviors, DorelMultilingualBehavior], Polymer.Element)) {
+      static get is() { return 'dorel-template-submit-your-review'; }
+
+      static get properties() {
+        return {
+          /**
+           * @attribute
+           * @name templateData
+           * @description all data needed to build up a certain component
+           */
+          templateData: {
+            type: Object,
+            statePath: 'page.currentPage',
+          },
+          routeData: Object,
+          reviewTemplate: {
+            type: Object,
+            statePath: 'review.reviewTemplate'
+          },
+          submitReviewState: {
+            type: Object,
+            statePath: 'review.submitReview',
+            observer: '_submitReviewStateChanged'
+          },
+          showError: {
+            type: Boolean,
+            value: false
+          },
+          product: {
+            type: Object,
+            statePath: function(state) {
+              if (this.routeData) {
+                return state.product.products.find(product => product.url === this.routeData.productName);
+              }
+              return {};
+            },
+            observer: '_productChanged'
+          },
+          /**
+           * @name radioOptions
+           * @description recommend options
+           */
+          radioOptions: {
+            type: Array,
+            notify: true,
+            readOnly: false
+          },
+          /**
+           * @name tipsOpenClassName
+           * @description the class name when the tips is opened in mobile view
+           */
+          tipsOpenClassName: {
+            type: String,
+            value: ''
+          },
+          /**
+           * @description form inputs
+           */
+          productquality: Number,
+          easeofuse: Number,
+          maintenance: Number,
+          comfort: Number,
+          headline: String,
+          comments: String,
+          customerName: String,
+          email_collection: String,
+          location: String,
+          bottomline: {
+            type: String,
+            observer: '_bottomlineChanged'
+          },
+          agreed: {
+            type: String,
+            observer: '_agreedChanged'
+          },
+          multimedia: {
+            type: Array,
+            value: []
+          },
+          fileUrl: {
+            type: String,
+            observer: '_fileUrlChanged'
+          }
+        }
+      }
+
+      static get observers() {
+        return [
+          '_productNameChanged(routeData.productName)',
+          '_submitReviewState()'
+        ]
+      }
+
+      connectedCallback() {
+        super.connectedCallback();
+        setTimeout(() => {
+          const options = [
+            {'name': 'Yes, I would recommend this to a friend', 'label': this.localize('reviews#yes')},
+            {'name': 'No, I would not recommend this to a friend', 'label': this.localize('reviews#no')}
+          ];
+          this.set('radioOptions', options);
+        }, 1000);
+      }
+
+      /**
+       * @name _productNameChanged
+       * @description if the productName changes reset the form and dispatch an action to retrieve product
+       * @param productName - Object
+       * @returns Boolean
+       */
+      _productNameChanged(productName) {
+        if(productName) {
+          /** reset the form */
+          this.dispatch('submitReviewFailed', null);
+          this.set('productquality', 0);
+          this.set('easeofuse', 0);
+          this.set('maintenance', 0);
+          this.set('comfort', 0);
+          this.set('headline', '');
+          this.set('comments', '');
+          this.set('customerName', '');
+          this.set('email_collection', '');
+          this.set('location', '');
+          this.set('bottomline', '');
+          this.set('agreed', false);
+
+          const origin = window.location.origin;
+          const url = `${origin}${this.route.prefix}/${this.route.path.split('/')[1]}`;
+          this.set('productUrl', url);
+
+          this.dispatch('requestProduct', productName);
+          this.dispatch('setCurrentProduct', productName);
+        }
+      }
+
+      _productChanged(product) {
+        if (product) {
+          this.dispatch('getReviewTemplate', product.sku);
+        }
+      }
+
+      _bottomlineChanged(value) {
+        if (value) {
+          this.$$('#bottomline').removeAttribute('invalid');
+          const field = this._getFieldItem('bottomline');
+          if (field) {
+            field.values = [{"value": value}];
+          }
+        }
+      }
+
+      _onRatingClicked(e) {
+        const key = e.target.getAttribute('data-key');
+        e.target.removeAttribute('invalid');
+        if (key && this.get(key) > 0) {
+          this._setFieldValue(key, this.get(key));
+        }
+      }
+
+      _textInputChanged(e) {
+        let key = e.target.getAttribute('data-key');
+        e.target.removeAttribute('invalid');
+        const value = this.get(key);
+        if (key === 'customerName') {
+          key = 'name';
+        }
+        if (value.length > 0) {
+          this._setFieldValue(key, value);
+        }
+      }
+
+      _agreedChanged() {
+        if (this.$$('#agreed')) {
+          this.$$('#agreed').className = 'checkbox';
+        }
+      }
+
+      _fileUrlChanged(value) {}
+
+      _setFieldValue(key, value) {
+        if (this.reviewTemplate) {
+          const field = this._getFieldItem(key);
+          if (field) {
+            field.value = value;
+          }
+        }
+      }
+
+      _getFieldItem(key) {
+        return this.reviewTemplate.form.fields.find(field => field.key === key);
+      }
+
+      _submitReview() {
+        if (this.agreed) {
+          this._setAverageRating();
+
+          // remove the form image and video fields
+          this.reviewTemplate.form.fields = this.reviewTemplate.form.fields.reduce((result, field) => {
+            if (field.key !== 'media_image' && field.key !== 'media_videourl') {
+              result.push(field);
+            }
+            return result;
+          }, []);
+
+          this.dispatch('submitReview', this.product.sku, this.reviewTemplate.form);
+        } else {
+          this.$$('#agreed').className = 'checkbox invalid';
+        }
+      }
+
+      _submitReviewStateChanged(state) {
+        const showError = this.submitReviewState ? (!this.submitReviewState.success && this.submitReviewState.error) : false;
+        this.set('showError', showError);
+        if (state.error && state.error.length > 0) {
+          for (let error of state.error) {
+            if (this.$$(`#${error.key}`)) {
+              this.$$(`#${error.key}`).setAttribute('invalid', true);
+            }
+          }
+        }
+        if (state.success) {
+          window.scrollTo(0, 0);
+        }
+      }
+
+      _setAverageRating() {
+        if (this.productquality > 0 && this.easeofuse && this.maintenance && this.comfort) {
+          const rating = Math.ceil((this.productquality + this.easeofuse + this.maintenance + this.comfort) / 4);
+          this._setFieldValue('rating', rating);
+        }
+      }
+
+      /**
+       * @name _showTips
+       * @description set the tipsOpenClassName to the mobile tips element
+       */
+      _showTips() {
+        this.tipsOpenClassName = this.tipsOpenClassName === '' ? 'details-container--tips-mobile_open' : '';
+      }
+
+      _openFileDialog() {
+        this.$$('#attachment').click();
+      }
+    }
+    customElements.define(DorelTemplateSubmitReview.is, DorelTemplateSubmitReview);
+  </script>
+</dom-module>

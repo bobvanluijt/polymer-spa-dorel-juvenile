@@ -1,6 +1,3 @@
-<link rel="import" href="../utils/behaviors/single/dorel-gtm-behavior.html">
-<link rel="import" href="../utils/behaviors/bundled/dorel-conditional-behaviors.html">
-
 <dom-module id="dorel-cta">
   <template>
     <style include="iron-flex">
@@ -95,10 +92,7 @@
       .theme-cta--large {
         @apply(--theme-button-large);
         height: 3em;
-      }
-
-      .theme-cta--large .theme-cta__content {
-        padding: 0;
+        width: 100%;
       }
 
       /*
@@ -114,6 +108,10 @@
         -webkit-flex-grow: 1;
         flex-grow: 1;
         padding: 0 0 0 0.75em;
+      }
+
+      .theme-cta--large .theme-cta__content {
+        padding: 0;
       }
 
       /*
@@ -213,18 +211,10 @@
       }
     </style>
 
-    <template is="dom-if" if="{{ isBrand('Maxi-Cosi') }}">
-      <style>
-        .theme-cta {
-          width: 100%;
-        }
-      </style>
-    </template>
-
     <template is="dom-if" if="{{ isBrand('Quinny') }}">
       <style>
         .theme-cta, .theme-cta.dorel-cta {
-          width: -moz-fit-content; 
+          width: -moz-fit-content;
           width: -webkit-fit-content;
           float: none;
           margin: auto;
@@ -390,7 +380,9 @@
           invertedCssClass: {
             type: String,
             computed: '_getInvertedStyle(inverted)'
-          }
+          },
+
+          gtmAction: String
         }
       }
 

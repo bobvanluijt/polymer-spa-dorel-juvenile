@@ -1,5 +1,3 @@
-<link rel="import" href="../../node_modules/paper-tabs/paper-tab.html">
-<link rel="import" href="../../node_modules/paper-tabs/paper-tabs.html">
 <dom-module id="dorel-nav-tabs">
   <template>
     <style>
@@ -49,7 +47,8 @@
     <dorel-media-query breakpoints="{{ breakpoints }}"></dorel-media-query>
     <paper-tabs
       selected="{{ selected }}"
-      scrollable="[[ !breakpoints.tabletMediumUp ]]">
+      scrollable="[[ !breakpoints.tabletMediumUp ]]"
+      fit-container="[[ !breakpoints.tabletMediumUp ]]">
       <template
         is="dom-repeat"
         items="[[ tabs ]]">
@@ -96,8 +95,10 @@
         if(typeof item === 'undefined') return;
 
         var title = this.get('title');
+        console.log(title);
+        console.log(item);
 
-        return (typeof title === 'undefined') ? item['name'] : item[title];
+        return (typeof title === 'undefined' || title.length === 0) ? item['name'] : item[title];
       }
     });
 

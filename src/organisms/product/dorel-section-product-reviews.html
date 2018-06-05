@@ -1,8 +1,3 @@
-<link rel="import" href="../../molecules/product/reviews/dorel-product-reviews.html">
-<link rel="import" href="../../molecules/product/reviews/dorel-product-review-total-summary.html">
-<link rel="import" href="../../utils/behaviors/single/dorel-multilingual-behavior.html">
-<link rel="import" href="../../molecules/dorel-overlay-modal.html">
-
 <dom-module id="dorel-section-product-reviews">
   <template>
     <style>
@@ -31,24 +26,52 @@
       .link:hover {
         color: var(--theme-brand-color-1);
       }
+
+      .submit-review-wrapper {
+        display: flex;
+      }
+
+      .submit-review-btn {
+        margin: auto;
+      }
     </style>
 
     <dorel-media-query breakpoints="{{ breakpoints }}"></dorel-media-query>
+
+    <dorel-layout-container>
+      <dorel-titling title="[[localize('product_reviews#title')]]"></dorel-titling>
+      <template
+        is="dom-if"
+        if="[[!reviews.rollup]]">
+        <div class="submit-review-wrapper">
+          <dorel-cta
+            title="[[localize('reviews#submit_your_review')]]"
+            type="link"
+            link="[[submitReviewUrl]]"
+            size="medium"
+            class="submit-review-btn"
+            disabled="[[submitReviewUrlDisabled]]">[[localize('reviews#submit_your_review')]]</dorel-cta>
+        </div>
+      </template>
+
+    </dorel-layout-container>
+
 
     <!-- api returns 200 always, but check if there are reviews before showing all html -->
     <template
       is="dom-if"
       if="[[reviews.results.length]]">
       <dorel-layout-container>
-        <dorel-titling title="[[localize('product_reviews#title')]]"></dorel-titling>
-
         <dorel-layout-row>
           <dorel-layout-column desktop-column-span="3" mobile-column-span="12">
             <dorel-product-review-total-summary
               number-of-stars="[[reviews.rollup.rating_histogram.length]]"
               rating="[[reviews.rollup.average_rating]]"
               rating-distribution="[[reviews.rollup.rating_histogram]]"
-              total-reviews="[[reviews.rollup.review_count]]"></dorel-product-review-total-summary>
+              total-reviews="[[reviews.rollup.review_count]]"
+              rollup="[[reviews.rollup]]"
+              submit-review-url="[[submitReviewUrl]]"
+              submit-review-url-disable="[[submitReviewUrlDisabled]]"></dorel-product-review-total-summary>
           </dorel-layout-column>
 
           <dorel-layout-column desktop-column-span="9" mobile-column-span="12" class="reviews-container">
@@ -66,12 +89,17 @@
                 helpful-votes="[[review.metrics.helpful_votes]]"
                 not-helpful-votes="[[review.metrics.not_helpful_votes]]"
                 rating="[[review.metrics.rating]]"
-                number-of-stars="[[reviews.rollup.rating_histogram.length]]"></dorel-product-reviews>
+                number-of-stars="[[reviews.rollup.rating_histogram.length]]"
+                merchant-response="[[review.details.merchant_response]]"></dorel-product-reviews>
             </template>
-            <div class="link" on-click="_openMoreReviews">
-              <span>[[localize('more_reviews')]]</span>
-              <iron-icon class="menu-item__icon" icon="dorel-icons:chevron-right"></iron-icon>
-            </div>
+            <template
+              is="dom-if"
+              if="[[showMoreReviews]]">
+              <div class="link" on-click="_openMoreReviews">
+                <span>[[localize('more_reviews')]]</span>
+                <iron-icon class="menu-item__icon" icon="dorel-icons:chevron-right"></iron-icon>
+              </div>
+            </template>
           </dorel-layout-column>
         </dorel-layout-row>
       </dorel-layout-container>
@@ -85,7 +113,9 @@
             number-of-stars="[[reviews.rollup.rating_histogram.length]]"
             rating="[[reviews.rollup.average_rating]]"
             rating-distribution="[[reviews.rollup.rating_histogram]]"
-            total-reviews="[[reviews.rollup.review_count]]"></dorel-product-review-total-summary>
+            total-reviews="[[reviews.rollup.review_count]]"
+            rollup="[[reviews.rollup]]"
+            submit-review-url="[[submitReviewUrl]]"></dorel-product-review-total-summary>
         </dorel-layout-column>
         <dorel-layout-column desktop-column-span="9" mobile-column-span="12" class="reviews-container">
           <template
@@ -102,7 +132,9 @@
               helpful-votes="[[review.metrics.helpful_votes]]"
               not-helpful-votes="[[review.metrics.not_helpful_votes]]"
               rating="[[review.metrics.rating]]"
-              number-of-stars="[[reviews.rollup.rating_histogram.length]]"></dorel-product-reviews>
+              number-of-stars="[[reviews.rollup.rating_histogram.length]]"
+              merchant-response="[[review.details.merchant_response]]"
+              submit-review-url-disable="[[submitReviewUrlDisabled]]"></dorel-product-reviews>
           </template>
           <template
             is="dom-if"
@@ -161,7 +193,6 @@
             type: Array,
             statePath: function(state) {
               const review = state.review.reviews.find(review => review.sku === this.get('productSku'));
-              // const review = state.review.reviews.find(review => review.sku === '2d7c2112-7cc1-47cc-8b6f-2cc7cd0a9d95');
               return review ? review : { isLoading: true };
             },
             observer: '_reviewsUpdated'
@@ -173,9 +204,28 @@
           shortReviews: Array,
 
           /**
-           * all the reviews for this product
+           * show the more reviews button to open the modal
            */
-          loadMoreReviews: Boolean
+          showMoreReviews: Boolean,
+          /**
+           * show the load more reviews button in the modal
+           */
+          loadMoreReviews: Boolean,
+
+          /**
+           * the boolean scrollHandler variable to trigger the scrolling
+           */
+          reviewsScrollHandler: {
+            type: Boolean,
+            notify: true,
+            observer: '_scrollHandler'
+          },
+
+          submitReviewUrl: String,
+          submitReviewUrlDisabled: {
+            type: Boolean,
+            value: true
+          }
         };
       }
 
@@ -186,15 +236,20 @@
        */
       _productChanged(productSku) {
         if (productSku) {
+          let submitReviewUrl = `${window.location.origin}${window.location.pathname}/submit-your-review`;
+          this.set('submitReviewUrl', submitReviewUrl.replace('//submit-your-review', '/submit-your-review'));
+          this.set('submitReviewUrlDisabled', false);
           this.dispatch('requestReviews', productSku, this.get('reviewsSorting'));
           // this.dispatch('requestReviews', '2d7c2112-7cc1-47cc-8b6f-2cc7cd0a9d95', this.get('reviewsSorting'), this.get('imageOnly'));
+        } else {
+          this.set('submitReviewUrlDisabled', true);
         }
       }
 
       /**
        * observer: when the reviews is added/updated
        *
-       * @param {string} the new reviews 
+       * @param {string} the new reviews
        */
       _reviewsUpdated(newReviews) {
         let shortReviews = [];
@@ -206,6 +261,7 @@
         this.set('shortReviews', shortReviews);
 
         if (newReviews.paging) {
+          this.set('showMoreReviews', newReviews.paging.total_results <= 3 ? false : true);
           this.set('loadMoreReviews', newReviews.paging.total_results === results.length ? false : true);
         }
       }
@@ -227,6 +283,16 @@
       _loadMoreReviews() {
         this.dispatch('requestMoreReviews', this.get('productSku'), this.reviews.paging.next_page_url);
       }
+
+      /**
+       * @name _scrollHandler
+       * @description sets the scroll offset position of this section
+       *
+       */
+      _scrollHandler() {
+        this.scrollIntoView({block: "start", behavior: "smooth"})
+      }
+
     };
 
     customElements.define(DorelSectionProductReviews.is, DorelSectionProductReviews);
