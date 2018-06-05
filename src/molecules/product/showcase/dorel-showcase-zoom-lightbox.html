@@ -93,21 +93,31 @@
           id="overlayWrapper"
           class="overlay-wrapper"
           on-click="imageClick">
+          <template
+            is="dom-if"
+            if="[[imageExists(position, -1)]]">
+            <div
+              id="overlayArrowLeft"
+              class="overlay-arrow left"
+              data-difference="-1"
+              data-image$="[[getImageUrl(position)]]"
+              on-click="_switchImage">
+              <iron-icon class="dorel-cookie-notification__proceed-icon" icon="dorel-icons:chevron-left"></iron-icon>
+            </div>
+          </template>
+
+          <template
+            is="dom-if"
+            if="[[imageExists(position, 1)]]">
           <div
-            id="overlayArrowLeft"
-            class="overlay-arrow left"
+            id="overlayArrowRight"
+            class="overlay-arrow right"
+            data-difference="1"
             data-image$="[[getImageUrl(position)]]"
             on-click="_switchImage">
-            <iron-icon class="dorel-cookie-notification__proceed-icon"
-                       icon="dorel-icons:chevron-left"></iron-icon>
+            <iron-icon class="dorel-cookie-notification__proceed-icon" icon="dorel-icons:chevron-right"></iron-icon>
           </div>
-          <div
-          id="overlayArrowRight"
-          class="overlay-arrow right"
-          data-image$="[[getImageUrl(position)]]"
-          on-click="_switchImage">
-          <iron-icon class="dorel-cookie-notification__proceed-icon" icon="dorel-icons:chevron-right"></iron-icon>
-        </div>
+          </template>
           <div
             id="overlayClose"
             class="overlay-close"
@@ -216,16 +226,25 @@
        */
       _switchImage(event) {
         event.stopPropagation();
-        const image = event.currentTarget.dataset.image;
+        const newPosition = this.get("position") + parseInt(event.currentTarget.dataset.difference);
+        if(!this.imageExists(newPosition)) return false;
+        this.set("position", newPosition);
       }
 
+      /**
+       * Get the image url by index.
+       */
       getImageUrl(index) {
         return this.get('imageUrls')[index];
       }
 
-      imageExists(index) {
+      /**
+       * Check if an image exists with a given index.
+       */
+      imageExists(index, dif = 0) {
+        index += dif;
         const imageUrls = this.get('imageUrls');
-        return imageUrls ? index <= this.get('imageUrls').length : false;
+        return imageUrls ? index < imageUrls.length && index >= 0  : false;
       }
 
 
