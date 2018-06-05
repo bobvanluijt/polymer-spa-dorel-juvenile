@@ -69,6 +69,19 @@
         padding: 0 1em;
       }
 
+      .product-benefits-list {
+        display: inline-block;
+        padding: 0;
+        margin-bottom: 0;
+        margin-top: .5em;
+        width: 100%;
+        list-style: none;
+      }
+
+      .product-benefits-list li {
+        margin: 0;
+      }
+
       .image {
         width: 100%;
         height: 100%;
@@ -104,15 +117,12 @@
     <section class="category-listing-item"
       fade$="[[fade]]"
       tablet-medium-up$="[[breakpoints.tabletMediumUp]]">
-
-      <a class="image-wrapper"
-        href$="[[_setDynamicProductUrl(linkUrl)]]">
+      <dorel-link link="[[_setDynamicProductUrl(linkUrl)]]" image gtm-action="open-product-detail-page">
         <dorel-product-image
           class="image"
           sizing="contain"
           image-url="{{currentProductImage}}"></dorel-product-image>
-      </a>
-
+      </dorel-link>
       <div class="content-wrapper">
         <dorel-color-switcher
           current-image="{{currentProductImage}}"
@@ -120,6 +130,21 @@
           filters="[[filters]]"></dorel-color-switcher>
 
         <h2 class="title">[[productName]]</h2>
+
+        <template
+          is="dom-if"
+          if="[[hasBenefits(productBenefits)]]">
+          <ul class="product-benefits-list">
+            <template
+              is = "dom-repeat"
+              items="[[productBenefits]]"
+              as="benefit">
+              <li>
+                - [[benefit.title]]
+              </li>
+            </template>
+          </ul>
+        </template>
 
         <dorel-cta
           type="link"
@@ -156,6 +181,13 @@
            * array defined on the attribute
            */
           colorsData: {
+            type: Array
+          },
+
+          /**
+             * array defined on the attribute
+           */
+          productBenefits: {
             type: Array
           },
 
@@ -198,6 +230,19 @@
        */
       _setDynamicProductUrl(linkUrl) {
         return `${window.location.origin}/${window.location.pathname.split('/')[1]}/${window.location.pathname.split('/')[2]}/${linkUrl}`;
+      }
+
+      /**
+       * Check if the item has benefits listed.
+       *
+       * @param {array} benefits
+       *   The list of benefits.
+       *
+       * @returns boolean
+       *   Returns true when there are benefits.
+       */
+      hasBenefits(benefits) {
+        return Boolean( benefits.length != 0 );
       }
     }
     customElements.define(DorelCategoryListingItem.is, DorelCategoryListingItem);

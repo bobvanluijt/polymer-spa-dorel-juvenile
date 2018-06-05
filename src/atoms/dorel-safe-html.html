@@ -6,7 +6,6 @@
       }
 
       #content {
-        float: left;
         width: 100%;
         @apply(--theme-paragraph-text);
         margin: 0;
@@ -22,6 +21,18 @@
 
       #content a:hover, .accessory a:focus {
         @apply(--theme-text-link-active);
+      }
+
+      :host([full-width]) #content {
+        max-width: 98%;
+        background-color: var(--theme-color-monochrome-2);
+        text-align: center;
+        padding: 1%;
+      }
+
+      :host([full-width]) #content p {
+        max-width: 100%;
+        margin: 1rem;
       }
     </style>
     <div id="content"></div>
@@ -42,6 +53,11 @@
           type: String,
           value: '',
           observer: '_htmlChanged'
+        },
+
+        fullWidth: {
+          type: Boolean,
+          reflectToAttribute: true
         }
 
       },
