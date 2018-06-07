@@ -48,22 +48,29 @@
         width: 50px;
         height: 50px;
         border-radius: 50%;
-        transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%) scale(1);
         background-color: white;
         line-height: 50px;
         text-align: center;
         box-shadow: 0 0 1px 1px rgba( 0, 0, 0, .1);
         transition: .2s;
+        cursor: pointer;
       }
 
       .overlay-arrow:hover {
         box-shadow: 0 0 2px 2px rgba( 0, 0, 0, .2);
       }
 
+      .overlay-arrow:active {
+        transform: translate(-50%, -50%) scale(1.1);
+      }
       .overlay-arrow.right {
         right: 0;
         left: auto;
-        transform: translate(50%, -50%);
+        transform: translate(50%, -50%) scale(1);
+      }
+      .overlay-arrow.right:active {
+        transform: translate(50%, -50%) scale(1.1);
       }
       .overlay-close {
         float: right;
@@ -185,6 +192,15 @@
       ready() {
         super.ready();
         this.addEventListener('click', this._closeLightbox);
+        window.addEventListener('update-light-box', function() {
+          //<Dirty code>
+          //  Change the position and change it back in order to trigger a change and rerender the component.
+          var position = this.get("position");
+          this.set("position", position + 1);
+          this.set("position", position);
+          //</Dirty code>
+          this.notifyPath('image.imageLightbox.position', 'changed')
+        }.bind(this));
       }
 
       /**
@@ -230,8 +246,8 @@
       /**
        * Set the image width to the overlay in order to position the close icon.
        *
-       * @param {String} url
-       *   The url of the image you want to set the width of.
+       * @param {Integer} position
+       *   The position in the imageUrls array of the item you want to get the position of.
        */
       _setImageWidth(position) {
         const url = this.getImageUrl(position);

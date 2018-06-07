@@ -154,12 +154,12 @@
         this.$.simpleSlider.movePos(index);
       }
 
-      _onClick(event) {
+      _onClick() {
         if(!this.lightboxMode) {
-          return
+          return;
         }
-
         this.dispatch('setImageLightbox', { active: true, position: this.position, imageUrls: this._getImageUrls() });
+        window.dispatchEvent(new Event('update-light-box'));
       }
 
     };
