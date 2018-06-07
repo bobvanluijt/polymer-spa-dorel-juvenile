@@ -4,7 +4,9 @@
 <link rel="import" href="../organisms/dorel-section-cards.html">
 
 <dom-module id="dorel-template-home">
-  <template>
+  <template
+    is="dom-if"
+    restamp>
     <style>
       h1, h2, h3, h4 {
         @apply(--theme-header-text-transform);
@@ -20,8 +22,7 @@
       <div class="container layout horizontal center center-justified wrap">
         <template
           is="dom-if"
-          if="[[selected]]"
-          restamp>
+          if="[[selected]]">
           <div class="row">
 
             <!-- section-hero-header -->

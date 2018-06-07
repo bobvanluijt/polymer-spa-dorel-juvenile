@@ -1,12 +1,13 @@
 <link rel="import" href="../organisms/store-locator/dorel-section-store-locator.html">
 
 <dom-module id="dorel-template-store-locator">
-  <template>
+  <template
+    is="dom-if"
+    restamp>
 
     <template
       is="dom-if"
-      if="[[selected]]"
-      restamp>
+      if="[[selected]]">
       <template
         is="dom-if"
         if="[[templateData.acf.hero_header.length]]">

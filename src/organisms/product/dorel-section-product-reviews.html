@@ -39,7 +39,7 @@
     <dorel-media-query breakpoints="{{ breakpoints }}"></dorel-media-query>
 
     <dorel-layout-container>
-      <template is="dom-if" if="[[selected]]" restamp>
+      <template is="dom-if" if="[[selected]]">
         <dorel-titling title="[[localize('product_reviews#title')]]"></dorel-titling>
       </template>
       <template
@@ -107,7 +107,7 @@
       </dorel-layout-container>
     </template>
 
-    <template is="dom-if" if="[[selected]]" restamp>
+    <template is="dom-if" if="[[selected]]">
       <dorel-overlay-modal id="overlay" title="[[localize('ratings_and_reviews')]]" subtitle="[[productName]]">
           <dorel-layout-container>
             <dorel-layout-row>

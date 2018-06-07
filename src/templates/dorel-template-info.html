@@ -3,7 +3,9 @@
 <link rel="import" href="../atoms/dorel-iframe.html">
 
 <dom-module id="dorel-template-info">
-  <template>
+  <template
+    is="dom-if"
+    restamp>
     <style>
       h1, h2, h3, h4 {
         @apply(--theme-header-text-transform);
@@ -52,8 +54,7 @@
       <!-- section-hero-header -->
       <template
         is="dom-if"
-        if="[[selected]]"
-        restamp>
+        if="[[selected]]">
         <template
           is="dom-if"
           if="[[templateData.acf.hero_header.length]]">

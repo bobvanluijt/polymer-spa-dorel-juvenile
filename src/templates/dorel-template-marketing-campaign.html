@@ -4,7 +4,9 @@
 <link rel="import" href="../organisms/dorel-section-timeline.html">
 
 <dom-module id="dorel-template-marketing-campaign">
-  <template>
+  <template
+    is="dom-if"
+    restamp>
     <style>
       h1, h2, h3, h4 {
         @apply(--theme-header-text-transform);
@@ -47,8 +49,7 @@
       <!-- HERO HEADER -->
       <template
         is="dom-if"
-        if="[[selected]]"
-        restamp>
+        if="[[selected]]">
         <dorel-section-hero-header
           align="left"
           hero-header-data="[[heroHeader]]"></dorel-section-hero-header>

@@ -65,7 +65,7 @@
             items="{{ carData.form.form_groups }}"
             index-as="index"
             as="item">
-            <template is="dom-if" if="{{ item }}" restamp="true">
+            <template is="dom-if" if="{{ item }}">
               <dorel-input-select
                 label="[[ localize(item.label) ]]"
                 selected="[[ item.selected ]]"
@@ -364,7 +364,7 @@
           }
 
           const car_information_label = `${car.brandName}, ${car.modelName}, ${car.doors} doors, ${car.introductionYear}`;
-          
+
           const data = {
             car_information_label: car_information_label,
             formData: this.values
@@ -383,13 +383,13 @@
        */
       _carConfigResponse: function(event) {
         let data = event.detail.response;
-                
+
         if (data.message !== 'success') {
           const car = this.getCarSelection();
           const car_information_label = `${car.brandName}, ${car.modelName}, ${car.introductionYear}`;
           data.car_information_label = car_information_label;
         }
-        
+
         data.formData = this.values;
         this.set('carData.result', data);
         this.set('carData.active', false);

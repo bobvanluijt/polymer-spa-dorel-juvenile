@@ -301,7 +301,7 @@
     <dorel-media-query breakpoints="{{ breakpoints }}"></dorel-media-query>
     <dorel-layout-container>
       <template is="dom-if" if="[[ breakpoints.desktopSmallUp ]]">
-        <template is="dom-if" if="[[ !standalone ]]" restamp="true">
+        <template is="dom-if" if="[[ !standalone ]]">
           <dorel-layout-row align="middle">
              <dorel-layout-column desktop-column-span="12" tablet-column-span="12" mobile-column-span="12" align="left">
               <dorel-cta class="cta-back" title="[[ stepData.options.previous ]]" rotate no-margin type="link" link="[[createCarFittingListLink(carFittingToolPage)]]" size="medium" icon="dorel-icons:chevron-right" on-click="previousStep">
@@ -316,7 +316,7 @@
             <dorel-layout-row>
                 <dorel-layout-column desktop-column-span="9" tablet-column-span="9" mobile-column-span="12" class="inner-col-left-top">
                   <h1 class="step-title">[[ localize('car_fitting_results#main_section_title') ]]</h1>
-                  <template id="carResults" is="dom-repeat" items="[[ carData ]]" as="car" index-as="carIndex" restamp="true">
+                  <template id="carResults" is="dom-repeat" items="[[ carData ]]" as="car" index-as="carIndex">
                     <br>
                     <strong hidden$="[[ !getLabelOrNotListed(car.result) ]]">[[ localize('car_fitting_results#car_information_label_title') ]] [[ car.result.car_information_label ]]</strong>
                     <strong hidden$="[[ getLabelOrNotListed(car.result) ]]">[[ localize('car_fitting_results#car_information_label_title') ]] [[ car.result.car_information_label ]]</strong>
@@ -331,13 +331,13 @@
                       <small class="image-message">[[ localize(stepData.main_section.info) ]]</small>
                       <br>
                       <br>
-                      <template is="dom-if" if='[[ car.result.message ]]' restamp='true'>
+                      <template is="dom-if" if='[[ car.result.message ]]'>
                         [[ loadImage(car.result, carIndex) ]]
                         <div id="svg_container_[[carIndex]]" class="svg_container"></div>
                       </template>
                       <div class="car_notices">
                         <ul>
-                          <template is="dom-repeat" items="[[ car.result.notices ]]" as="notification" restamp="true">
+                          <template is="dom-repeat" items="[[ car.result.notices ]]" as="notification"
                             <li>[[ localize(notification) ]]</li>
                             <template is="dom-if" if="[[ getFloorStorageImage(notification) ]]">
                               <br>
@@ -408,7 +408,7 @@
           </dorel-layout-row>
         </dorel-layout-column>
       </dorel-layout-row>
-      <template is="dom-if" if="[[ breakpoints.tabletMediumUp ]]" restamp="true">
+      <template is="dom-if" if="[[ breakpoints.tabletMediumUp ]]">
         <template is="dom-if" if="[[ hasBynderImage(stepData.sub_section.background_image_id) ]]">
           <dorel-bynder-image class="image"
                       derivative-identifier="Fullscreen Retina portrait"
@@ -421,8 +421,8 @@
         </template>
       </template>
     </dorel-layout-container>
-    <template is="dom-repeat" items="[[ carData ]]" as="car" index-as="carIndex" restamp="true">
-      <template is="dom-repeat" items="[[ car.result.carseat_positions ]]" as="seat" restamp="true">
+    <template is="dom-repeat" items="[[ carData ]]" as="car" index-as="carIndex" >
+      <template is="dom-repeat" items="[[ car.result.carseat_positions ]]" as="seat" >
         <div id="car_[[ carIndex ]]_seat_[[ seat.seat_position ]]_notification" class="notification">
           <div class="effect7">
             <object data="/assets/images/car-fitting/icon_[[ seat.icon ]].svg" type="image/svg+xml"></object>
@@ -430,7 +430,7 @@
               <strong class="notification-title">[[localize('car_fitting_results#safety_warning')]]</strong>
             </template>
             <ul>
-              <template is="dom-repeat" items="[[ seat.notices ]]" as="notification" restamp="true">
+              <template is="dom-repeat" items="[[ seat.notices ]]" as="notification">
                 <li>[[ localize(notification) ]]</li>
               </template>
             </ul>

@@ -51,8 +51,7 @@
 
             <template
               is="dom-if"
-              if="[[selected]]"
-              restamp>
+              if="[[selected]]">
               <template is="dom-if" if="[[leftSidebar.productSubCategories.toggle]]">
                 <dorel-accordion-item heading="[[localize('Subcategories')]]" opened="[[ filterOpened ]]" small>
                   <dorel-category-submenu items="[[leftSidebar.productSubCategories.sub_categories]]">

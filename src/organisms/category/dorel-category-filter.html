@@ -34,8 +34,7 @@
 
       <template
         is="dom-if"
-        if="[[checkComponent(filter, 'checkbox', retrievingProducts)]]"
-        restamp="true">
+        if="[[checkComponent(filter, 'checkbox', retrievingProducts)]]">
         <dorel-category-filter-checkbox
           query-params="[[queryParams]]"
           filter-data="[[filter]]"
@@ -45,8 +44,7 @@
 
       <template
         is="dom-if"
-        if="[[checkComponent(filter, 'slider', retrievingProducts)]]"
-        restamp="true">
+        if="[[checkComponent(filter, 'slider', retrievingProducts)]]">
         <dorel-category-filter-slider
           query-params="[[queryParams]]"
           filter-data="[[filter]]"

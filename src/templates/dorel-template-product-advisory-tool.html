@@ -78,7 +78,7 @@
       step-data="{{ stepData.carFittingCarSelector }}">
     </dorel-car-fitting-car-selector>
 
-    <template is="dom-if" if="{{ standalone }}" restamp="true">
+    <template is="dom-if" if="{{ standalone }}">
       <dorel-car-fitting-product-selector
         age-category="{{ ageCategory }}"
         car-data="{{ carData }}"
@@ -91,7 +91,7 @@
       </dorel-car-fitting-product-selector>
     </template>
 
-    <template is="dom-if" if="{{ carData }}" restamp="true">
+    <template is="dom-if" if="{{ carData }}">
       <dorel-car-fitting-results
         standalone="[[ standalone ]]"
         car-data="{{ carData }}"
@@ -104,7 +104,7 @@
       </dorel-car-fitting-results>
     </template>
 
-    <template is="dom-if" if="[[ breakpoints.tabletMediumUp ]]" restamp="true">
+    <template is="dom-if" if="[[ breakpoints.tabletMediumUp ]]">
       <div id="background-complementary"></div>
     </template>
 

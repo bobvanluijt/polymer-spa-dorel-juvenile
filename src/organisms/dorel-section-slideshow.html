@@ -97,7 +97,7 @@
         <div class="control-item control-item--previous" on-click="movePrevious" enabled$="{{ previousEnabled }}">
           <iron-icon class="control-item__icon" icon="dorel-icons:chevron-left"></iron-icon>
         </div>
-        <template is="dom-if" if="[[selected]]" restamp>
+        <template is="dom-if" if="[[selected]]">
           <dorel-content-carousel
             id="slider"
             slides="[[ slideshowData ]]"
