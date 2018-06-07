@@ -92,15 +92,13 @@
                 </template>
 
                 <div class="usp-content">
-                  <template is="dom-if" if="[[selected]]">
-                    <template
-                      is="dom-if"
-                      if="[[_hasValue(usp.title)]]">
-                      <h3 class="usp-title">
-                        <dorel-safe-html
-                          html="[[usp.title]]"></dorel-safe-html>
-                      </h3>
-                    </template>
+                  <template
+                    is="dom-if"
+                    if="[[_hasValue(usp.title)]]">
+                    <h3 class="usp-title">
+                      <dorel-safe-html
+                        html="[[usp.title]]"></dorel-safe-html>
+                    </h3>
                   </template>
 
                   <template
@@ -159,7 +157,6 @@
             }
           },
           uspsMockData: Object,
-          selected: Boolean
         };
       }
 

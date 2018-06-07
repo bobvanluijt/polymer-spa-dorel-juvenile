@@ -129,10 +129,7 @@
           colors-data="[[colorsData]]"
           filters="[[filters]]"></dorel-color-switcher>
 
-        <template is="dom-if" if="[[selected]]">
-          <h2 class="title">[[productName]]</h2>
-        </template>
-
+        <h2 class="title">[[productName]]</h2>
         <template
           is="dom-if"
           if="[[hasBenefits(productBenefits)]]">
@@ -224,10 +221,6 @@
             type: String,
             value: ''
           },
-
-          selected: {
-            type: Boolean
-          }
         }
       }
 
