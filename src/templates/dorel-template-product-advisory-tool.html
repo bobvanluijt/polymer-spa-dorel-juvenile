@@ -4,7 +4,9 @@
 <link rel="import" href="../organisms/car-fitting/dorel-car-fitting-product-selector.html">
 <link rel="import" href="../organisms/car-fitting/dorel-car-fitting-results.html">
 <dom-module id="dorel-template-product-advisory-tool">
-  <template>
+  <template
+    is="dom-if"
+    restamp>
     <style>
       h1, h2, h3, h4 {
         @apply(--theme-header-text-transform);
