@@ -527,7 +527,7 @@
       static get observers() {
         return [
           '_showcaseDataChanged(showcaseData)',
-          '_setStoreLocatorCta(webFlags, hatchOptions)'
+          '_setStoreLocatorCta(webFlags, hatchOptions, storeLocatorPage)'
         ];
       }
 
@@ -586,14 +586,14 @@
       }
 
       /**
-       * check webflags and hatchOptions to show the HtachOptionsCta or StorLocatorCta
+       * check webFlags and hatchOptions to show the HatchOptionsCta or StoreLocatorCta
        */
-      _setStoreLocatorCta(webFlags, hatchOptions) {
-        if (hatchOptions) {
-          const pageObject = this.storeLocatorPage;
-          const pageExist = typeof pageObject !== 'undefined' && pageObject !== '';
-          const showStoreLocatorCta = pageExist && this._hasProperties(pageObject) && (!hatchOptions.toggle || !webFlags || webFlags.indexOf('button_lead_generation') === -1);
-          const showHatchOptions = pageExist && hatchOptions.toggle && webFlags && webFlags.indexOf('button_lead_generation') >= 0;
+      _setStoreLocatorCta(webFlags, hatchOptions, storeLocatorPage) {
+        if (storeLocatorPage && this._hasProperties(storeLocatorPage)) {
+          const showStoreLocatorCta = !hatchOptions ||
+            (hatchOptions && !hatchOptions.toggle) ||
+            (webFlags instanceof Array && !webFlags.includes('button_lead_generation'));
+          const showHatchOptions = hatchOptions && hatchOptions.toggle && webFlags instanceof Array && webFlags.includes('button_lead_generation');
           this.set('showStoreLocatorCta', showStoreLocatorCta);
           this.set('showHatchOptions', showHatchOptions);
         }
