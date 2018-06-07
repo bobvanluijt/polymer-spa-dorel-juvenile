@@ -89,25 +89,25 @@
       on-click="handleClick">
       <template
         is="dom-if"
-        if="[[imageExists(position)]]">
+        if="[[_imageExists(position)]]">
         <dorel-product-image
           class="image"
           sizing="contain"
           height="[[windowHeight]]"
-          image-url$="[[getImageUrl(position)]]">
+          image-url$="[[_getImageUrl(position)]]">
         </dorel-product-image>
         <div
           id="overlayWrapper"
           class="overlay-wrapper"
-          on-click="imageClick">
+          on-click="_imageClick">
           <template
             is="dom-if"
-            if="[[imageExists(position, -1)]]">
+            if="[[_imageExists(position, -1)]]">
             <div
               id="overlayArrowLeft"
               class="overlay-arrow left"
               data-difference="-1"
-              data-image$="[[getImageUrl(position)]]"
+              data-image$="[[_getImageUrl(position)]]"
               on-click="_switchImage">
               <iron-icon class="dorel-cookie-notification__proceed-icon" icon="dorel-icons:chevron-left"></iron-icon>
             </div>
@@ -115,12 +115,12 @@
 
           <template
             is="dom-if"
-            if="[[imageExists(position, 1)]]">
+            if="[[_imageExists(position, 1)]]">
           <div
             id="overlayArrowRight"
             class="overlay-arrow right"
             data-difference="1"
-            data-image$="[[getImageUrl(position)]]"
+            data-image$="[[_getImageUrl(position)]]"
             on-click="_switchImage">
             <iron-icon class="dorel-cookie-notification__proceed-icon" icon="dorel-icons:chevron-right"></iron-icon>
           </div>
@@ -156,7 +156,7 @@
           },
 
           /**
-           * determines if the lightbox image a product image if true,
+           * The index of to be displayed image in the imageUrls array.
            */
           position: {
             type: String,
@@ -164,6 +164,9 @@
             statePath: 'image.imageLightbox.position'
           },
 
+          /**
+           * The urls to the images which are to be shown.
+           */
           imageUrls: {
             type: Array,
             reflectToAttribute: true,
@@ -206,7 +209,7 @@
       /**
        * Dont close the lightbox when clicked on image.
        */
-      imageClick(event) {
+      _imageClick(event) {
         event.stopPropagation();
       }
 
@@ -218,26 +221,26 @@
       }
 
       /**
-       * Switch images after button clicks.
+       * Switch images after button clicks (image is determined by data attribute).
        */
       _switchImage(event) {
         event.stopPropagation();
         const newPosition = this.get("position") + parseInt(event.currentTarget.dataset.difference);
-        if(!this.imageExists(newPosition)) return false;
+        if(!this._imageExists(newPosition)) return false;
         this.set("position", newPosition);
       }
 
       /**
        * Get the image url by index.
        */
-      getImageUrl(index) {
+      _getImageUrl(index) {
         return this.get('imageUrls')[index];
       }
 
       /**
        * Check if an image exists with a given index.
        */
-      imageExists(index, dif = 0) {
+      _imageExists(index, dif = 0) {
         index += dif;
         const imageUrls = this.get('imageUrls');
         return imageUrls ? index < imageUrls.length && index >= 0  : false;
@@ -250,13 +253,13 @@
        *   The position in the imageUrls array of the item you want to get the position of.
        */
       _setImageWidth(position) {
-        const url = this.getImageUrl(position);
+        const url = this._getImageUrl(position);
         Polymer.RenderStatus.afterNextRender(this, () => {
-        const img = new Image();
-        const element = this.shadowRoot.querySelector("#overlayWrapper");
-        img.addEventListener("load", function() {
-          element.style.width = "calc(" + 100 * (this.naturalWidth / this.naturalHeight) + "vh - 3em)";
-        });
+          const img = new Image();
+          const element = this.shadowRoot.querySelector("#overlayWrapper");
+          img.addEventListener("load", function() {
+            element.style.width = "calc(" + 100 * (this.naturalWidth / this.naturalHeight) + "vh - 3em)";
+          });
           img.src = url;
         });
       }
