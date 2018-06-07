@@ -70,7 +70,7 @@
     <dorel-car-fitting-car-selector
       car-data="{{ carData }}"
       hidden$="[[ !stepData.carFittingCarSelector.isCurrent ]]"
-      product-name="[[ requestedProductName ]]"
+      product-name="[[ requestedProductLabel ]]"
       product-sku="[[ requestedProductSKU ]]"
       step-controller="{{ stepController  }}"
       step-data="{{ stepData.carFittingCarSelector }}">
@@ -127,6 +127,10 @@
               }
             }
           },
+          currentProduct: {
+            type: String,
+            statePath: 'product.currentProduct'
+          },
           stepController: {
             type: Object,
             value: () => {
@@ -153,15 +157,20 @@
           },
           currentStepTitle: String,
           currentProgress: Number,
-          requestedProductName: String,
           requestedProductSKU: String,
+          requestedProductName: String,
+          requestedProductLabel: String,
           productData: {
             type: Object,
             statePath: function(state) {
-              const product = state.product.products.find(product => product.url === this.requestedProductName);
+              const product = state.product.products.find(product => product.url === this.currentProduct);
               if(product) {
                 if(!product.notAvailable) {
+                  if (product.name) {
+                    this.set('requestedProductLabel', product.name.value);
+                  }
                   this.set('requestedProductSKU', product.sku);
+                  this.set('requestedProductName', this.currentProduct);
                 }
               }
               return product ? product : { isLoading: true };
@@ -191,7 +200,7 @@
                         {
                           label: 'car_fitting_selection#brand_input_label',
                           default_option: {
-                            label: 'Choose a brand',
+                            label: 'car_fitting_select#brand',
                             value: ''
                           },
                           options: []
@@ -199,7 +208,7 @@
                         {
                           label: 'car_fitting_selection#model_input_label',
                           default_option: {
-                            label: 'Choose a model',
+                            label: 'car_fitting_select#model',
                             value: ''
                           },
                           options: []
@@ -207,7 +216,7 @@
                         {
                           label: 'car_fitting_selection#type_input_label',
                           default_option: {
-                            label: 'Choose a type',
+                            label: 'car_fitting_select#type',
                             value: ''
                           },
                           options: []
@@ -293,10 +302,10 @@
                   main_section: {
                     section_type: 'car-details-form',
                     title: 'Car Fitting',
-                    info: 'Click on the icons on the seats to see more details'
+                    info: 'car_fitting_results#click_seat_detail'
                   },
                   selected_product: {
-                      title: 'Your selection'
+                      title: 'car_fitting_results#your_selection'
                   },
                   legend: {
                       title: 'Legend'
@@ -315,21 +324,7 @@
       static get observers() {
         return [
             'setCurrentStep(stepController.currentStep)',
-            '_productNameChanged(requestedProductName)',
         ];
-      }
-
-      /**
-       * @name _productNameChanged
-       * @description if the productName changes dispatch an action to retrieve product
-       * @param product - Object
-       * @returns Boolean
-       */
-      _productNameChanged(productName) {
-        //debugger;
-        if(productName) {
-          this.dispatch('requestProduct', productName);
-        }
       }
 
       error(message) {
@@ -338,7 +333,7 @@
 
       getCurrentProgess() {
         const currentStepNumber = (this.getCurrentStepData()) ? this.getCurrentStepData().stepNumber : 0;
-        const totalAmountOfSteps = Object.keys(this.stepData).length;;
+        const totalAmountOfSteps = Object.keys(this.stepData).length;
         return (currentStepNumber * 100) / totalAmountOfSteps;
       }
 
@@ -348,16 +343,23 @@
         }.bind(this))];
       }
 
+      handleProductSelection() {
+        if (this.currentProduct !== 'none' || this.queryParams.product) {
+          if (this.currentProduct !== this.queryParams.product) {
+            this.dispatch('requestProduct', this.queryParams.product);
+            this.dispatch('setCurrentProduct', this.queryParams.product);
+          }
+          this.set('standalone', false);
+          this.set('stepController.currentStep', 'carFittingCarSelector');
+        } else {
+          this.set('standalone', true);
+          this.set('stepController.currentStep', 'carFittingAgeSelector');
+        }
+      }
+
       ready() {
         super.ready();
-          this.set('requestedProductName', this.queryParams.product);
-          if(this.requestedProductName) {
-            this.set('standalone', false);
-            this.set('stepController.currentStep', 'carFittingCarSelector');
-          } else {
-            this.set('standalone', true);
-            this.set('stepController.currentStep', 'carFittingAgeSelector');
-          }
+        this.handleProductSelection();
       }
 
       setCurrentStep(setStepTo) {

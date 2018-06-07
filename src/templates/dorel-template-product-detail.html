@@ -107,11 +107,11 @@
           reviews-scroll-handler="{{ reviewsScrollHandler }}"
           showcase-data="[[ product ]]"
           product-sku="[[ product.sku ]]"
-          selected="[[ selected ]]"></dorel-section-product-showcase>
+          web-flags="[[ product.web_flags ]]"
+          ></dorel-section-product-showcase>
 
         <dorel-section-product-usps
-          product-id="[[ product.id ]]"
-          selected="[[selected]]"></dorel-section-product-usps>
+          product-id="[[ product.id ]]"></dorel-section-product-usps>
 
         <template
           is="dom-if"
@@ -121,8 +121,7 @@
         </template>
 
         <dorel-section-product-features
-          product-id="[[ product.id ]]"
-          selected="[[ selected ]]"></dorel-section-product-features>
+          product-id="[[ product.id ]]"></dorel-section-product-features>
 
         <dorel-section-product-topics
           product-id="[[ product.id ]]"></dorel-section-product-topics>
@@ -131,12 +130,10 @@
           accessory-scroll-handler="{{ accessoryScrollHandler }}"
           category="[[ category ]]"
           related-products="[[ product.related_products ]]"
-          accessories-options="[[ product.related_product_section ]]"
-          selected="[[selected]]"></dorel-section-product-accessories>
+          accessories-options="[[ product.related_product_section ]]"></dorel-section-product-accessories>
 
         <dorel-section-product-accordions
-          product-id="[[ product.id ]]"
-          selected="[[ selected ]]"></dorel-section-product-accordions>
+          product-id="[[ product.id ]]"></dorel-section-product-accordions>
 
         <template
           is="dom-if"
@@ -147,15 +144,14 @@
             reviews-sorting="[[reviewsConfig.sorting]]"
             image-only="[[reviewsConfig.image_only]]"
             reviews-scroll-handler="[[reviewsScrollHandler]]"
-            selected="[[ selected ]]"></dorel-section-product-reviews>
+            ></dorel-section-product-reviews>
         </template>
 
         <template
           is="dom-if"
           if="[[ product.slideshow.length ]]">
           <dorel-section-slideshow
-            slideshow-data="[[ product.slideshow ]]"
-            selected="[[ selected ]]"></dorel-section-slideshow>
+            slideshow-data="[[ product.slideshow ]]"></dorel-section-slideshow>
         </template>
 
       </template>
@@ -243,8 +239,7 @@
             }
           },
 
-          carfittingEnabled: Boolean,
-          selected: Boolean
+          carfittingEnabled: Boolean
         }
       }
 

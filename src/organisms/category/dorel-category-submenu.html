@@ -5,11 +5,16 @@
         font-size: 1em;
       }
       nav {
-        width: 100%;
+        padding: .25rem .75rem;
       }
       nav paper-radio-button {
         width: 100%;
         padding: .25em 0;
+        margin-bottom: .5rem;
+      }
+      nav paper-radio-button div {
+        font-size: 90%;
+        color: var(--theme-color-monochrome-5);
       }
     </style>
 
@@ -31,6 +36,7 @@
           _menuItemTapname="{{menuItem.post_title}}"
           noink>
             {{ menuItem.post_title }}
+            <div>{{ menuItem.post_subtitle }}</div>
         </paper-radio-button>
       </template>
     </nav>
