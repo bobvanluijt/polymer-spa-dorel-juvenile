@@ -129,7 +129,7 @@
        * Get all the image urls of the images.
        */
       _getImageUrls() {
-        return this.get('slides').map(e => e.image_url);
+        return this.get('slides').map(slide => slide.image_url);
       }
 
       /**

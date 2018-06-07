@@ -196,12 +196,11 @@
         super.ready();
         this.addEventListener('click', this._closeLightbox);
         window.addEventListener('update-light-box', function() {
-          //<Dirty code>
+          // TODO clean this mess up.
           //  Change the position and change it back in order to trigger a change and rerender the component.
           var position = this.get("position");
           this.set("position", position + 1);
           this.set("position", position);
-          //</Dirty code>
         }.bind(this));
       }
 
